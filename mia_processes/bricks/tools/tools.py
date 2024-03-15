@@ -31,20 +31,19 @@ needed to run other higher-level bricks.
 # http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 # for details.
 ##########################################################################
-
-# flake8: noqa
-
+# fmt: off
+# fmt: on
 import os
 import re
 import shutil
 import tempfile
+import traceback
 
 # Other imports
 from ast import literal_eval
 
 import numpy as np
 import pandas as pd
-import scipy.signal as signal
 
 # nipype import
 from nipype.interfaces.base import (
@@ -64,7 +63,9 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from scipy import io, signal
 from scipy.interpolate import interp1d
+from scipy.special import gammaln
 from traits.api import Either, Undefined
 
 # mia_processes imports
@@ -1700,8 +1701,14 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.requirement = []  # no need of third party software!
 
         # Inputs description
-        trigger_data_desc = "The trigger data (a file)"
-        physio_data_desc = "The physiological data (a file)"
+        trigger_data_desc = (
+            "The trigger data (a file with extension "
+            "in ['.txt', '.csv', '.log'])"
+        )
+        physio_data_desc = (
+            "The physiological data (a file with extension "
+            "in ['.txt', '.csv'])"
+        )
         func_file_desc = "The fMRI scan under hypercapnia (a file)"
 
         # Outputs description
@@ -1737,13 +1744,74 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.add_trait("cvr_reg", File(output=True, desc=cvr_reg_desc))
         self.cvr_reg = traits.Undefined
 
-        # Special parameter used as a messenger for the run_process_mia method
-        # self.add_trait(
-        #     "dict4runtime",
-        #     traits.Dict(output=False, optional=True, userlevel=1),
-        # )
-
         self.init_default_traits()
+
+    def gaussfir(self, bt, nt=3, of=2):
+        """Generate a Gaussian FIR filter
+
+        with a specified bandwidth-time product (bt),
+        number of taps (nt), and oversampling factor (of)
+        """
+
+        def convert_to_t(of, nt):
+            """Convert to t in which to compute the filter coefficients."""
+            # Filter Length
+            filt_len = 2 * of * nt + 1
+            t = np.linspace(-nt, nt, filt_len)
+            return t
+
+        t = convert_to_t(of, nt)
+        alpha = np.sqrt(np.log(2) / 2) / (bt)
+        h = (np.sqrt(np.pi) / alpha) * np.exp(-((t * np.pi / alpha) ** 2))
+        # Normalize coefficients
+        h = h / np.sum(h)
+        return h
+
+    def gfb_conv(self, a, b, shape="full"):
+        """Return a subsection of the convolution, as specified by the
+        shape parameter.
+
+        :param a: a vector (a ndarray numpy object)
+        :param b: a vector (a ndarray numpy object)
+        :param shape: sub-section of the convolution (a string in
+                      ['full', 'same', 'valid'])
+        """
+        if shape not in ["full", "same", "valid"]:
+            raise ValueError(
+                "Make_CVR_reg_physio brick: Invalid value for 'shape'. "
+                "It must be 'full', 'same', or 'valid'."
+            )
+
+        na = np.prod(a.shape)
+        nb = np.prod(b.shape)
+        # Check if a is a column vector
+        iscolumn = np.size(np.shape(a)) == 1
+        # Reshape a and b into column vectors
+        a = a.flatten()
+        b = b.flatten()
+
+        # Determine the size of the output convolution array
+        if shape == "full":
+            k_max = max(na + nb - 1, 0)
+            ia = np.arange(1, k_max + 1)
+
+        elif shape == "same":
+            k_max = na
+            ia = np.arange(1, k_max + 1) + np.floor(nb / 2)
+
+        elif shape == "valid":
+            k_max = max(na - max(nb - 1, 0), 0)
+            ia = np.arange(1, k_max + 1) + max(nb - 1, 0)
+
+        ia = np.repeat(ia.reshape(-1, 1), nb, axis=1)
+        j = np.repeat(np.arange(1, nb + 1).reshape(1, -1), k_max, axis=0)
+        ia = ia + 1 - j
+        valid = np.logical_and(ia > 0, ia <= na)
+        ia[~valid] = na + 1
+        a = np.append(a, 0)  # Add zero to end of a
+        c = np.sum(a[ia - 1] * b, axis=1)
+
+        return c if iscolumn else c.reshape(1, -1)
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1760,8 +1828,8 @@ class Make_CVR_reg_physio(ProcessMIA):
         super(Make_CVR_reg_physio, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
+        # if self.outputs:
+        #     self.outputs = {}
 
         if self.func_file not in ["<undefined>", traits.Undefined]:
             patient_name = get_dbFieldValue(
@@ -1813,18 +1881,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         tag_to_add["unit"] = None
         tag_to_add["default_value"] = None
 
-        if (
-            (
-                self.trigger_data
-                and self.physio_data
-                not in [
-                    "<undefined>",
-                    traits.Undefined,
-                ]
-            )
-            and os.path.isfile(self.trigger_data)
-            and os.path.isfile(self.physio_data)
-        ):
+        try:
             tag_to_add["value"] = "Individual"
             # TODO: The following attributes are currently hard-coded, but
             #       we could add them as input of the brick if necessary?
@@ -1832,32 +1889,17 @@ class Make_CVR_reg_physio(ProcessMIA):
             end_dyn_sup = 0
             # delay between respiration and EtCO2 variation (s)
             delay_for_etco2 = 4.8
-            # tr = (
-            #     get_dbFieldValue(
-            #         self.project, self.func_file, "RepetitionTime"
-            #     )[0]
-            #     / 1000
-            # )
+            tr = (
+                get_dbFieldValue(
+                    self.project, self.func_file, "RepetitionTime"
+                )[0]
+                / 1000
+            )
             # TODO: glover_hrf(tr) don't give good result yet. While waiting
-            #       to make a good hrf, we use the hrf calculated in Amigo,
-            #       !! valid only for a TR of 3s !!
+            #       to make a good hrf, we use the hrf calculated as in spm
             # from nilearn.glm.first_level.hemodynamic_models import glover_hrf
             # hrf = glover_hrf(tr)
-            hrf = np.array(
-                [
-                    0,
-                    0.383336774751345,
-                    0.342135983764201,
-                    0.171766927912155,
-                    0.0681357904590986,
-                    0.0237549216202789,
-                    0.00763263283024258,
-                    0.00231806829729287,
-                    0.000675566955637493,
-                    0.000190779506299889,
-                    5.25539034490526e-05,
-                ]
-            )
+            hrf = self.spm_hrf(tr, [6, 16, 2, 1, np.inf, 0, 32])
             nb_dyn = (
                 get_dbFieldValue(
                     self.project,
@@ -1866,29 +1908,15 @@ class Make_CVR_reg_physio(ProcessMIA):
                 )[4]
                 - end_dyn_sup
             )
-            # TODO: make read_phys_trig_data(). phys_trig_data is an object
-            #       with data from trigger and physiological parameters
-            # phys_trig_data = read_phys_trig_data(self.physio_data,
-            #                                      self.physio_data)
-            # While we wait for the read_phys_trig_data() function to be
-            # coded we use phys_trig_data from amigo!
-            # from scipy.io import loadmat
-            # phys_trig_data = loadmat("/home/econdami/Desktop/physdata.mat",
-            #                          simplify_cells=True)['physdata']
             # ---- Start of making phys_trig_data ----
-            starttime = 0
-            endtime = np.inf
-            n_pulses = 0
             # record some data prior to start and after end of scan,
             # typically the duration of one hrf
             time_margin = 30  # seconds
             status_sample_freq = 37.127
-
             # ---- Start of making trigdata ----
             starttime = np.nan
             endtime = np.inf
             n_pulses = 0
-
             # Read data from different types of files
             file_extension = self.trigger_data.lower().split(".")[-1]
 
@@ -1939,7 +1967,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                             endtime = starttime + len(trig_times_s) * dt_s
                             break
 
-                TR = np.median(np.diff(trig_times_s))
+                tr = np.median(np.diff(trig_times_s))
 
             elif file_extension == "log":
                 # tested: OK
@@ -1984,12 +2012,12 @@ class Make_CVR_reg_physio(ProcessMIA):
                 trig_times_s = np.array(trig_times) / 10000
                 starttime = starttime + trig_times_s[0]
                 dt_s = np.diff(trig_times_s)
-                TR = np.median(dt_s)
-                endtime = starttime + trig_times_s[-1] - trig_times_s[0] + TR
+                tr = np.median(dt_s)
+                endtime = starttime + trig_times_s[-1] - trig_times_s[0] + tr
                 trig_times_s = trig_times_s - trig_times_s[0]
-                n_pulses = int((endtime - starttime) / TR)
+                n_pulses = int((endtime - starttime) / tr)
                 # look for missing triggers
-                dn = np.round(np.diff(trig_times_s) / TR) - 1
+                dn = np.round(np.diff(trig_times_s) / tr) - 1
                 dn_pos = np.where(dn != 0)[0]
 
                 if dn_pos.size != 0:
@@ -1999,7 +2027,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                         trig_times_s = np.concatenate(
                             [
                                 trig_times_s[:pos + 1],
-                                [TR + trig_times_s[pos]],
+                                [tr + trig_times_s[pos]],
                                 trig_times_s[pos + 1:],
                             ]
                         )
@@ -2023,25 +2051,25 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                 trig_times_s = np.array(trig_times)
                 starttime = starttime + trig_times_s[0]
-                TR = np.median(np.diff(trig_times_s))
-                endtime = starttime + trig_times_s[-1] + TR
+                tr = np.median(np.diff(trig_times_s))
+                endtime = starttime + trig_times_s[-1] + tr
                 trig_times_s = trig_times_s - trig_times_s[0]
                 n_pulses = len(trig_times_s)
 
-            # trigdata["starttime"] = float(starttime)
-            # trigdata["endtime"] = float(endtime)
-            # trigdata["triggers"] = trig_times_s
-            # trigdata["n_pulses"] = n_pulses
-            # trigdata["TR"] = TR
-            # # ---- End of making trigdata ----
-            #
-            # starttime = trigdata["starttime"]
-            # endtime = trigdata["endtime"]
-            # n_pulses = trigdata["n_pulses"]
+            else:
+                raise FileNotFoundError(
+                    "Make_CVR_reg_physio brick: The Only "
+                    ".csv, .log and .txt extensions are "
+                    "allowed for the trigger_data "
+                    "parameter. The individual regressor "
+                    "cannot be generated... "
+                )
+            # ---- End of making trigdata ----
             starttime = float(starttime)
             endtime = float(endtime)
 
             if self.physio_data.lower().endswith(".csv"):
+                # tested: OK
                 print("Data from Magdata software detected ...")
                 times = []
                 data_s = []
@@ -2060,7 +2088,6 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                 nlines = len(times)
                 phys_trig_data = {}
-                # data_matrix = np.full((nlines, len(data_s[0])), np.nan)
                 time_matrix = np.zeros(nlines)
                 datapoint = 0
                 have_format = False
@@ -2084,13 +2111,10 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                         if have_format is False:
                             formatline = this_times + data_s[line]
-
                             paramnames = formatline.split(",")
-
                             # We're not interested in the 'Time' field
                             # at the beginning
                             paramnames = paramnames[1:]
-
                             # Replace spaces with underscores and
                             # '%' with 'perc'
                             paramnames = [
@@ -2111,7 +2135,6 @@ class Make_CVR_reg_physio(ProcessMIA):
                                 name.replace("Satus", "Status")
                                 for name in paramnames
                             ]
-
                             n_params = len(paramnames)
                             # Mark data as unread
                             data_matrix = np.full((nlines, n_params), np.nan)
@@ -2232,6 +2255,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                         regress_valid.T, time_stat[stall_end:], rcond=None
                     )[0]
                 )
+
                 while stall_end > 0:
                     stall_start = (
                         np.where(
@@ -2274,29 +2298,41 @@ class Make_CVR_reg_physio(ProcessMIA):
                             np.ones(drift_start - stall_end + 1),
                         ]
                     ).T
-                    time_stat[stall_end : drift_start + 1] = np.dot(
+                    # fmt: off
+                    time_stat[stall_end:drift_start + 1] = np.dot(
                         regress_valid,
                         np.linalg.lstsq(
                             regress_valid,
-                            time_stat[stall_end : drift_start + 1],
+                            time_stat[stall_end:drift_start + 1],
                             rcond=None,
                         )[0],
                     )
-                    time_stat[drift_start : old_stall_end + 1] = np.linspace(
+                    time_stat[drift_start:old_stall_end + 1] = np.linspace(
                         time_stat[drift_start],
                         time_stat[old_stall_end],
                         old_stall_end - drift_start + 1,
                     )
+                    # fmt: on
 
                 if paramnames is None:
-                    return self.make_initResult()
+                    raise ValueError(
+                        "Make_CVR_reg_physio brick: the "
+                        "names of the physiological "
+                        "parameters could not be found "
+                        "in the physiological parameters "
+                        "file!\nThe individual regressor "
+                        "cannot be generated... "
+                    )
 
                 # Transfer data to the phys_trig_data dictionary
                 for field in range(len(paramnames)):
                     this_fieldname = paramnames[field]
                     this_field_datapoints = ~np.isnan(data_matrix[:, field])
                     this_field_datapoints[: min(status_idx)] = False
-                    this_field_datapoints[max(status_idx) + 1 :] = False
+                    # fmt: off
+                    this_field_datapoints[max(status_idx) + 1:] = False
+                    # fmt: on
+
                     if np.any(this_field_datapoints):
                         indx = np.where(this_field_datapoints)[0]
                         time = np.interp(indx, status_idx, time_stat)
@@ -2311,15 +2347,21 @@ class Make_CVR_reg_physio(ProcessMIA):
                 problem_timepoints = (
                     phys_trig_data["Waveform_Status3"]["data"] != 0
                 )
-                if data_matrix.shape[0] == n_timepoints:
+
+                if (
+                    phys_trig_data["Pleth_wm2"]["data"].shape[0]
+                    == n_timepoints
+                ):
                     problem_timepoints = np.logical_or(
                         problem_timepoints,
                         phys_trig_data["Pleth_wm2"]["data"] == 103,
                     )
+
                 if np.any(problem_timepoints):
                     valid_timepoints = np.where(~problem_timepoints)[0]
+
                     if (
-                        data_matrix["Resp_wm"]["data"].shape[0]
+                        phys_trig_data["Resp_wm"]["data"].shape[0]
                         == phys_trig_data["Capno_wm1"]["data"].shape[0]
                     ):
                         phys_trig_data["Capno_wm1"]["data"][
@@ -2365,20 +2407,26 @@ class Make_CVR_reg_physio(ProcessMIA):
                         phys_trig_data["Waveform_Status4"]["data"][
                             problem_timepoints
                         ] = 128 * (
-                            phys_trig_data["Waveform_Status4"]["data"][
-                                np.maximum(problem_timepoints - 1, 0)
-                            ]
-                            > 64
-                            or phys_trig_data["Waveform_Status4"]["data"][
-                                np.minimum(
-                                    problem_timepoints + 1,
-                                    phys_trig_data["Waveform_Status4"][
-                                        "data"
-                                    ].shape[0],
-                                )
-                            ]
-                            > 64
+                            (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.maximum(problem_timepoints - 1, 0)
+                                ]
+                                > 64
+                            ).any()
+                            or (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.minimum(
+                                        problem_timepoints + 1,
+                                        phys_trig_data["Waveform_Status4"][
+                                            "data"
+                                        ].shape[0]
+                                        - 1,
+                                    )
+                                ]
+                                > 64
+                            ).any()
                         )
+
                     else:
                         phys_trig_data["Capno_wm1"]["data"][
                             problem_timepoints
@@ -2395,6 +2443,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                                 problem_timepoints
                             ]
                         )
+
                         if (
                             data_matrix["Pleth_wm2"]["data"].shape[0]
                             == n_timepoints
@@ -2433,19 +2482,24 @@ class Make_CVR_reg_physio(ProcessMIA):
                         phys_trig_data["Waveform_Status4"]["data"][
                             problem_timepoints
                         ] = 128 * (
-                            phys_trig_data["Waveform_Status4"]["data"][
-                                np.maximum(problem_timepoints - 1, 0)
-                            ]
-                            > 64
-                            or phys_trig_data["Waveform_Status4"]["data"][
-                                np.minimum(
-                                    problem_timepoints + 1,
-                                    phys_trig_data["Waveform_Status4"][
-                                        "data"
-                                    ].shape[0],
-                                )
-                            ]
-                            > 64
+                            (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.maximum(problem_timepoints - 1, 0)
+                                ]
+                                > 64
+                            ).any()
+                            or (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.minimum(
+                                        problem_timepoints + 1,
+                                        phys_trig_data["Waveform_Status4"][
+                                            "data"
+                                        ].shape[0]
+                                        - 1,
+                                    )
+                                ]
+                                > 64
+                            ).any()
                         )
 
                 if n_pulses > 0:
@@ -2456,17 +2510,124 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                 phys_trig_data["starttime"] = starttime
 
+            # Read CoolTerm capture log
             elif self.physio_data.lower().endswith(".txt"):
+                # TODO: Not yet tested
                 print("Data from CoolTerm application detected ...")
-                data = np.loadtxt(
-                    self.physio_data, delimiter=",", skiprows=1, dtype=str
-                )
                 # Process data and construct phys_trig_data dictionary
                 # ...
+                with open(self.physio_data, "r") as fid:
+                    lines = fid.readlines()
+
+                data = []
+
+                for line in lines:
+                    line_data = line.strip().split(",")
+                    data.append(line_data)
+
+                (
+                    comp_date,
+                    comp_time,
+                    monitor_date,
+                    monitor_time,
+                    HR,
+                    SPO2t,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    SpO2,
+                    BR,
+                    ETCO2,
+                    ICO2,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                ) = zip(*data)
+
+                # Convert sample start and end times to seconds since midnight
+                monitortime = np.array(
+                    [list(map(int, t.split(":"))) for t in monitor_time]
+                )
+                monitortime = (
+                    3600 * monitortime[:, 0]
+                    + 60 * monitortime[:, 1]
+                    + monitortime[:, 2]
+                )
+                sampletime = np.array(
+                    [list(map(int, t.split(":"))) for t in comp_time]
+                )
+                sampletime = (
+                    3600 * sampletime[:, 0]
+                    + 60 * sampletime[:, 1]
+                    + sampletime[:, 2]
+                )
+                keep_idx = np.where(
+                    np.logical_and(
+                        sampletime >= starttime - time_margin,
+                        sampletime <= endtime + time_margin,
+                    )
+                )[0]
+                sampletime = sampletime[keep_idx] - starttime
+                HR = np.array(HR)[keep_idx].astype(float)
+                BR = np.array(BR)[keep_idx].astype(float)
+                ICO2 = np.array(ICO2)[keep_idx].astype(float)
+                ETCO2 = np.array(ETCO2)[keep_idx].astype(float)
+                SpO2 = np.array(SpO2)[keep_idx].astype(float)
+
+                # Transfer data to structure
+                phys_trig_data = {
+                    "HR": {
+                        "indx": np.where(~np.isnan(HR))[0],
+                        "time": sampletime[~np.isnan(HR)],
+                        "data": HR[~np.isnan(HR)],
+                    },
+                    "Resp_Rate": {
+                        "indx": np.where(~np.isnan(BR))[0],
+                        "time": sampletime[~np.isnan(BR)],
+                        "data": BR[~np.isnan(BR)],
+                    },
+                    "ICO2": {
+                        "indx": np.where(~np.isnan(ICO2))[0],
+                        "time": sampletime[~np.isnan(ICO2)],
+                        "data": ICO2[~np.isnan(ICO2)],
+                    },
+                    "ETCO2": {
+                        "indx": np.where(~np.isnan(ETCO2))[0],
+                        "time": sampletime[~np.isnan(ETCO2)],
+                        "data": ETCO2[~np.isnan(ETCO2)],
+                    },
+                    "SpO2_perc": {
+                        "indx": np.where(~np.isnan(SpO2))[0],
+                        "time": sampletime[~np.isnan(SpO2)],
+                        "data": SpO2[~np.isnan(SpO2)],
+                    },
+                }
+
+                if n_pulses > 0:  # We have read a trigger file
+                    phys_trig_data["trigger"] = {
+                        "time": trig_times_s,
+                        "data": np.ones_like(trig_times_s),
+                    }
+
+                # In units of seconds since midnight
+                phys_trig_data["starttime"] = starttime
 
             else:
-                print(
-                    "The format of the physiological data was not detected ..."
+                raise FileNotFoundError(
+                    "Make_CVR_reg_physio brick: The Only "
+                    ".csv and .txt extensions are "
+                    "allowed for the physio_data "
+                    "parameter. The individual regressor "
+                    "cannot be generated... "
                 )
             # ---- End of making phys_trig_data ----
 
@@ -2484,11 +2645,10 @@ class Make_CVR_reg_physio(ProcessMIA):
                     "EtCO2 recording does not seem to be strictly monotonic "
                     "and increasing !!!\n"
                     "This makes no physical sense and the calculation of "
-                    "the hypercapnic regressor will certainly fail.\n"
-                    "If this is the case, please restart the calculations "
-                    "after checking the physiological data or use the "
-                    "non-individual regressor.\n\n"
+                    "the hypercapnic individual regressor will certainly "
+                    "fail.\n"
                 )
+
                 print(
                     "\nMake_CVR_reg_physio brick: Trying to fix the "
                     "issue!!!\nPlease check the result carefully, this "
@@ -2516,7 +2676,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 outliers = np.abs(etco2data_pp) > 15
                 # a single outlier creates three points of high curvature.
                 # retain central point only:
-                # TODO: Here, we can also use gfb_conv(). Test it out!
+                # TODO: Here, we can also use self.gfb_conv(). Test it out!
                 outliers = (
                     np.convolve(
                         outliers.astype(int), np.array([1, 1, 1]), mode="same"
@@ -2566,24 +2726,28 @@ class Make_CVR_reg_physio(ProcessMIA):
             etco2data_shift = etco2data - baseline_etco2
             etco2data_bold = signal.convolve(etco2data_shift, hrf, mode="full")
             # fmt: off
-            r = etco2data_bold[num_init_trigs:num_init_trigs + nb_dyn]
-            # fmt: on
-            np.save(fname_reg, r)
-            print(
-                "The Make_CVR_reg_physio brick does not yet generate the "
-                "individual regressor. Currently, only the standard "
-                "regressor is provided in all cases."
-            )
-            config = Config()
-            shutil.copy(
-                os.path.join(
-                    config.get_resources_path(),
-                    "reference_population_data",
-                    "regressor_physio_EtCO2_standard.mat",
-                ),
+            io.savemat(
                 fname_reg,
+                {
+                    "R": etco2data_bold[
+                        num_init_trigs:num_init_trigs + nb_dyn
+                    ].reshape((-1, 1))
+                },
             )
-        else:
+            # fmt: on
+            print(
+                "\nMake_CVR_reg_physio brick: "
+                "individual regressor generated!"
+            )
+
+        except Exception as e:
+            print(
+                "\nMake_CVR_reg_physio brick: The generation of the "
+                "individual regressor has failed!\nTraceback:"
+            )
+            print("".join(traceback.format_tb(e.__traceback__)), end="")
+            print("{0}: {1}\n".format(e.__class__.__name__, e))
+            print("\n...Using the standard regressor...\n")
             tag_to_add["value"] = "Standard"
             config = Config()
             shutil.copy(
@@ -2593,6 +2757,9 @@ class Make_CVR_reg_physio(ProcessMIA):
                     "regressor_physio_EtCO2_standard.mat",
                 ),
                 fname_reg,
+            )
+            print(
+                "\nMake_CVR_reg_physio brick: " "standard regressor generated!"
             )
 
         all_tags_to_add.append(tag_to_add)
@@ -2608,72 +2775,66 @@ class Make_CVR_reg_physio(ProcessMIA):
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
-    def gaussfir(self, bt, nt=3, of=2):
-        """Generate a Gaussian FIR filter
+    def spm_hrf(self, rt, p=[6, 16, 1, 1, 6, 0, 32], t=16):
+        """
+        Hemodynamic response function.
 
-        with a specified bandwidth-time product (bt),
-        number of taps (nt), and oversampling factor (of)
+        Parameters:
+        - rt: scan repeat time
+        - p: parameters of the response function (two Gamma functions)
+             (Default: [6, 16, 1, 1, 6, 0, 32])
+        - t: microtime resolution (Default: 16)
+
+        Returns:
+        - hrf: hemodynamic response function
+        - p: parameters of the response function
+
+        Note: Adapted from SPM12 matlab code (spm_hrf.m)
         """
 
-        def convert_to_t(of, nt):
-            """Convert to t in which to compute the filter coefficients."""
-            # Filter Length
-            filt_len = 2 * of * nt + 1
-            t = np.linspace(-nt, nt, filt_len)
-            return t
+        def gam_dis_pdf(ga, sh, sc):
+            """
+            Probability Density Function (PDF) of Gamma distribution.
 
-        t = convert_to_t(of, nt)
-        alpha = np.sqrt(np.log(2) / 2) / (bt)
-        h = (np.sqrt(np.pi) / alpha) * np.exp(-((t * np.pi / alpha) ** 2))
-        # Normalize coefficients
-        h = h / np.sum(h)
-        return h
+            Parameters:
+            - ga: Gamma-variate (Gamma has range [0,Inf))
+            - sh: Shape parameter (h > 0)
+            - sc: Scale parameter (l > 0)
 
-    def gfb_conv(self, a, b, shape="full"):
-        """Return a subsection of the convolution, as specified by the
-        shape parameter.
+            Returns:
+            - f: PDF of Gamma-distribution with shape & scale parameters
 
-        :param a: a vector (a ndarray numpy object)
-        :param b: a vector (a ndarray numpy object)
-        :param shape: sub-section of the convolution (a string in
-                      ['full', 'same', 'valid'])
-        """
-        if shape not in ["full", "same", "valid"]:
-            raise ValueError(
-                "Make_CVR_reg_physio brick: Invalid value for 'shape'. "
-                "It must be 'full', 'same', or 'valid'."
+            Note: Adapted from SPM12 matlab code (spm_Gpdf.m).
+                  Warning: very specific to the spm_hrf case,
+                  no argument validity test is performed.
+            """
+            # Initialise result to zeros
+            f = np.zeros(len(ga))
+            # Compute
+            f[1:] = np.exp(
+                (sh - 1) * np.log(ga[1:])
+                + sh * np.log(sc)
+                - sc * ga[1:]
+                - gammaln(sh)
             )
 
-        na = np.prod(a.shape)
-        nb = np.prod(b.shape)
-        # Check if a is a column vector
-        iscolumn = np.size(np.shape(a)) == 1
-        # Reshape a and b into column vectors
-        a = a.flatten()
-        b = b.flatten()
+            return f
 
-        # Determine the size of the output convolution array
-        if shape == "full":
-            k_max = max(na + nb - 1, 0)
-            ia = np.arange(1, k_max + 1)
+        # from scipy.stats import gamma
+        # Modelled hemodynamic response function - {mixture of Gammas}
+        dt = rt / t
+        u = np.arange(0, np.ceil(p[6] / dt) + 1) - p[5] / dt
+        # hrf = (gamma.pdf(u, p[0] / p[2], scale=dt / p[2]) -
+        #        gamma.pdf(u, p[1] / p[3], scale=dt / p[3]) / p[4])
+        # We can also use the self.gam_dis_pdf() function:
+        hrf = (
+            gam_dis_pdf(u, p[0] / p[2], dt / p[2])
+            - gam_dis_pdf(u, p[1] / p[3], dt / p[3]) / p[4]
+        )
+        hrf = hrf[(np.arange(0, np.floor(p[6] // rt) + 1) * t).astype(int)]
+        hrf /= np.sum(hrf)
 
-        elif shape == "same":
-            k_max = na
-            ia = np.arange(1, k_max + 1) + np.floor(nb / 2)
-
-        elif shape == "valid":
-            k_max = max(na - max(nb - 1, 0), 0)
-            ia = np.arange(1, k_max + 1) + max(nb - 1, 0)
-
-        ia = np.repeat(ia.reshape(-1, 1), nb, axis=1)
-        j = np.repeat(np.arange(1, nb + 1).reshape(1, -1), k_max, axis=0)
-        ia = ia + 1 - j
-        valid = np.logical_and(ia > 0, ia <= na)
-        ia[~valid] = na + 1
-        a = np.append(a, 0)  # Add zero to end of a
-        c = np.sum(a[ia - 1] * b, axis=1)
-
-        return c if iscolumn else c.reshape(1, -1)
+        return hrf
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
