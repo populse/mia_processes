@@ -26,7 +26,7 @@ Generate the physiological regressor for cerebrovascular reactivity evaluation
   .log (CoolTerm) format and trigger files in .txt, .log or .csv format.
 
 - The Make_CVR_reg_physio brick generates a standard (average) regressor if
-  the physiological parameter files and trigger files are not supplied or are
+  the physiological parameter and trigger files are not supplied or are
   corrupt. Otherwise, an individual regressor is generated.
 
 Standard regressor:
