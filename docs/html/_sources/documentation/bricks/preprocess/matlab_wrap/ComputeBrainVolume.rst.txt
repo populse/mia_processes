@@ -14,7 +14,7 @@ Compute brain volume using an input image.
 
 *This brick requires an exclusive Matlab license*
 
-**Disclaimer**: This brick is provided as a proof of concept for developers. 
+**Disclaimer**: This brick is provided as a proof of concept for developers.
 It shows how to wrap a MATLAB script in a mia processes brick using nipype (and so with a Matlab license) in the absence of a better solution (with MCR).
 
 --------------------------------------
@@ -36,7 +36,7 @@ It shows how to wrap a MATLAB script in a mia processes brick using nipype (and 
 
     ::
 
-      ex. 532
+      ex. 4929083
 -------------
 
 Usefull links:

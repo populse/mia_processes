@@ -2782,7 +2782,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         Parameters:
         - rt: scan repeat time
         - p: parameters of the response function (two Gamma functions)
-             (Default: [6, 16, 1, 1, 6, 0, 32])
+        (Default: [6, 16, 1, 1, 6, 0, 32])
         - t: microtime resolution (Default: 16)
 
         Returns:
