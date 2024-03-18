@@ -166,6 +166,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_
     - `Make_A_List <bricks/tools/Make_A_List.html>`_
+    - `Make_CVR_reg_physio <bricks/tools/Make_CVR_reg_physio.html>`_
 
 - **pipelines**
 
