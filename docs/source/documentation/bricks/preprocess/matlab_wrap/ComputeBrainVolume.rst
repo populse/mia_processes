@@ -37,6 +37,7 @@ It shows how to wrap a MATLAB script in a mia processes brick using nipype (and 
     ::
 
       ex. 4929083
+
 -------------
 
 Usefull links:

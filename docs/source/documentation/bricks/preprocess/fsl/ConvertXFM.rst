@@ -13,7 +13,6 @@ ConvertXFM brick
 Modify transformation matrix using convert_xfm (FSL)
 -----------------------------------------------------
 
---------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
