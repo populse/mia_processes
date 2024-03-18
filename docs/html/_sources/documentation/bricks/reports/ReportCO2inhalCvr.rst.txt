@@ -16,13 +16,6 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
 **Inputs parameters:**
 
-- *anat* (a string representing an existing file)
-    Input raw anatomical image (valid extensions: [.nii, .nii.gz]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/Anat.nii'
-
 - *norm_anat* (a string representing an existing file)
     Normalised anatomical image (valid extensions: [.nii, .nii.gz]).
 
@@ -60,6 +53,32 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
     ::
 
       ex. 13
+
+- *norm_anat_cmap* (a string, optional)
+    The name of the colors range that are used for the normalised anatomical
+    slice planes plot (default is `Greys_r`).
+
+    ::
+
+      ex. Greys_r
+
+- *norm_anat_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *norm_anat_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
 
 - *norm_func* (a string representing an existing file)
     Normalised functional image (valid extensions: [.nii, .nii.gz]).
@@ -99,15 +118,125 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
       ex. <undefined>
 
-- *realignment_parameters_desc* (a string representing an existing file)
-    Estimated translation and rotation parameters (valid extensions: .txt).
+- *norm_func_cmap* (a string, optional)
+    The name of the colors range that are used for the normalised functional
+    slice planes plot (default is `Greys_r`).
 
     ::
 
-      ex. '/home/username/data/derived_data/rp_Func.txt
+      ex. Greys_r
 
-- *patient_info* (a dictionary with keys in ['PatientRef', 'Pathology', 'Age', 'Sex', MR', 'Gas', 'GasAdmin'])
-    Optional dictionary with information about the patient.
+- *norm_func_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *norm_func_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *realignment_parameters* (a string representing an existing file)
+    Estimated translation and rotation parameters during fMRI recording
+    (valid extensions: .txt).
+
+    ::
+
+      ex. /home/username/data/derived_data/rp_Func.txt
+
+- *regressor_physio* (a string representing an existing file)
+    Time series data that represent the physiological processes (ETCO2)
+    thought to contribute to the CVR in the fMRI signal
+    (valid extensions: .mat).
+
+    ::
+
+      ex. /home/username/data/derived_data/patient_ref_data/CVR_physio_reg.mat
+
+- *beta_image* (a string representing an existing file)
+    The estimated effect size or regression coefficients associated with the
+    1st predictor (e.g., conditions or regressors) included in the GLM model.
+    A spatial map that represent the estimated effect size or intensity of
+    activation/deactivation associated with the 1st predictor/regressor at
+    each voxel in the brain (valid extensions:.nii)
+
+    ::
+
+      ex. /home/username/data/derived_data/patient_ref_data/beta_0001.nii
+
+- *beta_cmap* (a string, optional)
+    The name of the colors range that are used for the beta map slice
+    planes plot (default: `rainbow`).
+
+    ::
+
+      ex. rainbow
+
+- *beta_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *beta_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *spmT_image* (a string representing an existing file)
+    A file containing t-statistic values per voxel, which indicate the
+    strength of the effect of interest at each brain voxel, derived from the
+    general linear model (GLM) analysis performed in SPM (valid
+    extensions:.nii)
+
+    ::
+
+      ex. /home/username/data/derived_data/patient_ref_data/spmT_0001.nii
+
+- *spmT_cmap* (a string, optional)
+    The name of the colors range that are used for the spmT map slice
+    planes plot (default: `rainbow`).
+
+    ::
+
+      ex. rainbow
+
+- *spmT_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *spmT_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *patient_info*
+    Optional dictionary with information about the patient (keys in
+    ['PatientRef', 'Pathology', 'Age', 'Sex', MR', 'Gas', 'GasAdmin'])
 
     ::
 
@@ -121,4 +250,4 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
     ::
 
-      ex. '/home/username/data/derived_data/sub-1_CO2_inhal_CVR_Report_2024_01_24_09_34_58_08.pdf'
+      ex. /home/username/data/derived_data/sub-1_CO2_inhal_CVR_Report_2024_01_24_09_34_58_08.pdf
