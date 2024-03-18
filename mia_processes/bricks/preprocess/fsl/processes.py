@@ -13,6 +13,7 @@ populse_mia.
         - EpiReg
         - ExtractROI
         - FastSegment
+        - Flirt
         - Smooth
 
 """
@@ -740,9 +741,10 @@ class EpiReg(ProcessMIA):
                 print("\nInput format is not recognized...!")
                 return
             if self.output_directory:
+                ext = EXT[self.output_type]
                 if self.in_epi:
                     self.outputs["out_file"] = os.path.join(
-                        self.output_directory, self.out_base + ".nii.gz"
+                        self.output_directory, self.out_base + "." + ext
                     )
                     self.outputs["epi2str_mat"] = os.path.join(
                         self.output_directory, self.out_base + ".mat"
@@ -751,7 +753,7 @@ class EpiReg(ProcessMIA):
                     if not self.no_fmapreg and isdefined(self.fmap):
                         self.outputs["out_1vol"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_1vol.nii.gz",
+                            self.out_base + "_1vol." + ext,
                         )
                         self.outputs["fmap2str_mat"] = os.path.join(
                             self.output_directory,
@@ -763,23 +765,23 @@ class EpiReg(ProcessMIA):
                         )
                         self.outputs["fmap_epi"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fieldmaprads2epi.nii.gz",
+                            self.out_base + "_fieldmaprads2epi." + ext,
                         )
                         self.outputs["fmap_str"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fieldmaprads2str.nii.gz",
+                            self.out_base + "_fieldmaprads2str." + ext,
                         )
                         self.outputs["fmapmag_str"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fieldmap2str.nii.gz",
+                            self.out_base + "_fieldmap2str." + ext,
                         )
                         self.outputs["shiftmap"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fieldmaprads2epi_shift.nii.gz",
+                            self.out_base + "_fieldmaprads2epi_shift." + ext,
                         )
                         self.outputs["fullwarp"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_warp.nii.gz",
+                            self.out_base + "_warp." + ext,
                         )
                         self.outputs["epi2str_inv"] = os.path.join(
                             self.output_directory, self.out_base + "_inv.mat"
@@ -787,15 +789,15 @@ class EpiReg(ProcessMIA):
                     if not isdefined(self.wmseg):
                         self.outputs["wmedge"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fast_wmedge.nii.gz",
+                            self.out_base + "_fast_wmedge." + ext,
                         )
                         self.outputs["wmseg_out"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fast_wmseg.nii.gz",
+                            self.out_base + "_fast_wmseg." + ext,
                         )
                         self.outputs["seg"] = os.path.join(
                             self.output_directory,
-                            self.out_base + "_fast_seg.nii.gz",
+                            self.out_base + "_fast_seg." + ext,
                         )
 
                 if self.outputs:
@@ -2030,6 +2032,7 @@ class Flirt(ProcessMIA):
                 return
 
             if self.output_directory:
+                ext = EXT[self.output_type]
                 if self.get_registered_file:
                     self.outputs["out_file"] = os.path.join(
                         self.output_directory,
@@ -2037,7 +2040,7 @@ class Flirt(ProcessMIA):
                         + "_registered_with_"
                         + fileName_ref
                         + "."
-                        + in_ext,
+                        + ext,
                     )
                 if not self.apply_xfm or not self.apply_isoxfm:
                     self.outputs["out_matrix_file"] = os.path.join(

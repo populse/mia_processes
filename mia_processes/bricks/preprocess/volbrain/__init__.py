@@ -12,4 +12,8 @@ Volbrain processes.
 # for details.
 ##########################################################################
 
-from .processes import AssemblyNet  # noqa: F401
+from .processes import (  # noqa: F401
+    AssemblyNetDocker,
+    GetLabels,
+    LabelsCorrespondence,
+)

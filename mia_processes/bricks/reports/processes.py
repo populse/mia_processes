@@ -2247,6 +2247,7 @@ class PlotSignalROI(ProcessMIA):
         labels_desc = (
             "The label list of the ROI to extract the signal (a list of int)"
         )
+        labels_names_desc = ()
         rois_files_desc = (
             "List of the image with each ROI segmented (a list of file)"
         )
@@ -2254,6 +2255,7 @@ class PlotSignalROI(ProcessMIA):
             "Extracted signal for each ROI in a csv file "
             "(a pathlike object or string representing a file)"
         )
+        suffix_desc = "Suffix for outout file ( string)"
 
         # Outputs description
         out_png_desc = (
@@ -2266,8 +2268,21 @@ class PlotSignalROI(ProcessMIA):
         )
         self.add_trait(
             "labels",
+            traits.Either(
+                traits.List(traits.Int()),
+                traits.List(traits.String()),
+                output=False,
+                optional=False,
+                desc=labels_desc,
+            ),
+        )
+        self.add_trait(
+            "labels_names",
             traits.List(
-                traits.Int(), output=False, optional=False, desc=labels_desc
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=labels_names_desc,
             ),
         )
         self.add_trait(
@@ -2287,6 +2302,10 @@ class PlotSignalROI(ProcessMIA):
             traits.File(
                 output=False, optional=True, desc=signals_whole_brain_desc
             ),
+        )
+        self.add_trait(
+            "suffix",
+            traits.String(output=False, optional=True, desc=suffix_desc),
         )
 
         # Outputs traits
@@ -2321,8 +2340,16 @@ class PlotSignalROI(ProcessMIA):
                     )
                     return
                 labels = ""
-                for label in self.labels:
-                    labels += "_" + str(label)
+                if self.suffix:
+                    labels = "_" + self.suffix
+                else:
+                    list_label = []
+                    if self.labels_names:
+                        list_label = self.labels_names
+                    elif self.labels:
+                        list_label = self.labels
+                    for label in list_label:
+                        labels += "_" + str(label)
                 self.outputs["out_png"] = os.path.join(
                     self.output_directory,
                     file_name + "_extracted_signals" + labels + ".png",
@@ -2367,10 +2394,11 @@ class PlotSignalROI(ProcessMIA):
         while len(self.labels) > len(color):
             color += color
         # Create fig
-        fig = plt.figure(figsize=(20, 16))
-        ax1 = plt.subplot2grid((2, 3), (0, 0), colspan=3, rowspan=1)
-        ax2 = plt.subplot2grid((2, 3), (1, 0), colspan=2, rowspan=1)
-        ax3 = plt.subplot2grid((2, 3), (1, 2), colspan=1, rowspan=1)
+        fig = plt.figure(figsize=(28, 20))
+        ax1 = plt.subplot2grid((2, 6), (0, 0), colspan=5, rowspan=1)
+        ax4 = plt.subplot2grid((2, 6), (0, 5), colspan=1, rowspan=1)
+        ax2 = plt.subplot2grid((2, 6), (1, 0), colspan=4, rowspan=1)
+        ax3 = plt.subplot2grid((2, 6), (1, 5), colspan=2, rowspan=1)
 
         # Create image with all the roi and plot it
         concate_roi = None
@@ -2402,9 +2430,30 @@ class PlotSignalROI(ProcessMIA):
         plotting.plot_roi(
             roi_img=concate_roi_image,
             bg_img=bg_image,
-            title=f"ROI in {file_name} space",
+            title="ROI",
             axes=ax1,
+            colorbar=True,
         )
+        txt_correspondence = "Colorbar correspondence:\n"
+        list_labels = self.labels
+        if self.labels_names and self.labels:
+            list_labels = self.labels_names
+            for i, label in enumerate(self.labels):
+                txt_correspondence += f"\n{label} : {self.labels_names[i]}"
+            txt_correspondence_ax = ax4.text(
+                0,
+                1,
+                txt_correspondence,
+                ha="left",
+                va="top",
+                wrap=True,
+                transform=ax4.transAxes,
+                fontsize=13,
+            )
+            ax4.set_xticks([])
+            ax4.set_yticks([])
+            ax4.axis("off")
+            txt_correspondence_ax._get_wrap_line_width = lambda: ax4.bbox.width
         txt = ""
         # Plot all signals
         # And create txt with average signal for each roi
@@ -2428,7 +2477,7 @@ class PlotSignalROI(ProcessMIA):
                     markersize=5,
                     markeredgecolor=color[0],
                     markerfacecolor=color[0],
-                    label=self.labels[0],
+                    label=list_labels[0],
                 )
             else:
                 # 4D image
@@ -2436,15 +2485,15 @@ class PlotSignalROI(ProcessMIA):
                     signals_roi[0],
                     linewidth=2,
                     color=color[0],
-                    label=self.labels[0],
+                    label=list_labels[0],
                 )
             average = np.mean(signals_roi)
             txt += (
-                f"\n \nMean signal ROI {self.labels[0]} : {round(average, 2)}"
+                f"\n \nMean signal ROI {list_labels[0]} : {round(average, 2)}"
             )
         elif signals_roi.shape[0] > 1:
             for indice, signals in enumerate(signals_roi):
-                label = self.labels[indice]
+                label = list_labels[indice]
                 if signals_roi.shape[1] == 1:
                     # 3D image
                     ax2.plot(
@@ -2454,7 +2503,7 @@ class PlotSignalROI(ProcessMIA):
                         markersize=5,
                         markeredgecolor=color[indice],
                         markerfacecolor=color[indice],
-                        label=self.labels[indice],
+                        label=label,
                     )
                 else:
                     # 4D image
@@ -2464,23 +2513,26 @@ class PlotSignalROI(ProcessMIA):
                 average = np.mean(signals)
                 txt += f"\n \nMean signal ROI {label} : {round(average, 2)}"
 
-        fig.suptitle("Average signal")
+        fig.suptitle(f"Average signal {file_name}", fontsize=25)
         txt = ax3.text(
             0,
-            0.9,
+            1,
             txt,
             ha="left",
             va="top",
             wrap=True,
             transform=ax3.transAxes,
+            fontsize=13,
         )
         txt._get_wrap_line_width = lambda: ax3.bbox.width
-        ax2.legend(loc=2)
+        ax2.set_xlabel("volumes")
+        ax2.set_ylabel("signals")
+        ax2.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
         ax3.set_xticks([])
         ax3.set_yticks([])
         ax3.axis("off")
 
-        plt.savefig(self.out_png)
+        plt.savefig(self.out_png, bbox_inches="tight")
 
 
 class Result_collector(ProcessMIA):

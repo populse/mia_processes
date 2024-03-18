@@ -1,0 +1,133 @@
+label,name
+4,3rd ventricle
+23,Right accumbens
+31,Right amygdala
+35,Brainstem
+36,Right caudate
+38,Right cerebellum exterior
+40,Right cerebellum White Matter
+44,Right cerebral White Matter
+47,Right hippocampus
+49,Right inf. lateral ventricle
+51,Right lateral ventricle
+55,Right pallidum
+57,Right putamen
+59,Right thalamus
+61,Right ventral DC
+71,Lobules I-V
+73,Lobules VIII-X
+75,Left basal forebrain
+100,Right anterior cingulate gyrus
+102,Right anterior insula
+104,Right anterior orbital gyrus
+106,Right angular gyrus
+108,Right calcarine cortex
+112,Right central operculum
+114,Right cuneus
+116,Right entorhinal area
+118,Right frontal operculum
+120,Right frontal pole
+122,Right fusiform gyrus
+124,Right gyrus rectus
+128,Right inf. occipital gyrus
+132,Right inf. temporal gyrus
+11,4th ventricle
+30,Left accumbens
+32,Left amygdala
+37,Left caudate
+39,Left cerebellum exterior
+41,Left cerebellum White Matter
+45,Left cerebral White Matter
+48,Left hippocampus
+50,Left inf. lateral ventricle
+52,Left lateral ventricle
+56,Left pallidum
+58,Left putamen
+60,Left thalamus
+62,Left ventral DC
+72,Lobules VI-VII
+76,Right basal forebrain
+101,Left anterior cingulate gyrus
+103,Left anterior insula
+105,Left anterior orbital gyrus
+107,Left angular gyrus
+109,Left calcarine cortex
+113,Left central operculum
+115,Left cuneus
+117,Left entorhinal area
+119,Left frontal operculum
+121,Left frontal pole
+123,Left fusiform gyrus
+125,Left gyrus rectus
+129,Left inf. occipital gyrus
+133,Left inf. temporal gyrus
+134,Right lingual gyrus
+136,Right lateral orbital gyrus
+138,Right middle cingulate gyrus
+140,Right medial frontal cortex
+142,Right middle frontal gyrus
+144,Right middle occipital gyrus
+146,Right medial orbital gyrus
+148,Right postcentral gyrus medial segment
+150,Right precentral gyrus medial segment
+152,Right sup. frontal gyrus medial segment
+154,Right middle temporal gyrus
+156,Right occipital pole
+160,Right occipital fusiform gyrus
+162,Right opercular inf. frontal gyrus
+164,Right orbital inf. frontal gyrus
+166,Right posterior cingulate gyrus
+168,Right precuneus
+170,Right parahippocampal gyrus
+172,Right posterior insula
+174,Right parietal operculum
+176,Right postcentral gyrus
+178,Right posterior orbital gyrus
+180,Right planum polare
+182,Right precentral gyrus
+184,Right planum temporale
+186,Right subcallosal area
+190,Right sup. frontal gyrus
+192,Right supplementary motor cortex
+194,Right supramarginal gyrus
+196,Right sup. occipital gyrus
+198,Right sup. parietal lobule
+200,Right sup. temporal gyrus
+202,Right temporal pole
+204,Right triangular inf. frontal gyrus
+206,Right transverse temporal gyrus
+135,Left lingual gyrus
+137,Left lateral orbital gyrus
+139,Left middle cingulate gyrus
+141,Left medial frontal cortex
+143,Left middle frontal gyrus
+145,Left middle occipital gyrus
+147,Left medial orbital gyrus
+149,Left postcentral gyrus medial segment
+151,Left precentral gyrus medial segment
+153,Left sup. frontal gyrus medial segment
+155,Left middle temporal gyrus
+157,Left occipital pole
+161,Left occipital fusiform gyrus
+163,Left opercular inf. frontal gyrus
+165,Left orbital inf. frontal gyrus
+167,Left posterior cingulate gyrus
+169,Left precuneus
+171,Left parahippocampal gyrus
+173,Left posterior insula
+175,Left parietal operculum
+177,Left postcentral gyrus
+179,Left posterior orbital gyrus
+181,Left planum polare
+183,Left precentral gyrus
+185,Left planum temporale
+187,Left subcallosal area
+191,Left sup. frontal gyrus
+193,Left supplementary motor cortex
+195,Left supramarginal gyrus
+197,Left sup. occipital gyrus
+199,Left sup. parietal lobule
+201,Left sup. temporal gyrus
+203,Left temporal pole
+205,Left triangular inf. frontal gyrus
+207,Left transverse temporal gyrus

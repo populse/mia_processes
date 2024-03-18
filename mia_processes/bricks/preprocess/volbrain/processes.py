@@ -23,19 +23,21 @@ The purpose of this module is to launch volbrain docker in mia_processes
 import os
 import subprocess
 
+import pandas as pd
 from nipype.interfaces.base import File
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from traits.api import Bool, Either, Int, List, String
 
 from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
 
-class AssemblyNet(ProcessMIA):
+class AssemblyNetDocker(ProcessMIA):
     """
-    *3D Whole Brain MRI Segmentation using AssemblyNet (volBrain)*
+    *3D Whole Brain MRI Segmentation using AssemblyNet (volBrain / Docker)*
 
     Please, see the complete documentation for the `AssemblyNet brick
     in the mia_processes website
@@ -49,10 +51,10 @@ class AssemblyNet(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(AssemblyNet, self).__init__()
+        super(AssemblyNetDocker, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # TODO: add reuqirement (docker needed)
+        # TODO: add requirement (docker needed)
 
         # Mandatory inputs description
         in_file_desc = (
@@ -193,8 +195,28 @@ class AssemblyNet(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(AssemblyNet, self).list_outputs()
+        super(AssemblyNetDocker, self).list_outputs()
 
+        # Check docker availibility
+        # This is a patch pending modification of the requirements check
+        # at initialisation time. Currently, initialisation will fail,
+        # but the user will not be informed why
+        # (unless he looks at the stdout ....)
+        try:
+            p = subprocess.Popen(
+                ["docker"],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            (sdtoutl, stderrl) = p.communicate()
+            if str(sdtoutl) != "":
+                print("sdtoutl: ", sdtoutl.decode())
+            if str(stderrl) != "":
+                print("stderrl: ", stderrl.decode())
+        except Exception:
+            print("\nThis brick requires Docker... ")
+            return
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
@@ -270,8 +292,6 @@ class AssemblyNet(ProcessMIA):
                 "mni_lobes",
                 "mni_macrostructures",
                 "mni_tissues",
-                "report_csv",
-                "report_pdf",
             ):
                 self.tags_inheritance(
                     in_file=self.in_file,
@@ -283,7 +303,7 @@ class AssemblyNet(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(AssemblyNet, self).run_process_mia()
+        super(AssemblyNetDocker, self).run_process_mia()
 
         in_directory = os.path.dirname(os.path.realpath(self.in_file))
         file_name = os.path.basename(self.in_file)
@@ -329,3 +349,255 @@ class AssemblyNet(ProcessMIA):
             print("sdtoutl: ", sdtoutl.decode())
         if str(stderrl) != "":
             print("stderrl: ", stderrl.decode())
+
+
+class GetLabels(ProcessMIA):
+    """
+    *GetLabels*
+
+    Please, see the complete documentation for the `GetLabels brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/volbrain/GetLabels.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(GetLabels, self).__init__()
+        # Optional inputs decription
+        tissues_desc = "Get labels for tissues (a boolean)"
+        structures_desc = "Get labels for structures (a boolean)"
+        lobes_desc = "Get labels for lobes (a boolean)"
+        macrostructures_desc = "Get labels for macrostructures (a boolean)"
+        # Outputs description
+        labels_desc = "List of labels (a list of int) "
+        names_desc = "List of labels names (a list of int) "
+
+        # Inputs traits
+        self.add_trait(
+            "tissues", Bool(False, optional=True, desc=tissues_desc)
+        )
+        self.add_trait(
+            "structures", Bool(False, optional=True, desc=structures_desc)
+        )
+        self.add_trait("lobes", Bool(False, optional=True, desc=lobes_desc))
+        self.add_trait(
+            "macrostructures",
+            Bool(False, optional=True, desc=macrostructures_desc),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "labels",
+            List(Int(), output=True, optional=True, desc=labels_desc),
+        )
+        self.add_trait(
+            "names",
+            List(String(), output=True, optional=True, desc=names_desc),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(GetLabels, self).list_outputs()
+
+        if (
+            not self.tissues
+            and not self.lobes
+            and not self.structures
+            and not self.macrostructures
+        ):
+            print(
+                "At least one of the following parameters should be "
+                "selectionned: tissues, lobes, structures, macrostructures"
+            )
+            return
+
+        # Outputs definition and tags inheritance (optional)
+        self.outputs["labels"] = []
+        self.outputs["names"] = []
+
+        if self.outputs:
+            self.outputs["notInDb"] = ["lables", "names"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(GetLabels, self).run_process_mia()
+        dir_name = os.path.realpath(os.path.dirname(__file__))
+        if self.tissues:
+            csv_file = os.path.join(dir_name, "assemblynet_labels_tissues.csv")
+        elif self.structures:
+            csv_file = os.path.join(
+                dir_name, "assemblynet_labels_structures.csv"
+            )
+        elif self.macrostructures:
+            csv_file = os.path.join(
+                dir_name, "assemblynet_labels_macrostructures.csv"
+            )
+        elif self.lobes:
+            csv_file = os.path.join(dir_name, "assemblynet_labels_lobes.csv")
+
+        labels_assemblynet = pd.read_csv(csv_file)
+        self.labels = labels_assemblynet["label"].values.tolist()
+        self.names = labels_assemblynet["name"].values.tolist()
+
+
+class LabelsCorrespondence(ProcessMIA):
+    """
+    *3D Whole Brain MRI Segmentation using AssemblyNet (volBrain / Docker)*
+
+    Please, see the complete documentation for the `AssemblyNet brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/volbrain/AssemblyNet.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(LabelsCorrespondence, self).__init__()
+
+        # Mandatory inputs description
+        labels_names_desc = (
+            "List of labels or names  for which the corresponding "
+            "name / label is wanted (a list of int)"
+        )
+        # Optional inputs decription
+        tissues_desc = "Get labels for tissues (a boolean)"
+        structures_desc = "Get labels for structures (a boolean)"
+        lobes_desc = "Get labels for lobes (a boolean)"
+        macrostructures_desc = "Get labels for macrostructures (a boolean)"
+        # Outputs description
+        correspondence_desc = (
+            "List of corresponding labels/name "
+            "(a list of string or a list of int) "
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "labels_names",
+            Either(
+                List(Int()),
+                List(String()),
+                optional=False,
+                desc=labels_names_desc,
+            ),
+        )
+        self.add_trait(
+            "tissues", Bool(False, optional=True, desc=tissues_desc)
+        )
+        self.add_trait(
+            "structures", Bool(False, optional=True, desc=structures_desc)
+        )
+        self.add_trait("lobes", Bool(False, optional=True, desc=lobes_desc))
+        self.add_trait(
+            "macrostructures",
+            Bool(False, optional=True, desc=macrostructures_desc),
+        )
+
+        # Optional inputs with default value traits
+
+        # Outputs traits
+        self.add_trait(
+            "correspondence",
+            Either(
+                List(Int()),
+                List(String()),
+                output=True,
+                optional=True,
+                desc=correspondence_desc,
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(LabelsCorrespondence, self).list_outputs()
+
+        if (
+            not self.tissues
+            and not self.lobes
+            and not self.structures
+            and not self.macrostructures
+        ):
+            print(
+                "At least one of the following parameters should be "
+                "selectionned: tissues, lobes, structures, macrostructures"
+            )
+            return
+
+        # Outputs definition and tags inheritance (optional)
+        if self.labels_names:
+            self.outputs["correspondence"] = []
+
+        if self.outputs:
+            self.outputs["notInDb"] = ["correspondence"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(LabelsCorrespondence, self).run_process_mia()
+        dir_name = os.path.realpath(os.path.dirname(__file__))
+        if self.tissues:
+            csv_file = os.path.join(dir_name, "assemblynet_labels_tissues.csv")
+        elif self.structures:
+            csv_file = os.path.join(
+                dir_name, "assemblynet_labels_structures.csv"
+            )
+        elif self.macrostructures:
+            csv_file = os.path.join(
+                dir_name, "assemblynet_labels_macrostructures.csv"
+            )
+        elif self.lobes:
+            csv_file = os.path.join(dir_name, "assemblynet_labels_lobes.csv")
+
+        labels_assemblynet = pd.read_csv(csv_file)
+        list_correspondence = []
+        if isinstance(self.labels_names[0], int):
+            col_name_1 = "label"
+            col_name_2 = "name"
+        elif isinstance(self.labels_names[0], str):
+            col_name_2 = "label"
+            col_name_1 = "name"
+
+        for i in self.labels_names:
+            j = labels_assemblynet.loc[labels_assemblynet[col_name_1] == i][
+                col_name_2
+            ].values[0]
+            list_correspondence.append(j)
+
+        self.correspondence = list_correspondence
