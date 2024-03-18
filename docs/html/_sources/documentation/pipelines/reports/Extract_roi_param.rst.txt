@@ -36,7 +36,8 @@ Produces gray matter masks for various ROIs and means, standard deviations, late
 **Inputs parameters:**
 
 - *spmT_images*
-   A list of T-statistics images, previously obtained from the `EstimateContrast <../../bricks/stats/spm/EstimateContrast.html>`_ brick.
+    A list of T-statistics images, previously obtained from the
+    `EstimateContrast <../../bricks/stats/spm/EstimateContrast.html>`_ brick.
 
     ::
 
