@@ -11,11 +11,8 @@ ExtractSignalROI brick
 ======================
 
 Extract signals from ROI using a segmentation file with label
-------------------------------------------------------------
+-------------------------------------------------------------
 
-
-
---------------------------------------
 
 **Mandatory inputs parameters:**
 
