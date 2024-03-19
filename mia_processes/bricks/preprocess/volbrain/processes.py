@@ -68,7 +68,7 @@ class AssemblyNetDocker(ProcessMIA):
             "(a pathlike object or string representing a file)"
         )
         native_structures_desc = (
-            "Structure segmentation in native space"
+            "Structures segmentation in native space"
             "(a pathlike object or string representing a file)"
         )
         native_mask_desc = (
@@ -76,11 +76,11 @@ class AssemblyNetDocker(ProcessMIA):
             "(a pathlike object or string representing a file)"
         )
         native_lobes_desc = (
-            "Lobe segmentation in native space"
+            "Lobes segmentation in native space"
             "(a pathlike object or string representing a file)"
         )
         native_macrosctrutures_desc = (
-            "Macrostructure segmentation in native space"
+            "Macrostructures segmentation in native space"
             "(a pathlike object or string representing a file)"
         )
         native_tissues_desc = (
@@ -92,7 +92,7 @@ class AssemblyNetDocker(ProcessMIA):
             "(a pathlike object or string representing a file)"
         )
         mni_mask_desc = (
-            "IIntracranial Cavity mask image in MNI space"
+            "Intracranial Cavity mask image in MNI space"
             "(a pathlike object or string representing a file)"
         )
         mni_tissues_desc = (
@@ -100,15 +100,19 @@ class AssemblyNetDocker(ProcessMIA):
             "(a pathlike object or string representing a file)"
         )
         mni_macrostructures_desc = (
-            "Macrostructure segmentation in MNI space"
+            "Macrostructures segmentation in MNI space"
             "(a pathlike object or string representing a file)"
         )
         mni_lobes_desc = (
-            "Lobe segmentation in MNI space"
+            "Lobes segmentation in MNI space"
             "(a pathlike object or string representing a file)"
         )
         mni_structures_desc = (
-            "Structure segmentation in MNI space"
+            "Structures segmentation in MNI space"
+            "(a pathlike object or string representing a file)"
+        )
+        matrix_affine_desc = (
+            "ITK transformation matrix from native to MNI space"
             "(a pathlike object or string representing a file)"
         )
         report_pdf_desc = (
@@ -171,6 +175,10 @@ class AssemblyNetDocker(ProcessMIA):
         self.add_trait(
             "mni_structures",
             File(output=True, optional=True, desc=mni_structures_desc),
+        )
+        self.add_trait(
+            "matrix_affine",
+            File(output=True, optional=True, desc=matrix_affine_desc),
         )
         self.add_trait(
             "report_pdf",
@@ -270,6 +278,10 @@ class AssemblyNetDocker(ProcessMIA):
                     self.output_directory,
                     "mni_tissues_" + file_name + ".nii.gz",
                 )
+                self.outputs["matrix_affine"] = os.path.join(
+                    self.output_directory,
+                    "matrix_affine_native_to_mni_" + file_name + ".txt",
+                )
                 self.outputs["report_csv"] = os.path.join(
                     self.output_directory, "report_" + file_name + ".csv"
                 )
@@ -353,7 +365,7 @@ class AssemblyNetDocker(ProcessMIA):
 
 class GetLabels(ProcessMIA):
     """
-    *GetLabels*
+    *Get Assemblynet segmentation labels*
 
     Please, see the complete documentation for the `GetLabels brick
     in the mia_processes website
@@ -375,7 +387,7 @@ class GetLabels(ProcessMIA):
         macrostructures_desc = "Get labels for macrostructures (a boolean)"
         # Outputs description
         labels_desc = "List of labels (a list of int) "
-        names_desc = "List of labels names (a list of int) "
+        names_desc = "List of label names (a list of stringLi) "
 
         # Inputs traits
         self.add_trait(
@@ -462,7 +474,7 @@ class GetLabels(ProcessMIA):
 
 class LabelsCorrespondence(ProcessMIA):
     """
-    *3D Whole Brain MRI Segmentation using AssemblyNet (volBrain / Docker)*
+    *Get labels names or get labels from names*
 
     Please, see the complete documentation for the `AssemblyNet brick
     in the mia_processes website
