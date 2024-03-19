@@ -49,7 +49,7 @@ An example of fMRI data pre-processing
     - `Normalize12 <../../bricks/preprocess/spm/Normalize12.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
     - `Coregister  <../../bricks/preprocess/spm/Coregister.html>`_
-    - `Smooth  <../../bricks/preprocess/spm/Smooth..html>`_
+    - `Smooth  <../../bricks/preprocess/spm/Smooth.html>`_
 
 .. image:: ../../images/Bold_spatial_preprocessing1_pipeline.png
   :width: 1100
