@@ -125,6 +125,9 @@ class CO2_inhalation(Pipeline):
         self.export_parameter(
             "make_cvr_reg_physio_1", "physio_data", is_optional=True
         )
+        self.nodes["1_spatial_preprocessing"].process.trait(
+            "bias_field_images"
+        ).userlevel = 1
         self.export_parameter(
             "1_spatial_preprocessing", "bias_field_images", is_optional=True
         )
@@ -155,6 +158,9 @@ class CO2_inhalation(Pipeline):
             "1_spatial_preprocessing.smoothed_func->"
             "2_spatial_mask.smoothed_func"
         )
+        self.nodes["1_spatial_preprocessing"].process.trait(
+            "coregistered_source"
+        ).userlevel = 1
         self.export_parameter(
             "1_spatial_preprocessing", "coregistered_source", is_optional=False
         )
@@ -164,10 +170,14 @@ class CO2_inhalation(Pipeline):
         )
         self.add_link("2_spatial_mask.mask_002->4_extract_roi_param.mask_002")
         self.add_link("2_spatial_mask.mask_002->3_boldStat.mask_002")
+        self.nodes["2_spatial_mask"].process.trait("mask_003").userlevel = 1
         self.export_parameter("2_spatial_mask", "mask_003", is_optional=False)
         self.add_link(
             "3_boldStat.spmT_images->4_extract_roi_param.spmT_images"
         )
+        self.nodes["3_boldStat"].process.trait(
+            "out_spm_mat_file"
+        ).userlevel = 1
         self.export_parameter(
             "3_boldStat", "out_spm_mat_file", is_optional=False
         )
@@ -176,12 +186,18 @@ class CO2_inhalation(Pipeline):
             "3_boldStat.beta_images->4_extract_roi_param.beta_images"
         )
         self.add_link("3_boldStat.spmT_images->reportco2inhalcvr.spmT_image")
+        self.nodes["4_extract_roi_param"].process.trait(
+            "resample2_masks"
+        ).userlevel = 1
         self.export_parameter(
             "4_extract_roi_param", "resample2_masks", is_optional=False
         )
         self.export_parameter(
             "4_extract_roi_param", "xls_files", is_optional=False
         )
+        self.nodes["4_extract_roi_param"].process.trait(
+            "conv_roi_masks"
+        ).userlevel = 1
         self.export_parameter(
             "4_extract_roi_param", "conv_roi_masks", is_optional=False
         )
