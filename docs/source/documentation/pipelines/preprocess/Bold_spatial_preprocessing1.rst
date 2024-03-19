@@ -68,7 +68,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/raw_data/Anat.nii
 
 - *func_files*
-    Functional images (ex. 3D T2* sequence such as echo planar imaging).
+    Functional images (ex. 4D T2* sequence such as echo planar imaging).
     A list of items which are an existing, uncompressed file (valid
     extensions: [.img, .nii, .hdr]).
 
