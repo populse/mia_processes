@@ -30,6 +30,12 @@ Compute no-reference IQMs (image quality metrics) from functional (BOLD)
 |   - `Compute quality index  <../../bricks/reports/QualityIndex.html>`_
 |   - `Compute IQMs <../../bricks/reports/BoldIQMS.html>`_
 
+.. image:: ../../images/Bold_iqms_pipeline.png
+  :width: 1100
+  :alt: Bold_iqms pipeline
+
+--------------------
+
 **Mandatory inputs parameters**
 
 - *brainmask* (a string representing an existing file)

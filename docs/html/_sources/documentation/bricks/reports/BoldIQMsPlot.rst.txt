@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+-------------------------------------------+----------------------------------------------------+
 
-=================
-BoldQMsPlot brick
-=================
+==================
+BoldIQMsPlot brick
+==================
 
 Plot a figure showing the slice-wise signal intensity at the extremes for the identification of spikes,
 the outliers metric, the DVARS, the FD and the carpetplot.

@@ -49,7 +49,7 @@ An example of fMRI data pre-processing
     - `Normalize12 <../../bricks/preprocess/spm/Normalize12.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
     - `Coregister  <../../bricks/preprocess/spm/Coregister.html>`_
-    - `Smooth  <../../bricks/preprocess/spm/Smooth..html>`_
+    - `Smooth  <../../bricks/preprocess/spm/Smooth.html>`_
 
 .. image:: ../../images/Bold_spatial_preprocessing1_pipeline.png
   :width: 1100
@@ -68,7 +68,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/raw_data/Anat.nii
 
 - *func_files*
-    Functional images (ex. 3D T2* sequence such as echo planar imaging).
+    Functional images (ex. 4D T2* sequence such as echo planar imaging).
     A list of items which are an existing, uncompressed file (valid
     extensions: [.img, .nii, .hdr]).
 

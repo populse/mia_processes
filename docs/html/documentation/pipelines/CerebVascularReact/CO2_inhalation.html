@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CO2_inhalation pipeline &#8212; mia_processes 2.5.1-dev+aaaaebf9 documentation</title>
+    <title>CO2_inhalation pipeline &#8212; mia_processes 2.5.1-dev+619b34d5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=d901fcb5"></script>
+    <script src="../../../_static/documentation_options.js?v=37d74110"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+aaaaebf9 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+619b34d5 documentation</span></a></h1>
         <h2 class="heading"><span>CO2_inhalation pipeline</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -41,14 +41,140 @@
 <section id="co2-inhalation-pipeline">
 <h1>CO2_inhalation pipeline<a class="headerlink" href="#co2-inhalation-pipeline" title="Link to this heading">¶</a></h1>
 <section id="cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge">
-<h2>Cerebrovascular reactivity (CVR) evaluation under CO2 challenge<a class="headerlink" href="#cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge" title="Link to this heading">¶</a></h2>
+<h2>Cerebrovascular reactivity (CVR) evaluation under CO<sub>2</sub> challenge<a class="headerlink" href="#cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge" title="Link to this heading">¶</a></h2>
+<p>Functional magnetic resonance imaging (fMRI) experiments to assess
+cerebrovascular reactivity (CVR) to hypercapnia (increased CO<sub>2</sub> levels)
+typically involve inducing controlled changes in CO<sub>2</sub> levels while
+measuring the resulting changes in brain activity.</p>
+<p>Hypercapnia is induced by administering a gas mixture containing higher
+than normal levels of CO<sub>2</sub> (typically around 8% CO<sub>2</sub>).
+This can be achieved using a gas delivery system within the MRI scanner.
+Participants breathe the gas mixture through a mask or a respiratory apparatus.</p>
+<p>While hypercapnia is induced, fMRI data is continuously acquired to capture
+changes in blood oxygenation level-dependent (BOLD) signals, which reflect
+changes in cerebral blood flow.</p>
+<p>Throughout the experiment, physiological parameters such as end-tidal
+CO<sub>2</sub> (ETCO2) levels, heart rate, and respiratory rate are monitored to
+ensure the effectiveness of hypercapnia induction and to account for
+potential confounding effects. Trigger and physiological data are used
+together to ensure that ETCO2 data are synchronized with imaging data.</p>
+<p>The fMRI data are analyzed using a GLM approach. An <a class="reference external" href="../../bricks/tools/Make_CVR_reg_physio.html">ETCO2
+regressor</a> is included in the
+model to account for variations in CO2 levels. Other potential confounding
+variables (e.g. motion parameters) are also included as regressors.</p>
+<p>A report is generated at the end of the analysis with the main statistical
+results obtained.</p>
+<hr class="docutils" />
 <p><strong>Pipeline insight</strong></p>
-<p>Work in progress …</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>The CO2_inhalation pipeline combines the following bricks:</dt><dd><ul>
+<li><p><a class="reference external" href="../../pipelines/preprocess/Bold_spatial_preprocessing1.html">Bold_spatial_preprocessing1</a></p></li>
+<li><p><a class="reference external" href="../../pipelines/preprocess/Spatial_mask.html">Spatial_mask</a></p></li>
+<li><p><a class="reference external" href="../../pipelines/stat/Bold_stat_cvr.html">Bold_stat_cvr</a></p></li>
+<li><p><a class="reference external" href="../../pipelines/reports/Extract_roi_param.html">Extract_roi_param</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Make_CVR_reg_physio.html">Make_CVR_reg_physio</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Files_To_List.html">Files_To_List</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/List_To_File.html">List_To_File</a></p></li>
+<li><p><a class="reference external" href="../../bricks/reports/ReportCO2inhalCvr.html">ReportCO2inhalCvr</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<a class="reference internal image-reference" href="../../../_images/CO2_inhalation_pipeline.png"><img alt="CO2_inhalation pipeline" src="../../../_images/CO2_inhalation_pipeline.png" style="width: 1100px;" /></a>
 <hr class="docutils" />
 <p><strong>Inputs parameters</strong></p>
-<p>Work in progress …</p>
+<ul>
+<li><dl>
+<dt><em>anat_file</em></dt><dd><p>An anatomical image (ex. 3D T1 sequence such as T1 turbo field echo).
+An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>func_files</em></dt><dd><p>Functional images (ex. 4D T2* sequence such as echo planar imaging).
+A list of items which are an existing, uncompressed file (valid
+extensions: [.img, .nii, .hdr]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>trigger_data</em></dt><dd><p>The trigger data, to ensure that ETCO2 data (physiological data) are
+synchronized with imaging data. An existing file,
+exclusively in [.txt, .csv, .log] format.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/downloaded_data/trigger_time.log&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>physio_data</em></dt><dd><p>The physiological data, including ETCO2 levels, measured during the
+neuroimaging scan. An existing file, exclusively in [.txt, .csv] format.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/downloaded_data/physio_data.csv&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>patient_info</em></dt><dd><dl class="simple">
+<dt>A dictionary for entering patient data.</dt><dd><ul class="simple">
+<li><p>PatientRef: the patient’s code name</p></li>
+<li><p>Pathology: the patient’s pathology</p></li>
+<li><p>Age: patient’s age</p></li>
+<li><p>Sex: patient’s sex</p></li>
+<li><p>MR: MR-imager used,</p></li>
+<li><p>Gas: Stimulation gas: Carbogen, Bactal, Variocap, etc.</p></li>
+<li><p>GasAdmin : Stimulation gas administration: Mask, Cannula, etc.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientRef&#39;</span><span class="p">:</span> <span class="s1">&#39;bob_01&#39;</span><span class="p">,</span> <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="s1">&#39;ACMD&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="mi">57</span><span class="p">,</span>
+     <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="s1">&#39;3T&#39;</span><span class="p">,</span> <span class="s1">&#39;Gas&#39;</span><span class="p">:</span> <span class="s1">&#39;Bactal&#39;</span><span class="p">,</span> <span class="s1">&#39;GasAdmin&#39;</span><span class="p">:</span> <span class="s1">&#39;Mask&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
 <p><strong>Outputs parameters:</strong></p>
-<p>Work in progress …</p>
+<ul>
+<li><dl>
+<dt><em>xls_files</em></dt><dd><p>A tab-delimited text file containing a summary of the statistical results
+obtained (e.g. laterality indices, mean values, standard deviations, etc.)
+in the regions of interest.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_IL_mean_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_std_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_IL_std_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_mean_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_mean_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_IL_mean_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_std_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/PatientRef_data/results_aggregation/BOLD_IL_std_spmT.xls&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>report</em></dt><dd><p>The output generated report (.pdf). The summary of analysis, including
+laterality indices in various territories for statistical results
+(beta coefficients and t-statistical values, derived from GLM) plots.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/PatientRef_CO2_inhal_CVR_Report_2024_03_19_11_01_15_04.pdf&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
 </section>
 </section>
 

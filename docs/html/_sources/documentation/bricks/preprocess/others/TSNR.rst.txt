@@ -6,14 +6,14 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==========
 TSNR brick
-============
+==========
 
 Computes the time-course SNR for a time series
 ----------------------------------------------
 
-Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974>`_
+Adapted from  `Nipype Confounds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974>`_
 
 --------------------------------------
 
@@ -78,4 +78,4 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 Usefull links:
 
-`Cofunds TSNR nipype <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899>`_
+`Confunds TSNR nipype <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899>`_

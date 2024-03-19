@@ -172,7 +172,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
   - **CerebVascularReact**
 
-    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_  (in progress)
+    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_
 
   - **DWITractography**
 
