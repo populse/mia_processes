@@ -9,8 +9,11 @@ Each package corresponds to a software encapsulated in mia_processes.
         - dipy: bricks from dipy
         - freesurfer: bricks from freesurfer
         - fsl: bricks from fsl
-        - other: bricks from other sources (usually homemade bricks)
+        - matlab_wrap: bricks that wrap MATLAB scripts using Nipype
+        - mrtrix: bricks from mrtrix3
+        - others: bricks from other sources (usually homemade bricks)
         - spm: bricks from spm
+        - volbrain: bricks from volbrain
 
 """
 

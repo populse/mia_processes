@@ -31,7 +31,7 @@ It shows how to wrap a MATLAB script in a mia processes brick using nipype (and 
 
 **Outputs parameters:**
 
-- *voulume* (an integer)
+- *volume* (an integer)
    Brain volume
 
     ::

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The pipelines dedicated to the quality control measurement.
+Volbrain processes.
 
 """
 
@@ -12,6 +12,8 @@ The pipelines dedicated to the quality control measurement.
 # for details.
 ##########################################################################
 
-from .anat_mriqc import Anat_mriqc  # noqa: F401
-from .bold_mriqc import Bold_mriqc  # noqa: F401
-from .bold_signals_roi import Bold_signals_roi  # noqa: F401
+from .processes import (  # noqa: F401
+    AssemblyNetDocker,
+    GetLabels,
+    LabelsCorrespondence,
+)

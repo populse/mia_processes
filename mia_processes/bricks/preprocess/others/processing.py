@@ -1659,6 +1659,7 @@ class ExtractROIbyLabel(ProcessMIA):
         save_concate_roi_desc = (
             "Save a concatenation of regions as a NIfTI file (a boolean)"
         )
+        suffix_desc = "Suffix for outout file ( string)"
         # Outputs description
         # out_nibabel_desc = (
         #     "Extracted ROI (nibabel Nifti1Image format)"
@@ -1689,7 +1690,11 @@ class ExtractROIbyLabel(ProcessMIA):
         )
         self.add_trait(
             "save_concate_roi",
-            traits.Bool(False, optional=True, desc=save_concate_roi_desc),
+            traits.Bool(True, optional=True, desc=save_concate_roi_desc),
+        )
+        self.add_trait(
+            "suffix",
+            traits.String(output=False, optional=True, desc=suffix_desc),
         )
 
         # Outputs traits
@@ -1737,15 +1742,22 @@ class ExtractROIbyLabel(ProcessMIA):
                     return
                 labels = ""
                 out_files = []
-                for label in self.labels:
-                    labels += "_" + str(label)
-                    if self.save_each_roi:
-                        out_files.append(
-                            os.path.join(
-                                self.output_directory,
-                                file_name + "_" + str(label) + "." + in_ext,
+                if self.suffix:
+                    labels = "_" + self.suffix
+                else:
+                    for label in self.labels:
+                        labels += "_" + str(label)
+                        if self.save_each_roi:
+                            out_files.append(
+                                os.path.join(
+                                    self.output_directory,
+                                    file_name
+                                    + "_"
+                                    + str(label)
+                                    + "."
+                                    + in_ext,
+                                )
                             )
-                        )
 
                 if self.save_each_roi and out_files:
                     self.outputs["out_files"] = out_files
@@ -1795,7 +1807,9 @@ class ExtractROIbyLabel(ProcessMIA):
                 seg_volume == int(label), int(label), 0
             )
             label_seg_image = nib.Nifti1Image(
-                label_seg_volume, nib.load(self.in_file).affine
+                label_seg_volume,
+                nib.load(self.in_file).affine,
+                nib.load(self.in_file).header,
             )
             if self.save_each_roi:
                 if os.path.exists(out_file):
@@ -1855,6 +1869,7 @@ class ExtractSignalROI(ProcessMIA):
         labels_desc = (
             "The label list of the ROI to extract the signal (a list of int)"
         )
+        suffix_desc = "Suffix for outout file ( string)"
 
         # Outputs description
         # roi_nibabel_desc = (
@@ -1882,6 +1897,10 @@ class ExtractSignalROI(ProcessMIA):
                 optional=True,
                 desc=labels_desc,
             ),
+        )
+        self.add_trait(
+            "suffix",
+            traits.String(output=False, optional=True, desc=suffix_desc),
         )
 
         # Outputs traits
@@ -1916,8 +1935,11 @@ class ExtractSignalROI(ProcessMIA):
                     )
                     return
                 labels = ""
-                for label in self.labels:
-                    labels += "_" + str(label)
+                if self.suffix:
+                    labels = "_" + self.suffix
+                else:
+                    for label in self.labels:
+                        labels += "_" + str(label)
                 self.outputs["signals"] = os.path.join(
                     self.output_directory,
                     file_name + "_extracted_signals" + labels + ".csv",
@@ -1950,7 +1972,6 @@ class ExtractSignalROI(ProcessMIA):
 
         # Reorganise signals array
         signals = signals.T
-        print("aaaaaaaaaaaaaaa", signals.shape)
         df = pd.DataFrame(data=signals, index=self.labels)
         df.to_csv(self.signals)
 

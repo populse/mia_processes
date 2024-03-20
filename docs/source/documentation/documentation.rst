@@ -122,6 +122,12 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
       - `Smooth <bricks/preprocess/spm/Smooth.html>`__
 
+    - **volbrain**
+
+      - `AssemblyNetDocker <bricks/preprocess/volbrain/AssemblyNetDocker.html>`_
+      - `GetLabels <bricks/preprocess/volbrain/GetLabels.html>`_
+      - `LabelsCorrespondence <bricks/preprocess/volbrain/LabelsCorrespondence.html>`_
+
   - **reports**
 
     - `AnatIQMs <bricks/reports/AnatIQMs.html>`_
@@ -199,6 +205,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
     - `Anat_mriqc <pipelines/qualityControl/Anat_mriqc.html>`_
     - `Bold_mri_qc <pipelines/qualityControl/Bold_mriqc.html>`_
+    - `Bold_signals_roi <pipelines/qualityControl/Bold_signals_roi.html>`_
 
   - **reports**
 
