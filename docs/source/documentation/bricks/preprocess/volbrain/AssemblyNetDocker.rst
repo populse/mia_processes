@@ -17,16 +17,12 @@ This brick allows to run the AssemblyNet Docker image.
 
 Based on a large ensemble of convolution neural networks, AssemblyNet segment a T1w image in 133 labels (according to BrainColor protocol).
 
-If you use this brick:
-
-- cite: Pierrick Coupé, Boris Mansencal, Michaël Clément, Rémi Giraud, Baudouin Denis de Senneville, Vinh-Thong Ta, Vincent Lepetit, José V. Manjon
-`AssemblyNet: A large ensemble of CNNs for 3D whole brain MRI segmentation. <https://www.sciencedirect.com/science/article/pii/S1053811920305127?via%3Dihub>`_
-NeuroImage, Elsevier, 2020, 219, pp.117026.
-
-- check the AssemblyNet's `license <https://github.com/volBrain/AssemblyNet/blob/main/README.md#license>`_
+| If you use this brick:
+|   - cite: Pierrick Coupé, Boris Mansencal, Michaël Clément, Rémi Giraud, Baudouin Denis de Senneville, Vinh-Thong Ta, Vincent Lepetit, José V. Manjon `AssemblyNet <https://www.sciencedirect.com/science/article/pii/S1053811920305127?via%3Dihub>`_: A large ensemble of CNNs for 3D whole brain MRI segmentation. NeuroImage, Elsevier, 2020, 219, pp.117026.
+|   - check the AssemblyNet's `license <https://github.com/volBrain/AssemblyNet/blob/main/README.md#license>`_
 
 
-*This brick requires `Docker <https://docs.docker.com/get-docker/>`_ *
+*This brick requires Docker*
 
 --------------------------------------
 
@@ -140,7 +136,7 @@ NeuroImage, Elsevier, 2020, 219, pp.117026.
 
       ex. '/home/username/data/derived_data/report_T1w.pdf'
 
- - *report_csv* (a pathlike object or string representing a file)
+- *report_csv* (a pathlike object or string representing a file)
     Volumetry report (csv format)
 
     ::
@@ -156,3 +152,4 @@ Usefull links:
 
 `brainCOLOR protocol <https://mindboggle.info/braincolor/>`_
 
+`Docker <https://docs.docker.com/get-docker/>`_

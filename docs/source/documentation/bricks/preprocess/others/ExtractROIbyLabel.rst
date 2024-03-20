@@ -11,10 +11,7 @@ ExtractROIbyLabel brick
 =======================
 
 Extract a specific ROI from a segmentation file using labels
-------------------------------------------------------------
-
-
---------------------------------------
+-------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 

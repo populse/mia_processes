@@ -12,7 +12,8 @@ GetLabels brick
 
 Get Assemblynet segmentation labels
 ------------------------------------
-
+In each segmentation file obtain (tissues, lobes...) with AssemblyNet, each ROI is defined by a label (an integer).
+This brick is used to obtain the label and the label name, depending on the type of the segmentation file.
 Choose between "tissues", "lobes", "structures", "macrostructures" and obtain the corresponding labels and the label names
 
 --------------------------------------
@@ -58,7 +59,7 @@ Choose between "tissues", "lobes", "structures", "macrostructures" and obtain th
       ex. [1, 2, 3, 4, 5, 6, 7]
 
 - *names* (a list of string)
-     List of the corresponding label names.
+    List of the corresponding label names.
 
     ::
 
@@ -72,4 +73,3 @@ Usefull links:
 `volBrain Assemblynet <https://github.com/volBrain/AssemblyNet>`_
 
 `brainCOLOR protocol <https://mindboggle.info/braincolor/>`_
-

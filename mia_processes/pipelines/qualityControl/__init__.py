@@ -14,3 +14,4 @@ The pipelines dedicated to the quality control measurement.
 
 from .anat_mriqc import Anat_mriqc  # noqa: F401
 from .bold_mriqc import Bold_mriqc  # noqa: F401
+from .bold_signals_roi import Bold_signals_roi  # noqa: F401

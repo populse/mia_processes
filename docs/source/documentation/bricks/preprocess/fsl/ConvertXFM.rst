@@ -13,12 +13,10 @@ ConvertXFM brick
 Modify transformation matrix using convert_xfm (FSL)
 -----------------------------------------------------
 
---------------------------------------------------------------
-
 **Mandatory inputs parameters:**
 
 - *in_transfo* (a string representing an existing file)
-    Input transformation matrix  (valid extensions: [.mat]).
+    Input transformation matrix (valid extensions: [.mat]).
 
     ::
 
