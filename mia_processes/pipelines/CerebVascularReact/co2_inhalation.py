@@ -49,6 +49,18 @@ class CO2_inhalation(Pipeline):
             "smooth": True,
             "coregister": True,
         }
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_1"
+        ].process.write_voxel_sizes = [1.0, 1.0, 1.0]
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_1"
+        ].process.write_bounding_box = [
+            [-78.0, -112.0, -50.0],
+            [78.0, 76.0, 85.0],
+        ]
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_1"
+        ].process.write_interp = 1
         self.add_process(
             "2_spatial_mask",
             "mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask",
