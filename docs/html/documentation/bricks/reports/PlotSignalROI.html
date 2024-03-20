@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PlotSignalROI brick &#8212; mia_processes 2.5.1-dev+619b34d5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../_static/documentation_options.js?v=37d74110"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.5.1-dev+619b34d5 documentation</span></a></h1>
+        <h2 class="heading"><span>PlotSignalROI brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="plotsignalroi-brick">
+<h1>PlotSignalROI brick<a class="headerlink" href="#plotsignalroi-brick" title="Link to this heading">¶</a></h1>
+<section id="plot-signals-from-roi-using-a-segmentation-file-with-label">
+<h2>Plot signals from ROI using a segmentation file with label<a class="headerlink" href="#plot-signals-from-roi-using-a-segmentation-file-with-label" title="Link to this heading">¶</a></h2>
+<p>Example of png file obtained:</p>
+<a class="reference internal image-reference" href="../../../_images/PlotSignalROI.png"><img alt="Out of PlotSignalROI" src="../../../_images/PlotSignalROI.png" style="width: 800px;" /></a>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input image (valid extensions: [.nii, .nii.gz]).
+Image from which signals have been extracted.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/sub-001_bold.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>labels</em> (a list of integer)</dt><dd><p>List of the labels of the ROI to plot</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;47&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>rois_files</em> (a string representing existing files or a list of string representing existing files)</dt><dd><p>Could be either one image with all the ROI or one image by ROI</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/native_structures_sub-001_bold_space_concate_47_48.nii&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/native_structures_sub-001_bold_space_47.nii&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;/home/username/data/raw_data/native_structures_sub-001_bold_space_48.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>signals</em> (a pathlike object or string representing an existing file)</dt><dd><p>Extracted signal for each ROI in a csv file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/native_structures_sub-001_bold_space_1.csv&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>signals_whole_brain</em> (a pathlike object or string representing an existing file)</dt><dd><p>Extracted signal for all brain in a csv file. If if needed to have the average signal in the whole brain.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/native_structures_sub-001_bold_space_47_48.csv&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_png</em> (a pathlike object or string representing a file)</dt><dd><p>Out png file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/sub-001_bold_extracted_signals_47_48.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

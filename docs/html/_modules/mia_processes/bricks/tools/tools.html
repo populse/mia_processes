@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.5.1-dev+ed6789f4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../_static/documentation_options.js?v=eca75eaf"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+ed6789f4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -50,6 +50,7 @@
 <span class="sd">        - List_Duplicate</span>
 <span class="sd">        - List_To_File</span>
 <span class="sd">        - Make_A_List</span>
+<span class="sd">        - Make_CVR_reg_physio</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -60,13 +61,18 @@
 <span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
 <span class="c1"># for details.</span>
 <span class="c1">##########################################################################</span>
-
-<span class="c1"># Other imports</span>
+<span class="c1"># fmt: off</span>
+<span class="c1"># fmt: on</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
 
+<span class="c1"># Other imports</span>
+<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># nipype import</span>
@@ -87,7 +93,12 @@
 <span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="n">BRICK_OUTPUTS</span><span class="p">,</span> <span class="n">COLLECTION_CURRENT</span>
 <span class="kn">from</span> <span class="nn">populse_mia.software_properties</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">signal</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">gammaln</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Undefined</span>
 
+<span class="c1"># mia_processes imports</span>
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span><span class="p">,</span> <span class="n">get_dbFieldValue</span>
 
 
@@ -1181,7 +1192,7 @@
 
         <span class="c1"># Inputs description</span>
         <span class="n">rois_list_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list or a list of lists of strings, defining the&quot;</span>
+            <span class="s2">&quot;A list or a list of lists of strings, defining the &quot;</span>
             <span class="s2">&quot;data to import.&quot;</span>
         <span class="p">)</span>
         <span class="n">lib_dir_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -1813,13 +1824,29 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">objt1</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj1</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">SyntaxError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="c1">#  TODO: is it enough to do just that?</span>
+                <span class="n">objt1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span>
+
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
             <span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;obj_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">obj1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;obj_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt1</span><span class="p">]</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;obj_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">obj1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span><span class="p">]</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">objt2</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj2</span><span class="p">)</span>
+
+                <span class="k">except</span> <span class="p">(</span><span class="ne">SyntaxError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                    <span class="c1">#  TODO: is it enough to do just that?</span>
+                    <span class="n">objt2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;obj_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt1</span><span class="p">,</span> <span class="n">objt2</span><span class="p">]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;obj_list&quot;</span><span class="p">]</span>
 
@@ -1831,6 +1858,1194 @@
 <a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.run_process_mia">[docs]</a>
     <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio">[docs]</a>
+<span class="k">class</span> <span class="nc">Make_CVR_reg_physio</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Generate the physiological regressor for CVR*</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Make_CVR_reg_physio in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_CVR_reg_physio.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Make_CVR_reg_physio</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># no need of third party software!</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">trigger_data_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The trigger data (a file with extension &quot;</span>
+            <span class="s2">&quot;in [&#39;.txt&#39;, &#39;.csv&#39;, &#39;.log&#39;])&quot;</span>
+        <span class="p">)</span>
+        <span class="n">physio_data_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The physiological data (a file with extension &quot;</span>
+            <span class="s2">&quot;in [&#39;.txt&#39;, &#39;.csv&#39;])&quot;</span>
+        <span class="p">)</span>
+        <span class="n">func_file_desc</span> <span class="o">=</span> <span class="s2">&quot;The fMRI scan under hypercapnia (a file)&quot;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">cvr_reg_desc</span> <span class="o">=</span> <span class="s2">&quot;The physiological regressor for CVR (a file)&quot;</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;trigger_data&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">trigger_data_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;physio_data&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">physio_data_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;func_file&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">ImageFileSPM</span><span class="p">(),</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">func_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;cvr_reg&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">cvr_reg_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cvr_reg</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.gaussfir">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gaussfir">[docs]</a>
+    <span class="k">def</span> <span class="nf">gaussfir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="n">nt</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">of</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a Gaussian FIR filter</span>
+
+<span class="sd">        with a specified bandwidth-time product (bt),</span>
+<span class="sd">        number of taps (nt), and oversampling factor (of)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">convert_to_t</span><span class="p">(</span><span class="n">of</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Convert to t in which to compute the filter coefficients.&quot;&quot;&quot;</span>
+            <span class="c1"># Filter Length</span>
+            <span class="n">filt_len</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">of</span> <span class="o">*</span> <span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">nt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">filt_len</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">t</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">convert_to_t</span><span class="p">(</span><span class="n">of</span><span class="p">,</span> <span class="n">nt</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">t</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># Normalize coefficients</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">h</span></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.gfb_conv">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gfb_conv">[docs]</a>
+    <span class="k">def</span> <span class="nf">gfb_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a subsection of the convolution, as specified by the</span>
+<span class="sd">        shape parameter.</span>
+
+<span class="sd">        :param a: a vector (a ndarray numpy object)</span>
+<span class="sd">        :param b: a vector (a ndarray numpy object)</span>
+<span class="sd">        :param shape: sub-section of the convolution (a string in</span>
+<span class="sd">                      [&#39;full&#39;, &#39;same&#39;, &#39;valid&#39;])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="s2">&quot;valid&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Make_CVR_reg_physio brick: Invalid value for &#39;shape&#39;. &quot;</span>
+                <span class="s2">&quot;It must be &#39;full&#39;, &#39;same&#39;, or &#39;valid&#39;.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">na</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="c1"># Check if a is a column vector</span>
+        <span class="n">iscolumn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="c1"># Reshape a and b into column vectors</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="c1"># Determine the size of the output convolution array</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+            <span class="n">k_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">na</span> <span class="o">+</span> <span class="n">nb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
+            <span class="n">k_max</span> <span class="o">=</span> <span class="n">na</span>
+            <span class="n">ia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">nb</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s2">&quot;valid&quot;</span><span class="p">:</span>
+            <span class="n">k_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">na</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">nb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">ia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">ia</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">nb</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">k_max</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ia</span> <span class="o">=</span> <span class="n">ia</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">j</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ia</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ia</span> <span class="o">&lt;=</span> <span class="n">na</span><span class="p">)</span>
+        <span class="n">ia</span><span class="p">[</span><span class="o">~</span><span class="n">valid</span><span class="p">]</span> <span class="o">=</span> <span class="n">na</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Add zero to end of a</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">ia</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">c</span> <span class="k">if</span> <span class="n">iscolumn</span> <span class="k">else</span> <span class="n">c</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Make_CVR_reg_physio</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="c1"># if self.outputs:</span>
+        <span class="c1">#     self.outputs = {}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+            <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Make_CVR_reg_physio brick: The mandatory &#39;func_file&#39; input &quot;</span>
+                <span class="s2">&quot;parameter is not defined ...&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">patient_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Make_CVR_reg_physio brick: Please, fill &#39;PatientName&#39; &quot;</span>
+                <span class="s2">&quot;tag in the database for </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+            <span class="c1"># Create a data directory for this patient</span>
+            <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">patient_name</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_directory</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">out_directory</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Make_CVR_reg_physio brick: No output_directory was &quot;</span>
+                <span class="s2">&quot;found...!</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="n">fname_reg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_directory</span><span class="p">,</span> <span class="s2">&quot;CVR_physio_reg.mat&quot;</span><span class="p">)</span>
+        <span class="n">all_tags_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Add the reg state (individual or standard), in database</span>
+        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Regressor state&quot;</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Indicates the state of the physiological regressor for CVR &quot;</span>
+            <span class="s2">&quot;(Individual or Standard)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Individual&quot;</span>
+            <span class="c1"># TODO: The following attributes are currently hard-coded, but</span>
+            <span class="c1">#       we could add them as input of the brick if necessary?</span>
+            <span class="c1"># the number of last dyns to be deleted</span>
+            <span class="n">end_dyn_sup</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># delay between respiration and EtCO2 variation (s)</span>
+            <span class="n">delay_for_etco2</span> <span class="o">=</span> <span class="mf">4.8</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="o">/</span> <span class="mi">1000</span>
+            <span class="p">)</span>
+            <span class="c1"># TODO: glover_hrf(tr) don&#39;t give good result yet. While waiting</span>
+            <span class="c1">#       to make a good hrf, we use the hrf calculated as in spm</span>
+            <span class="c1"># from nilearn.glm.first_level.hemodynamic_models import glover_hrf</span>
+            <span class="c1"># hrf = glover_hrf(tr)</span>
+            <span class="n">hrf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_hrf</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+            <span class="n">nb_dyn</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span>
+                    <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+                <span class="p">)[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="o">-</span> <span class="n">end_dyn_sup</span>
+            <span class="p">)</span>
+            <span class="c1"># ---- Start of making phys_trig_data ----</span>
+            <span class="c1"># record some data prior to start and after end of scan,</span>
+            <span class="c1"># typically the duration of one hrf</span>
+            <span class="n">time_margin</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># seconds</span>
+            <span class="n">status_sample_freq</span> <span class="o">=</span> <span class="mf">37.127</span>
+            <span class="c1"># ---- Start of making trigdata ----</span>
+            <span class="n">starttime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">endtime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="n">n_pulses</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Read data from different types of files</span>
+            <span class="n">file_extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;txt&quot;</span><span class="p">:</span>
+                <span class="c1"># TODO: Not yet tested</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fil</span><span class="p">:</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="n">fil</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">starttime</span><span class="p">):</span>
+                            <span class="n">colonidxs</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;:&quot;</span>
+                            <span class="p">]</span>
+
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colonidxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                                <span class="c1"># fmt: off</span>
+                                <span class="n">this_time_s</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="mi">3600</span>
+                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                                    <span class="p">)</span>
+                                    <span class="o">+</span> <span class="mi">60</span>
+                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span>
+                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                                        <span class="p">]</span>
+                                    <span class="p">)</span>
+                                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span>
+                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span>
+                                        <span class="p">]</span>
+                                    <span class="p">)</span>
+                                <span class="p">)</span>
+                                <span class="c1"># fmt: on</span>
+                                <span class="n">starttime</span> <span class="o">=</span> <span class="n">this_time_s</span>
+
+                        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;E11&quot;</span><span class="p">):</span>
+                            <span class="n">this_data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="n">dt_ms</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">this_data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+                            <span class="n">dt_s</span> <span class="o">=</span> <span class="n">dt_ms</span> <span class="o">/</span> <span class="mi">1000</span>
+                            <span class="n">next_line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                            <span class="n">trig_times_ms</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">next_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="p">]</span>
+                            <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trig_times_ms</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>
+                            <span class="n">endtime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt_s</span>
+                            <span class="k">break</span>
+
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
+                <span class="c1"># tested: OK</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fil</span><span class="p">:</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="n">fil</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">5</span><span class="p">:]</span>  <span class="c1"># Skip header lines</span>
+                    <span class="n">trig_times</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">starttime</span><span class="p">):</span>
+                            <span class="n">colonidxs</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;:&quot;</span>
+                            <span class="p">]</span>
+
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colonidxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                                <span class="c1"># fmt: off</span>
+                                <span class="n">this_time_s</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="mi">3600</span>
+                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                                    <span class="p">)</span>
+                                    <span class="o">+</span> <span class="mi">60</span>
+                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                                    <span class="p">)</span>
+                                    <span class="o">+</span> <span class="nb">float</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span>
+                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5</span>
+                                        <span class="p">]</span>
+                                    <span class="p">)</span>
+                                <span class="p">)</span>
+                                <span class="c1"># fmt: on</span>
+                                <span class="n">starttime_abs</span> <span class="o">=</span> <span class="n">this_time_s</span>
+                                <span class="n">tab_pos</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                                <span class="n">starttime_rel</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tab_pos</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mi">10000</span>
+                                <span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime_abs</span> <span class="o">-</span> <span class="n">starttime_rel</span>
+
+                        <span class="k">if</span> <span class="s2">&quot;Pulse&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">tab_pos</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="n">trig_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tab_pos</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+                <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trig_times</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">dt_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">)</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dt_s</span><span class="p">)</span>
+                <span class="n">endtime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">tr</span>
+                <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">trig_times_s</span> <span class="o">-</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">n_pulses</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">endtime</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">)</span> <span class="o">/</span> <span class="n">tr</span><span class="p">)</span>
+                <span class="c1"># look for missing triggers</span>
+                <span class="n">dn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">)</span> <span class="o">/</span> <span class="n">tr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">dn_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dn</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">dn_pos</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">dn_pos</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="c1"># fmt: off</span>
+                        <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">trig_times_s</span><span class="p">[:</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">tr</span> <span class="o">+</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="n">pos</span><span class="p">]],</span>
+                                <span class="n">trig_times_s</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:],</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="c1"># fmt: on</span>
+
+            <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;csv&quot;</span><span class="p">:</span>
+                <span class="c1"># TODO: Not yet tested</span>
+                <span class="c1"># Extract start time from file name</span>
+                <span class="n">short_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span><span class="p">)</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">short_fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trigger_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fil</span><span class="p">:</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="n">fil</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]</span>  <span class="c1"># Skip header lines</span>
+                    <span class="n">trig_times</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+                        <span class="n">trig_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+                <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trig_times</span><span class="p">)</span>
+                <span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">))</span>
+                <span class="n">endtime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tr</span>
+                <span class="n">trig_times_s</span> <span class="o">=</span> <span class="n">trig_times_s</span> <span class="o">-</span> <span class="n">trig_times_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">n_pulses</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                    <span class="s2">&quot;Make_CVR_reg_physio brick: The Only &quot;</span>
+                    <span class="s2">&quot;.csv, .log and .txt extensions are &quot;</span>
+                    <span class="s2">&quot;allowed for the trigger_data &quot;</span>
+                    <span class="s2">&quot;parameter. The individual regressor &quot;</span>
+                    <span class="s2">&quot;cannot be generated... &quot;</span>
+                <span class="p">)</span>
+            <span class="c1"># ---- End of making trigdata ----</span>
+            <span class="n">starttime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">starttime</span><span class="p">)</span>
+            <span class="n">endtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">endtime</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+                <span class="c1"># tested: OK</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data from Magdata software detected ...&quot;</span><span class="p">)</span>
+                <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">data_s</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">paramnames</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fid</span><span class="p">:</span>
+                        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="mi">9</span><span class="p">])</span>
+
+                        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                            <span class="n">data_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">data_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">:])</span>
+
+                <span class="n">nlines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+                <span class="n">phys_trig_data</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">time_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nlines</span><span class="p">)</span>
+                <span class="n">datapoint</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">have_format</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlines</span><span class="p">):</span>
+                    <span class="n">this_times</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># convert to seconds since midnight</span>
+                        <span class="n">this_time_s</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">time</span> <span class="o">*</span> <span class="n">factor</span>
+                                <span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">factor</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                                    <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">this_times</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)),</span>
+                                    <span class="p">[</span><span class="mi">3600</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+                        <span class="k">if</span> <span class="n">have_format</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                            <span class="n">formatline</span> <span class="o">=</span> <span class="n">this_times</span> <span class="o">+</span> <span class="n">data_s</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
+                            <span class="n">paramnames</span> <span class="o">=</span> <span class="n">formatline</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="c1"># We&#39;re not interested in the &#39;Time&#39; field</span>
+                            <span class="c1"># at the beginning</span>
+                            <span class="n">paramnames</span> <span class="o">=</span> <span class="n">paramnames</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                            <span class="c1"># Replace spaces with underscores and</span>
+                            <span class="c1"># &#39;%&#39; with &#39;perc&#39;</span>
+                            <span class="n">paramnames</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="s2">&quot;perc&quot;</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">paramnames</span>
+                            <span class="p">]</span>
+
+                            <span class="c1"># If &#39;IBP2_wm2&#39; is not present,</span>
+                            <span class="c1"># insert the missing field right after &#39;IBP2_wm1&#39;</span>
+                            <span class="k">if</span> <span class="s2">&quot;IBP2_wm2&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">paramnames</span><span class="p">:</span>
+                                <span class="n">position</span> <span class="o">=</span> <span class="n">paramnames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;IBP2_wm1&quot;</span><span class="p">)</span>
+                                <span class="n">paramnames</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;IBP2_wm2&quot;</span><span class="p">)</span>
+
+                            <span class="c1"># Fix typos in magdata-provided field names</span>
+                            <span class="n">paramnames</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Satus&quot;</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">paramnames</span>
+                            <span class="p">]</span>
+                            <span class="n">n_params</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">paramnames</span><span class="p">)</span>
+                            <span class="c1"># Mark data as unread</span>
+                            <span class="n">data_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nlines</span><span class="p">,</span> <span class="n">n_params</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                            <span class="n">have_format</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+
+                        <span class="k">if</span> <span class="n">starttime</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">starttime</span> <span class="o">=</span> <span class="n">this_time_s</span>
+                            <span class="n">this_time_s</span> <span class="o">=</span> <span class="mi">0</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+
+                            <span class="k">if</span> <span class="n">this_time_s</span> <span class="o">&lt;</span> <span class="n">starttime</span> <span class="o">-</span> <span class="n">time_margin</span><span class="p">:</span>
+                                <span class="k">continue</span>  <span class="c1"># discard this line</span>
+
+                            <span class="k">elif</span> <span class="n">this_time_s</span> <span class="o">&gt;</span> <span class="n">endtime</span> <span class="o">+</span> <span class="n">time_margin</span><span class="p">:</span>
+                                <span class="c1"># don&#39;t expect to find any interesting</span>
+                                <span class="c1"># data after this point</span>
+                                <span class="k">break</span>
+
+                            <span class="n">this_time_s</span> <span class="o">=</span> <span class="n">this_time_s</span> <span class="o">-</span> <span class="n">starttime</span>
+
+                        <span class="n">this_data</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data_s</span><span class="p">[</span><span class="n">line</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                        <span class="p">]</span>
+                        <span class="n">this_nvalues</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="n">datapoint</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">data_matrix</span><span class="p">[</span><span class="n">datapoint</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">this_nvalues</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_data</span><span class="p">[</span>
+                            <span class="mi">1</span><span class="p">:</span>
+                        <span class="p">]</span>
+                        <span class="n">time_matrix</span><span class="p">[</span><span class="n">datapoint</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_time_s</span>
+
+                <span class="n">n_datapoints</span> <span class="o">=</span> <span class="n">datapoint</span>
+                <span class="n">data_matrix</span> <span class="o">=</span> <span class="n">data_matrix</span><span class="p">[:</span><span class="n">n_datapoints</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">time_matrix</span> <span class="o">=</span> <span class="n">time_matrix</span><span class="p">[:</span><span class="n">n_datapoints</span><span class="p">]</span>
+
+                <span class="c1"># Correcting time data</span>
+                <span class="n">status_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data_matrix</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">time_stat</span> <span class="o">=</span> <span class="n">time_matrix</span><span class="p">[</span><span class="n">status_idx</span><span class="p">]</span>
+                <span class="n">n_timepoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">time_stat</span><span class="p">)</span>
+
+                <span class="c1"># Smoothing time data</span>
+                <span class="n">n_interp</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mi">25</span> <span class="o">*</span> <span class="n">status_sample_freq</span><span class="p">),</span> <span class="n">n_timepoints</span><span class="p">)</span>
+                <span class="n">coeff_beg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                        <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_interp</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_interp</span><span class="p">)]</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="n">time_stat</span><span class="p">[:</span><span class="n">n_interp</span><span class="p">],</span>
+                    <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">coeff_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="p">(</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                                    <span class="n">n_timepoints</span> <span class="o">-</span> <span class="n">n_interp</span><span class="p">,</span> <span class="n">n_timepoints</span>
+                                <span class="p">)</span>
+                                <span class="o">+</span> <span class="mi">1</span>
+                            <span class="p">),</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_interp</span><span class="p">),</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="n">time_stat</span><span class="p">[</span><span class="o">-</span><span class="n">n_interp</span><span class="p">:],</span>
+                    <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gaussfir</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">round</span><span class="p">(</span><span class="n">status_sample_freq</span><span class="p">))</span>
+                <span class="n">n_extrap_beg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">n_extrap_end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">n_extrap_beg</span>
+                <span class="n">time_extrap_beg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n_extrap_beg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_extrap_beg</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">coeff_beg</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">time_extrap_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                                <span class="n">n_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                <span class="n">n_timepoints</span> <span class="o">+</span> <span class="n">n_extrap_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_extrap_end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">coeff_end</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">time_extrap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">time_extrap_beg</span><span class="p">,</span> <span class="n">time_stat</span><span class="p">,</span> <span class="n">time_extrap_end</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">time_stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gfb_conv</span><span class="p">(</span><span class="n">time_extrap</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="s2">&quot;valid&quot;</span><span class="p">)</span>
+                <span class="c1"># We can also use np.convolve()!</span>
+                <span class="c1"># time_stat = np.convolve(</span>
+                <span class="c1">#     time_extrap.astype(int), h, mode=&quot;valid&quot;</span>
+                <span class="c1"># )</span>
+
+                <span class="c1"># Check for points where time stands still</span>
+                <span class="n">time_stat_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">time_stat</span><span class="p">)))</span>
+                <span class="c1"># time_stat_d = np.diff(time_stat, prepend=0)</span>
+                <span class="n">stall_points</span> <span class="o">=</span> <span class="n">time_stat_d</span> <span class="o">&lt;</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span><span class="p">)</span>
+                <span class="n">stall_end</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stall_points</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">stall_points</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="mi">0</span>
+                <span class="p">)</span>
+                <span class="n">regress_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">stall_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_timepoints</span> <span class="o">-</span> <span class="n">stall_end</span><span class="p">,)),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">time_stat</span><span class="p">[</span><span class="n">stall_end</span><span class="p">:]</span> <span class="o">=</span> <span class="n">regress_valid</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
+                        <span class="n">regress_valid</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">time_stat</span><span class="p">[</span><span class="n">stall_end</span><span class="p">:],</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="k">while</span> <span class="n">stall_end</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">stall_start</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                            <span class="n">time_stat_d</span><span class="p">[:</span><span class="n">stall_end</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span>
+                            <span class="n">time_stat_d</span><span class="p">[:</span><span class="n">stall_end</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span>
+                        <span class="p">)</span>
+                        <span class="k">else</span> <span class="mi">0</span>
+                    <span class="p">)</span>
+                    <span class="n">sample_interv_ok</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">time_stat_d</span><span class="p">[:</span> <span class="n">stall_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span>
+                    <span class="p">)</span>
+                    <span class="n">avg_sample_interv_ok</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">time_stat</span><span class="p">[</span><span class="n">stall_end</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_stat</span><span class="p">[:</span> <span class="n">stall_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                        <span class="n">stall_end</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">stall_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span>
+                    <span class="n">drift_start</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sample_interv_ok</span> <span class="o">&amp;</span> <span class="n">avg_sample_interv_ok</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span>
+                            <span class="o">-</span><span class="mi">1</span>
+                        <span class="p">]</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sample_interv_ok</span> <span class="o">&amp;</span> <span class="n">avg_sample_interv_ok</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="mi">0</span>
+                    <span class="p">)</span>
+                    <span class="n">old_stall_end</span> <span class="o">=</span> <span class="n">stall_end</span>
+                    <span class="n">time_stat_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">time_stat</span><span class="p">[:</span> <span class="n">drift_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="n">stall_points</span> <span class="o">=</span> <span class="n">time_stat_d</span> <span class="o">&lt;</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="p">(</span>
+                        <span class="mi">1</span> <span class="o">/</span> <span class="n">status_sample_freq</span>
+                    <span class="p">)</span>
+                    <span class="n">stall_end</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stall_points</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">stall_points</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="mi">0</span>
+                    <span class="p">)</span>
+                    <span class="n">regress_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">stall_end</span><span class="p">,</span> <span class="n">drift_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">drift_start</span> <span class="o">-</span> <span class="n">stall_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                    <span class="c1"># fmt: off</span>
+                    <span class="n">time_stat</span><span class="p">[</span><span class="n">stall_end</span><span class="p">:</span><span class="n">drift_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                        <span class="n">regress_valid</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
+                            <span class="n">regress_valid</span><span class="p">,</span>
+                            <span class="n">time_stat</span><span class="p">[</span><span class="n">stall_end</span><span class="p">:</span><span class="n">drift_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="p">)</span>
+                    <span class="n">time_stat</span><span class="p">[</span><span class="n">drift_start</span><span class="p">:</span><span class="n">old_stall_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                        <span class="n">time_stat</span><span class="p">[</span><span class="n">drift_start</span><span class="p">],</span>
+                        <span class="n">time_stat</span><span class="p">[</span><span class="n">old_stall_end</span><span class="p">],</span>
+                        <span class="n">old_stall_end</span> <span class="o">-</span> <span class="n">drift_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="c1"># fmt: on</span>
+
+                <span class="k">if</span> <span class="n">paramnames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Make_CVR_reg_physio brick: the &quot;</span>
+                        <span class="s2">&quot;names of the physiological &quot;</span>
+                        <span class="s2">&quot;parameters could not be found &quot;</span>
+                        <span class="s2">&quot;in the physiological parameters &quot;</span>
+                        <span class="s2">&quot;file!</span><span class="se">\n</span><span class="s2">The individual regressor &quot;</span>
+                        <span class="s2">&quot;cannot be generated... &quot;</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Transfer data to the phys_trig_data dictionary</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">paramnames</span><span class="p">)):</span>
+                    <span class="n">this_fieldname</span> <span class="o">=</span> <span class="n">paramnames</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                    <span class="n">this_field_datapoints</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data_matrix</span><span class="p">[:,</span> <span class="n">field</span><span class="p">])</span>
+                    <span class="n">this_field_datapoints</span><span class="p">[:</span> <span class="nb">min</span><span class="p">(</span><span class="n">status_idx</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="c1"># fmt: off</span>
+                    <span class="n">this_field_datapoints</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">status_idx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="c1"># fmt: on</span>
+
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">this_field_datapoints</span><span class="p">):</span>
+                        <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">this_field_datapoints</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">status_idx</span><span class="p">,</span> <span class="n">time_stat</span><span class="p">)</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">data_matrix</span><span class="p">[</span><span class="n">this_field_datapoints</span><span class="p">,</span> <span class="n">field</span><span class="p">]</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="n">this_fieldname</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">indx</span><span class="p">,</span>
+                            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+                        <span class="p">}</span>
+
+                <span class="c1"># Correct other bugs in magdata software</span>
+                <span class="n">problem_timepoints</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status3&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">==</span> <span class="n">n_timepoints</span>
+                <span class="p">):</span>
+                    <span class="n">problem_timepoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                        <span class="n">problem_timepoints</span><span class="p">,</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">103</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">problem_timepoints</span><span class="p">):</span>
+                    <span class="n">valid_timepoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">problem_timepoints</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Resp_wm&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="o">==</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Resp_wm&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span>
+                        <span class="n">problem_problem_timepoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                            <span class="n">problem_timepoints</span><span class="p">,</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Resp_wm&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_problem_timepoints</span>
+                        <span class="p">]</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Resp_wm&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span>
+                        <span class="n">problem_timepoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">problem_timepoints</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">problem_timepoints</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="p">],</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span>
+                                    <span class="n">problem_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span>
+                                        <span class="s2">&quot;data&quot;</span>
+                                    <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">],</span>
+                        <span class="p">)</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="mi">128</span> <span class="o">*</span> <span class="p">(</span>
+                            <span class="p">(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">problem_timepoints</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                                <span class="p">]</span>
+                                <span class="o">&gt;</span> <span class="mi">64</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+                            <span class="ow">or</span> <span class="p">(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span>
+                                        <span class="n">problem_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span>
+                                            <span class="s2">&quot;data&quot;</span>
+                                        <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                        <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                    <span class="p">)</span>
+                                <span class="p">]</span>
+                                <span class="o">&gt;</span> <span class="mi">64</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+                        <span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">][</span>
+                                <span class="n">valid_timepoints</span>
+                            <span class="p">],</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">valid_timepoints</span>
+                            <span class="p">],</span>
+                            <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">,</span>
+                        <span class="p">)(</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Capno_wm1&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">][</span>
+                                <span class="n">problem_timepoints</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">data_matrix</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="o">==</span> <span class="n">n_timepoints</span>
+                        <span class="p">):</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">problem_timepoints</span>
+                            <span class="p">]</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">][</span>
+                                    <span class="n">valid_timepoints</span>
+                                <span class="p">],</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                    <span class="n">valid_timepoints</span>
+                                <span class="p">],</span>
+                                <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">,</span>
+                            <span class="p">)(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Pleth_wm2&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">][</span>
+                                    <span class="n">problem_timepoints</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="n">problem_timepoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">problem_timepoints</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">problem_timepoints</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="p">],</span>
+                            <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span>
+                                    <span class="n">problem_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status1&quot;</span><span class="p">][</span>
+                                        <span class="s2">&quot;data&quot;</span>
+                                    <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">],</span>
+                        <span class="p">)</span>
+                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                            <span class="n">problem_timepoints</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="mi">128</span> <span class="o">*</span> <span class="p">(</span>
+                            <span class="p">(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">problem_timepoints</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                                <span class="p">]</span>
+                                <span class="o">&gt;</span> <span class="mi">64</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+                            <span class="ow">or</span> <span class="p">(</span>
+                                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                                    <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span>
+                                        <span class="n">problem_timepoints</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                        <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;Waveform_Status4&quot;</span><span class="p">][</span>
+                                            <span class="s2">&quot;data&quot;</span>
+                                        <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                        <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                    <span class="p">)</span>
+                                <span class="p">]</span>
+                                <span class="o">&gt;</span> <span class="mi">64</span>
+                            <span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">n_pulses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;trigger&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">trig_times_s</span><span class="p">,</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">),</span>
+                    <span class="p">}</span>
+
+                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">starttime</span>
+
+            <span class="c1"># Read CoolTerm capture log</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">):</span>
+                <span class="c1"># TODO: Not yet tested</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data from CoolTerm application detected ...&quot;</span><span class="p">)</span>
+                <span class="c1"># Process data and construct phys_trig_data dictionary</span>
+                <span class="c1"># ...</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                    <span class="n">line_data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_data</span><span class="p">)</span>
+
+                <span class="p">(</span>
+                    <span class="n">comp_date</span><span class="p">,</span>
+                    <span class="n">comp_time</span><span class="p">,</span>
+                    <span class="n">monitor_date</span><span class="p">,</span>
+                    <span class="n">monitor_time</span><span class="p">,</span>
+                    <span class="n">HR</span><span class="p">,</span>
+                    <span class="n">SPO2t</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">SpO2</span><span class="p">,</span>
+                    <span class="n">BR</span><span class="p">,</span>
+                    <span class="n">ETCO2</span><span class="p">,</span>
+                    <span class="n">ICO2</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                    <span class="n">_</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span>
+
+                <span class="c1"># Convert sample start and end times to seconds since midnight</span>
+                <span class="n">monitortime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">monitor_time</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">monitortime</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mi">3600</span> <span class="o">*</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">sampletime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">comp_time</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">sampletime</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mi">3600</span> <span class="o">*</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">keep_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                        <span class="n">sampletime</span> <span class="o">&gt;=</span> <span class="n">starttime</span> <span class="o">-</span> <span class="n">time_margin</span><span class="p">,</span>
+                        <span class="n">sampletime</span> <span class="o">&lt;=</span> <span class="n">endtime</span> <span class="o">+</span> <span class="n">time_margin</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">sampletime</span> <span class="o">=</span> <span class="n">sampletime</span><span class="p">[</span><span class="n">keep_idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">starttime</span>
+                <span class="n">HR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">HR</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">BR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">BR</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">ICO2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ICO2</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">ETCO2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ETCO2</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">SpO2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">SpO2</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+                <span class="c1"># Transfer data to structure</span>
+                <span class="n">phys_trig_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;HR&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">HR</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">sampletime</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">HR</span><span class="p">)],</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">HR</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">HR</span><span class="p">)],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;Resp_Rate&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">BR</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">sampletime</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">BR</span><span class="p">)],</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">BR</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">BR</span><span class="p">)],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;ICO2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ICO2</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">sampletime</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ICO2</span><span class="p">)],</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">ICO2</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ICO2</span><span class="p">)],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;ETCO2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ETCO2</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">sampletime</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ETCO2</span><span class="p">)],</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">ETCO2</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ETCO2</span><span class="p">)],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;SpO2_perc&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">SpO2</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">sampletime</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">SpO2</span><span class="p">)],</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">SpO2</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">SpO2</span><span class="p">)],</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="n">n_pulses</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># We have read a trigger file</span>
+                    <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;trigger&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">trig_times_s</span><span class="p">,</span>
+                        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">trig_times_s</span><span class="p">),</span>
+                    <span class="p">}</span>
+
+                <span class="c1"># In units of seconds since midnight</span>
+                <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">starttime</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                    <span class="s2">&quot;Make_CVR_reg_physio brick: The Only &quot;</span>
+                    <span class="s2">&quot;.csv and .txt extensions are &quot;</span>
+                    <span class="s2">&quot;allowed for the physio_data &quot;</span>
+                    <span class="s2">&quot;parameter. The individual regressor &quot;</span>
+                    <span class="s2">&quot;cannot be generated... &quot;</span>
+                <span class="p">)</span>
+            <span class="c1"># ---- End of making phys_trig_data ----</span>
+
+            <span class="c1"># performed for all odd frames</span>
+            <span class="n">triggers</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;trigger&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+            <span class="n">trig_TR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">triggers</span><span class="p">))</span>
+            <span class="n">etco2data</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;ETCO2&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">etco2time</span> <span class="o">=</span> <span class="n">phys_trig_data</span><span class="p">[</span><span class="s2">&quot;ETCO2&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">delay_for_etco2</span>
+            <span class="n">outliers_etco2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">etco2data</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">,</span> <span class="n">etco2data</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">valid_etco2</span> <span class="o">=</span> <span class="o">~</span><span class="n">outliers_etco2</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">etco2time</span><span class="p">[</span><span class="n">valid_etco2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Make_CVR_reg_physio brick: The time relative to the &quot;</span>
+                    <span class="s2">&quot;EtCO2 recording does not seem to be strictly monotonic &quot;</span>
+                    <span class="s2">&quot;and increasing !!!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;This makes no physical sense and the calculation of &quot;</span>
+                    <span class="s2">&quot;the hypercapnic individual regressor will certainly &quot;</span>
+                    <span class="s2">&quot;fail.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Make_CVR_reg_physio brick: Trying to fix the &quot;</span>
+                    <span class="s2">&quot;issue!!!</span><span class="se">\n</span><span class="s2">Please check the result carefully, this &quot;</span>
+                    <span class="s2">&quot;is an automatic process ....</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+                <span class="n">x</span> <span class="o">=</span> <span class="n">etco2time</span><span class="p">[</span><span class="n">valid_etco2</span><span class="p">]</span>
+                <span class="n">x2</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">etco2data</span><span class="p">[</span><span class="n">outliers_etco2</span><span class="p">[</span><span class="n">index</span><span class="p">]]</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+                    <span class="n">etco2time</span><span class="p">[</span><span class="n">outliers_etco2</span><span class="p">],</span> <span class="n">x2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;cubic&quot;</span>
+                <span class="p">)(</span><span class="n">etco2data</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">etco2data</span><span class="p">[</span><span class="n">outliers_etco2</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+                    <span class="n">etco2time</span><span class="p">[</span><span class="n">valid_etco2</span><span class="p">],</span>
+                    <span class="n">etco2data</span><span class="p">[</span><span class="n">valid_etco2</span><span class="p">],</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+                <span class="p">)(</span><span class="n">etco2time</span><span class="p">[</span><span class="n">outliers_etco2</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="c1"># clean the etco2 data:</span>
+                <span class="c1"># second derivative to get local outliers</span>
+                <span class="n">etco2data_pp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">etco2data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">),</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="c1"># detect outliers (very crude)</span>
+                <span class="n">outliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">etco2data_pp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">15</span>
+                <span class="c1"># a single outlier creates three points of high curvature.</span>
+                <span class="c1"># retain central point only:</span>
+                <span class="c1"># TODO: Here, we can also use self.gfb_conv(). Test it out!</span>
+                <span class="n">outliers</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span>
+                        <span class="n">outliers</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span>
+                    <span class="p">)</span>
+                    <span class="o">==</span> <span class="mi">3</span>
+                <span class="p">)</span>
+                <span class="c1"># correct shift due to derivative above</span>
+                <span class="n">outliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">etco2data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">etco2data</span><span class="p">,</span> <span class="n">outliers</span><span class="p">)</span>
+                <span class="n">etco2time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">etco2time</span><span class="p">,</span> <span class="n">outliers</span><span class="p">)</span>
+
+            <span class="c1"># sort data and combine data from identical timepoints</span>
+            <span class="n">etco2time</span><span class="p">,</span> <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">etco2time</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">etco2time</span><span class="p">)</span>
+            <span class="n">etco2data</span> <span class="o">=</span> <span class="n">etco2data</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">]</span>
+            <span class="n">step_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">etco2time</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">step_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">step_points</span><span class="p">,</span> <span class="n">step_points</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">step_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">etco2time</span><span class="p">[</span><span class="n">step_points</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">step_times</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">this_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">etco2time</span> <span class="o">==</span> <span class="n">step_times</span><span class="p">[</span><span class="n">k</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">etco2data</span><span class="p">[</span><span class="n">this_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">etco2data</span><span class="p">[</span><span class="n">this_points</span><span class="p">])</span>
+                <span class="n">etco2data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">etco2data</span><span class="p">,</span> <span class="n">this_points</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">etco2time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">etco2time</span><span class="p">,</span> <span class="n">this_points</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+            <span class="c1"># add artificial triggers before and after scan (while we have</span>
+            <span class="c1"># data) to help with convolution of regressors with hrf</span>
+            <span class="n">num_init_trigs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="n">triggers</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">etco2time</span><span class="p">))</span> <span class="o">/</span> <span class="n">trig_TR</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">num_post_trigs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">etco2time</span><span class="p">)</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">triggers</span><span class="p">))</span> <span class="o">/</span> <span class="n">trig_TR</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">triggers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">trig_TR</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_init_trigs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">triggers</span><span class="p">),</span>
+                    <span class="n">triggers</span><span class="p">,</span>
+                    <span class="nb">max</span><span class="p">(</span><span class="n">triggers</span><span class="p">)</span> <span class="o">+</span> <span class="n">trig_TR</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_post_trigs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">etco2data</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">etco2time</span><span class="p">,</span> <span class="n">etco2data</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;cubic&quot;</span><span class="p">)(</span><span class="n">triggers</span><span class="p">)</span>
+            <span class="c1"># value separating &#39;hypercapnia&#39; from &#39;normocapnia&#39;</span>
+            <span class="n">median_etco2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">etco2data</span><span class="p">)</span>
+            <span class="c1"># average of &#39;normocapnia&#39;</span>
+            <span class="n">baseline_etco2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">etco2data</span><span class="p">[</span><span class="n">etco2data</span> <span class="o">&lt;</span> <span class="n">median_etco2</span><span class="p">])</span>
+            <span class="c1"># shift baseline hc to zero, approximately</span>
+            <span class="n">etco2data_shift</span> <span class="o">=</span> <span class="n">etco2data</span> <span class="o">-</span> <span class="n">baseline_etco2</span>
+            <span class="n">etco2data_bold</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">etco2data_shift</span><span class="p">,</span> <span class="n">hrf</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+            <span class="c1"># fmt: off</span>
+            <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span>
+                <span class="n">fname_reg</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="n">etco2data_bold</span><span class="p">[</span>
+                        <span class="n">num_init_trigs</span><span class="p">:</span><span class="n">num_init_trigs</span> <span class="o">+</span> <span class="n">nb_dyn</span>
+                    <span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="c1"># fmt: on</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Make_CVR_reg_physio brick: &quot;</span>
+                <span class="s2">&quot;individual regressor generated!&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Make_CVR_reg_physio brick: The generation of the &quot;</span>
+                <span class="s2">&quot;individual regressor has failed!</span><span class="se">\n</span><span class="s2">Traceback:&quot;</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_tb</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">...Using the standard regressor...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Standard&quot;</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">get_resources_path</span><span class="p">(),</span>
+                    <span class="s2">&quot;reference_population_data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;regressor_physio_EtCO2_standard.mat&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">fname_reg</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Make_CVR_reg_physio brick: &quot;</span> <span class="s2">&quot;standard regressor generated!&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">all_tags_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag_to_add</span><span class="p">)</span>
+        <span class="c1"># TODO: Can we simply add new tags without inheritance (I&#39;m not sure</span>
+        <span class="c1">#       this possibility was considered when we coded the</span>
+        <span class="c1">#       tags_inheritance function)? As in this case, it might be</span>
+        <span class="c1">#       preferable not to inherit from the functional but simply to</span>
+        <span class="c1">#       add new tags.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span> <span class="n">fname_reg</span><span class="p">,</span> <span class="n">own_tags</span><span class="o">=</span><span class="n">all_tags_to_add</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cvr_reg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname_reg</span>
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.spm_hrf">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.spm_hrf">[docs]</a>
+    <span class="k">def</span> <span class="nf">spm_hrf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rt</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">t</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Hemodynamic response function.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        - rt: scan repeat time</span>
+<span class="sd">        - p: parameters of the response function (two Gamma functions)</span>
+<span class="sd">        (Default: [6, 16, 1, 1, 6, 0, 32])</span>
+<span class="sd">        - t: microtime resolution (Default: 16)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        - hrf: hemodynamic response function</span>
+<span class="sd">        - p: parameters of the response function</span>
+
+<span class="sd">        Note: Adapted from SPM12 matlab code (spm_hrf.m)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">gam_dis_pdf</span><span class="p">(</span><span class="n">ga</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Probability Density Function (PDF) of Gamma distribution.</span>
+
+<span class="sd">            Parameters:</span>
+<span class="sd">            - ga: Gamma-variate (Gamma has range [0,Inf))</span>
+<span class="sd">            - sh: Shape parameter (h &gt; 0)</span>
+<span class="sd">            - sc: Scale parameter (l &gt; 0)</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">            - f: PDF of Gamma-distribution with shape &amp; scale parameters</span>
+
+<span class="sd">            Note: Adapted from SPM12 matlab code (spm_Gpdf.m).</span>
+<span class="sd">                  Warning: very specific to the spm_hrf case,</span>
+<span class="sd">                  no argument validity test is performed.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Initialise result to zeros</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ga</span><span class="p">))</span>
+            <span class="c1"># Compute</span>
+            <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">sh</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ga</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="o">+</span> <span class="n">sh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">sc</span> <span class="o">*</span> <span class="n">ga</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="o">-</span> <span class="n">gammaln</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">f</span>
+
+        <span class="c1"># from scipy.stats import gamma</span>
+        <span class="c1"># Modelled hemodynamic response function - {mixture of Gammas}</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">rt</span> <span class="o">/</span> <span class="n">t</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span>
+        <span class="c1"># hrf = (gamma.pdf(u, p[0] / p[2], scale=dt / p[2]) -</span>
+        <span class="c1">#        gamma.pdf(u, p[1] / p[3], scale=dt / p[3]) / p[4])</span>
+        <span class="c1"># We can also use the self.gam_dis_pdf() function:</span>
+        <span class="n">hrf</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gam_dis_pdf</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="o">-</span> <span class="n">gam_dis_pdf</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">dt</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">hrf</span> <span class="o">=</span> <span class="n">hrf</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">//</span> <span class="n">rt</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]</span>
+        <span class="n">hrf</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hrf</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">hrf</span></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="c1"># The regressor is created at initialisation time rather than at</span>
+        <span class="c1"># runtime because some bricks that use this regressor need to consult</span>
+        <span class="c1"># it at initialisation time (e.g. Level1Design)!</span>
         <span class="k">return</span></div>
 </div>
 

@@ -37,6 +37,12 @@ ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion i
 |   - `Plot IQMs <../../bricks/reports/BoldIQMsPlot.html>`_
 |   - `Func report  <../../bricks/reports/ReportFuncMriqc.html>`_
 
+.. image:: ../../images/Bold_mriqc_pipeline.png
+  :width: 1100
+  :alt: Bold_mriqc pipeline
+
+--------------------
+
 **Mandatory inputs parameters**
 
 - *func_file* (a string representing an existing file)

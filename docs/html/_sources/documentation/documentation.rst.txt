@@ -52,11 +52,13 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - **fsl**
 
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
+      - `ConvertXFM <bricks/preprocess/fsl/ConvertXFM.html>`_
+      - `EpiReg <bricks/preprocess/fsl/EpiReg.html>`_
       - `ExtractROI <bricks/preprocess/fsl/ExtractROI.html>`_
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
       - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
-    
+
     - **matlab_wrap**
 
       - `ComputeBrainVolume <bricks/preprocess/matlab_wrap/ComputeBrainVolume.html>`__
@@ -95,6 +97,8 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `ConvROI <bricks/preprocess/others/ConvROI.html>`_
       - `Enhance <bricks/preprocess/others/Enhance.html>`_
       - `EstimateSNR <bricks/preprocess/others/EstimateSNR.html>`_
+      - `ExtractROIbyLabel <bricks/preprocess/others/ExtractROIbyLabel.html>`_
+      - `ExtractSignalROI <bricks/preprocess/others/ExtractSignalROI.html>`_
       - `GradientThreshold <bricks/preprocess/others/GradientThreshold.html>`_
       - `Harmonize <bricks/preprocess/others/Harmonize.html>`_
       - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
@@ -127,6 +131,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
+    - `PlotSignalROI <bricks/reports/PlotSignalROI.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportCO2inhalCvr <bricks/reports/ReportCO2inhalCvr.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
@@ -161,12 +166,13 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_
     - `Make_A_List <bricks/tools/Make_A_List.html>`_
+    - `Make_CVR_reg_physio <bricks/tools/Make_CVR_reg_physio.html>`_
 
 - **pipelines**
 
   - **CerebVascularReact**
 
-    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_  (in progress)
+    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_
 
   - **DWITractography**
 

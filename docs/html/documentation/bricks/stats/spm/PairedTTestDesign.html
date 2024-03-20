@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>PairedTTestDesign brick &#8212; mia_processes 2.5.1-dev+1b04ffd2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+    <title>PairedTTestDesign brick &#8212; mia_processes 2.5.1-dev+619b34d5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=37d74110"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+1b04ffd2 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+619b34d5 documentation</span></a></h1>
         <h2 class="heading"><span>PairedTTestDesign brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -33,11 +31,6 @@
   <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 35%" />
-<col style="width: 40%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
 <td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
@@ -46,15 +39,15 @@
 </tbody>
 </table>
 <section id="pairedttestdesign-brick">
-<h1>PairedTTestDesign brick<a class="headerlink" href="#pairedttestdesign-brick" title="Permalink to this headline">¶</a></h1>
+<h1>PairedTTestDesign brick<a class="headerlink" href="#pairedttestdesign-brick" title="Link to this heading">¶</a></h1>
 <section id="create-spm-design-for-paired-t-test-spm12-fmri-factorial-design">
-<h2>Create SPM design for paired t-test (SPM12 fMRI factorial Design)<a class="headerlink" href="#create-spm-design-for-paired-t-test-spm12-fmri-factorial-design" title="Permalink to this headline">¶</a></h2>
+<h2>Create SPM design for paired t-test (SPM12 fMRI factorial Design)<a class="headerlink" href="#create-spm-design-for-paired-t-test-spm12-fmri-factorial-design" title="Link to this heading">¶</a></h2>
 <p>This brick can be used for second-level analysis. Level one design should be first performed.</p>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>paired_files</em> &lt;=&gt; pairs* <a class="footnote-reference brackets" href="#label" id="id1">1</a> (a list of list with 2 items which are a string representing an existing file):</dt><dd><p>Input paired files.</p>
+<dt><em>paired_files</em> &lt;=&gt; pairs* <a class="footnote-reference brackets" href="#label" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of list with 2 items which are a string representing an existing file):</dt><dd><p>Input paired files.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/derived_data/sub-001_data/beta_001.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/sub-001_data/beta_002.nii&#39;</span><span class="p">,],</span>
 <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/sub-002_data/beta_001.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/sub-002_data/beta_002.nii&#39;</span><span class="p">]]</span>
 </pre></div>
@@ -75,7 +68,7 @@ This directory will be created in the derived_data folder of the project.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>threshold_masking</em> &lt;=&gt; Threshold masking* <a class="footnote-reference brackets" href="#label" id="id2">1</a> (one of None, Absolute or Relative, optional, default value is None)</dt><dd><p>Images are thresholded at a given value and only voxels at which all images exceed the threshold are included:</p>
+<dt><em>threshold_masking</em> &lt;=&gt; Threshold masking* <a class="footnote-reference brackets" href="#label" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (one of None, Absolute or Relative, optional, default value is None)</dt><dd><p>Images are thresholded at a given value and only voxels at which all images exceed the threshold are included:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- None: No threshold masking</div>
@@ -90,7 +83,7 @@ This directory will be created in the derived_data folder of the project.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>use_implicit_mask</em> &lt;=&gt; Implicit Mask* <a class="footnote-reference brackets" href="#label" id="id3">1</a> (a boolean, optional, default value is True):</dt><dd><p>Use implicit mask NaNs or zeros to threshold.</p>
+<dt><em>use_implicit_mask</em> &lt;=&gt; Implicit Mask* <a class="footnote-reference brackets" href="#label" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a boolean, optional, default value is True):</dt><dd><p>Use implicit mask NaNs or zeros to threshold.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
 </pre></div>
 </div>
@@ -98,7 +91,7 @@ This directory will be created in the derived_data folder of the project.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>global_calc</em> &lt;=&gt; Global Calculation * <a class="footnote-reference brackets" href="#label" id="id4">1</a> (one of Omit, Mean, User, optional, default value is Omit):</dt><dd><p>This option is for PET or VBM data (not second level fMRI). There are three methods for estimating global effects:</p>
+<dt><em>global_calc</em> &lt;=&gt; Global Calculation * <a class="footnote-reference brackets" href="#label" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (one of Omit, Mean, User, optional, default value is Omit):</dt><dd><p>This option is for PET or VBM data (not second level fMRI). There are three methods for estimating global effects:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- Omit: assumming no other options requiring the global value chosen</div>
@@ -113,7 +106,7 @@ This directory will be created in the derived_data folder of the project.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>no_grand_mean_scaling</em> &lt;=&gt; Overall grand mean scalling* <a class="footnote-reference brackets" href="#label" id="id5">1</a> (a boolean, optional, default value is True):</dt><dd><p>This option is for PET or VBM data (not second level fMRI).
+<dt><em>no_grand_mean_scaling</em> &lt;=&gt; Overall grand mean scalling* <a class="footnote-reference brackets" href="#label" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a boolean, optional, default value is True):</dt><dd><p>This option is for PET or VBM data (not second level fMRI).
 Do not perform grand mean scaling.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
 </pre></div>
@@ -122,7 +115,7 @@ Do not perform grand mean scaling.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>normalisation</em> &lt;=&gt; Normalisation* <a class="footnote-reference brackets" href="#label" id="id6">1</a> (one of 1, 2, 3, optional, default value is 1):</dt><dd><p>This option is for PET or VBM data (not second level fMRI). Global normalisation:</p>
+<dt><em>normalisation</em> &lt;=&gt; Normalisation* <a class="footnote-reference brackets" href="#label" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (one of 1, 2, 3, optional, default value is 1):</dt><dd><p>This option is for PET or VBM data (not second level fMRI). Global normalisation:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- 1: None</div>
@@ -137,7 +130,7 @@ Do not perform grand mean scaling.</p>
 <p><strong>Optional inputs:</strong></p>
 <ul>
 <li><dl>
-<dt><em>covariates_names</em> &lt;=&gt; Covariate.Name* <a class="footnote-reference brackets" href="#label" id="id7">1</a> (a list of string, optional):</dt><dd><p>Names of the covariates.
+<dt><em>covariates_names</em> &lt;=&gt; Covariate.Name* <a class="footnote-reference brackets" href="#label" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of string, optional):</dt><dd><p>Names of the covariates.
 The covariate option allows to specified covariates or nuissance variables.
 The aims is to examine whether there are any correlations between this additionl data and brain activation.</p>
 <p>covariates_vectors, covariates_interactions and covariates_centerings should be aslo filled.</p>
@@ -148,7 +141,7 @@ The aims is to examine whether there are any correlations between this additionl
 </dl>
 </li>
 <li><dl>
-<dt><em>covariates_vectors</em> &lt;=&gt; Covariate.Vector* <a class="footnote-reference brackets" href="#label" id="id8">1</a> (a list of list of float, optional):</dt><dd><p>Vectors of the covariates values.
+<dt><em>covariates_vectors</em> &lt;=&gt; Covariate.Vector* <a class="footnote-reference brackets" href="#label" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of list of float, optional):</dt><dd><p>Vectors of the covariates values.
 For each covariate, the values should be entered “per subject” (i.e all for subject 1, then all for subject 2,…).</p>
 <p>covariates_names, covariates_interactions and covariates_centerings should be aslo filled.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]]</span>
@@ -158,7 +151,7 @@ For each covariate, the values should be entered “per subject” (i.e all for 
 </dl>
 </li>
 <li><dl>
-<dt><em>covariates_interactions</em> &lt;=&gt; Covariate.Intercations* <a class="footnote-reference brackets" href="#label" id="id9">1</a> (a list of int among 1, 2, 3, 4 optional):</dt><dd><p>For each covariate you have defined, there is an opportunity to create an additional regressor that
+<dt><em>covariates_interactions</em> &lt;=&gt; Covariate.Intercations* <a class="footnote-reference brackets" href="#label" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of int among 1, 2, 3, 4 optional):</dt><dd><p>For each covariate you have defined, there is an opportunity to create an additional regressor that
 is the interaction between the covariate and a chosen experimental facto:</p>
 <blockquote>
 <div><div class="line-block">
@@ -176,7 +169,7 @@ is the interaction between the covariate and a chosen experimental facto:</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>covariates_centerings</em> &lt;=&gt; Covariate.Centering* <a class="footnote-reference brackets" href="#label" id="id10">1</a> (a list of int among 1, 2, 3, 4, 5, 6, 7, 8, optional):</dt><dd><p>Covariates centering values:</p>
+<dt><em>covariates_centerings</em> &lt;=&gt; Covariate.Centering* <a class="footnote-reference brackets" href="#label" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of int among 1, 2, 3, 4, 5, 6, 7, 8, optional):</dt><dd><p>Covariates centering values:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- 1: Overall mean</div>
@@ -197,7 +190,7 @@ is the interaction between the covariate and a chosen experimental facto:</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>threshold_mask_value</em> &lt;=&gt; Threshold masking.Threshold* <a class="footnote-reference brackets" href="#label" id="id11">1</a> (a float, optional):</dt><dd><p>Value of the threshold.
+<dt><em>threshold_mask_value</em> &lt;=&gt; Threshold masking.Threshold* <a class="footnote-reference brackets" href="#label" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a float, optional):</dt><dd><p>Value of the threshold.
 If “Absolute” is used for threshold_masking parameter, enter the absolute value of the threshold.
 If “Relative” is used for threshold_masking parameter, enter the threshold as a proportion of the global value.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.8</span>
@@ -207,7 +200,7 @@ If “Relative” is used for threshold_masking parameter, enter the threshold a
 </dl>
 </li>
 <li><dl>
-<dt><em>explicit_mask_file</em> &lt;=&gt; Explicit mask* <a class="footnote-reference brackets" href="#label" id="id12">1</a> (a string that representing an exiting file, optional):</dt><dd><p>Use an implicit mask file to threshold.
+<dt><em>explicit_mask_file</em> &lt;=&gt; Explicit mask* <a class="footnote-reference brackets" href="#label" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a string that representing an exiting file, optional):</dt><dd><p>Use an implicit mask file to threshold.
 Explicit masks are other images containing (implicit) masks that are to be applied to the current analysis.
 All voxels with value NaN (for image data-types with a representation of NaN), or zero (for other data types) are excluded from the analysis.</p>
 <p>Explicit mask images can have any orientation and voxel/image size. Nearest neighbour interpolation of a mask image is used if the voxel centers of the input images do not coincide with that of the mask image.</p>
@@ -218,7 +211,7 @@ All voxels with value NaN (for image data-types with a representation of NaN), o
 </dl>
 </li>
 <li><dl>
-<dt><em>global_calc_values</em> &lt;=&gt; Global Calculaion.Global values* <a class="footnote-reference brackets" href="#label" id="id13">1</a> (a list of float, optional)</dt><dd><p>Vector of global values used for global caculation (to be filled only if “User” choose for global_calc parameter )</p>
+<dt><em>global_calc_values</em> &lt;=&gt; Global Calculaion.Global values* <a class="footnote-reference brackets" href="#label" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of float, optional)</dt><dd><p>Vector of global values used for global caculation (to be filled only if “User” choose for global_calc parameter )</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -239,11 +232,13 @@ Note that the input smp_mat_file will be overwritten.</p>
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>,<a href="#id6">6</a>,<a href="#id7">7</a>,<a href="#id8">8</a>,<a href="#id9">9</a>,<a href="#id10">10</a>,<a href="#id11">11</a>,<a href="#id12">12</a>,<a href="#id13">13</a>)</span></dt>
-<dd><p>Syntax: mia_processes/nipype OneSampleTTestDesign brick &lt;=&gt; SPM12 fMRI factorial design.</p>
-</dd>
-</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="label" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>,<a role="doc-backlink" href="#id7">7</a>,<a role="doc-backlink" href="#id8">8</a>,<a role="doc-backlink" href="#id9">9</a>,<a role="doc-backlink" href="#id10">10</a>,<a role="doc-backlink" href="#id11">11</a>,<a role="doc-backlink" href="#id12">12</a>,<a role="doc-backlink" href="#id13">13</a>)</span>
+<p>Syntax: mia_processes/nipype OneSampleTTestDesign brick &lt;=&gt; SPM12 fMRI factorial design.</p>
+</aside>
+</aside>
 <p>Usefull links:</p>
 <p><a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=81">SPM12 fMRI Factorial Design</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#onesamplettestdesign">nipype OneSampleTTestDesign</a></p>
@@ -261,8 +256,8 @@ Note that the input smp_mat_file will be overwritten.</p>
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -883,7 +883,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         )
 
         norm_anat_vmin_desc = (
-            "Minimum value in the data range covered by the color map ("
+            "Minimum value in the data range covered by the color map"
         )
 
         norm_anat_vmax_desc = (

@@ -41,7 +41,7 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
   **Optional inputs parameters:**
 
 - *dwi_bvec* (a string representing an existing file)
-    Bvec file (valid extensions: [.bvec]). 
+    Bvec file (valid extensions: [.bvec]).
     If no file is supplied, the file with the same name as "in_dwi" but wil ".bvec" extension will be automatically used.
 
     ::
@@ -57,7 +57,7 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
       ex. '/home/username/data/raw_data/dwi.bval'
 
 - *in_mask* (a string representing an existing file)
-    Brain mask file (valid extensions: [.nii, .nii.gz]). If you want to fit the model within a mask. 
+    Brain mask file (valid extensions: [.nii, .nii.gz]). If you want to fit the model within a mask.
 
     ::
 

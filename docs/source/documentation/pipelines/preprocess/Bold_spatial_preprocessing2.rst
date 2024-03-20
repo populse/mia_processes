@@ -15,7 +15,7 @@ An example of fMRI data pre-processing
 
 **Pipeline insight**
 
-- Spatial_preprocessing pipeline combines the following bricks:
+- The Bold_spatial_preprocessing2 pipeline combines the following bricks:
     - `Slice timing  <../../bricks/preprocess/spm/SliceTiming.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
     - `Normalize12 Estimate & write <../../bricks/preprocess/spm/Normalize12.html>`_
@@ -41,7 +41,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/raw_data/Anat.nii
 
 - *func_files* (A list of items which are an existing uncompressed file)
-    Functional images (valid extensions: [.nii]). Ex. 3D T2* sequence sush as echo planar imaging.
+    Functional images (valid extensions: [.nii]). Ex. 4D T2* sequence sush as echo planar imaging.
 
     ::
 

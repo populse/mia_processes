@@ -49,9 +49,6 @@ Generates files containing summary data for each region of interest
 	  '/home/username/data/raw_data/ACM_L_mean_spmT_BOLD.txt',
 	  '/home/username/data/raw_data/ACM_R_mean_spmT_BOLD.txt',
 
-
-
-
 - *laterality_index*
     | A Boolean to calculate (True) or not (False) the laterality index:
     | (left hemisphere parameter - right hemisphere parameter) / (left hemisphere parameter + right hemisphere parameter)

@@ -33,13 +33,20 @@ Further discussion is available
 |   - `Harmonize <../../bricks/preprocess/others/Harmonize.html>`_
 |   - `Skull Stripping <../../pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_ (using SynthStrip from Freesurfer)
 |   - `Segmentation <../../bricks/preprocess/fsl/FastSegment.html>`_ (using Fast from FSL)
+|   - `List_To_file <../../bricks/tools/List_To_File.html>`_
 |   - `Spatial Normalisation <../../pipelines/preprocess/Anat_spatial_norm.html>`_
 |   - `Head mask <../../bricks/preprocess/fsl/FastSegment.html>`_ (using Bet from FSL)
 |   - `Air mask  <../../pipelines/preprocess/Anat_airmask.html>`_
 |   - `Anat_mni_tpms <../../pipelines/preprocess/Anat_mni_tpms.html>`_
 |   - `IQMs computation  <../../bricks/reports/AnatIQMs.html>`_
-|   - `FWHMx computation  <../../bricks/reports/FWHMx.html>`_
+|   - `FWHMx computation  <../../bricks/preprocess/afni/FWHMx.html>`_
 |   - `Anat report  <../../bricks/reports/ReportFuncMriqc.html>`_
+
+.. image:: ../../images/Anat_mriqc_pipeline.png
+  :width: 1100
+  :alt: Anat_mriqc pipeline
+
+--------------------
 
 **Mandatory inputs parameters**
 

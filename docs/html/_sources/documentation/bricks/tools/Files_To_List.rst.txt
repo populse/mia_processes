@@ -41,29 +41,39 @@ Files_To_List brick
 From 3 file names, generating a list containing all theses file names
 ---------------------------------------------------------------------
 
-- `file1` is mandatory, while `file2` and `file3` are optional. If one (or both) of the latter two entries is (are) undefined, it will not be present in `file_list`.
-- Ex. `file2` is undefined and `file3` is defined, the result for file_list will be [file1, file3].
+- `file1` is mandatory, while `file2` and `file3` are optional. If one
+  (or both) of the latter two entries is (are) undefined, it will not be
+  present in `file_list`.
+- Ex. `file2` is undefined and `file3` is defined, the result for file_list
+  will be [file1, file3].
 
 **Inputs parameters:**
 
 - *file1*
-    A string corresponding to a path file.
+    A mandatory string corresponding to a path file.
 
     ::
 
-      ex. /home/username/data/Anat.nii
+      ex. /home/username/data/raw_data/Anat.nii
 
 - *file2*
     An optional string corresponding to a path file.
 
     ::
 
-      ex. /home/username/data/Func.nii
+      ex. /home/username/data/raw_data/Func.nii
+
+- *file3*
+    An optional string corresponding to a path file.
+
+    ::
+
+      ex. <undefined>
 
 **Outputs parameters:**
 
 - *file_list*
-    A list.
+    A list of files.
 
     ::
 

@@ -31,18 +31,19 @@ needed to run other higher-level bricks.
 # http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 # for details.
 ##########################################################################
-
+# fmt: off
+# fmt: on
 import os
 import re
 import shutil
 import tempfile
+import traceback
 
 # Other imports
 from ast import literal_eval
 
 import numpy as np
 import pandas as pd
-import scipy.signal as signal
 
 # nipype import
 from nipype.interfaces.base import (
@@ -62,7 +63,9 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from scipy import io, signal
 from scipy.interpolate import interp1d
+from scipy.special import gammaln
 from traits.api import Either, Undefined
 
 # mia_processes imports
@@ -1698,8 +1701,14 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.requirement = []  # no need of third party software!
 
         # Inputs description
-        trigger_data_desc = "The trigger data (a file)"
-        physio_data_desc = "The physiological data (a file)"
+        trigger_data_desc = (
+            "The trigger data (a file with extension "
+            "in ['.txt', '.csv', '.log'])"
+        )
+        physio_data_desc = (
+            "The physiological data (a file with extension "
+            "in ['.txt', '.csv'])"
+        )
         func_file_desc = "The fMRI scan under hypercapnia (a file)"
 
         # Outputs description
@@ -1735,13 +1744,74 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.add_trait("cvr_reg", File(output=True, desc=cvr_reg_desc))
         self.cvr_reg = traits.Undefined
 
-        # Special parameter used as a messenger for the run_process_mia method
-        # self.add_trait(
-        #     "dict4runtime",
-        #     traits.Dict(output=False, optional=True, userlevel=1),
-        # )
-
         self.init_default_traits()
+
+    def gaussfir(self, bt, nt=3, of=2):
+        """Generate a Gaussian FIR filter
+
+        with a specified bandwidth-time product (bt),
+        number of taps (nt), and oversampling factor (of)
+        """
+
+        def convert_to_t(of, nt):
+            """Convert to t in which to compute the filter coefficients."""
+            # Filter Length
+            filt_len = 2 * of * nt + 1
+            t = np.linspace(-nt, nt, filt_len)
+            return t
+
+        t = convert_to_t(of, nt)
+        alpha = np.sqrt(np.log(2) / 2) / (bt)
+        h = (np.sqrt(np.pi) / alpha) * np.exp(-((t * np.pi / alpha) ** 2))
+        # Normalize coefficients
+        h = h / np.sum(h)
+        return h
+
+    def gfb_conv(self, a, b, shape="full"):
+        """Return a subsection of the convolution, as specified by the
+        shape parameter.
+
+        :param a: a vector (a ndarray numpy object)
+        :param b: a vector (a ndarray numpy object)
+        :param shape: sub-section of the convolution (a string in
+                      ['full', 'same', 'valid'])
+        """
+        if shape not in ["full", "same", "valid"]:
+            raise ValueError(
+                "Make_CVR_reg_physio brick: Invalid value for 'shape'. "
+                "It must be 'full', 'same', or 'valid'."
+            )
+
+        na = np.prod(a.shape)
+        nb = np.prod(b.shape)
+        # Check if a is a column vector
+        iscolumn = np.size(np.shape(a)) == 1
+        # Reshape a and b into column vectors
+        a = a.flatten()
+        b = b.flatten()
+
+        # Determine the size of the output convolution array
+        if shape == "full":
+            k_max = max(na + nb - 1, 0)
+            ia = np.arange(1, k_max + 1)
+
+        elif shape == "same":
+            k_max = na
+            ia = np.arange(1, k_max + 1) + np.floor(nb / 2)
+
+        elif shape == "valid":
+            k_max = max(na - max(nb - 1, 0), 0)
+            ia = np.arange(1, k_max + 1) + max(nb - 1, 0)
+
+        ia = np.repeat(ia.reshape(-1, 1), nb, axis=1)
+        j = np.repeat(np.arange(1, nb + 1).reshape(1, -1), k_max, axis=0)
+        ia = ia + 1 - j
+        valid = np.logical_and(ia > 0, ia <= na)
+        ia[~valid] = na + 1
+        a = np.append(a, 0)  # Add zero to end of a
+        c = np.sum(a[ia - 1] * b, axis=1)
+
+        return c if iscolumn else c.reshape(1, -1)
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1758,8 +1828,8 @@ class Make_CVR_reg_physio(ProcessMIA):
         super(Make_CVR_reg_physio, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
+        # if self.outputs:
+        #     self.outputs = {}
 
         if self.func_file not in ["<undefined>", traits.Undefined]:
             patient_name = get_dbFieldValue(
@@ -1797,8 +1867,6 @@ class Make_CVR_reg_physio(ProcessMIA):
             return self.make_initResult()
 
         fname_reg = os.path.join(out_directory, "CVR_physio_reg.mat")
-        self.outputs["cvr_reg"] = fname_reg
-
         all_tags_to_add = []
         # Add the reg state (individual or standard), in database
         tag_to_add = dict()
@@ -1813,61 +1881,25 @@ class Make_CVR_reg_physio(ProcessMIA):
         tag_to_add["unit"] = None
         tag_to_add["default_value"] = None
 
-        if self.trigger_data and self.physio_data not in [
-            "<undefined>",
-            traits.Undefined,
-        ]:
+        try:
             tag_to_add["value"] = "Individual"
-
-        else:
-            tag_to_add["value"] = "Standard"
-
-        all_tags_to_add.append(tag_to_add)
-        # TODO: Can we simply add new tags without inheritance (I'm not sure
-        #       this possibility was considered when we coded the
-        #       tags_inheritance function)? As in this case, it might be
-        #       preferable not to inherit from the functional but simply to
-        #       add new tags.
-        self.tags_inheritance(
-            self.func_file, fname_reg, own_tags=all_tags_to_add
-        )
-
-        if self.trigger_data and self.physio_data not in [
-            "<undefined>",
-            traits.Undefined,
-        ]:
             # TODO: The following attributes are currently hard-coded, but
             #       we could add them as input of the brick if necessary?
             # the number of last dyns to be deleted
             end_dyn_sup = 0
             # delay between respiration and EtCO2 variation (s)
             delay_for_etco2 = 4.8
-            # tr = (
-            #     get_dbFieldValue(
-            #         self.project, self.func_file, "RepetitionTime"
-            #     )[0]
-            #     / 1000
-            # )
+            tr = (
+                get_dbFieldValue(
+                    self.project, self.func_file, "RepetitionTime"
+                )[0]
+                / 1000
+            )
             # TODO: glover_hrf(tr) don't give good result yet. While waiting
-            #       to make a good hrf, we use the hrf calculated in Amigo,
-            #       !! valid only for a TR of 3s !!
+            #       to make a good hrf, we use the hrf calculated as in spm
             # from nilearn.glm.first_level.hemodynamic_models import glover_hrf
             # hrf = glover_hrf(tr)
-            hrf = np.array(
-                [
-                    0,
-                    0.383336774751345,
-                    0.342135983764201,
-                    0.171766927912155,
-                    0.0681357904590986,
-                    0.0237549216202789,
-                    0.00763263283024258,
-                    0.00231806829729287,
-                    0.000675566955637493,
-                    0.000190779506299889,
-                    5.25539034490526e-05,
-                ]
-            )
+            hrf = self.spm_hrf(tr, [6, 16, 2, 1, np.inf, 0, 32])
             nb_dyn = (
                 get_dbFieldValue(
                     self.project,
@@ -1876,35 +1908,15 @@ class Make_CVR_reg_physio(ProcessMIA):
                 )[4]
                 - end_dyn_sup
             )
-            # TODO: make read_phys_trig_data(). phys_trig_data is an object
-            #       with data from trigger and physiological parameters
-            # phys_trig_data = read_phys_trig_data(self.physio_data,
-            #                                      self.physio_data)
-            # While we wait for the read_phys_trig_data() function to be
-            # coded we use phys_trig_data from amigo!
-            # from scipy.io import loadmat
-            # phys_trig_data = loadmat("/home/econdami/Desktop/physdata.mat",
-            #                          simplify_cells=True)['physdata']
             # ---- Start of making phys_trig_data ----
-            starttime = 0
-            endtime = np.inf
-            n_pulses = 0
+            # record some data prior to start and after end of scan,
+            # typically the duration of one hrf
             time_margin = 30  # seconds
             status_sample_freq = 37.127
-
             # ---- Start of making trigdata ----
-            trigdata = {}
             starttime = np.nan
             endtime = np.inf
             n_pulses = 0
-
-            # Check if file exists
-            if not os.path.isfile(self.trigger_data):
-                raise FileNotFoundError(
-                    f"Make_CVR_reg_physio brick: Input "
-                    f"file {self.trigger_data} not found!"
-                )
-
             # Read data from different types of files
             file_extension = self.trigger_data.lower().split(".")[-1]
 
@@ -1955,7 +1967,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                             endtime = starttime + len(trig_times_s) * dt_s
                             break
 
-                TR = np.median(np.diff(trig_times_s))
+                tr = np.median(np.diff(trig_times_s))
 
             elif file_extension == "log":
                 # tested: OK
@@ -2000,12 +2012,12 @@ class Make_CVR_reg_physio(ProcessMIA):
                 trig_times_s = np.array(trig_times) / 10000
                 starttime = starttime + trig_times_s[0]
                 dt_s = np.diff(trig_times_s)
-                TR = np.median(dt_s)
-                endtime = starttime + trig_times_s[-1] - trig_times_s[0] + TR
+                tr = np.median(dt_s)
+                endtime = starttime + trig_times_s[-1] - trig_times_s[0] + tr
                 trig_times_s = trig_times_s - trig_times_s[0]
-                n_pulses = int((endtime - starttime) / TR)
+                n_pulses = int((endtime - starttime) / tr)
                 # look for missing triggers
-                dn = np.round(np.diff(trig_times_s) / TR) - 1
+                dn = np.round(np.diff(trig_times_s) / tr) - 1
                 dn_pos = np.where(dn != 0)[0]
 
                 if dn_pos.size != 0:
@@ -2015,7 +2027,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                         trig_times_s = np.concatenate(
                             [
                                 trig_times_s[:pos + 1],
-                                [TR + trig_times_s[pos]],
+                                [tr + trig_times_s[pos]],
                                 trig_times_s[pos + 1:],
                             ]
                         )
@@ -2039,102 +2051,583 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                 trig_times_s = np.array(trig_times)
                 starttime = starttime + trig_times_s[0]
-                TR = np.median(np.diff(trig_times_s))
-                endtime = starttime + trig_times_s[-1] + TR
+                tr = np.median(np.diff(trig_times_s))
+                endtime = starttime + trig_times_s[-1] + tr
                 trig_times_s = trig_times_s - trig_times_s[0]
                 n_pulses = len(trig_times_s)
 
-            trigdata["starttime"] = float(starttime)
-            trigdata["endtime"] = float(endtime)
-            trigdata["triggers"] = trig_times_s
-            trigdata["n_pulses"] = n_pulses
-            trigdata["TR"] = TR
+            else:
+                raise FileNotFoundError(
+                    "Make_CVR_reg_physio brick: The Only "
+                    ".csv, .log and .txt extensions are "
+                    "allowed for the trigger_data "
+                    "parameter. The individual regressor "
+                    "cannot be generated... "
+                )
             # ---- End of making trigdata ----
-
-            starttime = trigdata["starttime"]
-            endtime = trigdata["endtime"]
-            trig_times_s = trigdata["triggers"]
-            n_pulses = trigdata["n_pulses"]
+            starttime = float(starttime)
+            endtime = float(endtime)
 
             if self.physio_data.lower().endswith(".csv"):
+                # tested: OK
                 print("Data from Magdata software detected ...")
-                data = np.loadtxt(
-                    self.physio_data, delimiter=",", skiprows=1, dtype=str
-                )
-                times = data[:, 0]
-                data_s = data[:, 1:]
+                times = []
+                data_s = []
+                paramnames = None
+
+                with open(self.physio_data, "r") as fid:
+
+                    for line in fid:
+                        times.append(line[:9])
+
+                        if line[9:].endswith("\n"):
+                            data_s.append(line[9:-2])
+
+                        else:
+                            data_s.append(line[9:])
+
                 nlines = len(times)
                 phys_trig_data = {}
-                data_matrix = np.full((nlines, len(data_s[0])), np.nan)
                 time_matrix = np.zeros(nlines)
                 datapoint = 0
-                # have_format = False
+                have_format = False
 
                 for line in range(nlines):
                     this_times = times[line]
-                    # convert to seconds since midnight
-                    this_time_s = sum(map(int, this_times.split(":")))
 
-                    if starttime == 0:
-                        starttime = this_time_s
-                        this_time_s = 0
+                    try:
+                        # convert to seconds since midnight
+                        this_time_s = sum(
+                            [
+                                time * factor
+                                for time, factor in zip(
+                                    map(int, this_times.split(":")),
+                                    [3600, 60, 1],
+                                )
+                            ]
+                        )
+
+                    except ValueError:
+
+                        if have_format is False:
+                            formatline = this_times + data_s[line]
+                            paramnames = formatline.split(",")
+                            # We're not interested in the 'Time' field
+                            # at the beginning
+                            paramnames = paramnames[1:]
+                            # Replace spaces with underscores and
+                            # '%' with 'perc'
+                            paramnames = [
+                                name.strip()
+                                .replace(" ", "_")
+                                .replace("%", "perc")
+                                for name in paramnames
+                            ]
+
+                            # If 'IBP2_wm2' is not present,
+                            # insert the missing field right after 'IBP2_wm1'
+                            if "IBP2_wm2" not in paramnames:
+                                position = paramnames.index("IBP2_wm1")
+                                paramnames.insert(position + 1, "IBP2_wm2")
+
+                            # Fix typos in magdata-provided field names
+                            paramnames = [
+                                name.replace("Satus", "Status")
+                                for name in paramnames
+                            ]
+                            n_params = len(paramnames)
+                            # Mark data as unread
+                            data_matrix = np.full((nlines, n_params), np.nan)
+                            have_format = True
 
                     else:
 
-                        if this_time_s < starttime - time_margin:
-                            continue
+                        if starttime == 0:
+                            starttime = this_time_s
+                            this_time_s = 0
 
-                        elif this_time_s > endtime + time_margin:
-                            break
+                        else:
 
-                        this_time_s -= starttime
+                            if this_time_s < starttime - time_margin:
+                                continue  # discard this line
 
-                    this_data = data_s[line].astype(float)
-                    this_nvalues = len(this_data)
-                    datapoint += 1
-                    data_matrix[datapoint - 1, :this_nvalues] = this_data
-                    time_matrix[datapoint - 1] = this_time_s
+                            elif this_time_s > endtime + time_margin:
+                                # don't expect to find any interesting
+                                # data after this point
+                                break
+
+                            this_time_s = this_time_s - starttime
+
+                        this_data = [
+                            int(val) if val.strip() else np.nan
+                            for val in data_s[line].split(",")
+                        ]
+                        this_nvalues = len(this_data) - 1
+                        datapoint += 1
+                        data_matrix[datapoint - 1, :this_nvalues] = this_data[
+                            1:
+                        ]
+                        time_matrix[datapoint - 1] = this_time_s
 
                 n_datapoints = datapoint
                 data_matrix = data_matrix[:n_datapoints, :]
                 time_matrix = time_matrix[:n_datapoints]
-                # Correct time data
-                time_stat = time_matrix
-                time_extrap = np.concatenate(
-                    np.linspace(
-                        time_stat[0] - time_margin,
-                        time_stat[0],
-                        int(25 * status_sample_freq),
-                    ),
-                    time_stat,
-                    np.linspace(
-                        time_stat[-1],
-                        time_stat[-1] + time_margin,
-                        int(25 * status_sample_freq),
-                    ),
-                )
-                print(time_extrap)
-                # time_stat = np.convolve(
-                #     time_extrap,
-                #     gaussfir(0.3, 2, 2 * int(status_sample_freq)),
-                #     mode="valid",
-                # )
-                # Further processing to correct time data
-                # ...
-                # Construct phys_trig_data dictionary with corrected time data
-                # ...
 
-            elif self.physio_data.lower().endswith(".txt"):
-                print("Data from CoolTerm application detected ...")
-                data = np.loadtxt(
-                    self.physio_data, delimiter=",", skiprows=1, dtype=str
+                # Correcting time data
+                status_idx = np.where(~np.isnan(data_matrix[:, -1]))[0]
+                time_stat = time_matrix[status_idx]
+                n_timepoints = len(time_stat)
+
+                # Smoothing time data
+                n_interp = min(round(25 * status_sample_freq), n_timepoints)
+                coeff_beg = np.linalg.lstsq(
+                    np.vstack(
+                        [(np.arange(n_interp) + 1), np.ones(n_interp)]
+                    ).T,
+                    time_stat[:n_interp],
+                    rcond=None,
+                )[0]
+                coeff_end = np.linalg.lstsq(
+                    np.vstack(
+                        [
+                            (
+                                np.arange(
+                                    n_timepoints - n_interp, n_timepoints
+                                )
+                                + 1
+                            ),
+                            np.ones(n_interp),
+                        ]
+                    ).T,
+                    time_stat[-n_interp:],
+                    rcond=None,
+                )[0]
+                h = self.gaussfir(0.3, 2, 2 * round(status_sample_freq))
+                n_extrap_beg = int(np.ceil((len(h) - 1) / 2))
+                n_extrap_end = len(h) - 1 - n_extrap_beg
+                time_extrap_beg = np.dot(
+                    np.hstack(
+                        (
+                            np.arange(-n_extrap_beg + 1, 1).reshape(-1, 1),
+                            np.ones((n_extrap_beg, 1)),
+                        )
+                    ),
+                    coeff_beg,
                 )
+                time_extrap_end = np.dot(
+                    np.hstack(
+                        (
+                            np.arange(
+                                n_timepoints + 1,
+                                n_timepoints + n_extrap_end + 1,
+                            ).reshape(-1, 1),
+                            np.ones((n_extrap_end, 1)),
+                        )
+                    ),
+                    coeff_end,
+                )
+                time_extrap = np.concatenate(
+                    (time_extrap_beg, time_stat, time_extrap_end)
+                )
+                time_stat = self.gfb_conv(time_extrap, h, "valid")
+                # We can also use np.convolve()!
+                # time_stat = np.convolve(
+                #     time_extrap.astype(int), h, mode="valid"
+                # )
+
+                # Check for points where time stands still
+                time_stat_d = np.concatenate(([0], np.diff(time_stat)))
+                # time_stat_d = np.diff(time_stat, prepend=0)
+                stall_points = time_stat_d < 0.75 * (1 / status_sample_freq)
+                stall_end = (
+                    np.where(stall_points)[0][-1]
+                    if np.any(stall_points)
+                    else 0
+                )
+                regress_valid = np.vstack(
+                    (
+                        (np.arange(stall_end + 1, n_timepoints + 1)),
+                        np.ones((n_timepoints - stall_end,)),
+                    )
+                )
+                time_stat[stall_end:] = regress_valid.T.dot(
+                    np.linalg.lstsq(
+                        regress_valid.T, time_stat[stall_end:], rcond=None
+                    )[0]
+                )
+
+                while stall_end > 0:
+                    stall_start = (
+                        np.where(
+                            time_stat_d[:stall_end] > 1 / status_sample_freq
+                        )[0][-1]
+                        if np.any(
+                            time_stat_d[:stall_end] > 1 / status_sample_freq
+                        )
+                        else 0
+                    )
+                    sample_interv_ok = (
+                        time_stat_d[: stall_start + 1]
+                        <= 1 / status_sample_freq
+                    )
+                    avg_sample_interv_ok = (
+                        time_stat[stall_end] - time_stat[: stall_start + 1]
+                    ) / (
+                        stall_end - np.arange(stall_start + 1)
+                    ) >= 1 / status_sample_freq
+                    drift_start = (
+                        np.where(sample_interv_ok & avg_sample_interv_ok)[0][
+                            -1
+                        ]
+                        if np.any(sample_interv_ok & avg_sample_interv_ok)
+                        else 0
+                    )
+                    old_stall_end = stall_end
+                    time_stat_d = np.diff(time_stat[: drift_start + 1])
+                    stall_points = time_stat_d < 0.75 * (
+                        1 / status_sample_freq
+                    )
+                    stall_end = (
+                        np.where(stall_points)[0][-1]
+                        if np.any(stall_points)
+                        else 0
+                    )
+                    regress_valid = np.vstack(
+                        [
+                            (np.arange(stall_end, drift_start + 1) + 1),
+                            np.ones(drift_start - stall_end + 1),
+                        ]
+                    ).T
+                    # fmt: off
+                    time_stat[stall_end:drift_start + 1] = np.dot(
+                        regress_valid,
+                        np.linalg.lstsq(
+                            regress_valid,
+                            time_stat[stall_end:drift_start + 1],
+                            rcond=None,
+                        )[0],
+                    )
+                    time_stat[drift_start:old_stall_end + 1] = np.linspace(
+                        time_stat[drift_start],
+                        time_stat[old_stall_end],
+                        old_stall_end - drift_start + 1,
+                    )
+                    # fmt: on
+
+                if paramnames is None:
+                    raise ValueError(
+                        "Make_CVR_reg_physio brick: the "
+                        "names of the physiological "
+                        "parameters could not be found "
+                        "in the physiological parameters "
+                        "file!\nThe individual regressor "
+                        "cannot be generated... "
+                    )
+
+                # Transfer data to the phys_trig_data dictionary
+                for field in range(len(paramnames)):
+                    this_fieldname = paramnames[field]
+                    this_field_datapoints = ~np.isnan(data_matrix[:, field])
+                    this_field_datapoints[: min(status_idx)] = False
+                    # fmt: off
+                    this_field_datapoints[max(status_idx) + 1:] = False
+                    # fmt: on
+
+                    if np.any(this_field_datapoints):
+                        indx = np.where(this_field_datapoints)[0]
+                        time = np.interp(indx, status_idx, time_stat)
+                        data = data_matrix[this_field_datapoints, field]
+                        phys_trig_data[this_fieldname] = {
+                            "indx": indx,
+                            "time": time,
+                            "data": data,
+                        }
+
+                # Correct other bugs in magdata software
+                problem_timepoints = (
+                    phys_trig_data["Waveform_Status3"]["data"] != 0
+                )
+
+                if (
+                    phys_trig_data["Pleth_wm2"]["data"].shape[0]
+                    == n_timepoints
+                ):
+                    problem_timepoints = np.logical_or(
+                        problem_timepoints,
+                        phys_trig_data["Pleth_wm2"]["data"] == 103,
+                    )
+
+                if np.any(problem_timepoints):
+                    valid_timepoints = np.where(~problem_timepoints)[0]
+
+                    if (
+                        phys_trig_data["Resp_wm"]["data"].shape[0]
+                        == phys_trig_data["Capno_wm1"]["data"].shape[0]
+                    ):
+                        phys_trig_data["Capno_wm1"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Resp_wm"]["data"][
+                            problem_timepoints
+                        ]
+                        problem_problem_timepoints = np.logical_and(
+                            problem_timepoints,
+                            phys_trig_data["Resp_wm"]["data"] == 0,
+                        )
+                        phys_trig_data["Capno_wm1"]["data"][
+                            problem_problem_timepoints
+                        ] = phys_trig_data["Waveform_Status1"]["data"][
+                            problem_problem_timepoints
+                        ]
+                        phys_trig_data["Resp_wm"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Pleth_wm2"]["data"][
+                            problem_timepoints
+                        ]
+                        phys_trig_data["Pleth_wm2"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Pleth_wm1"]["data"][
+                            problem_timepoints
+                        ]
+                        problem_timepoints = np.where(problem_timepoints)[0]
+                        phys_trig_data["Waveform_Status1"]["data"][
+                            problem_timepoints
+                        ] = np.maximum(
+                            phys_trig_data["Waveform_Status1"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ],
+                            phys_trig_data["Waveform_Status1"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    phys_trig_data["Waveform_Status1"][
+                                        "data"
+                                    ].shape[0],
+                                )
+                            ],
+                        )
+                        phys_trig_data["Waveform_Status4"]["data"][
+                            problem_timepoints
+                        ] = 128 * (
+                            (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.maximum(problem_timepoints - 1, 0)
+                                ]
+                                > 64
+                            ).any()
+                            or (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.minimum(
+                                        problem_timepoints + 1,
+                                        phys_trig_data["Waveform_Status4"][
+                                            "data"
+                                        ].shape[0]
+                                        - 1,
+                                    )
+                                ]
+                                > 64
+                            ).any()
+                        )
+
+                    else:
+                        phys_trig_data["Capno_wm1"]["data"][
+                            problem_timepoints
+                        ] = interp1d(
+                            phys_trig_data["Capno_wm1"]["time"][
+                                valid_timepoints
+                            ],
+                            phys_trig_data["Capno_wm1"]["data"][
+                                valid_timepoints
+                            ],
+                            fill_value="extrapolate",
+                        )(
+                            phys_trig_data["Capno_wm1"]["time"][
+                                problem_timepoints
+                            ]
+                        )
+
+                        if (
+                            data_matrix["Pleth_wm2"]["data"].shape[0]
+                            == n_timepoints
+                        ):
+                            phys_trig_data["Pleth_wm2"]["data"][
+                                problem_timepoints
+                            ] = interp1d(
+                                phys_trig_data["Pleth_wm2"]["time"][
+                                    valid_timepoints
+                                ],
+                                phys_trig_data["Pleth_wm2"]["data"][
+                                    valid_timepoints
+                                ],
+                                fill_value="extrapolate",
+                            )(
+                                phys_trig_data["Pleth_wm2"]["time"][
+                                    problem_timepoints
+                                ]
+                            )
+                        problem_timepoints = np.where(problem_timepoints)[0]
+                        phys_trig_data["Waveform_Status1"]["data"][
+                            problem_timepoints
+                        ] = np.maximum(
+                            phys_trig_data["Waveform_Status1"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ],
+                            phys_trig_data["Waveform_Status1"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    phys_trig_data["Waveform_Status1"][
+                                        "data"
+                                    ].shape[0],
+                                )
+                            ],
+                        )
+                        phys_trig_data["Waveform_Status4"]["data"][
+                            problem_timepoints
+                        ] = 128 * (
+                            (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.maximum(problem_timepoints - 1, 0)
+                                ]
+                                > 64
+                            ).any()
+                            or (
+                                phys_trig_data["Waveform_Status4"]["data"][
+                                    np.minimum(
+                                        problem_timepoints + 1,
+                                        phys_trig_data["Waveform_Status4"][
+                                            "data"
+                                        ].shape[0]
+                                        - 1,
+                                    )
+                                ]
+                                > 64
+                            ).any()
+                        )
+
+                if n_pulses > 0:
+                    phys_trig_data["trigger"] = {
+                        "time": trig_times_s,
+                        "data": np.ones_like(trig_times_s),
+                    }
+
+                phys_trig_data["starttime"] = starttime
+
+            # Read CoolTerm capture log
+            elif self.physio_data.lower().endswith(".txt"):
+                # TODO: Not yet tested
+                print("Data from CoolTerm application detected ...")
                 # Process data and construct phys_trig_data dictionary
                 # ...
+                with open(self.physio_data, "r") as fid:
+                    lines = fid.readlines()
+
+                data = []
+
+                for line in lines:
+                    line_data = line.strip().split(",")
+                    data.append(line_data)
+
+                (
+                    comp_date,
+                    comp_time,
+                    monitor_date,
+                    monitor_time,
+                    HR,
+                    SPO2t,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    SpO2,
+                    BR,
+                    ETCO2,
+                    ICO2,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                    _,
+                ) = zip(*data)
+
+                # Convert sample start and end times to seconds since midnight
+                monitortime = np.array(
+                    [list(map(int, t.split(":"))) for t in monitor_time]
+                )
+                monitortime = (
+                    3600 * monitortime[:, 0]
+                    + 60 * monitortime[:, 1]
+                    + monitortime[:, 2]
+                )
+                sampletime = np.array(
+                    [list(map(int, t.split(":"))) for t in comp_time]
+                )
+                sampletime = (
+                    3600 * sampletime[:, 0]
+                    + 60 * sampletime[:, 1]
+                    + sampletime[:, 2]
+                )
+                keep_idx = np.where(
+                    np.logical_and(
+                        sampletime >= starttime - time_margin,
+                        sampletime <= endtime + time_margin,
+                    )
+                )[0]
+                sampletime = sampletime[keep_idx] - starttime
+                HR = np.array(HR)[keep_idx].astype(float)
+                BR = np.array(BR)[keep_idx].astype(float)
+                ICO2 = np.array(ICO2)[keep_idx].astype(float)
+                ETCO2 = np.array(ETCO2)[keep_idx].astype(float)
+                SpO2 = np.array(SpO2)[keep_idx].astype(float)
+
+                # Transfer data to structure
+                phys_trig_data = {
+                    "HR": {
+                        "indx": np.where(~np.isnan(HR))[0],
+                        "time": sampletime[~np.isnan(HR)],
+                        "data": HR[~np.isnan(HR)],
+                    },
+                    "Resp_Rate": {
+                        "indx": np.where(~np.isnan(BR))[0],
+                        "time": sampletime[~np.isnan(BR)],
+                        "data": BR[~np.isnan(BR)],
+                    },
+                    "ICO2": {
+                        "indx": np.where(~np.isnan(ICO2))[0],
+                        "time": sampletime[~np.isnan(ICO2)],
+                        "data": ICO2[~np.isnan(ICO2)],
+                    },
+                    "ETCO2": {
+                        "indx": np.where(~np.isnan(ETCO2))[0],
+                        "time": sampletime[~np.isnan(ETCO2)],
+                        "data": ETCO2[~np.isnan(ETCO2)],
+                    },
+                    "SpO2_perc": {
+                        "indx": np.where(~np.isnan(SpO2))[0],
+                        "time": sampletime[~np.isnan(SpO2)],
+                        "data": SpO2[~np.isnan(SpO2)],
+                    },
+                }
+
+                if n_pulses > 0:  # We have read a trigger file
+                    phys_trig_data["trigger"] = {
+                        "time": trig_times_s,
+                        "data": np.ones_like(trig_times_s),
+                    }
+
+                # In units of seconds since midnight
+                phys_trig_data["starttime"] = starttime
 
             else:
-                print(
-                    "The format of the physiological data was not detected ..."
+                raise FileNotFoundError(
+                    "Make_CVR_reg_physio brick: The Only "
+                    ".csv and .txt extensions are "
+                    "allowed for the physio_data "
+                    "parameter. The individual regressor "
+                    "cannot be generated... "
                 )
             # ---- End of making phys_trig_data ----
 
@@ -2152,11 +2645,10 @@ class Make_CVR_reg_physio(ProcessMIA):
                     "EtCO2 recording does not seem to be strictly monotonic "
                     "and increasing !!!\n"
                     "This makes no physical sense and the calculation of "
-                    "the hypercapnic regressor will certainly fail.\n"
-                    "If this is the case, please restart the calculations "
-                    "after checking the physiological data or use the "
-                    "non-individual regressor.\n\n"
+                    "the hypercapnic individual regressor will certainly "
+                    "fail.\n"
                 )
+
                 print(
                     "\nMake_CVR_reg_physio brick: Trying to fix the "
                     "issue!!!\nPlease check the result carefully, this "
@@ -2184,6 +2676,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 outliers = np.abs(etco2data_pp) > 15
                 # a single outlier creates three points of high curvature.
                 # retain central point only:
+                # TODO: Here, we can also use self.gfb_conv(). Test it out!
                 outliers = (
                     np.convolve(
                         outliers.astype(int), np.array([1, 1, 1]), mode="same"
@@ -2233,37 +2726,115 @@ class Make_CVR_reg_physio(ProcessMIA):
             etco2data_shift = etco2data - baseline_etco2
             etco2data_bold = signal.convolve(etco2data_shift, hrf, mode="full")
             # fmt: off
-            r = etco2data_bold[num_init_trigs:num_init_trigs + nb_dyn]
+            io.savemat(
+                fname_reg,
+                {
+                    "R": etco2data_bold[
+                        num_init_trigs:num_init_trigs + nb_dyn
+                    ].reshape((-1, 1))
+                },
+            )
             # fmt: on
-            np.save(fname_reg, r)
             print(
-                "The Make_CVR_reg_physio brick does not yet generate the "
-                "individual regressor. Currently, only the standard "
-                "regressor is provided in all cases."
+                "\nMake_CVR_reg_physio brick: "
+                "individual regressor generated!"
             )
-            config = Config()
-            shutil.copy(
-                os.path.join(
-                    config.get_resources_path(),
-                    "reference_population_data",
-                    "regressor_physio_EtCO2_standard.mat",
-                ),
-                fname_reg,
-            )
-        else:
-            config = Config()
-            shutil.copy(
-                os.path.join(
-                    config.get_resources_path(),
-                    "reference_population_data",
-                    "regressor_physio_EtCO2_standard.mat",
-                ),
-                fname_reg,
-            )
-            pass
 
+        except Exception as e:
+            print(
+                "\nMake_CVR_reg_physio brick: The generation of the "
+                "individual regressor has failed!\nTraceback:"
+            )
+            print("".join(traceback.format_tb(e.__traceback__)), end="")
+            print("{0}: {1}\n".format(e.__class__.__name__, e))
+            print("\n...Using the standard regressor...\n")
+            tag_to_add["value"] = "Standard"
+            config = Config()
+            shutil.copy(
+                os.path.join(
+                    config.get_resources_path(),
+                    "reference_population_data",
+                    "regressor_physio_EtCO2_standard.mat",
+                ),
+                fname_reg,
+            )
+            print(
+                "\nMake_CVR_reg_physio brick: " "standard regressor generated!"
+            )
+
+        all_tags_to_add.append(tag_to_add)
+        # TODO: Can we simply add new tags without inheritance (I'm not sure
+        #       this possibility was considered when we coded the
+        #       tags_inheritance function)? As in this case, it might be
+        #       preferable not to inherit from the functional but simply to
+        #       add new tags.
+        self.tags_inheritance(
+            self.func_file, fname_reg, own_tags=all_tags_to_add
+        )
+        self.outputs["cvr_reg"] = fname_reg
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
+
+    def spm_hrf(self, rt, p=[6, 16, 1, 1, 6, 0, 32], t=16):
+        """
+        Hemodynamic response function.
+
+        Parameters:
+        - rt: scan repeat time
+        - p: parameters of the response function (two Gamma functions)
+        (Default: [6, 16, 1, 1, 6, 0, 32])
+        - t: microtime resolution (Default: 16)
+
+        Returns:
+        - hrf: hemodynamic response function
+        - p: parameters of the response function
+
+        Note: Adapted from SPM12 matlab code (spm_hrf.m)
+        """
+
+        def gam_dis_pdf(ga, sh, sc):
+            """
+            Probability Density Function (PDF) of Gamma distribution.
+
+            Parameters:
+            - ga: Gamma-variate (Gamma has range [0,Inf))
+            - sh: Shape parameter (h > 0)
+            - sc: Scale parameter (l > 0)
+
+            Returns:
+            - f: PDF of Gamma-distribution with shape & scale parameters
+
+            Note: Adapted from SPM12 matlab code (spm_Gpdf.m).
+                  Warning: very specific to the spm_hrf case,
+                  no argument validity test is performed.
+            """
+            # Initialise result to zeros
+            f = np.zeros(len(ga))
+            # Compute
+            f[1:] = np.exp(
+                (sh - 1) * np.log(ga[1:])
+                + sh * np.log(sc)
+                - sc * ga[1:]
+                - gammaln(sh)
+            )
+
+            return f
+
+        # from scipy.stats import gamma
+        # Modelled hemodynamic response function - {mixture of Gammas}
+        dt = rt / t
+        u = np.arange(0, np.ceil(p[6] / dt) + 1) - p[5] / dt
+        # hrf = (gamma.pdf(u, p[0] / p[2], scale=dt / p[2]) -
+        #        gamma.pdf(u, p[1] / p[3], scale=dt / p[3]) / p[4])
+        # We can also use the self.gam_dis_pdf() function:
+        hrf = (
+            gam_dis_pdf(u, p[0] / p[2], dt / p[2])
+            - gam_dis_pdf(u, p[1] / p[3], dt / p[3]) / p[4]
+        )
+        hrf = hrf[(np.arange(0, np.floor(p[6] // rt) + 1) * t).astype(int)]
+        hrf /= np.sum(hrf)
+
+        return hrf
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
