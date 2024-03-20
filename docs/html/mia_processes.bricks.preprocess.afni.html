@@ -1,21 +1,23 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>mia_processes.bricks.preprocess.afni package &#8212; mia_processes 2.5.1-dev+619b34d5 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=37d74110"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.bricks.preprocess.afni package &#8212; mia_processes 2.5.1-dev+4b482614 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.5.1-dev+619b34d5 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+4b482614 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.afni package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -29,21 +31,21 @@
         
         
   <section id="module-mia_processes.bricks.preprocess.afni">
-<span id="mia-processes-bricks-preprocess-afni-package"></span><h1>mia_processes.bricks.preprocess.afni package<a class="headerlink" href="#module-mia_processes.bricks.preprocess.afni" title="Link to this heading">¶</a></h1>
+<span id="mia-processes-bricks-preprocess-afni-package"></span><h1>mia_processes.bricks.preprocess.afni package<a class="headerlink" href="#module-mia_processes.bricks.preprocess.afni" title="Permalink to this headline">¶</a></h1>
 <p>The atomic calculations from afni.</p>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
 <section id="module-mia_processes.bricks.preprocess.afni.processes">
-<span id="mia-processes-bricks-preprocess-afni-processes-module"></span><h2>mia_processes.bricks.preprocess.afni.processes module<a class="headerlink" href="#module-mia_processes.bricks.preprocess.afni.processes" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-bricks-preprocess-afni-processes-module"></span><h2>mia_processes.bricks.preprocess.afni.processes module<a class="headerlink" href="#module-mia_processes.bricks.preprocess.afni.processes" title="Permalink to this headline">¶</a></h2>
 <p>The afni preprocess library of the mia_processes package.</p>
 <p>The purpose of this module is to customise the main afni preprocessing bricks
 provided by nipype and to correct some things that do not work directly in
 populse_mia.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dt class="field-odd">Contains</dt>
 <dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Class<span class="colon">:</span></dt>
+<dt class="field-odd">Class</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>Automask</p></li>
 <li><p>Calc</p></li>
@@ -65,8 +67,8 @@ populse_mia.</p>
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Automask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Automask</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Automask</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Create a brain-only mask of the image using AFNI 3dAutomask command</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Automask.html">Automask brick in
 the mia_processes website</a></p>
@@ -80,7 +82,7 @@ the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Automask.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -89,7 +91,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Automask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -98,10 +100,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -109,7 +111,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Automask.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Automask.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Automask.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -117,8 +119,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Calc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Calc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Calc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Voxel-by-voxel arithmetic on 3D datasets</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Calc.html">Calc brick
 in the mia_processes website</a></p>
@@ -132,7 +134,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Calc.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -141,7 +143,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Calc.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -150,10 +152,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -161,7 +163,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Calc.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Calc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Calc.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -169,8 +171,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.CalcDropTRs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">CalcDropTRs</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">CalcDropTRs</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>DropTRs of bold datasets (using AFNI 3dCalc command)</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/CalcDropTRs.html">CalcDropTRs brick in
 the mia_processes website</a></p>
@@ -184,7 +186,7 @@ the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -193,7 +195,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -202,10 +204,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -213,7 +215,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#CalcDropTRs.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -221,8 +223,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Despike">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Despike</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Despike</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Removes ‘spikes’ from the 3D+time input dataset</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Despike.html">Despike brick
 in the mia_processes website</a></p>
@@ -236,7 +238,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Despike.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -245,7 +247,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Despike.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -254,10 +256,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -265,7 +267,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Despike.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Despike.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Despike.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -273,8 +275,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.FWHMx">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">FWHMx</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">FWHMx</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Computes FWHMs for all sub-bricks in the input dataset, each one separately</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/FWHMx.html">FWHMx brick
 in the mia_processes website</a></p>
@@ -288,7 +290,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.FWHMx.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -297,7 +299,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.FWHMx.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -306,10 +308,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -317,7 +319,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.FWHMx.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#FWHMx.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.FWHMx.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -325,8 +327,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.GCOR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">GCOR</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">GCOR</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Computes the average correlation between every voxel and every other voxel, over any given mask</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/GCOR.html">GCOR brick
 in the mia_processes website</a></p>
@@ -340,7 +342,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.GCOR.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -349,7 +351,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.GCOR.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -358,10 +360,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -369,7 +371,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.GCOR.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#GCOR.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.GCOR.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -377,8 +379,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.OutlierCount">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">OutlierCount</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">OutlierCount</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Computes outliers for all sub-bricks in the input dataset, each one separately</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/OutlierCount.html">OutlierCount brick
 in the mia_processes website</a></p>
@@ -392,7 +394,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.OutlierCount.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -401,7 +403,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.OutlierCount.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -410,10 +412,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -421,7 +423,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.OutlierCount.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#OutlierCount.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.OutlierCount.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -429,8 +431,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.QualityIndex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">QualityIndex</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">QualityIndex</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Computes a quality index for each sub-brick in a 3D+time dataset</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/QualityIndex.html">QualityIndex brick
 in the mia_processes website</a></p>
@@ -444,7 +446,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.QualityIndex.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -453,7 +455,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.QualityIndex.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -462,10 +464,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -473,7 +475,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.QualityIndex.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#QualityIndex.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.QualityIndex.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -481,8 +483,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.RefitDeoblique">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">RefitDeoblique</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">RefitDeoblique</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Deoblique dataset</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/RefitDeoblique.html">RefitDeoblique brick in
 the mia_processes website</a></p>
@@ -496,7 +498,7 @@ the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -505,7 +507,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -514,10 +516,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -525,7 +527,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#RefitDeoblique.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -533,8 +535,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.SkullStrip">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">SkullStrip</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">SkullStrip</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>From MRI T1-weighted images, extract the brain from surrounding tissue</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/SkullStrip.html">SkullStrip brick
 in the mia_processes website</a></p>
@@ -548,7 +550,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.SkullStrip.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -557,7 +559,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.SkullStrip.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -566,10 +568,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -577,7 +579,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.SkullStrip.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#SkullStrip.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.SkullStrip.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -585,8 +587,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TShift">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">TShift</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">TShift</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Slice-time correction of bold images</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TShift.html">TShift brick
 in the mia_processes website</a></p>
@@ -600,7 +602,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TShift.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -609,7 +611,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TShift.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -618,10 +620,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -629,7 +631,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TShift.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TShift.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TShift.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -637,8 +639,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TStatMean">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">TStatMean</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">TStatMean</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Mean of bold images (using AFNI 3dTstat)</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TStatMean.html">TStatMean brick
 in the mia_processes website</a></p>
@@ -652,7 +654,7 @@ in the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TStatMean.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -661,7 +663,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TStatMean.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -670,10 +672,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -681,7 +683,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.TStatMean.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#TStatMean.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.TStatMean.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -689,8 +691,8 @@ self.make_initResult() object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Volreg">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Volreg</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.afni.processes.</span></span><span class="sig-name descname"><span class="pre">Volreg</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Register an input volume to a base volume using AFNI 3dvolreg</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Volreg.html">Volreg brick in
 the mia_processes website</a></p>
@@ -704,7 +706,7 @@ the mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Volreg.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -713,7 +715,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Volreg.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -722,10 +724,10 @@ this output must be a value of the optional key ‘notInDb’ of the
 self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
 </dd>
 </dl>
@@ -733,7 +735,7 @@ self.make_initResult() object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.afni.processes.Volreg.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.run_process_mia" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/afni/processes.html#Volreg.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.afni.processes.Volreg.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -753,8 +755,8 @@ self.make_initResult() object.</p>
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

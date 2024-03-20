@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
-    <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.5.1-dev+4b482614 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+4b482614 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -61,10 +63,8 @@
 <span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
 
 <span class="c1"># populse_mia import</span>
+<span class="kn">from</span> <span class="nn">populse_mia.software_properties</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
-
-<span class="c1"># traits import</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 <span class="c1"># mia_processes import:</span>
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="p">(</span>
@@ -76,9 +76,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="ReportAnatMriqc">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a>
-<span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for anatomical data in MRIQC pipeline*</span>
 
@@ -88,9 +86,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportAnatMriqc.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -335,10 +331,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportAnatMriqc.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -839,10 +832,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -867,14 +857,10 @@
             <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
-</div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
 
 
-
-<div class="viewcode-block" id="ReportCO2inhalCvr">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr">[docs]</a>
-<span class="k">class</span> <span class="nc">ReportCO2inhalCvr</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportCO2inhalCvr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr">[docs]</a><span class="k">class</span> <span class="nc">ReportCO2inhalCvr</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates report for CVR study by CO2 inhalation task*</span>
 
@@ -884,9 +870,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportCO2inhalCvr.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportCO2inhalCvr.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -900,10 +884,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">anat_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;An existing, uncompressed raw anatomical &quot;</span>
-            <span class="s2">&quot;image file (valid extensions: .nii)&quot;</span>
-        <span class="p">)</span>
         <span class="n">norm_anat_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;An existing, uncompressed normalised anatomical &quot;</span>
             <span class="s2">&quot;image file (valid extensions: .nii)&quot;</span>
@@ -927,6 +907,19 @@
 
         <span class="n">norm_anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Gap between slices in normalised anatomical slice planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the normalised anatomical plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;Greys_r&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
         <span class="p">)</span>
 
         <span class="n">norm_func_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -953,6 +946,19 @@
             <span class="s2">&quot;Gap between slices in the normalised functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">norm_func_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the normalised functional plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;Greys_r&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map (&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
         <span class="n">realignment_parameters_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Estimation of translation and rotation parameters when &quot;</span>
             <span class="s2">&quot;realigning functional data (a pathlike object or a&quot;</span>
@@ -960,12 +966,49 @@
             <span class="s2">&quot;of pathlike objects or strings &quot;</span>
             <span class="s2">&quot;representing a file)&quot;</span>
         <span class="p">)</span>
-
+        <span class="n">regressor_physio_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Time series data that represent the &quot;</span>
+            <span class="s2">&quot;physiological processes thought to &quot;</span>
+            <span class="s2">&quot;contribute to the CVR in the fMRI signal &quot;</span>
+            <span class="s2">&quot;(a pathlike object or a string representing &quot;</span>
+            <span class="s2">&quot;a file, or a list of pathlike objects or &quot;</span>
+            <span class="s2">&quot;strings representing a file)&quot;</span>
+        <span class="p">)</span>
         <span class="n">beta_image_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The 1st estimated parameter of the&quot;</span> <span class="s2">&quot;model (i.e. beta_0001.nii)&quot;</span>
+            <span class="s2">&quot;The 1st estimated parameter of the model, i.e. beta_0001.nii &quot;</span>
+            <span class="s2">&quot;(valid extensions:.nii)&quot;</span>
         <span class="p">)</span>
 
-        <span class="n">spmT_image_desc</span> <span class="o">=</span> <span class="s2">&quot;Stat images from a t-contrast (i.e. spmT_0001.nii)&quot;</span>
+        <span class="n">beta_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the first beta parameter plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">beta_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map (&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">beta_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">spmT_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Stat images from a t-contrast, i.e. spmT_0001.nii, &quot;</span>
+            <span class="s2">&quot;(valid extensions:.nii)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">spmT_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the stat images plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">spmT_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">spmT_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">patient_info_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Optional dictionary with information about the patient &quot;</span>
@@ -979,16 +1022,6 @@
         <span class="n">report_desc</span> <span class="o">=</span> <span class="s2">&quot;The generated report (pdf)&quot;</span>
 
         <span class="c1"># Inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;anat&quot;</span><span class="p">,</span>
-            <span class="n">ImageFileSPM</span><span class="p">(</span>
-                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">desc</span><span class="o">=</span><span class="n">anat_desc</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;norm_anat&quot;</span><span class="p">,</span>
             <span class="n">ImageFileSPM</span><span class="p">(</span>
@@ -1036,6 +1069,40 @@
                 <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_slices_gap_desc</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_cmap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
 
         <span class="c1"># TODO: We use the normalized functional. It seems that it&#39;s the</span>
         <span class="c1">#       normalized - smothed functional that&#39;s used in Amigo. We&#39;ll</span>
@@ -1089,10 +1156,49 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_cmap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">realignment_parameters_desc</span>
             <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;regressor_physio&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">regressor_physio_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -1101,9 +1207,71 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;beta_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">beta_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;beta_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">beta_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;beta_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">beta_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;spmT_image&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spmT_image_desc</span><span class="p">),</span>
         <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spmT_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spmT_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spmT_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">spmT_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spmT_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">spmT_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
@@ -1134,10 +1302,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportCO2inhalCvr.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportCO2inhalCvr.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1156,23 +1321,24 @@
             <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
             <span class="o">+</span> <span class="mi">1</span>
         <span class="p">)</span>
-        <span class="n">db_file_anat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="n">db_file_norm_anat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="n">db_file_norm_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="c1"># TODO: Do we need to explicitly take the smoothed func as input,</span>
         <span class="c1">#       or can we simply add the prefix &#39;s&#39; to the normalized func?</span>
         <span class="n">db_file_smooth_norm_func</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">db_file_norm_func</span>
+        <span class="n">db_file_regressor_physio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regressor_physio</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
 
         <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
         <span class="c1"># we prepare here the data that the run_process_mia method will need</span>
         <span class="c1"># via dict4runtime parameter:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dict4runtime_update</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">db_file_anat</span><span class="p">,</span>
+            <span class="n">db_file_norm_anat</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Acquisition nbr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
@@ -1191,13 +1357,6 @@
             <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">dict4runtime_update</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">db_file_norm_anat</span><span class="p">,</span>
-            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1228,9 +1387,16 @@
             <span class="n">db_file_smooth_norm_func</span><span class="p">,</span>
             <span class="s2">&quot;FWHM (X, Y, Z) for Smooth&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;regressor_physio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;regressor_physio&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_regressor_physio</span><span class="p">,</span>
+            <span class="s2">&quot;Regressor state&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># FIXME: the data should be anonymized and we should use PatientRef</span>
         <span class="c1">#        instead of PatientName !</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ReportCO2inhalCvr brick:</span><span class="se">\n</span><span class="s2">The tags PatientName was not &quot;</span>
                 <span class="s2">&quot;found in the database for the </span><span class="si">{}</span><span class="s2"> file...</span><span class="se">\n</span><span class="s2"> The &quot;</span>
@@ -1242,67 +1408,79 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
-                    <span class="s2">&quot;anat&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
                 <span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;PatientName&quot;</span>
-                <span class="p">]</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;PatientRef&quot;</span>
-                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="s2">&quot;PatientRef&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;Pathology&quot;</span>
-                <span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="s2">&quot;Pathology&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Age&quot;</span>
+                <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Age&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Sex&quot;</span>
+                <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Sex&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Spectro&quot;</span>
+                <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;MR&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Gas&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -1336,14 +1514,24 @@
         <span class="c1">#        should be found to retrieve them automatically or to put them</span>
         <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
                 <span class="s2">&quot;Site&quot;</span>
             <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Spectro&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+
+        <span class="c1"># Reference population file for result stat anal</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;CVR_ref_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get_resources_path</span><span class="p">(),</span>
+            <span class="s2">&quot;reference_population_data&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CVR_ref_pop_SEMVIE-16.xlsx&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -1356,7 +1544,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_CO2_inhal_CVR_Report_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
                     <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -1370,10 +1558,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportCO2inhalCvr.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportCO2inhalCvr.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportCO2inhalCvr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1386,22 +1571,34 @@
             <span class="n">norm_anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
             <span class="n">norm_anat_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_inf_slice_start</span><span class="p">,</span>
             <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_anat_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_cmap</span><span class="p">,</span>
+            <span class="n">norm_anat_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmin</span><span class="p">,</span>
+            <span class="n">norm_anat_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmax</span><span class="p">,</span>
             <span class="n">norm_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
             <span class="n">norm_func_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
             <span class="n">norm_func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
             <span class="n">norm_func_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_inf_slice_start</span><span class="p">,</span>
             <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_func_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_cmap</span><span class="p">,</span>
+            <span class="n">norm_func_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmin</span><span class="p">,</span>
+            <span class="n">norm_func_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmax</span><span class="p">,</span>
             <span class="n">realignment_parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">realignment_parameters</span><span class="p">,</span>
+            <span class="n">regressor_physio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regressor_physio</span><span class="p">,</span>
+            <span class="n">beta_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_image</span><span class="p">,</span>
+            <span class="n">beta_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_cmap</span><span class="p">,</span>
+            <span class="n">beta_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_vmin</span><span class="p">,</span>
+            <span class="n">beta_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beta_vmax</span><span class="p">,</span>
+            <span class="n">spmT_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_image</span><span class="p">,</span>
+            <span class="n">spmT_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_cmap</span><span class="p">,</span>
+            <span class="n">spmT_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmin</span><span class="p">,</span>
+            <span class="n">spmT_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmax</span><span class="p">,</span>
+            <span class="n">output_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
-</div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
 
 
-
-<div class="viewcode-block" id="ReportFuncMriqc">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a>
-<span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportFuncMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for functional data in MRIQC pipeline*</span>
 
@@ -1411,9 +1608,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportFuncMriqc.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportFuncMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1644,10 +1839,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportFuncMriqc.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportFuncMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1995,10 +2187,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -2022,14 +2211,10 @@
             <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
-</div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
 
 
-
-<div class="viewcode-block" id="ReportGroupMriqc">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a>
-<span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportGroupMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates a group report for mriqc pipelines*</span>
 
@@ -2039,9 +2224,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportGroupMriqc.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportGroupMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2064,7 +2247,7 @@
         <span class="c1"># Inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;modality&quot;</span><span class="p">,</span>
-            <span class="n">Enum</span><span class="p">(</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
                 <span class="s2">&quot;anat&quot;</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">modality_desc</span>
             <span class="p">),</span>
         <span class="p">)</span>
@@ -2080,10 +2263,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportGroupMriqc.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportGroupMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2172,10 +2352,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportGroupMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Get all info in a tsv file and in a panda dataframe</span>
@@ -2311,9 +2488,7 @@
 
         <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span>
 
-        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
-</div>
-
+        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div></div>
 </pre></div>
 
       </div>
@@ -2326,8 +2501,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

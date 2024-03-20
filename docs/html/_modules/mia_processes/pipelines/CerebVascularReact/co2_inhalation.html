@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.CerebVascularReact.co2_inhalation &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
-    <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.pipelines.CerebVascularReact.co2_inhalation &#8212; mia_processes 2.5.1-dev+4b482614 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+4b482614 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.CerebVascularReact.co2_inhalation</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -52,9 +54,7 @@
 <span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 
-<div class="viewcode-block" id="CO2_inhalation">
-<a class="viewcode-back" href="../../../../mia_processes.pipelines.CerebVascularReact.html#mia_processes.pipelines.CerebVascularReact.co2_inhalation.CO2_inhalation">[docs]</a>
-<span class="k">class</span> <span class="nc">CO2_inhalation</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+<div class="viewcode-block" id="CO2_inhalation"><a class="viewcode-back" href="../../../../mia_processes.pipelines.CerebVascularReact.html#mia_processes.pipelines.CerebVascularReact.co2_inhalation.CO2_inhalation">[docs]</a><span class="k">class</span> <span class="nc">CO2_inhalation</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *CVR measurement under hypercapnia challenge*</span>
 
@@ -63,10 +63,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/CerebVascularReact/CO2_inhalation.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CO2_inhalation.pipeline_definition">
-<a class="viewcode-back" href="../../../../mia_processes.pipelines.CerebVascularReact.html#mia_processes.pipelines.CerebVascularReact.co2_inhalation.CO2_inhalation.pipeline_definition">[docs]</a>
-    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CO2_inhalation.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.CerebVascularReact.html#mia_processes.pipelines.CerebVascularReact.co2_inhalation.CO2_inhalation.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+
         <span class="c1"># nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span>
@@ -128,24 +127,39 @@
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.reports.reporting.ReportCO2inhalCvr&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">beta_vmin</span> <span class="o">=</span> <span class="mf">0.01</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">beta_vmax</span> <span class="o">=</span> <span class="mf">0.25</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spmT_vmin</span> <span class="o">=</span> <span class="mf">3.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spmT_vmax</span> <span class="o">=</span> <span class="mi">12</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.tools.tools.&quot;</span> <span class="s2">&quot;Make_CVR_reg_physio&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="c1"># links</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_file-&gt;reportco2inhalcvr.anat&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;func_files&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
-            <span class="s2">&quot;files_to_list&quot;</span><span class="p">,</span> <span class="s2">&quot;file1&quot;</span><span class="p">,</span> <span class="s2">&quot;regressor_physio&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;func_files-&gt;make_cvr_reg_physio_1.func_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">,</span> <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;patient_info-&gt;4_extract_roi_param.patient_info&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1&quot;</span><span class="p">,</span> <span class="s2">&quot;trigger_data&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1&quot;</span><span class="p">,</span> <span class="s2">&quot;physio_data&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span>
+            <span class="s2">&quot;bias_field_images&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_field_images&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
@@ -176,6 +190,9 @@
             <span class="s2">&quot;1_spatial_preprocessing.smoothed_func-&gt;&quot;</span>
             <span class="s2">&quot;2_spatial_mask.smoothed_func&quot;</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span>
+            <span class="s2">&quot;coregistered_source&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;coregistered_source&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
@@ -185,10 +202,14 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;2_spatial_mask.mask_002-&gt;4_extract_roi_param.mask_002&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;2_spatial_mask.mask_002-&gt;3_boldStat.mask_002&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;2_spatial_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;mask_003&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;2_spatial_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_003&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
             <span class="s2">&quot;3_boldStat.spmT_images-&gt;4_extract_roi_param.spmT_images&quot;</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;3_boldStat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_spm_mat_file&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;3_boldStat&quot;</span><span class="p">,</span> <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
@@ -197,26 +218,37 @@
             <span class="s2">&quot;3_boldStat.beta_images-&gt;4_extract_roi_param.beta_images&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;3_boldStat.spmT_images-&gt;reportco2inhalcvr.spmT_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span>
+            <span class="s2">&quot;resample2_masks&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">,</span> <span class="s2">&quot;resample2_masks&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">,</span> <span class="s2">&quot;xls_files&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span>
+            <span class="s2">&quot;conv_roi_masks&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">,</span> <span class="s2">&quot;conv_roi_masks&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;files_to_list.file_list-&gt;3_boldStat.regressors&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">,</span> <span class="s2">&quot;report&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_to_file_1.file-&gt;reportco2inhalcvr.beta_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;make_cvr_reg_physio_1.cvr_reg-&gt;files_to_list.file1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1.cvr_reg-&gt;&quot;</span>
+            <span class="s2">&quot;reportco2inhalcvr.regressor_physio&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># parameters order</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="s2">&quot;anat_file&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;func_files&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;regressor_physio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;trigger_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;physio_data&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;bias_field_images&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;coregistered_source&quot;</span><span class="p">,</span>
@@ -243,6 +275,7 @@
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">748.1071959262655</span><span class="p">,</span> <span class="mf">258.2245925859173</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">971.2936610271133</span><span class="p">,</span> <span class="o">-</span><span class="mf">146.65919984483403</span><span class="p">),</span>
             <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">455.4447133457113</span><span class="p">,</span> <span class="mf">554.0646315898613</span><span class="p">),</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">61.59780851025405</span><span class="p">,</span> <span class="mf">457.28542588968276</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="c1"># nodes dimensions</span>
@@ -256,11 +289,10 @@
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">138.83679503946317</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">),</span>
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">212.484375</span><span class="p">,</span> <span class="mf">495.0</span><span class="p">),</span>
             <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">117.75</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;make_cvr_reg_physio_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">174.125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
         <span class="p">}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div>
-</div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
 </pre></div>
 
       </div>
@@ -273,8 +305,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

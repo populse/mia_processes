@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bold_signals_roi pipeline &#8212; mia_processes 2.5.1-dev+4b482614 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.5.1-dev+4b482614 documentation</span></a></h1>
+        <h2 class="heading"><span>Bold_signals_roi pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bold-signals-roi-pipeline">
+<h1>Bold_signals_roi pipeline<a class="headerlink" href="#bold-signals-roi-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>This pipeline allows to get plots of the BOLD average signal in severals ROI (defined by AssemblyNet).</p>
+<p><em>This pipeline requires Docker to run AssemblyNetDocker brick</em></p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Bold_signals_roi pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/volbrain/AssemblyNetDocker.html">AssemblyNetDocker</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/fsl/EpiReg.html">EpiReg</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/afni/Automask.html">Automask</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/fsl/BetSurfacesExtraction.html">BetSurfacesExtraction</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/fsl/ConvertXFM.html">ConvertXFM</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/fsl/Flirt.html">Flirt</a> (default values : apply_xfm = True, interpolation = ‘nearestneighbour’)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/volbrain/LabelsCorrespondence.html">LabelsCorrespondence</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/volbrain/GetLabels.html">GetLabels</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/ExtractSignalROI.html">ExtractSignalROI</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/ExtractROIbyLabel.html">ExtractROIbyLabel</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/PlotSignalROI.html">PlotSignalROI</a></div>
+</div>
+</div>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>bold</em> (a string representing an existing file)</dt><dd><p>A functional image (BOLD). An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>anat</em> (a string representing an existing file)</dt><dd><p>A T1w image. An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with default values</strong></p>
+<ul>
+<li><dl>
+<dt><em>labels_structures</em> (a list of integer, default value is [47, 48])</dt><dd><p>List of structures labels for which the average signals will be extracted.</p>
+<p>The defaul value is [47, 48], this correponds to le left and the right hippocampus.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">47</span><span class="p">,</span> <span class="mi">48</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_png_tissues</em> (a string representing a file)</dt><dd><p>Out png file with a plot of the average signal for each tissues.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/func_extracted_signals_tissues.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_png_lobes</em> (a string representing a file)</dt><dd><p>Out png file with a plot of the average signal for each lobes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/func_extracted_signals_lobes.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_png_macrostructures</em> (a string representing a file)</dt><dd><p>Out png file with a plot of the average signal for each macrostructures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/func_extracted_signals_macrostructures.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_png_structures</em> (a string representing a file)</dt><dd><p>Out png file with a plot of the average signal for each structures given in the labels_structures parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/func_extracted_signals_47_48.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://github.com/volBrain/AssemblyNet">volBrain Assemblynet</a></p>
+<p><a class="reference external" href="https://docs.docker.com/get-docker/">Docker</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
