@@ -49,6 +49,7 @@ class CO2_inhalation(Pipeline):
             "smooth": True,
             "coregister": True,
         }
+        # We use exactly the same parameters as in Amigo.
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
         ].process.write_voxel_sizes = [1.0, 1.0, 1.0]
@@ -60,6 +61,15 @@ class CO2_inhalation(Pipeline):
         ]
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
+        ].process.write_interp = 1
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_2"
+        ].process.write_bounding_box = [
+            [-78.0, -112.0, -50.0],
+            [78.0, 76.0, 85.0],
+        ]
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_2"
         ].process.write_interp = 1
         self.add_process(
             "2_spatial_mask",
