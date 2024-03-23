@@ -5187,6 +5187,7 @@ def threshold(file_name, thresh):
     img = nib.load(file_name)
     img_data = img.get_fdata()
     _max = img_data.max()
-    img_thresh = (img_data > (_max * thresh)).astype(float)
+    # Cast the thresholded data to the same data type as the input data
+    img_thresh = (img_data > (_max * thresh)).astype(img_data.dtype)
     img_final = nib.Nifti1Image(img_thresh, img.affine, img.header)
     return img_final

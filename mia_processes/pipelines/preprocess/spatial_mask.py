@@ -51,6 +51,7 @@ class Spatial_mask(Pipeline):
             "smooth", "mia_processes.bricks.preprocess.spm.Smooth"
         )
         self.nodes["smooth"].process.in_files = traits.Undefined
+        self.nodes["smooth"].process.data_type = 4
 
         self.add_process(
             "threshold_2", "mia_processes.bricks.preprocess.others.Threshold"
