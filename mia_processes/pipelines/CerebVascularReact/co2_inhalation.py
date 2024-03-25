@@ -92,6 +92,9 @@ class CO2_inhalation(Pipeline):
             "estimatemodel": True,
             "make_a_list": True,
         }
+        self.nodes["3_boldStat"].process.nodes[
+            "level1design"
+        ].process.microtime_onset = 1
         self.add_process(
             "4_extract_roi_param",
             "mia_processes.pipelines.reports.extract_roi_param."
