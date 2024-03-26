@@ -50,6 +50,7 @@ import nibabel as nib
 import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
+from nilearn.image import resample_to_img
 from nilearn.maskers import NiftiLabelsMasker
 
 # nipype import
@@ -1191,26 +1192,52 @@ class ConvROI(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # Resample the convolve_with to the size of images_to_convolve, then
-        # convolve each images_to_convolve with resized convolve_with.
-        mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
+        # # Resample the convolve_with to the size of images_to_convolve, then
+        # # convolve each images_to_convolve with resized convolve_with.
+        # mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
+        #
+        # for roi_file in self.images_to_convolve:
+        #     roi_img = nib.load(roi_file)
+        #     roi_data = roi_img.get_fdata()
+        #     # roi_size = roi_data.shape[:3]
+        #     # resized_mask = resize(mask_thresh, roi_size)
+        #     resized_mask = resize(roi_data, mask_thresh.shape)
+        #     # mult = (roi_data * resized_mask).astype(float)
+        #     mult = (mask_thresh * resized_mask).astype("float64")
+        #     # TODO: Should we take info from images_to_convolve or from
+        #     #       convolve_with ?
+        #     #       Currently we take from convolve_with
+        #     #mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
+        #     mult_img = nib.Nifti1Image(mult,
+        #                                nib.load(self.convolve_with).affine,
+        #                                nib.load(self.convolve_with).header)
+        #
+        #     # Image save in conv_dir
+        #     out_file = os.path.join(
+        #         conv_dir, self.prefix + os.path.basename(roi_file)
+        #     )
+        #     nib.save(mult_img, out_file)
+        #     print("{0} saved".format(out_file))
+
+        # Resample the images_to_convolve to the size of convolve_with, then
+        # convolve each resized images_to_convolve with convolve_with at
+        # threshold 0.5
+        mask_img = nib.load(self.convolve_with)
+        mask_data = mask_img.get_fdata()
+        thres = 0.5
 
         for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
-            roi_data = roi_img.get_fdata()
-            roi_size = roi_data.shape[:3]
-            resized_mask = resize(mask_thresh, roi_size)
-            mult = (roi_data * resized_mask).astype(float)
-            # TODO: Should we take info from images_to_convolve or from
-            #       convolve_with ?
-            #       Currently we take from images_to_convolve
-            mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
-
+            roi_data_resampled = resample_to_img(
+                roi_img, mask_img, interpolation="linear"
+            ).get_fdata()
+            result_data = np.where(mask_data > thres, roi_data_resampled, 0)
+            result_img = nib.Nifti1Image(result_data, mask_img.affine)
             # Image save in conv_dir
             out_file = os.path.join(
                 conv_dir, self.prefix + os.path.basename(roi_file)
             )
-            nib.save(mult_img, out_file)
+            nib.save(result_img, out_file)
             print("{0} saved".format(out_file))
 
 
