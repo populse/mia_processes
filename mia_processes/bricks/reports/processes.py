@@ -2167,15 +2167,16 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Making sure that the ROIs and parametric images are at the
                 # same size
                 if roi_data.shape[:3] != map_data.shape[:3]:
-                    map_data_max = max(map_data.max(), -map_data.min())
-                    final_map_data = (
-                        resize(map_data / map_data_max, roi_data.shape[:3])
-                        * map_data_max
-                    )
+                    # map_data_max = max(map_data.max(), -map_data.min())
+                    # final_map_data = (
+                    #     resize(map_data / map_data_max, roi_data.shape[:3])
+                    #     * map_data_max
+                    # )
+                    final_roi_data = resize(roi_data, map_data.shape[:3])
 
                 # Convolution of the parametric map with the ROI images
-                roi_thresh = (roi_data > 0).astype(float)
-                result = final_map_data * roi_thresh
+                roi_thresh = (final_roi_data > 0).astype(float)
+                result = map_data * roi_thresh
 
                 # Calculating mean and standard deviation
                 if np.size(result[result.nonzero()]) == 0:

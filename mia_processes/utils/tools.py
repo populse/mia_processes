@@ -50,6 +50,7 @@ from populse_mia.data_manager.project import (
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable
+from skimage.transform import resize
 from traits.api import Undefined
 
 
@@ -602,7 +603,35 @@ def plot_slice_planes(
         for i, fil in enumerate(data_2):
             brain_img_2 = nib.as_closest_canonical(nib.load(fil))
             data = brain_img_2.get_fdata()
+
+            if brain_data_1.shape[:3] != brain_img_2.shape[:3]:
+                data = resize(data, brain_data_1.shape[:3])
+
             data = np.squeeze(data)
+
+            # from nilearn.image import resample_to_img
+            # data = resample_to_img(brain_img_2, brain_img_1,
+            #                        interpolation="linear").get_fdata()
+
+            #     from scipy.ndimage import map_coordinates
+            #     target_coords = np.meshgrid(
+            #         np.arange(brain_data_1.shape[0]),
+            #         np.arange(brain_data_1.shape[1]),
+            #         np.arange(brain_data_1.shape[2]),
+            #         indexing='ij')
+            # # Resample the data array to the grid of the target image using
+            # # trilinear interpolation
+            # data = map_coordinates(data, target_coords, order=1,
+            #                        mode='nearest')
+
+            # from scipy.ndimage import zoom
+            # scale_factors = np.array(
+            #     brain_data_1.shape) / np.array(
+            #     data.shape)
+            #
+            # # Perform trilinear interpolation using zoom
+            # data = zoom(data, scale_factors, order=1, mode='nearest')
+
             nan_indexes = np.isnan(data)
 
             if cmap_2 in (None, Undefined):
