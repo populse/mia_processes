@@ -98,7 +98,8 @@ import tempfile
 from math import sqrt
 
 import matplotlib.pyplot as plt
-import nibabel as nb
+import nibabel as nib
+import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
 import scipy.ndimage as nd
@@ -124,7 +125,6 @@ from numpy.polynomial import Legendre
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy.stats import kurtosis  # pylint: disable=E0611
-from skimage.transform import resize
 
 # mia_processes import
 from mia_processes.utils import checkFileExt, get_dbFieldValue
@@ -308,15 +308,15 @@ class AnatIQMs(ProcessMIA):
 
         results_dict = {}
 
-        imdata = nb.load(self.in_ras).get_fdata()
+        imdata = nib.load(self.in_ras).get_fdata()
 
         # Try to load files
         has_in_noinu = True
         if self.in_noinu:
             try:
-                imnii = nb.load(self.in_noinu)
+                imnii = nib.load(self.in_noinu)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -333,9 +333,9 @@ class AnatIQMs(ProcessMIA):
         if self.segmentation:
             try:
                 # Load binary segmentation from FSL FAST
-                segnii = nb.load(self.segmentation)
+                segnii = nib.load(self.segmentation)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -351,9 +351,9 @@ class AnatIQMs(ProcessMIA):
         if self.airmask:
             try:
                 # Load binary segmentation from FSL FAST
-                airnii = nb.load(self.airmask)
+                airnii = nib.load(self.airmask)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -369,9 +369,9 @@ class AnatIQMs(ProcessMIA):
         if self.artmask:
             try:
                 # Load binary segmentation from FSL FAST
-                artnii = nb.load(self.artmask)
+                artnii = nib.load(self.artmask)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -387,9 +387,9 @@ class AnatIQMs(ProcessMIA):
         if self.headmask:
             try:
                 # Load binary segmentation from FSL FAST
-                headnii = nb.load(self.headmask)
+                headnii = nib.load(self.headmask)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -405,9 +405,9 @@ class AnatIQMs(ProcessMIA):
         if self.rotmask:
             try:
                 # Load binary segmentation from FSL FAST
-                rotnii = nb.load(self.rotmask)
+                rotnii = nib.load(self.rotmask)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -425,9 +425,9 @@ class AnatIQMs(ProcessMIA):
                 # Load Partial Volume Maps (pvms) from FSL FAST
                 pvmniis = []
                 for fname in self.pvms:
-                    pvmniis.append(nb.load(fname))
+                    pvmniis.append(nib.load(fname))
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -454,9 +454,9 @@ class AnatIQMs(ProcessMIA):
             try:
                 mni_tpmsniis = []
                 for fname in self.mni_tpms:
-                    mni_tpmsniis.append(nb.load(fname))
+                    mni_tpmsniis.append(nib.load(fname))
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -530,7 +530,7 @@ class AnatIQMs(ProcessMIA):
         if self.hatmask != Undefined:
             # Artifacts QI2
             results_dict["qi_2"], results_dict["histogram_qi2"] = art_qi2(
-                imdata, nb.load(self.hatmask).get_fdata()
+                imdata, nib.load(self.hatmask).get_fdata()
             )
 
         if has_stats:
@@ -600,7 +600,7 @@ class AnatIQMs(ProcessMIA):
 
         if has_segmentation:
             # Bias
-            bias = nb.load(self.in_inu).get_fdata()[segdata > 0]
+            bias = nib.load(self.in_inu).get_fdata()[segdata > 0]
             results_dict["inu"] = {
                 "range": float(
                     np.abs(
@@ -818,7 +818,7 @@ class BoldIQMs(ProcessMIA):
         super(BoldIQMs, self).run_process_mia()
 
         # Get the mean EPI data and get it ready
-        epinii = nb.load(self.in_epi)
+        epinii = nib.load(self.in_epi)
         epidata = np.nan_to_num(epinii.get_fdata())
         epidata = epidata.astype(np.float32)
         epidata[epidata < 0] = 0
@@ -827,9 +827,9 @@ class BoldIQMs(ProcessMIA):
         has_in_hmc = True
         if self.in_hmc:
             try:
-                hmcnii = nb.load(self.in_hmc)
+                hmcnii = nib.load(self.in_hmc)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -846,9 +846,9 @@ class BoldIQMs(ProcessMIA):
         has_in_mask = True
         if self.in_mask:
             try:
-                msknii = nb.load(self.in_mask)
+                msknii = nib.load(self.in_mask)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -866,9 +866,9 @@ class BoldIQMs(ProcessMIA):
         has_in_tsnr = True
         if self.in_tsnr:
             try:
-                tsnr_nii = nb.load(self.in_tsnr)
+                tsnr_nii = nib.load(self.in_tsnr)
             except (
-                nb.filebasedimages.ImageFileError,
+                nib.filebasedimages.ImageFileError,
                 FileNotFoundError,
                 TypeError,
             ) as e:
@@ -1242,7 +1242,7 @@ class BoldIQMsPlot(ProcessMIA):
             }
         )
 
-        input_data = nb.load(self.in_func)
+        input_data = nib.load(self.in_func)
         seg_file = self.carpet_seg
         dataset, segments = _nifti_timeseries(input_data, seg_file)
 
@@ -1392,7 +1392,7 @@ class CarpetParcellation(ProcessMIA):
         super(CarpetParcellation, self).run_process_mia()
 
         # Binary dilation
-        brainmask_img = nb.load(self.brainmask)
+        brainmask_img = nib.load(self.brainmask)
         brainmaskdata = np.bool_(brainmask_img.dataobj)
 
         # Obtain dilated brain mask
@@ -1406,7 +1406,7 @@ class CarpetParcellation(ProcessMIA):
         subtraction[np.bool_(brainmaskdata)] = False
 
         # Carpet parcellation
-        img = nb.load(self.segmentation)
+        img = nib.load(self.segmentation)
 
         lut = np.zeros((256,), dtype="uint8")
         lut[100:201] = 1  # Ctx GM
@@ -1614,8 +1614,8 @@ class ComputeDVARS(ProcessMIA):
         )
 
         # Load data
-        func = np.float32(nb.load(self.in_file).dataobj)
-        mask = np.bool_(nb.load(self.in_mask).dataobj)
+        func = np.float32(nib.load(self.in_file).dataobj)
+        mask = np.bool_(nib.load(self.in_mask).dataobj)
 
         if len(func.shape) != 4:
             raise RuntimeError("Input fMRI dataset should be 4-dimensional")
@@ -2136,10 +2136,7 @@ class Mean_stdDev_calc(ProcessMIA):
 
         for parametric_map in self.parametric_maps:
             # Reading parametric map
-            map_img = nb.load(parametric_map)
-            map_data = map_img.get_fdata()
-            # Setting the NaN to 0 in parametric map
-            map_data = np.nan_to_num(map_data)
+            map_img = nib.load(parametric_map)
             # Deduction of the parameter from the name of the parametric map
             param_file_name = os.path.basename(parametric_map)
 
@@ -2150,10 +2147,7 @@ class Mean_stdDev_calc(ProcessMIA):
                 parameter = param_file_name[: param_file_name.index("_")]
 
             for roi_file in self.rois_files:
-                roi_img = nb.load(roi_file)
-                roi_data = roi_img.get_fdata()
-                # Setting the NaN to 0 in ROI images
-                roi_data = np.nan_to_num(roi_data)
+                roi_img = nib.load(roi_file)
                 # Deduction of the ROI name from the roi_file
                 roi_name, _ = os.path.splitext(os.path.basename(roi_file))
 
@@ -2166,17 +2160,17 @@ class Mean_stdDev_calc(ProcessMIA):
 
                 # Making sure that the ROIs and parametric images are at the
                 # same size
-                if roi_data.shape[:3] != map_data.shape[:3]:
-                    # map_data_max = max(map_data.max(), -map_data.min())
-                    # final_map_data = (
-                    #     resize(map_data / map_data_max, roi_data.shape[:3])
-                    #     * map_data_max
-                    # )
-                    final_roi_data = resize(roi_data, map_data.shape[:3])
+                if roi_img.shape[:3] != map_img.shape[:3]:
+                    final_roi_img = nibp.resample_from_to(
+                        roi_img, map_img, order=3
+                    )
 
                 # Convolution of the parametric map with the ROI images
-                roi_thresh = (final_roi_data > 0).astype(float)
-                result = map_data * roi_thresh
+                final_roi_data = final_roi_img.get_fdata().astype(np.float32)
+                final_roi_data[final_roi_data < 1e-5] = 0
+                map_data = map_img.get_fdata()
+                mask = (final_roi_data > 0) & ~np.isnan(map_data)
+                result = np.where(mask, map_data, 0)
 
                 # Calculating mean and standard deviation
                 if np.size(result[result.nonzero()]) == 0:
@@ -2405,20 +2399,20 @@ class PlotSignalROI(ProcessMIA):
         concate_roi = None
         if isinstance(self.rois_files, TraitListObject):
             for roi in self.rois_files:
-                roi_volume = np.asarray(nb.load(roi).dataobj)
+                roi_volume = np.asarray(nib.load(roi).dataobj)
                 if concate_roi is None:
                     concate_roi = roi_volume > 0
                 concate_roi = np.where(roi_volume > 0, roi_volume, concate_roi)
-                affine = nb.load(roi).affine
-                header = nb.load(roi).header
-            concate_roi_image = nb.Nifti1Image(
+                affine = nib.load(roi).affine
+                header = nib.load(roi).header
+            concate_roi_image = nib.Nifti1Image(
                 concate_roi, affine, header=header
             )
         else:
             concate_roi = self.rois_files
         valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
 
-        image = nb.load(self.in_file)
+        image = nib.load(self.in_file)
         if len(image.shape) == 3:
             # 3D image
             bg_image = self.in_file
@@ -2426,7 +2420,7 @@ class PlotSignalROI(ProcessMIA):
             # 4D image
             volume = np.asarray(image.dataobj)
             first_volume = volume.copy()[:, :, :, 0]
-            bg_image = nb.Nifti1Image(first_volume, image.affine)
+            bg_image = nib.Nifti1Image(first_volume, image.affine)
 
         plotting.plot_roi(
             roi_img=concate_roi_image,
@@ -3177,11 +3171,11 @@ class Spikes(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Spikes, self).run_process_mia()
 
-        func_nii = nb.load(self.in_file)
+        func_nii = nib.load(self.in_file)
         func_data = func_nii.get_fdata()
         func_shape = func_data.shape
 
-        orientation = nb.aff2axcodes(func_nii.affine)
+        orientation = nib.aff2axcodes(func_nii.affine)
 
         new_mask_3d = np.zeros(func_nii.shape[:3]) == 1
 

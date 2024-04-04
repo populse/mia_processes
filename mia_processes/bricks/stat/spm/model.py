@@ -1605,19 +1605,19 @@ class Level1Design(ProcessMIA):
             "sess_hpf",
             traits.List(
                 traits.Float(),
-                value=[427.2],
+                value=[427.0],
                 usedefault=True,
                 output=False,
                 optional=True,
                 desc=sess_hpf_desc,
             ),
         )
-        # TODO: 427.2 corresponds to the value used in Amigo
-        #       Duration * TR * 3.56 = 427.2 if Duration == 40 and
+        # TODO: 427.0 corresponds to the value used in Amigo
+        #       round(Duration * TR * 3.56) = 427 if Duration == 40 and
         #       TR == 3s; why 3.56 ?
         #       I was expecting rather to:
         #       (time between first block start
-        #        - second block start) * TR *2 = 80 *3 *2 = 480
+        #        - second block start) * TR * 2 = 80 * 3 * 2 = 480
         #       Can we code an automatic recovery procedure for the
         #       hpf parameter ?
         #       (in this case, the user would have to declare additional

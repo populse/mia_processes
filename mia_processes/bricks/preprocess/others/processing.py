@@ -68,7 +68,6 @@ from nipype.interfaces.spm.base import ImageFileSPM
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import ndimage as sim
 from skimage.morphology import ball
-from skimage.transform import resize
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -1232,6 +1231,7 @@ class ConvROI(ProcessMIA):
                 roi_img, mask_img, interpolation="linear"
             ).get_fdata()
             result_data = np.where(mask_data > thres, roi_data_resampled, 0)
+            # mask_img.header can be added ?
             result_img = nib.Nifti1Image(result_data, mask_img.affine)
             # Image save in conv_dir
             out_file = os.path.join(
@@ -3707,17 +3707,15 @@ class Resample2(ProcessMIA):
             shutil.rmtree(tmp)
 
         # Setting files_to_resample to the resolution of the reference_image
-        mask = nib.load(self.reference_image).get_fdata()
-        mask_size = mask.shape[:3]
+        mask_img = nib.load(self.reference_image)
 
         for roi_file in self.files_to_resample:
             roi_img = nib.load(roi_file)
-            roi_data = roi_img.get_fdata()
-            resized_roi = resize(roi_data, mask_size)
-            # TODO: Should we take info from ROI or from the mask ?
-            #       Currently we take from ROI images
+            resized_roi_img = nibp.resample_from_to(roi_img, mask_img, order=3)
+            final_roi_data = resized_roi_img.get_fdata().astype(np.float32)
+            final_roi_data[final_roi_data < 1e-5] = 0
             resized_img = nib.Nifti1Image(
-                resized_roi, roi_img.affine, roi_img.header
+                final_roi_data, resized_roi_img.affine, resized_roi_img.header
             )
 
             # Image save

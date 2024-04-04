@@ -35,6 +35,7 @@ import os
 
 import matplotlib.pyplot as plt
 import nibabel as nib
+import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
 from matplotlib.cm import get_cmap
@@ -50,7 +51,6 @@ from populse_mia.data_manager.project import (
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable
-from skimage.transform import resize
 from traits.api import Undefined
 
 
@@ -602,36 +602,14 @@ def plot_slice_planes(
 
         for i, fil in enumerate(data_2):
             brain_img_2 = nib.as_closest_canonical(nib.load(fil))
-            data = brain_img_2.get_fdata()
 
-            if brain_data_1.shape[:3] != brain_img_2.shape[:3]:
-                data = resize(data, brain_data_1.shape[:3])
+            if brain_img_1.shape[:3] != brain_img_2.shape[:3]:
+                brain_img_2 = nibp.resample_from_to(
+                    brain_img_2, brain_img_1, order=3
+                )
+                data = brain_img_2.get_fdata()
 
             data = np.squeeze(data)
-
-            # from nilearn.image import resample_to_img
-            # data = resample_to_img(brain_img_2, brain_img_1,
-            #                        interpolation="linear").get_fdata()
-
-            #     from scipy.ndimage import map_coordinates
-            #     target_coords = np.meshgrid(
-            #         np.arange(brain_data_1.shape[0]),
-            #         np.arange(brain_data_1.shape[1]),
-            #         np.arange(brain_data_1.shape[2]),
-            #         indexing='ij')
-            # # Resample the data array to the grid of the target image using
-            # # trilinear interpolation
-            # data = map_coordinates(data, target_coords, order=1,
-            #                        mode='nearest')
-
-            # from scipy.ndimage import zoom
-            # scale_factors = np.array(
-            #     brain_data_1.shape) / np.array(
-            #     data.shape)
-            #
-            # # Perform trilinear interpolation using zoom
-            # data = zoom(data, scale_factors, order=1, mode='nearest')
-
             nan_indexes = np.isnan(data)
 
             if cmap_2 in (None, Undefined):
@@ -937,3 +915,84 @@ def plot_slice_planes(
 
     fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")
     return out_file
+
+
+def check_orientations(images, verbose=True):
+    """Check the dimensions and orientations of the images.
+
+    images: images from nibabel
+    verbose: whether to create a verbose returned message.
+
+    returns:    status: status (True means OK)
+                message: string describing status (empty if OK)
+
+    """
+    status = True
+    message = ""
+
+    if len(images) <= 1:
+        return status, message
+
+    dimensions = [img.shape for img in images]
+    orientations = [img.affine for img in images]
+
+    if len(set(dimensions)) > 1:
+        status = False
+        message += "The images do not all have the same dimensions.\n"
+
+        if verbose:
+            message += (
+                "The function assumes that a voxel in one image "
+                "corresponds to the same voxel in another.\n"
+            )
+            message += (
+                "This is not a safe assumption if the dimensions "
+                "of the images differ.\n"
+            )
+            message += (
+                "Please ensure that you have processed all the "
+                "image data in the same way (eg. check spatial "
+                "normalisation bounding-boxes, voxel-sizes etc).\n"
+            )
+            message += "Here are the dimensions of the image volumes:\n"
+
+            for i, dim in enumerate(dimensions):
+                message += (
+                    f'[{", ".join(map(str, dim))}]:'
+                    f"{images[i].get_filename()}\n"
+                )
+            message += "\n"
+
+    if len(set(orientations)) > 1:
+        status = False
+        message += (
+            "The images do not all have the same orientation "
+            "and/or voxel size.\n"
+        )
+        if verbose:
+            message += (
+                "The function assumes that a voxel in one image "
+                "corresponds exactly with the same voxel "
+                "in another.\n"
+            )
+            message += (
+                "This is not a safe assumption if the orientation "
+                "information in the headers files indicates that\n"
+            )
+            message += (
+                "the images are oriented differently. Please ensure "
+                "that you process all data correctly.\n"
+            )
+            message += (
+                "For example, you may have realigned the images, "
+                "but not actually resliced them to be in voxel-wise "
+                "alignment.\n"
+            )
+            message += (
+                "Here are the orientation matrices of the " "image volumes:\n"
+            )
+
+            for i, orient in enumerate(orientations):
+                message += f"{orient}\n"
+
+    return status, message
