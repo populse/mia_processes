@@ -13,6 +13,11 @@ Resample1 brick
 Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to()
 -----------------------------------------------------------------------------------------------------
 
+- To eliminate the near-zero noise generated in the resized image, thresholding (10-5) is performed.
+  All values below 10-5 are therefore truncated at 0.
+
+--------------------------------------
+
 **Mandatory inputs parameters:**
 
 - *files_to_resample*
@@ -24,7 +29,7 @@ Resamples an image to the resolution of a reference image using nibabel.processi
 
 
 - *reference_image*
-    A 3D or 4D image used as reference to resample the files_to_resample images (a string representing an existing file ; valid extensions: [.nii, .nii.gz]).
+    A 3D or 4D image used as reference to resample the `files_to_resample` images (a string representing an existing file ; valid extensions: [.nii, .nii.gz]).
 
     ::
 

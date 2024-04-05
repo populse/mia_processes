@@ -10,13 +10,15 @@
 Resample2 brick
 ================
 
-Sets images to the resolution of a reference image using skimage.transform.resize()
------------------------------------------------------------------------------------
+Sets images to the resolution of a reference image using nibabel.processing.resample_from_to()
+----------------------------------------------------------------------------------------------
 
 - The "`PatientName`\_data/ROI_data/convROI_BOLD2" directory is created to receive the resampling
   results from the runtime. If this directory exists at runtime, it is deleted.
 - To work correctly, the database entry for the `reference_image` parameter
   must have the `PatientName` tag filled in.
+- To eliminate the near-zero noise generated in the resized image, thresholding (10-5) is performed.
+  All values below 10-5 are therefore truncated at 0.
 
 --------------------------------------
 
@@ -64,4 +66,4 @@ Sets images to the resolution of a reference image using skimage.transform.resiz
 
 Usefull links:
 
- `skimage.transform.resize() <https://scikit-image.org/docs/stable/api/skimage.transform.html#skimage.transform.resize>`_
+ `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to>`_

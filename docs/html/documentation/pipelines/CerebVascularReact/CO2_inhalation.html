@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CO2_inhalation pipeline &#8212; mia_processes 2.5.1-dev+4b482614 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>CO2_inhalation pipeline &#8212; mia_processes 2.5.1-dev+fdc71a29 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../_static/documentation_options.js?v=35ead824"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+4b482614 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+fdc71a29 documentation</span></a></h1>
         <h2 class="heading"><span>CO2_inhalation pipeline</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -33,11 +31,6 @@
   <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 23%" />
-<col style="width: 35%" />
-<col style="width: 42%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
 <td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
@@ -46,9 +39,9 @@
 </tbody>
 </table>
 <section id="co2-inhalation-pipeline">
-<h1>CO2_inhalation pipeline<a class="headerlink" href="#co2-inhalation-pipeline" title="Permalink to this headline">¶</a></h1>
+<h1>CO2_inhalation pipeline<a class="headerlink" href="#co2-inhalation-pipeline" title="Link to this heading">¶</a></h1>
 <section id="cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge">
-<h2>Cerebrovascular reactivity (CVR) evaluation under CO<sub>2</sub> challenge<a class="headerlink" href="#cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge" title="Permalink to this headline">¶</a></h2>
+<h2>Cerebrovascular reactivity (CVR) evaluation under CO<sub>2</sub> challenge<a class="headerlink" href="#cerebrovascular-reactivity-cvr-evaluation-under-co2-challenge" title="Link to this heading">¶</a></h2>
 <p>Functional magnetic resonance imaging (fMRI) experiments to assess
 cerebrovascular reactivity (CVR) to hypercapnia (increased CO<sub>2</sub> levels)
 typically involve inducing controlled changes in CO<sub>2</sub> levels while
@@ -67,7 +60,7 @@ potential confounding effects. Trigger and physiological data are used
 together to ensure that ETCO2 data are synchronized with imaging data.</p>
 <p>The fMRI data are analyzed using a GLM approach. An <a class="reference external" href="../../bricks/tools/Make_CVR_reg_physio.html">ETCO2
 regressor</a> is included in the
-model to account for variations in CO2 levels. Other potential confounding
+model to account for variations in CO<sub>2</sub> levels. Other potential confounding
 variables (e.g. motion parameters) are also included as regressors.</p>
 <p>A report is generated at the end of the analysis with the main statistical
 results obtained.</p>
@@ -75,7 +68,7 @@ results obtained.</p>
 <p><strong>Pipeline insight</strong></p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>The CO2_inhalation pipeline combines the following bricks:</dt><dd><ul>
+<dt>The <cite>CO2_inhalation</cite> pipeline combines the following bricks:</dt><dd><ul>
 <li><p><a class="reference external" href="../../pipelines/preprocess/Bold_spatial_preprocessing1.html">Bold_spatial_preprocessing1</a></p></li>
 <li><p><a class="reference external" href="../../pipelines/preprocess/Spatial_mask.html">Spatial_mask</a></p></li>
 <li><p><a class="reference external" href="../../pipelines/stat/Bold_stat_cvr.html">Bold_stat_cvr</a></p></li>
@@ -196,8 +189,8 @@ laterality indices in various territories for statistical results
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
