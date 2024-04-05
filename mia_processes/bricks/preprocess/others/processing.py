@@ -50,7 +50,8 @@ import nibabel as nib
 import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
-from nilearn.image import resample_to_img
+
+# from nilearn.image import resample_to_img
 from nilearn.maskers import NiftiLabelsMasker
 
 # nipype import
@@ -65,6 +66,7 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
+# from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import ndimage as sim
 from skimage.morphology import ball
@@ -85,10 +87,6 @@ from mia_processes.utils import (
 
 # Other import
 # from distutils.dir_util import copy_tree
-
-
-# from populse_mia.software_properties import Config
-
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
@@ -1191,33 +1189,6 @@ class ConvROI(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # # Resample the convolve_with to the size of images_to_convolve, then
-        # # convolve each images_to_convolve with resized convolve_with.
-        # mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
-        #
-        # for roi_file in self.images_to_convolve:
-        #     roi_img = nib.load(roi_file)
-        #     roi_data = roi_img.get_fdata()
-        #     # roi_size = roi_data.shape[:3]
-        #     # resized_mask = resize(mask_thresh, roi_size)
-        #     resized_mask = resize(roi_data, mask_thresh.shape)
-        #     # mult = (roi_data * resized_mask).astype(float)
-        #     mult = (mask_thresh * resized_mask).astype("float64")
-        #     # TODO: Should we take info from images_to_convolve or from
-        #     #       convolve_with ?
-        #     #       Currently we take from convolve_with
-        #     #mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
-        #     mult_img = nib.Nifti1Image(mult,
-        #                                nib.load(self.convolve_with).affine,
-        #                                nib.load(self.convolve_with).header)
-        #
-        #     # Image save in conv_dir
-        #     out_file = os.path.join(
-        #         conv_dir, self.prefix + os.path.basename(roi_file)
-        #     )
-        #     nib.save(mult_img, out_file)
-        #     print("{0} saved".format(out_file))
-
         # Resample the images_to_convolve to the size of convolve_with, then
         # convolve each resized images_to_convolve with convolve_with at
         # threshold 0.5
@@ -1227,12 +1198,22 @@ class ConvROI(ProcessMIA):
 
         for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
-            roi_data_resampled = resample_to_img(
-                roi_img, mask_img, interpolation="linear"
-            ).get_fdata()
-            result_data = np.where(mask_data > thres, roi_data_resampled, 0)
-            # mask_img.header can be added ?
-            result_img = nib.Nifti1Image(result_data, mask_img.affine)
+            # roi_data_resampled = resample_to_img(
+            #     roi_img, mask_img, interpolation="linear"
+            # )
+            roi_data_resampled = nibp.resample_from_to(
+                roi_img, mask_img, order=3
+            )
+            # thresholding (1e-5) of the resized image (elimination of
+            # near-zero noise in the resized image)
+            final_data = roi_data_resampled.get_fdata().astype(np.float32)
+            final_data[final_data < 1e-5] = 0
+            result_data = np.where(mask_data > thres, final_data, 0)
+            result_img = nib.Nifti1Image(
+                result_data,
+                roi_data_resampled.affine,
+                roi_data_resampled.header,
+            )
             # Image save in conv_dir
             out_file = os.path.join(
                 conv_dir, self.prefix + os.path.basename(roi_file)
@@ -3406,6 +3387,7 @@ class Resample1(ProcessMIA):
         :returns: a message according to the selected order
         """
 
+        # Note on resampling:
         # skimage.transform.resize (does not seem to be the best solution for
         # resampling):
         # - B-splines of the order 0 and 1 correspond to nearest neighbour and
@@ -3512,6 +3494,14 @@ class Resample1(ProcessMIA):
                 fileFinal = nibp.resample_from_to(
                     fileName, refName.slicer[:, :, :, 0], order=self.interp
                 )
+
+            # thresholding (1e-5) of the resized image (elimination of
+            # near-zero noise in the resized image)
+            final_data = fileFinal.get_fdata().astype(np.float32)
+            final_data[final_data < 1e-5] = 0
+            fileFinal = nib.Nifti1Image(
+                final_data, fileFinal.affine, fileFinal.header
+            )
 
             # Image save
             path, file_name = os.path.split(file_name)
@@ -3712,6 +3702,8 @@ class Resample2(ProcessMIA):
         for roi_file in self.files_to_resample:
             roi_img = nib.load(roi_file)
             resized_roi_img = nibp.resample_from_to(roi_img, mask_img, order=3)
+            # thresholding (1e-5) of the resized image (elimination of
+            # near-zero noise in the resized image)
             final_roi_data = resized_roi_img.get_fdata().astype(np.float32)
             final_roi_data[final_roi_data < 1e-5] = 0
             resized_img = nib.Nifti1Image(

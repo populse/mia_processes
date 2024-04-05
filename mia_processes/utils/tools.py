@@ -607,7 +607,13 @@ def plot_slice_planes(
                 brain_img_2 = nibp.resample_from_to(
                     brain_img_2, brain_img_1, order=3
                 )
-                data = brain_img_2.get_fdata()
+                # thresholding (1e-5) of the resized image (elimination of
+                # near-zero noise in the resized image)
+                data = brain_img_2.get_fdata().astype(np.float32)
+                data[data < 1e-5] = 0
+
+            else:
+                data = brain_img_2.get_fdata().astype(np.float32)
 
             data = np.squeeze(data)
             nan_indexes = np.isnan(data)

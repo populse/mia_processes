@@ -20,7 +20,7 @@ Generate the physiological regressor for cerebrovascular reactivity evaluation
 
 - ETCO2 data are pre-processed and then convolved with a canonical hemodynamic
   response function (HRF) to create a regressor that accounts for the
-  hemodynamic response to variations in CO2 levels.
+  hemodynamic response to variations in CO\ :sub:`2` levels.
 
 - The brick accepts physiological parameter files in .csv (Magdata) or
   .log (CoolTerm) format and trigger files in .txt, .log or .csv format.

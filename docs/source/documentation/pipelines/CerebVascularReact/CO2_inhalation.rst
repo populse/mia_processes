@@ -63,7 +63,7 @@ together to ensure that ETCO2 data are synchronized with imaging data.
 
 The fMRI data are analyzed using a GLM approach. An `ETCO2
 regressor <../../bricks/tools/Make_CVR_reg_physio.html>`_ is included in the
-model to account for variations in CO2 levels. Other potential confounding
+model to account for variations in CO\ :sub:`2` levels. Other potential confounding
 variables (e.g. motion parameters) are also included as regressors.
 
 A report is generated at the end of the analysis with the main statistical
@@ -73,7 +73,7 @@ results obtained.
 
 **Pipeline insight**
 
-- The CO2_inhalation pipeline combines the following bricks:
+- The `CO2_inhalation` pipeline combines the following bricks:
     - `Bold_spatial_preprocessing1  <../../pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
     - `Spatial_mask  <../../pipelines/preprocess/Spatial_mask.html>`_
     - `Bold_stat_cvr <../../pipelines/stat/Bold_stat_cvr.html>`_
