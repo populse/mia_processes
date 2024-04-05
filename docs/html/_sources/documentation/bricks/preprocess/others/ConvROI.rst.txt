@@ -18,8 +18,8 @@ Image convolution with one image
 - The “PatientName_data/ROI_data/convROI_BOLD” directory is created to receive the convolution results from the runtime.
   If this directory exists at runtime, it is overwritten.
 - To work correctly, the database entry for the `convolve_with` parameter must have the "PatientName" tag filled in.
-- To eliminate the near-zero noise generated in the resized image, thresholding (10-5) is performed.
-  All values below 10-5 are therefore truncated at 0.
+- To eliminate the near-zero noise generated in the resized image, thresholding (10\ :sup:`-5`) is performed.
+  All values below 10\ :sup:`-5` are therefore truncated at 0.
 
 --------------------------------------
 

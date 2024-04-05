@@ -13,8 +13,8 @@ Resample1 brick
 Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to()
 -----------------------------------------------------------------------------------------------------
 
-- To eliminate the near-zero noise generated in the resized image, thresholding (10-5) is performed.
-  All values below 10-5 are therefore truncated at 0.
+- To eliminate the near-zero noise generated in the resized image, thresholding (10\ :sup:`-5`) is performed.
+  All values below 10\ :sup:`-5` are therefore truncated at 0.
 
 --------------------------------------
 

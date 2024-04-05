@@ -17,8 +17,8 @@ Sets images to the resolution of a reference image using nibabel.processing.resa
   results from the runtime. If this directory exists at runtime, it is deleted.
 - To work correctly, the database entry for the `reference_image` parameter
   must have the `PatientName` tag filled in.
-- To eliminate the near-zero noise generated in the resized image, thresholding (10-5) is performed.
-  All values below 10-5 are therefore truncated at 0.
+- To eliminate the near-zero noise generated in the resized image, thresholding (10\ :sup:`-5`) is performed.
+  All values below 10\ :sup:`-5` are therefore truncated at 0.
 
 --------------------------------------
 
