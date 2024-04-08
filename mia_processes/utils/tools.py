@@ -783,7 +783,12 @@ def plot_slice_planes(
         if slice_numb >= len(ind_slices):
             displ_1 = np.zeros((2, 2, 2))
             ind_slice = 1
-            displ_2 = [np.zeros((2, 2, 2))]
+
+            if brain_data_2 is not None:
+                displ_2 = [np.zeros((2, 2, 2))]
+
+            else:
+                displ_2 = None
 
         else:
             displ_1 = brain_data_1
