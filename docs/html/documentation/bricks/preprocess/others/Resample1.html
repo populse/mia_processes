@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Resample1 brick &#8212; mia_processes 2.5.1-dev+93ce272e documentation</title>
+    <title>Resample1 brick &#8212; mia_processes 2.5.1-dev+a74182e7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=05647b69"></script>
+    <script src="../../../../_static/documentation_options.js?v=56b9cb02"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+93ce272e documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a74182e7 documentation</span></a></h1>
         <h2 class="heading"><span>Resample1 brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -40,13 +40,8 @@
 </table>
 <section id="resample1-brick">
 <h1>Resample1 brick<a class="headerlink" href="#resample1-brick" title="Link to this heading">¶</a></h1>
-<section id="resamples-an-image-to-the-resolution-of-a-reference-image-using-nibabel-processing-resample-from-to">
-<h2>Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to()<a class="headerlink" href="#resamples-an-image-to-the-resolution-of-a-reference-image-using-nibabel-processing-resample-from-to" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>To eliminate the near-zero noise generated in the resized image, thresholding (10<sup>-5</sup>) is performed.
-All values below 10<sup>-5</sup> are therefore truncated at 0.</p></li>
-</ul>
-<hr class="docutils" />
+<section id="resamples-an-image-to-the-resolution-of-a-reference-image-using-nilearn-image-resample-to-img">
+<h2>Resamples an image to the resolution of a reference image using nilearn.image.resample_to_img()<a class="headerlink" href="#resamples-an-image-to-the-resolution-of-a-reference-image-using-nilearn-image-resample-to-img" title="Link to this heading">¶</a></h2>
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
 <li><dl>
@@ -69,8 +64,8 @@ All values below 10<sup>-5</sup> are therefore truncated at 0.</p></li>
 <p><strong>Optional inputs with default value parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>interp</em></dt><dd><p>The order of the spline interpolation (an integer between 0 and 5, default value is trilinear, 3).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
+<dt><em>interp</em></dt><dd><p>The resample method (a string in [‘continuous’, ‘linear’, ‘nearest’]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;linear&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -115,7 +110,7 @@ All values below 10<sup>-5</sup> are therefore truncated at 0.</p></li>
 <hr class="docutils" />
 <p>Usefull links:</p>
 <blockquote>
-<div><p><a class="reference external" href="https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to">nibabel.processing.resample_from_to()</a></p>
+<div><p><a class="reference external" href="https://nilearn.github.io/dev/modules/generated/nilearn.image.resample_to_img.html">nilearn.image.resample_to_img()</a></p>
 </div></blockquote>
 </section>
 </section>

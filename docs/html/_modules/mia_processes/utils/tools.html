@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.tools &#8212; mia_processes 2.5.1-dev+fdc71a29 documentation</title>
+    <title>mia_processes.utils.tools &#8212; mia_processes 2.5.1-dev+a74182e7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=35ead824"></script>
+    <script src="../../../_static/documentation_options.js?v=56b9cb02"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+fdc71a29 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a74182e7 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -65,12 +65,12 @@
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
-<span class="kn">import</span> <span class="nn">nibabel.processing</span> <span class="k">as</span> <span class="nn">nibp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">get_cmap</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">ImageGrid</span>
+<span class="kn">from</span> <span class="nn">nilearn.image</span> <span class="kn">import</span> <span class="n">resample_to_img</span>
 <span class="kn">from</span> <span class="nn">nilearn.plotting</span> <span class="kn">import</span> <span class="n">plot_anat</span>
 <span class="kn">from</span> <span class="nn">nitransforms.io.afni</span> <span class="kn">import</span> <span class="n">_dicom_real_to_card</span>
 <span class="kn">from</span> <span class="nn">populse_mia.data_manager.data_history_inspect</span> <span class="kn">import</span> <span class="n">data_history_pipeline</span>
@@ -690,16 +690,11 @@
             <span class="n">brain_img_2</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">as_closest_canonical</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fil</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">brain_img_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="n">brain_img_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
-                <span class="n">brain_img_2</span> <span class="o">=</span> <span class="n">nibp</span><span class="o">.</span><span class="n">resample_from_to</span><span class="p">(</span>
-                    <span class="n">brain_img_2</span><span class="p">,</span> <span class="n">brain_img_1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span>
+                <span class="n">brain_img_2</span> <span class="o">=</span> <span class="n">resample_to_img</span><span class="p">(</span>
+                    <span class="n">brain_img_2</span><span class="p">,</span> <span class="n">brain_img_1</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span>
                 <span class="p">)</span>
-                <span class="c1"># thresholding (1e-5) of the resized image (elimination of</span>
-                <span class="c1"># near-zero noise in the resized image)</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">brain_img_2</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">brain_img_2</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">brain_img_2</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
             <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="n">nan_indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
