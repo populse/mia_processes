@@ -10,15 +10,13 @@
 Resample2 brick
 ================
 
-Sets images to the resolution of a reference image using nibabel.processing.resample_from_to()
+Sets images to the resolution of a reference image using using nilearn.image.resample_to_img()
 ----------------------------------------------------------------------------------------------
 
 - The "`PatientName`\_data/ROI_data/convROI_BOLD2" directory is created to receive the resampling
   results from the runtime. If this directory exists at runtime, it is deleted.
 - To work correctly, the database entry for the `reference_image` parameter
   must have the `PatientName` tag filled in.
-- To eliminate the near-zero noise generated in the resized image, thresholding (10\ :sup:`-5`) is performed.
-  All values below 10\ :sup:`-5` are therefore truncated at 0.
 
 --------------------------------------
 
@@ -66,4 +64,4 @@ Sets images to the resolution of a reference image using nibabel.processing.resa
 
 Usefull links:
 
- `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to>`_
+ `nilearn.image.resample_to_img() <https://nilearn.github.io/dev/modules/generated/nilearn.image.resample_to_img.html>`_

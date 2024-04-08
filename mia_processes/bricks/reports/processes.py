@@ -99,11 +99,11 @@ from math import sqrt
 
 import matplotlib.pyplot as plt
 import nibabel as nib
-import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
 import scipy.ndimage as nd
 from nilearn import plotting
+from nilearn.image import resample_to_img
 from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
@@ -2161,12 +2161,12 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Making sure that the ROIs and parametric images are at the
                 # same size
                 if roi_img.shape[:3] != map_img.shape[:3]:
-                    final_roi_img = nibp.resample_from_to(
-                        roi_img, map_img, order=3
+                    roi_img = resample_to_img(
+                        roi_img, map_img, interpolation="linear"
                     )
 
                 # Convolution of the parametric map with the ROI images
-                final_roi_data = final_roi_img.get_fdata().astype(np.float32)
+                final_roi_data = roi_img.get_fdata().astype(np.float32)
                 final_roi_data[final_roi_data < 1e-5] = 0
                 map_data = map_img.get_fdata()
                 mask = (final_roi_data > 0) & ~np.isnan(map_data)

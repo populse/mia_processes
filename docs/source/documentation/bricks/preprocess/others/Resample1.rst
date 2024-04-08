@@ -10,13 +10,9 @@
 Resample1 brick
 ================
 
-Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to()
------------------------------------------------------------------------------------------------------
+Resamples an image to the resolution of a reference image using nilearn.image.resample_to_img()
+-----------------------------------------------------------------------------------------------
 
-- To eliminate the near-zero noise generated in the resized image, thresholding (10\ :sup:`-5`) is performed.
-  All values below 10\ :sup:`-5` are therefore truncated at 0.
-
---------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -39,11 +35,11 @@ Resamples an image to the resolution of a reference image using nibabel.processi
 **Optional inputs with default value parameters:**
 
 - *interp*
-    The order of the spline interpolation (an integer between 0 and 5, default value is trilinear, 3).
+    The resample method (a string in [‘continuous’, ‘linear’, ‘nearest’]).
 
     ::
 
-      ex. 3
+      ex. 'linear'
 
 - *prefix*
     Prefix of the output image (a string, default value is '').
@@ -79,4 +75,4 @@ Resamples an image to the resolution of a reference image using nibabel.processi
 
 Usefull links:
 
- `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to>`_
+ `nilearn.image.resample_to_img() <https://nilearn.github.io/dev/modules/generated/nilearn.image.resample_to_img.html>`_

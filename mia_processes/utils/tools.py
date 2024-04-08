@@ -35,12 +35,12 @@ import os
 
 import matplotlib.pyplot as plt
 import nibabel as nib
-import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
 from matplotlib.cm import get_cmap
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
+from nilearn.image import resample_to_img
 from nilearn.plotting import plot_anat
 from nitransforms.io.afni import _dicom_real_to_card
 from populse_mia.data_manager.data_history_inspect import data_history_pipeline
@@ -604,16 +604,11 @@ def plot_slice_planes(
             brain_img_2 = nib.as_closest_canonical(nib.load(fil))
 
             if brain_img_1.shape[:3] != brain_img_2.shape[:3]:
-                brain_img_2 = nibp.resample_from_to(
-                    brain_img_2, brain_img_1, order=3
+                brain_img_2 = resample_to_img(
+                    brain_img_2, brain_img_1, interpolation="linear"
                 )
-                # thresholding (1e-5) of the resized image (elimination of
-                # near-zero noise in the resized image)
-                data = brain_img_2.get_fdata().astype(np.float32)
-                data[data < 1e-5] = 0
 
-            else:
-                data = brain_img_2.get_fdata().astype(np.float32)
+            data = brain_img_2.get_fdata().astype(np.float32)
 
             data = np.squeeze(data)
             nan_indexes = np.isnan(data)

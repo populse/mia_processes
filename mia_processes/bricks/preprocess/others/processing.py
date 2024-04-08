@@ -47,11 +47,9 @@ import shutil
 import tempfile
 
 import nibabel as nib
-import nibabel.processing as nibp
 import numpy as np
 import pandas as pd
-
-# from nilearn.image import resample_to_img
+from nilearn.image import resample_to_img
 from nilearn.maskers import NiftiLabelsMasker
 
 # nipype import
@@ -1198,16 +1196,10 @@ class ConvROI(ProcessMIA):
 
         for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
-            # roi_data_resampled = resample_to_img(
-            #     roi_img, mask_img, interpolation="linear"
-            # )
-            roi_data_resampled = nibp.resample_from_to(
-                roi_img, mask_img, order=3
+            roi_data_resampled = resample_to_img(
+                roi_img, mask_img, interpolation="linear"
             )
-            # thresholding (1e-5) of the resized image (elimination of
-            # near-zero noise in the resized image)
             final_data = roi_data_resampled.get_fdata().astype(np.float32)
-            final_data[final_data < 1e-5] = 0
             result_data = np.where(mask_data > thres, final_data, 0)
             result_img = nib.Nifti1Image(
                 result_data,
@@ -2983,7 +2975,7 @@ class Resample1(ProcessMIA):
     """
     *Resamples an image to the resolution of a reference image*
 
-    - Uses nibabel.processing.resample_from_to().
+    - Uses nilearn.image.resample_to_img().
 
     Please, see the complete documentation for the
     `Resample1 brick in the mia_processes website
@@ -3020,8 +3012,8 @@ class Resample1(ProcessMIA):
             "with extension in [.img, .nii, .hdr])."
         )
         interp_desc = (
-            "The order of the spline interpolation (an integer "
-            "between 0 and 5; trilinear == 3)."
+            "The resample method (a string in"
+            "[‘continuous’, ‘linear’, ‘nearest’])."
         )
         prefix_desc = "The prefix for the out_files image (a string)."
         suffix_to_delete_desc = (
@@ -3053,10 +3045,10 @@ class Resample1(ProcessMIA):
 
         self.add_trait(
             "interp",
-            traits.Range(
-                value=3,
-                low=0,
-                high=5,
+            traits.Enum(
+                "linear",
+                "continuous",
+                "nearest",
                 output=False,
                 optional=True,
                 desc=interp_desc,
@@ -3381,69 +3373,6 @@ class Resample1(ProcessMIA):
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
-    def _check_interp(self):
-        """Checks the order of the splines interpolation.
-
-        :returns: a message according to the selected order
-        """
-
-        # Note on resampling:
-        # skimage.transform.resize (does not seem to be the best solution for
-        # resampling):
-        # - B-splines of the order 0 and 1 correspond to nearest neighbour and
-        #   linear interpolation, respectively.
-        # - B-splines of a higher order can be defined by a repetitive
-        #   convolution of the zeroth-order spline (the box function) with
-        #   itself.
-        #
-        # nibabel.processing.resample_from_to (seems to be a good solution, but
-        # can give non-zero intensity for the background -> needs
-        # thresolding ?)
-        #
-        # nilearn.image.resample_to_img (seems to be a good solution, no
-        # non-zero intensity for the background observed)
-
-        if self.interp == 0:
-            # skimage and nibabel: Nearest neighbour
-            return "spline interpolation of order 0 (Nearest-neighbour)"
-
-        elif self.interp == 1:
-            # skimage: It seems that with dimensions=3 and B-spline order=1,
-            #          the interpolation would be equivalent to "trilinear"
-            # return ("Bi-linear (with dimensions=3, Bi-linear is equivalent "
-            #        "to 'trilinear')")
-
-            # nibabel: spline interpolation of order 1
-            return "spline interpolation of order 1"
-
-        elif self.interp == 2:
-            # skimage:
-            # return "Bi-quadratic"
-
-            # nibabel: spline interpolation of order 2
-            return "spline interpolation of order 2"
-
-        elif self.interp == 3:
-            # skimage
-            # return "Bi-cubic"
-
-            # nibabel: spline interpolation of order 3: trilinear
-            return "spline interpolation of order 3 (trilinear)"
-
-        elif self.interp == 4:
-            # skimage
-            # return "Bi-quartic"
-
-            # nibabel: spline interpolation of order 4
-            return "spline interpolation of order 4"
-
-        elif self.interp == 5:
-            # skimage
-            # return "Bi-quintic"
-
-            # nibabel: spline interpolation of order 5
-            return "spline interpolation of order 5"
-
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Resample1, self).run_process_mia()
@@ -3451,57 +3380,47 @@ class Resample1(ProcessMIA):
         refName = nib.load(self.reference_image)
         print(
             "\nResample1 process from mia_processes: \n",
-            self._check_interp(),
+            self.interp,
             " \n",
         )
 
         for file_name in files_name:
             fileName = nib.load(file_name)
-            # mask_data = mask.get_fdata()  # skimage
+            # Note on resampling:
+            # -------------------
+            # skimage.transform.resize (does not seem to be the best solution
+            # for resampling):
+            # - B-splines of the order 0 and 1 correspond to nearest neighbour
+            #   and linear interpolation, respectively.
+            # - B-splines of a higher order can be defined by a repetitive
+            #   convolution of the zeroth-order spline (the box function) with
+            #   itself.
+            #
+            # nibabel.processing.resample_from_to (seems to be a good
+            # solution, but can give non-zero intensity for the background
+            # -> needs thresolding ?)
+            #
+            # nilearn.image.resample_to_img (seems to be a good solution, no
+            # non-zero intensity for the background observed)
 
             # Currently, resampling is only done for 3D images using 3D
             # or 4D images for reference. It would be interesting to widen the
             # possibilities to more cases (at least a 4D using a 3D, and why
             # not, to larger dimensions?). Currently, we use
-            # nibabel.processing.resample_from_to(), (see
+            # nilearn.image.resample_to_img(), (see
             # https://mail.python.org/pipermail/neuroimaging/2019-January/001902.html).
-            # It seems this method produces a little noise (can give non-zero
-            # intensity for the background). In addition to the resolution
-            # settings it seems the size of the reference_image are also
-            # transferred to the resampled image but not the orientations and
-            # positions (output space comes from the affine of
-            # files_to_resample).
 
             if len(fileName.shape) == len(refName.shape) == 3:
-                # nibabel:
-                fileFinal = nibp.resample_from_to(
-                    fileName, refName, order=self.interp
+                fileFinal = resample_to_img(
+                    fileName, refName, interpolation=self.interp
                 )
 
             if len(fileName.shape) == 3 and len(refName.shape) == 4:
-                # skimage
-                # ref_size = ref_data.shape[:3]
-                # resized_mask_data = resize(mask_data,
-                #                           ref_size,
-                #                           order=self.interp,
-                #                           mode='reflect')
-                # TODO: Taking info of mask's or ref's header?
-                # mask_final = nib.Nifti1Image(resized_mask_data,
-                #                             ref.affine,
-                #                             ref.header)
-
-                # nibabel:
-                fileFinal = nibp.resample_from_to(
-                    fileName, refName.slicer[:, :, :, 0], order=self.interp
+                fileFinal = resample_to_img(
+                    fileName,
+                    refName.slicer[:, :, :, 0],
+                    interpolation=self.interp,
                 )
-
-            # thresholding (1e-5) of the resized image (elimination of
-            # near-zero noise in the resized image)
-            final_data = fileFinal.get_fdata().astype(np.float32)
-            final_data[final_data < 1e-5] = 0
-            fileFinal = nib.Nifti1Image(
-                final_data, fileFinal.affine, fileFinal.header
-            )
 
             # Image save
             path, file_name = os.path.split(file_name)
@@ -3533,7 +3452,7 @@ class Resample2(ProcessMIA):
     """
     *Resamples images to the resolution of a reference image*
 
-    - Uses skimage.transform.resize()
+    - Uses nilearn.image.resample_to_img().
     - The output_directory/PatientName_data/ROI_data/convROI_BOLD2 directory is
       created to receive the resampled images. If this directory exists at
       runtime it is deleted.
@@ -3701,21 +3620,15 @@ class Resample2(ProcessMIA):
 
         for roi_file in self.files_to_resample:
             roi_img = nib.load(roi_file)
-            resized_roi_img = nibp.resample_from_to(roi_img, mask_img, order=3)
-            # thresholding (1e-5) of the resized image (elimination of
-            # near-zero noise in the resized image)
-            final_roi_data = resized_roi_img.get_fdata().astype(np.float32)
-            final_roi_data[final_roi_data < 1e-5] = 0
-            resized_img = nib.Nifti1Image(
-                final_roi_data, resized_roi_img.affine, resized_roi_img.header
+            resized_roi_img = resample_to_img(
+                roi_img, mask_img, interpolation="linear"
             )
-
             # Image save
             out_file = os.path.basename(roi_file)
             out_file_no_ext, file_extension = os.path.splitext(out_file)
             out_file = out_file_no_ext + self.suffix + file_extension
             out_file = os.path.join(conv_dir2, out_file)
-            nib.save(resized_img, out_file)
+            nib.save(resized_roi_img, out_file)
             print(
                 "\nResample2 brick:{0} saved".format(
                     os.path.basename(out_file)
