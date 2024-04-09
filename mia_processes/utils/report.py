@@ -42,12 +42,14 @@ from nipype import info as nipype_info
 from populse_mia import info as mia_info
 from populse_mia import sources_images
 from reportlab.lib import colors
-
-# reportlab import
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch, mm
+
+# reportlab import
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     Image,
     PageBreak,
@@ -89,6 +91,12 @@ class Report:
     def __init__(self, report_file, dict4runtime, **kwargs):
         """Create Canvas , create cover and make report"""
 
+        pdfmetrics.registerFont(
+            TTFont(
+                "DejaVuSans",
+                os.path.join(os.path.dirname(__file__), "DejaVuSans.ttf"),
+            )
+        )
         today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.dict4runtime = dict4runtime
         ref_exp = "Undefined"
@@ -1159,23 +1167,24 @@ class Report:
             )
             matDataReg = None
 
+        # TODO: We state that the file to take is "s" + self.norm_func.
+        #       1- Since we want the BOLD time course in bold, perhaps
+        #          we could take only the self.norm_func?
+        #       2- Should we simply add "s" to self.norm_fun or add the
+        #          data as an input to the brick?
+        folder, file = os.path.split(self.norm_func)
+        snorm_func = os.path.join(folder, "s" + file)
+        # TODO: We make the mask name from the self.norm_anat.
+        #       Should we simply add the data as an input to the brick?
+        folder, file = os.path.split(self.norm_anat)
+        file, ext = os.path.splitext(file)
+        grey_mat_mask = os.path.join(
+            folder, "mask_swc1" + file[1:] + "_003" + ext
+        )
+
         try:
-            # TODO: We state that the file to take is "s" + self.norm_func.
-            #       1- Since we want the BOLD time course in bold, perhaps
-            #          we could take only the self.norm_func?
-            #       2- Should we simply add "s" to self.norm_fun or add the
-            #          data as an input to the brick?
-            folder, file = os.path.split(self.norm_func)
-            snorm_func = os.path.join(folder, "s" + file)
             brain_img_snorm_func = nib.load(snorm_func)
             snorm_func_data = brain_img_snorm_func.get_fdata()
-            # TODO: We make the mask name from the self.norm_anat.
-            #       Should we simply add the data as an input to the brick?
-            folder, file = os.path.split(self.norm_anat)
-            file, ext = os.path.splitext(file)
-            grey_mat_mask = os.path.join(
-                folder, "mask_swc1" + file[1:] + "_003" + ext
-            )
             brain_img_grey_mat_mask = nib.load(grey_mat_mask)
             mask_data = brain_img_grey_mat_mask.get_fdata()
             binary_mask = np.where(mask_data > 0.1, 1, 0)
@@ -1574,15 +1583,14 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=14><b> Parametric maps: </b></font>"
-                "<font name='Symbol' size=14><b><greek>b</greek></b></font>"
+                "<font name='DejaVuSans' size=14><b>β</b></font>"
                 "<font size=14><b> weight values in </b></font>"
-                "<font name='Symbol' size=14><b><greek>D</greek></b></font>"
+                "<font name='DejaVuSans' size=14><b>Δ</b></font>"
                 "<font size=14><b>(%BOLD) / EtCO<sub>2</sub> "
                 "(mmHg)</b></font>",
                 self.styles["Left"],
             )
         )
-
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
