@@ -2108,7 +2108,7 @@ class Report:
                 (210, 105, 30),  # chocolate
                 (0, 0, 255),  # blue
                 (255, 0, 0),  # red
-                (255, 228, 181),  # moccasin
+                (255, 165, 0),  # moccasin
                 (0, 255, 0),  # lime (green)
                 (255, 0, 255),  # magenta (fuschia)
             ],

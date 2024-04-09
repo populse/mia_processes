@@ -621,8 +621,9 @@ def plot_slice_planes(
 
             if isinstance(cmap_2, list):
                 cmap = cmap_2[int(np.fix(i / 2))]
+                norm_mask_color = tuple(channel / 255 for channel in cmap)
                 cmap = LinearSegmentedColormap.from_list(
-                    "CustomCmap", [cmap, cmap]
+                    "CustomCmap", [norm_mask_color, norm_mask_color]
                 )
 
             else:
@@ -851,50 +852,6 @@ def plot_slice_planes(
         cbar = grid.cbar_axes[0].colorbar(im2)
         cbar.ax.tick_params(labelsize=6, colors="white")
         cbar.set_label("Intensity", size=6, color="white")
-
-    # elif brain_data_2 is not None:
-    #     test_list = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
-    #     test_list = sum(([element] * 2 for element in test_list), [])
-    #
-    #     if all(test_list[i] in data_2[i] for i in range(len(test_list))):
-    #         words = [
-    #             "Posterior cerebral artery",
-    #             "Anterior cerebral artery",
-    #             "Middle cerebral artery",
-    #             "Posterior inferior cerebellar artery",
-    #             "Superior cerebellar artery",
-    #         ]
-    #         colors = [
-    #             (255, 0, 0),  # red
-    #             (0, 255, 0),  # lime (green)
-    #             (0, 0, 255),  # blue
-    #             (210, 105, 30),  # chocolate
-    #             (255, 255, 0),  # yellow
-    #         ]
-    #         colors_normalized = [
-    #             (r / 255, g / 255, b / 255) for r, g, b in colors
-    #         ]
-    #         x_position = 0.3
-    #         y_position = 0.3
-    #         bbox_props = dict(
-    #             boxstyle="square,pad=0.3",
-    #             fc="black",
-    #             ec="black",
-    #             lw=0.5,
-    #             alpha=1,
-    #         )
-    #
-    #         for word, color in zip(words, colors_normalized):
-    #             plt.figtext(
-    #                 x_position,
-    #                 y_position,
-    #                 word,
-    #                 color=color,
-    #                 ha="center",
-    #                 bbox=bbox_props,
-    #                 transform=fig.transFigure
-    #             )
-    #             x_position += 0.011 * len(word)
 
     if data_2 is None:
         fname, _ = os.path.splitext(os.path.basename(data_1))
