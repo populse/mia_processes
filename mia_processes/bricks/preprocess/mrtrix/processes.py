@@ -11,6 +11,7 @@ populse_mia.
         - ConstrainedSphericalDeconvolution
         - DWIBiasCorrect
         - DWIBrainMask
+        - DWICat
         - DWIDenoise
         - DWIExtract
         - DWIPreproc
@@ -591,6 +592,133 @@ class DWIBrainMask(ProcessMIA):
         self.process.out_file = self.out_file
 
         return self.process.run(configuration_dict={})
+
+
+class DWICat(ProcessMIA):
+    """
+    *Concatenating multiple DWI series with
+    intensity scaling (dwicat command)*
+
+    Please, see the complete documentation for the `DWICat brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/DWICat.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(DWICat, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["mrtrix"]
+
+        # Mandatory inputs description
+        in_files_desc = (
+            "Inputs DWI images (a list of items which are a pathlike "
+            "object or a string representing an existing file)"
+        )
+        # Optional inputs description
+        in_mask_desc = (
+            "A binary mask within which image intensities will be matched"
+            "(a pathlike object or a string representing an existing file)"
+        )
+        out_name_desc = "Output name (a string)"
+
+        # Output description
+        out_file_desc = (
+            "Output image ie all DWI concatenated "
+            "(a pathlike object or string representing an existing file)"
+        )
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_files",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=in_files_desc,
+            ),
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
+
+        self.add_trait(
+            "out_name", String(output=False, optional=True, desc=out_name_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        # no nipype command for dwicat
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(DWICat, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_files:
+            out_name = "concat"
+
+            for in_file in self.in_files:
+                valid_ext, in_ext, file_name = checkFileExt(in_file, EXT_DWI)
+                out_name += "_" + file_name
+                if not valid_ext:
+                    print("\nThe input image format is not recognized...!")
+                    return self.make_initResult()
+
+            if self.output_directory:
+                if self.out_name:
+                    out_file_name = self.out_name
+                else:
+                    out_file_name = out_name
+
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, out_file_name + ".mif"
+                )
+
+        if self.outputs:
+            # Inheritance from the first file
+            self.tags_inheritance(
+                in_file=self.in_files[0], out_file=self.outputs["out_file"]
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(DWICat, self).run_process_mia()
+
+        cmd = ["dwicat"]
+
+        if self.in_files:
+            for in_file in self.in_files:
+                cmd += [in_file]
+        if self.in_mask:
+            cmd += ["-mask", self.in_mask]
+
+        cmd += [self.out_file]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class DWIDenoise(ProcessMIA):

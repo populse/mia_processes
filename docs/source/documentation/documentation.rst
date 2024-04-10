@@ -68,6 +68,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `ConstrainedSphericalDeconvolution <bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
       - `DWIBiasCorrect <bricks/preprocess/mrtrix/DWIBiasCorrect.html>`_
       - `DWIBrainMask <bricks/preprocess/mrtrix/DWIBrainMask.html>`_
+      - `DWICat <bricks/preprocess/mrtrix/DWICat.html>`_
       - `DWIDenoise <bricks/preprocess/mrtrix/DWIDenoise.html>`_
       - `DWIExtract <bricks/preprocess/mrtrix/DWIExtract.html>`_
       - `DWIPreproc <bricks/preprocess/mrtrix/DWIPreproc.html>`_

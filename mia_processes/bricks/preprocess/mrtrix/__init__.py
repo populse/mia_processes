@@ -16,6 +16,7 @@ from .processes import (  # noqa: F401
     ConstrainedSphericalDeconvolution,
     DWIBiasCorrect,
     DWIBrainMask,
+    DWICat,
     DWIDenoise,
     DWIExtract,
     DWIPreproc,
