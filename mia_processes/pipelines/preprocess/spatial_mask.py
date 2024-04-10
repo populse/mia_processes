@@ -75,19 +75,18 @@ class Spatial_mask(Pipeline):
         self.add_link("threshold_1.out_files->smooth.in_files")
         self.add_link("smooth.smoothed_files->threshold_2.in_files")
         self.add_link("threshold_2.out_files->resample1.files_to_resample")
-        self.export_parameter("threshold_2", "out_files", "mask_002")
         self.export_parameter("resample1", "out_files", "mask_003")
         self.export_parameter("resample1", "reference_image", "smoothed_func")
 
         # nodes positions
         self.node_position = {
-            "resample1": (1098.1930830538756, 358.70082875467926),
-            "gm_wm_normalize": (148.0592545730909, 241.78618461052582),
-            "threshold_2": (859.6906003882427, 166.4031059560745),
-            "smooth": (589.819429076529, 60.48208962658873),
-            "outputs": (1253.8683258652045, 204.33700914618174),
-            "inputs": (-108.82929066732682, 268.3653106451782),
-            "threshold_1": (383.85268207902703, -53.26912478589021),
+            "resample1": (1067.6501882850332, 222.64611569347358),
+            "gm_wm_normalize": (136.9527473844211, 309.8135411411285),
+            "threshold_2": (866.6321673811615, 369.0968621492992),
+            "smooth": (607.8675032581176, 370.0759775107607),
+            "outputs": (1284.411220634047, 244.59809770510992),
+            "inputs": (-49.131814528226414, 168.40674594714966),
+            "threshold_1": (418.5605170436202, 453.4652656971715),
         }
 
         # nodes dimensions

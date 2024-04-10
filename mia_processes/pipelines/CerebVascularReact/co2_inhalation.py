@@ -107,8 +107,6 @@ class CO2_inhalation(Pipeline):
             "find_in_list_2": True,
             "files_to_list": True,
             "convroi": True,
-            "resample1": True,
-            "resample2": True,
             "mean_stddev_calc": True,
             "concat_to_list": True,
             "result_collector": True,
@@ -197,10 +195,8 @@ class CO2_inhalation(Pipeline):
             "1_spatial_preprocessing.normalized_func->"
             "reportco2inhalcvr.norm_func"
         )
-        self.add_link("2_spatial_mask.mask_002->4_extract_roi_param.mask_002")
-        self.add_link("2_spatial_mask.mask_002->3_boldStat.mask_002")
-        self.nodes["2_spatial_mask"].process.trait("mask_003").userlevel = 1
-        self.export_parameter("2_spatial_mask", "mask_003", is_optional=False)
+        self.add_link("2_spatial_mask.mask_003->4_extract_roi_param.mask_003")
+        self.add_link("2_spatial_mask.mask_003->3_boldStat.mask_003")
         self.add_link(
             "3_boldStat.spmT_images->4_extract_roi_param.spmT_images"
         )
@@ -215,12 +211,6 @@ class CO2_inhalation(Pipeline):
             "3_boldStat.beta_images->4_extract_roi_param.beta_images"
         )
         self.add_link("3_boldStat.spmT_images->reportco2inhalcvr.spmT_image")
-        self.nodes["4_extract_roi_param"].process.trait(
-            "resample2_masks"
-        ).userlevel = 1
-        self.export_parameter(
-            "4_extract_roi_param", "resample2_masks", is_optional=False
-        )
         self.export_parameter(
             "4_extract_roi_param", "xls_files", is_optional=False
         )
@@ -249,10 +239,8 @@ class CO2_inhalation(Pipeline):
                 "out_spm_mat_file",
                 "bias_field_images",
                 "coregistered_source",
-                "mask_003",
                 "conv_roi_masks",
                 "patient_info",
-                "resample2_masks",
                 "xls_files",
                 "report",
             )
@@ -260,33 +248,32 @@ class CO2_inhalation(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "inputs": (-261.5363166564018, 251.21244066176695),
+            "inputs": (-281.02043430965205, 588.9371466514381),
             "1_spatial_preprocessing": (
-                -221.77554406843106,
-                -205.76719126265274,
+                -48.94420414422969,
+                370.09673048896616,
             ),
-            "2_spatial_mask": (123.5699228017393, -98.47786471856485),
-            "3_boldStat": (382.3026076737819, 162.10972167003825),
-            "4_extract_roi_param": (581.4206080133966, -206.69621906526237),
-            "files_to_list": (198.71272571362283, 330.3029426377244),
-            "reportco2inhalcvr": (748.1071959262655, 258.2245925859173),
-            "outputs": (971.2936610271133, -146.65919984483403),
-            "list_to_file_1": (455.4447133457113, 554.0646315898613),
-            "make_cvr_reg_physio_1": (-61.59780851025405, 457.28542588968276),
+            "2_spatial_mask": (323.46253724434376, 254.04033800783333),
+            "3_boldStat": (717.1407777148236, 145.8729569589964),
+            "4_extract_roi_param": (1050.4826996657182, 186.95512092910872),
+            "files_to_list": (557.7256343244377, 662.2545767301366),
+            "reportco2inhalcvr": (1026.6579149690285, 389.92279524214587),
+            "outputs": (1401.7483343665126, 568.8408984217451),
+            "list_to_file_1": (841.8797134685083, 494.89064464295325),
+            "make_cvr_reg_physio_1": (122.41885821488734, 669.806635107542),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "inputs": (141.46938723929543, 180.0),
-            "1_spatial_preprocessing": (236.515625, 355.0),
+            "inputs": (107.859375, 161.0),
+            "1_spatial_preprocessing": (236.515625, 285.0),
             "2_spatial_mask": (200.15625, 145.0),
-            "3_boldStat": (215.375, 145.0),
-            "4_extract_roi_param": (206.875, 180.0),
+            "3_boldStat": (192.84375, 145.0),
+            "4_extract_roi_param": (152.796875, 180.0),
             "files_to_list": (97.640625, 145.0),
-            "outputs": (138.83679503946317, 320.0),
-            "reportco2inhalcvr": (212.484375, 495.0),
+            "outputs": (70.35242003946317, 86.0),
+            "reportco2inhalcvr": (219.03125, 985.0),
             "list_to_file_1": (117.75, 110.0),
-            "make_cvr_reg_physio_1": (174.125, 145.0),
+            "make_cvr_reg_physio_1": (162.125, 145.0),
         }
-
         self.do_autoexport_nodes_parameters = False

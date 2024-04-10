@@ -65,7 +65,7 @@ class Bold_stat_cvr(Pipeline):
             "level1design", "sess_scans", "smoothed_func", is_optional=False
         )
         self.export_parameter(
-            "level1design", "mask_image", "mask_002", is_optional=True
+            "level1design", "mask_image", "mask_003", is_optional=True
         )
         self.export_parameter(
             "estimatecontrast", "spmT_images", is_optional=True
@@ -92,7 +92,7 @@ class Bold_stat_cvr(Pipeline):
             (
                 "regressors",
                 "smoothed_func",
-                "mask_002",
+                "mask_003",
                 "spmT_images",
                 "out_spm_mat_file",
                 "beta_images",
@@ -101,22 +101,22 @@ class Bold_stat_cvr(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "estimatecontrast": (809.5599999999998, 60.0),
-            "level1design": (139.24, -103.75999999999988),
-            "estimatemodel": (489.87999999999977, 145.7199999999999),
-            "make_a_list": (8.399999999999991, 255.60000000000002),
+            "estimatecontrast": (854.3356190476188, 53.00380952380948),
+            "level1design": (171.42247619047617, -102.36076190476183),
+            "estimatemodel": (515.0662857142854, 175.10399999999987),
+            "make_a_list": (39.18323809523808, 198.2312380952381),
             "inputs": (-158.2314466389599, 157.20000000000002),
-            "outputs": (1133.715545039463, 267.3599999999999),
+            "outputs": (1150.50640218232, 168.01409523809508),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "estimatecontrast": (226.203125, 425.0),
+            "estimatecontrast": (247.8125, 425.0),
             "level1design": (290.015625, 880.0),
-            "estimatemodel": (246.296875, 425.0),
-            "make_a_list": (101.984375, 110.0),
-            "inputs": (109.015625, 145.0),
-            "outputs": (121.359375, 145.0),
+            "estimatemodel": (246.296875, 390.0),
+            "make_a_list": (96.515625, 110.0),
+            "inputs": (129.36001223929543, 111.0),
+            "outputs": (124.38367003946317, 111.0),
         }
 
         self.do_autoexport_nodes_parameters = False

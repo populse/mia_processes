@@ -1023,8 +1023,8 @@ class ConvROI(ProcessMIA):
     """
     *Image convolution with one image*
 
-    - Resampling the convolve_with to the size of images_to_convolve.
-    - Then convolve each element of images_to_convolve with resized
+    - Resampling the images_to_convolve to the size of convolve_with.
+    - Then convolve each element of resized images_to_convolve with
       convolve_with.
     - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is
       created to receive the convolved images. If this directory exists at

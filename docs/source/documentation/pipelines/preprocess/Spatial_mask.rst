@@ -57,13 +57,6 @@ From a list of images resulting from a previous segmentation, produces a grey ma
 
 **Outputs parameters:**
 
-- *mask_002*
-    The grey matter mask at the resolution defined by the GM_WM_Normalize brick.
-
-    ::
-
-      ex. /home/username/data/derived_data/mask_swc1anat_002.nii
-
 - *mask_003*
     The grey matter mask at the resolution of `the smoothed_func`.
 

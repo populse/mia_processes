@@ -1961,11 +1961,11 @@ class Report:
             self.output_directory,
             self.dict4runtime["norm_anat"]["PatientName"] + "_data",
             "ROI_data",
-            "convROI_BOLD2",
+            "convROI_BOLD",
         )
         arter_terr = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
         arter_terr_files = [
-            os.path.join(conv_roi_dir, f"{a_t}_{l_r}_2.nii")
+            os.path.join(conv_roi_dir, f"{a_t}_{l_r}.nii")
             for a_t in arter_terr
             for l_r in ["L", "R"]
         ]
@@ -2088,7 +2088,7 @@ class Report:
             "convROI-THA",
         ]
         brain_lobes_files = [
-            os.path.join(conv_roi_dir, f"{b_l}_{l_r}_2.nii")
+            os.path.join(conv_roi_dir, f"{b_l}_{l_r}.nii")
             for b_l in brain_lobes
             for l_r in ["L", "R"]
         ]

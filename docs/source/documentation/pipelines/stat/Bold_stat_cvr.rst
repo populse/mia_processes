@@ -47,7 +47,7 @@ SPM-based first level GLM analysis used in the CVR evaluation
 
       ex. ['/home/username/data/raw_data/swrfunc.nii']
 
-- *mask_002*
+- *mask_003*
     A grey matter mask image with a resolution defined previously in
     the `Spatial_mask <../preprocess/Spatial_mask.html>`_.
 
