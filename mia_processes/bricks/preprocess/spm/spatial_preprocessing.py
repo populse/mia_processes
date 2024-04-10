@@ -540,16 +540,17 @@ class GM_WM_Normalize(ProcessMIA):
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
+        apply_to_files_desc = (
+            "Files to apply transformation to. A list of "
+            "items which are an existing, uncompressed file "
+            "(valid extensions: [.img, .nii, .hdr])."
+        )
+
         deformation_file_desc = (
             "File y_*.nii containing 3 deformation fields "
             "for the deformation in x, y and z dimension "
             "(an uncompressed file; valid extensions in "
             "[.img, .nii, .hdr])."
-        )
-        apply_to_files_desc = (
-            "Files to apply transformation to. A list of "
-            "items which are an existing, uncompressed file "
-            "(valid extensions: [.img, .nii, .hdr])."
         )
 
         in_filter_desc = (
@@ -585,13 +586,6 @@ class GM_WM_Normalize(ProcessMIA):
 
         # Inputs traits
         self.add_trait(
-            "deformation_file",
-            ImageFileSPM(
-                output=False, optional=False, desc=deformation_file_desc
-            ),
-        )
-
-        self.add_trait(
             "apply_to_files",
             InputMultiPath(
                 traits.Either(
@@ -600,6 +594,13 @@ class GM_WM_Normalize(ProcessMIA):
                 output=False,
                 optional=False,
                 desc=apply_to_files_desc,
+            ),
+        )
+
+        self.add_trait(
+            "deformation_file",
+            ImageFileSPM(
+                output=False, optional=False, desc=deformation_file_desc
             ),
         )
 

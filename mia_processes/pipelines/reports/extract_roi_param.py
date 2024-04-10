@@ -62,14 +62,6 @@ class Extract_roi_param(Pipeline):
             "mia_processes.bricks.preprocess.others.processing.ConvROI",
         )
         self.add_process(
-            "resample1",
-            "mia_processes.bricks.preprocess.others.processing.Resample1",
-        )
-        self.add_process(
-            "resample2",
-            "mia_processes.bricks.preprocess.others.processing.Resample2",
-        )
-        self.add_process(
             "mean_stddev_calc",
             "mia_processes.bricks.reports.processes.Mean_stdDev_calc",
         )
@@ -104,27 +96,20 @@ class Extract_roi_param(Pipeline):
             "find_in_list_2", "in_list", "beta_images", is_optional=False
         )
         self.export_parameter(
-            "convroi", "convolve_with", "mask_002", is_optional=False
+            "convroi", "convolve_with", "mask_003", is_optional=False
         )
-        self.add_link("mask_002->resample1.files_to_resample")
         self.add_link(
             "concat_to_list_of_list.listOflist->import_data.rois_list"
         )
         self.add_link("import_data.rois_files->convroi.images_to_convolve")
         self.add_link("find_in_list_1.out_file->files_to_list.file1")
-        self.add_link("find_in_list_1.out_file->resample1.reference_image")
         self.add_link("find_in_list_2.out_file->files_to_list.file2")
         self.add_link(
             "files_to_list.file_list->mean_stddev_calc.parametric_maps"
         )
         self.add_link("convroi.out_images->mean_stddev_calc.rois_files")
-        self.add_link("convroi.out_images->resample2.files_to_resample")
         self.export_parameter(
             "convroi", "out_images", "conv_roi_masks", is_optional=False
-        )
-        self.add_link("resample1.out_files->resample2.reference_image")
-        self.export_parameter(
-            "resample2", "out_images", "resample2_masks", is_optional=False
         )
         self.add_link("mean_stddev_calc.mean_out_files->concat_to_list.list1")
         self.add_link("mean_stddev_calc.std_out_files->concat_to_list.list2")
@@ -144,9 +129,8 @@ class Extract_roi_param(Pipeline):
             (
                 "spmT_images",
                 "beta_images",
-                "mask_002",
+                "mask_003",
                 "patient_info",
-                "resample2_masks",
                 "xls_files",
                 "conv_roi_masks",
             )
@@ -154,19 +138,17 @@ class Extract_roi_param(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "concat_to_list_of_list": (614.2930418166122, 827.1208223644738),
-            "import_data": (925.9736882862239, 848.8631446556915),
-            "find_in_list_1": (776.4427376188082, 303.29535996898),
-            "find_in_list_2": (856.2337859568112, 567.1330449805765),
-            "files_to_list": (1026.2058853774747, 483.98336643917287),
-            "convroi": (1089.7332639638682, 685.6142079029513),
-            "resample1": (1134.4471373729352, 232.24020431310066),
-            "resample2": (1419.5562603305748, 274.20917687569397),
-            "inputs": (612.3472403891509, 560.3262591732853),
-            "mean_stddev_calc": (1432.1926253095098, 449.1820536125214),
-            "concat_to_list": (1748.091183783158, 395.2820325663692),
-            "result_collector": (1612.1473004020177, 658.4933845149167),
-            "outputs": (1922.8337322988386, 777.3577137671373),
+            "concat_to_list_of_list": (600.7683536977197, 728.759454227074),
+            "import_data": (838.6779740642814, 754.1903278234439),
+            "find_in_list_1": (932.5914095369304, 358.62362954626724),
+            "find_in_list_2": (934.9228804667309, 484.75539916550395),
+            "files_to_list": (1114.731116701135, 420.0484771498629),
+            "convroi": (1065.1429219295185, 724.9587551579114),
+            "inputs": (611.1177232874335, 426.308895086078),
+            "mean_stddev_calc": (1271.1258849845178, 433.198331290194),
+            "concat_to_list": (1548.909413304923, 471.51209287285405),
+            "result_collector": (1593.7045438762555, 614.2307688530867),
+            "outputs": (1776.5211971944557, 773.6691624619851),
         }
 
         # nodes dimensions
@@ -177,13 +159,11 @@ class Extract_roi_param(Pipeline):
             "find_in_list_2": (118.84375, 110.0),
             "files_to_list": (97.640625, 145.0),
             "convroi": (208.0625, 145.0),
-            "resample1": (176.84375, 250.0),
-            "resample2": (193.921875, 145.0),
             "inputs": (119.17251223929541, 136.0),
-            "mean_stddev_calc": (214.171875, 145.0),
+            "mean_stddev_calc": (214.171875, 180.0),
             "concat_to_list": (97.96875, 110.0),
             "result_collector": (171.640625, 145.0),
-            "outputs": (126.07117003946317, 111.0),
+            "outputs": (113.32117003946317, 86.0),
         }
 
         self.do_autoexport_nodes_parameters = False

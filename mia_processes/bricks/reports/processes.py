@@ -1873,8 +1873,9 @@ class Mean_stdDev_calc(ProcessMIA):
     """
     *Makes the mean and standard deviation of parametric_maps*
 
-    - The parametric_maps are first resized, if necessary, to the size of the
-      rois_files. Next, the parametric_maps and the rois_files are convolved.
+    - The rois_files parametric_maps are first resized, if necessary, to the
+      size of the parametric_maps. Next, the parametric_maps and the
+      rois_files are convolved.
       Finally, the mean and standard deviation are calculated for the
       corresponding ROIs.
     - The “PatientName_data/ROI_data/ROI_analysis” directory is created to

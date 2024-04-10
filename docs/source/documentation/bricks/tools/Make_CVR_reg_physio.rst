@@ -37,8 +37,17 @@ Standard regressor:
 
 -----------------------------------------------
 
-
 **Inputs parameters:**
+
+*func_file*
+    T2* functional Magnetic Resonance Imaging (fMRI) experiment recorded
+    during the hypercapnic Challenge (only required to extract metadata from
+    the functional image). An existing, uncompressed file
+    (valid extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. ['/home/username/data/raw_data/func.nii']
 
 - *trigger_data*
     The trigger data, to ensure that ETCO2 data are synchronized with
@@ -54,16 +63,6 @@ Standard regressor:
     ::
 
       ex. '/home/username/data/downloaded_data/physio_data.csv'
-
- *func_file*
-    T2* functional Magnetic Resonance Imaging (fMRI) experiment recorded
-    during the hypercapnic Challenge. An existing, uncompressed file
-    (valid extensions: [.img, .nii, .hdr]).
-
-    ::
-
-      ex. ['/home/username/data/raw_data/func.nii']
-
 
 **Outputs parameters:**
 

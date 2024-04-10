@@ -1701,6 +1701,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.requirement = []  # no need of third party software!
 
         # Inputs description
+        func_file_desc = "The fMRI scan under hypercapnia (a file)"
         trigger_data_desc = (
             "The trigger data (a file with extension "
             "in ['.txt', '.csv', '.log'])"
@@ -1709,24 +1710,11 @@ class Make_CVR_reg_physio(ProcessMIA):
             "The physiological data (a file with extension "
             "in ['.txt', '.csv'])"
         )
-        func_file_desc = "The fMRI scan under hypercapnia (a file)"
 
         # Outputs description
         cvr_reg_desc = "The physiological regressor for CVR (a file)"
 
         # Inputs traits
-        self.add_trait(
-            "trigger_data",
-            File(output=False, optional=True, desc=trigger_data_desc),
-        )
-        self.trigger_data = traits.Undefined
-
-        self.add_trait(
-            "physio_data",
-            File(output=False, optional=True, desc=physio_data_desc),
-        )
-        self.physio_data = traits.Undefined
-
         self.add_trait(
             "func_file",
             Either(
@@ -1739,6 +1727,18 @@ class Make_CVR_reg_physio(ProcessMIA):
             ),
         )
         self.func_file = traits.Undefined
+
+        self.add_trait(
+            "trigger_data",
+            File(output=False, optional=True, desc=trigger_data_desc),
+        )
+        self.trigger_data = traits.Undefined
+
+        self.add_trait(
+            "physio_data",
+            File(output=False, optional=True, desc=physio_data_desc),
+        )
+        self.physio_data = traits.Undefined
 
         # Outputs traits
         self.add_trait("cvr_reg", File(output=True, desc=cvr_reg_desc))
