@@ -15,7 +15,7 @@ Concatenating multiple DWI series
 
 (mrtrix dwicat command)
 
-Concatenate 4D DWI images with an intensity scaling. 
+Concatenate 4D DWI images with an intensity scaling.
 
 *Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
 The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
@@ -43,8 +43,8 @@ In this case, bvec and bval file should be specified.*
       ex. '/home/username/data/derived_data/brainmask.mif'
 
 - *out_name* (a string, optional)
-    Out file name. 
-    If no out file name provide, the output file name will be: 
+    Out file name.
+    If no out file name provide, the output file name will be:
     "concat_filename1_filename...""
 
     ::
@@ -55,7 +55,7 @@ In this case, bvec and bval file should be specified.*
 
 - *out_file* (a pathlike object or string representing a file)
     Output image (all DWI concatenated)
-    
+
     ::
 
       ex. '/home/username/data/derived_data/concat_dwi1_dwi2.mif'

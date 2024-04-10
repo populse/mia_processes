@@ -1,22 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.5.1-dev+3138be70 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.5.1-dev+a5d09ffc documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../_static/documentation_options.js?v=ad6ca273"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+3138be70 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a5d09ffc documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -105,7 +103,9 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+<div class="viewcode-block" id="Report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report">[docs]</a>
+<span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pdf report</span>
 
 <span class="sd">    IQMs_file --&gt; mriqc individual report (with all IQMs)</span>
@@ -120,7 +120,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Report.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Report.__init__">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create Canvas , create cover and make report&quot;&quot;&quot;</span>
 
         <span class="n">pdfmetrics</span><span class="o">.</span><span class="n">registerFont</span><span class="p">(</span>
@@ -468,7 +470,10 @@
         <span class="c1"># Canvas creation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Report.get_iqms_data"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Report.get_iqms_data">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -536,7 +541,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
                 <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Report.co2_inhal_cvr_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.co2_inhal_cvr_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">co2_inhal_cvr_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Report.co2_inhal_cvr_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.co2_inhal_cvr_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">co2_inhal_cvr_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make CVR under CO2 challenge report&quot;&quot;&quot;</span>
 
         <span class="c1"># page 1 - cover ##################################################</span>
@@ -1993,11 +2001,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ROI_data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">arter_terr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;convACA&quot;</span><span class="p">,</span> <span class="s2">&quot;convACM&quot;</span><span class="p">,</span> <span class="s2">&quot;convACP&quot;</span><span class="p">,</span> <span class="s2">&quot;convPICA&quot;</span><span class="p">,</span> <span class="s2">&quot;convSCA&quot;</span><span class="p">]</span>
         <span class="n">arter_terr_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_roi_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">a_t</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">l_r</span><span class="si">}</span><span class="s2">_2.nii&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_roi_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">a_t</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">l_r</span><span class="si">}</span><span class="s2">.nii&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">a_t</span> <span class="ow">in</span> <span class="n">arter_terr</span>
             <span class="k">for</span> <span class="n">l_r</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">]</span>
         <span class="p">]</span>
@@ -2120,7 +2128,7 @@
             <span class="s2">&quot;convROI-THA&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">brain_lobes_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_roi_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b_l</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">l_r</span><span class="si">}</span><span class="s2">_2.nii&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_roi_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b_l</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">l_r</span><span class="si">}</span><span class="s2">.nii&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">b_l</span> <span class="ow">in</span> <span class="n">brain_lobes</span>
             <span class="k">for</span> <span class="n">l_r</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">]</span>
         <span class="p">]</span>
@@ -2208,7 +2216,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Report.mriqc_anat_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_anat_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_anat_make_report</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Report.mriqc_anat_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_anat_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">mriqc_anat_make_report</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc anat individual report&quot;&quot;&quot;</span>
@@ -3016,7 +3027,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Report.mriqc_func_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Report.mriqc_func_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc functional individual report&quot;&quot;&quot;</span>
@@ -3626,7 +3640,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Report.mriqc_group_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_group_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_group_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Report.mriqc_group_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_group_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">mriqc_group_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc group report&quot;&quot;&quot;</span>
 
         <span class="c1"># First page - cover ##################################################</span>
@@ -4050,7 +4067,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -4063,8 +4082,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>NewSegment brick &#8212; mia_processes 2.5.1-dev+3138be70 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+    <title>NewSegment brick &#8212; mia_processes 2.5.1-dev+a5d09ffc documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=ad6ca273"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+3138be70 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a5d09ffc documentation</span></a></h1>
         <h2 class="heading"><span>NewSegment brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -33,11 +31,6 @@
   <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 35%" />
-<col style="width: 40%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
 <td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
@@ -46,13 +39,13 @@
 </tbody>
 </table>
 <section id="newsegment-brick">
-<h1>NewSegment brick<a class="headerlink" href="#newsegment-brick" title="Permalink to this headline">¶</a></h1>
+<h1>NewSegment brick<a class="headerlink" href="#newsegment-brick" title="Link to this heading">¶</a></h1>
 <section id="segments-bias-corrects-and-spatially-normalises-all-in-the-same-model">
-<h2>Segments,  bias  corrects  and  spatially normalises - all in the same model<a class="headerlink" href="#segments-bias-corrects-and-spatially-normalises-all-in-the-same-model" title="Permalink to this headline">¶</a></h2>
+<h2>Segments,  bias  corrects  and  spatially normalises - all in the same model<a class="headerlink" href="#segments-bias-corrects-and-spatially-normalises-all-in-the-same-model" title="Link to this heading">¶</a></h2>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>channel_files &lt;=&gt; channel.vols</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>Path of the scans for processing (valid extensions, .img, .nii, .hdr).</p>
+<dt><em>channel_files &lt;=&gt; channel.vols</em> <a class="footnote-reference brackets" href="#label" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Path of the scans for processing (valid extensions, .img, .nii, .hdr).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -60,7 +53,7 @@
 </dl>
 </li>
 <li><dl>
-<dt><em>channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, (channel.write))</em> <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>A tuple (consisting of a float, a float and a tuple consisting of a boolean, a boolean) with the following fields:</p>
+<dt><em>channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, (channel.write))</em> <a class="footnote-reference brackets" href="#label" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>A tuple (consisting of a float, a float and a tuple consisting of a boolean, a boolean) with the following fields:</p>
 <ul>
 <li><dl>
 <dt>bias reguralisation (a float between 0 and 10)</dt><dd><p>The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a
@@ -107,7 +100,7 @@ mm cutoff).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><p>A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
+<dt><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference brackets" href="#label" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
 matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from
 spm12.</p>
 <p>Each tuple consists of the following fields:</p>
@@ -185,7 +178,7 @@ modulation.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
+<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
 required by SPM12).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
@@ -194,7 +187,7 @@ required by SPM12).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>affine_regularization &lt;=&gt; warp.affreg</em> <a class="footnote-reference brackets" href="#label" id="id5">1</a></dt><dd><p>Standard space for affine registration (‘mni’ or ‘eastern’ or ‘subj’ or ‘none’).</p>
+<dt><em>affine_regularization &lt;=&gt; warp.affreg</em> <a class="footnote-reference brackets" href="#label" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Standard space for affine registration (‘mni’ or ‘eastern’ or ‘subj’ or ‘none’).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">mni</span>
 </pre></div>
 </div>
@@ -202,7 +195,7 @@ required by SPM12).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>sampling_distance &lt;=&gt; warp.samp</em> <a class="footnote-reference brackets" href="#label" id="id6">1</a></dt><dd><p>Approximate distance between sampled points when estimating the model parameters (a float).</p>
+<dt><em>sampling_distance &lt;=&gt; warp.samp</em> <a class="footnote-reference brackets" href="#label" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Approximate distance between sampled points when estimating the model parameters (a float).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
 </pre></div>
 </div>
@@ -210,7 +203,7 @@ required by SPM12).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>write_deformation_fields &lt;=&gt; warp.write</em> <a class="footnote-reference brackets" href="#label" id="id7">1</a></dt><dd><p>Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
+<dt><em>write_deformation_fields &lt;=&gt; warp.write</em> <a class="footnote-reference brackets" href="#label" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
 fields to write; Inverse, Forward).</p>
 <blockquote>
 <div><div class="line-block">
@@ -322,9 +315,11 @@ string representing an existing file).</p>
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>,<a href="#id6">6</a>,<a href="#id7">7</a>)</span></dt>
-<dd><p>Syntax: mia_processes/nipype NewSegment &lt;=&gt; SPM12 Segment.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="label" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>,<a role="doc-backlink" href="#id7">7</a>)</span>
+<p>Syntax: mia_processes/nipype NewSegment &lt;=&gt; SPM12 Segment.</p>
 <dl class="simple">
 <dt>NOTE:</dt><dd><ul class="simple">
 <li><p>This interface currently supports single channel input only.</p></li>
@@ -335,8 +330,8 @@ string representing an existing file).</p>
 <p>Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=45">SPM12 Segment</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#newsegment">nipype NewSegment</a></p>
-</dd>
-</dl>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -351,8 +346,8 @@ string representing an existing file).</p>
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

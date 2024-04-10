@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.5.1-dev+fdc71a29 documentation</title>
+    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.5.1-dev+a5d09ffc documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=35ead824"></script>
+    <script src="../../../../../_static/documentation_options.js?v=ad6ca273"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.5.1-dev+fdc71a29 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a5d09ffc documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -586,16 +586,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Inputs description</span>
+        <span class="n">apply_to_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Files to apply transformation to. A list of &quot;</span>
+            <span class="s2">&quot;items which are an existing, uncompressed file &quot;</span>
+            <span class="s2">&quot;(valid extensions: [.img, .nii, .hdr]).&quot;</span>
+        <span class="p">)</span>
+
         <span class="n">deformation_file_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;File y_*.nii containing 3 deformation fields &quot;</span>
             <span class="s2">&quot;for the deformation in x, y and z dimension &quot;</span>
             <span class="s2">&quot;(an uncompressed file; valid extensions in &quot;</span>
             <span class="s2">&quot;[.img, .nii, .hdr]).&quot;</span>
-        <span class="p">)</span>
-        <span class="n">apply_to_files_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Files to apply transformation to. A list of &quot;</span>
-            <span class="s2">&quot;items which are an existing, uncompressed file &quot;</span>
-            <span class="s2">&quot;(valid extensions: [.img, .nii, .hdr]).&quot;</span>
         <span class="p">)</span>
 
         <span class="n">in_filter_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -631,13 +632,6 @@
 
         <span class="c1"># Inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;deformation_file&quot;</span><span class="p">,</span>
-            <span class="n">ImageFileSPM</span><span class="p">(</span>
-                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">deformation_file_desc</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span>
             <span class="n">InputMultiPath</span><span class="p">(</span>
                 <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
@@ -646,6 +640,13 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">apply_to_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;deformation_file&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">deformation_file_desc</span>
             <span class="p">),</span>
         <span class="p">)</span>
 

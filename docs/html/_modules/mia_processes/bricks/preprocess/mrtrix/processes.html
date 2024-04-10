@@ -1,22 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.5.1-dev+3138be70 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
-    <script src="../../../../../_static/jquery.js"></script>
-    <script src="../../../../../_static/underscore.js"></script>
-    <script src="../../../../../_static/doctools.js"></script>
+    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.5.1-dev+a5d09ffc documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../../_static/documentation_options.js?v=ad6ca273"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.5.1-dev+3138be70 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+a5d09ffc documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.mrtrix.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -99,7 +97,9 @@
 <span class="n">EXT_TCK</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;TCK&quot;</span><span class="p">:</span> <span class="s2">&quot;tck&quot;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="ConstrainedSphericalDeconvolution"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution">[docs]</a><span class="k">class</span> <span class="nc">ConstrainedSphericalDeconvolution</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ConstrainedSphericalDeconvolution">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution">[docs]</a>
+<span class="k">class</span> <span class="nc">ConstrainedSphericalDeconvolution</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimate fibre orientation distributions from diffusion data using</span>
 <span class="sd">    spherical deconvolution (dwi2fod command)*</span>
@@ -110,7 +110,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -273,7 +275,10 @@
             <span class="s2">&quot;nipype.interfaces.mrtrix3.ConstrainedSphericalDeconvolution&quot;</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -326,7 +331,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ConstrainedSphericalDeconvolution.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConstrainedSphericalDeconvolution</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -355,10 +363,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sh</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">max_sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sh</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DWIBiasCorrect"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect">[docs]</a><span class="k">class</span> <span class="nc">DWIBiasCorrect</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBiasCorrect">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect">[docs]</a>
+<span class="k">class</span> <span class="nc">DWIBiasCorrect</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Perform B1 field inhomogeneity correction for a DWI volume series.</span>
 <span class="sd">    (dwibiascorrect command)*</span>
@@ -368,7 +380,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIBiasCorrect.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWIBiasCorrect.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWIBiasCorrect.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -467,7 +481,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.DWIBiasCorrect&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DWIBiasCorrect.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBiasCorrect.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -517,7 +534,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWIBiasCorrect.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBiasCorrect.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIBiasCorrect</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -533,10 +553,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_field_map</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DWIBrainMask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask">[docs]</a><span class="k">class</span> <span class="nc">DWIBrainMask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBrainMask">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask">[docs]</a>
+<span class="k">class</span> <span class="nc">DWIBrainMask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates a whole brain mask from a DWI image.</span>
 <span class="sd">    (dwi2mask command)*</span>
@@ -546,7 +570,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIBrainMask.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWIBrainMask.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWIBrainMask.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -582,7 +608,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.BrainMask&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DWIBrainMask.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBrainMask.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -617,17 +646,23 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWIBrainMask.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIBrainMask.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIBrainMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
 
-<div class="viewcode-block" id="DWICat"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat">[docs]</a><span class="k">class</span> <span class="nc">DWICat</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="DWICat">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat">[docs]</a>
+<span class="k">class</span> <span class="nc">DWICat</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Concatenating multiple DWI series with</span>
 <span class="sd">    intensity scaling (dwicat command)*</span>
@@ -637,7 +672,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/DWICat.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWICat.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWICat.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -663,8 +700,8 @@
 
         <span class="c1"># Output description</span>
         <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Output image ie all DWI concatenated(a pathlike object or string representing &quot;</span>
-            <span class="s2">&quot;an existing file)&quot;</span>
+            <span class="s2">&quot;Output image ie all DWI concatenated &quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing an existing file)&quot;</span>
         <span class="p">)</span>
         <span class="c1"># Mandatory inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -678,17 +715,11 @@
 
         <span class="c1"># Optional inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span>
-            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_mask_desc</span><span class="p">)</span>
+            <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_mask_desc</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;out_name&quot;</span><span class="p">,</span>
-            <span class="n">String</span><span class="p">(</span>
-                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">desc</span><span class="o">=</span><span class="n">out_name_desc</span>
-            <span class="p">)</span>
+            <span class="s2">&quot;out_name&quot;</span><span class="p">,</span> <span class="n">String</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_name_desc</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
@@ -699,7 +730,10 @@
         <span class="c1"># no nipype command for dwicat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWICat.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWICat.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -719,7 +753,7 @@
 
             <span class="k">for</span> <span class="n">in_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT_DWI</span><span class="p">)</span>
-                <span class="n">out_name</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">file_name</span>
+                <span class="n">out_name</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">file_name</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
@@ -731,8 +765,7 @@
                     <span class="n">out_file_name</span> <span class="o">=</span> <span class="n">out_name</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_file_name</span> <span class="o">+</span> <span class="s2">&quot;.mif&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_file_name</span> <span class="o">+</span> <span class="s2">&quot;.mif&quot;</span>
                 <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
@@ -744,7 +777,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWICat.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWICat.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWICat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -758,10 +794,14 @@
 
         <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DWIDenoise"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise">[docs]</a><span class="k">class</span> <span class="nc">DWIDenoise</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIDenoise">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise">[docs]</a>
+<span class="k">class</span> <span class="nc">DWIDenoise</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Denoise DWI data and estimate the noise level based on the optimal</span>
 <span class="sd">    threshold for PCA. (dwi denoise command)*</span>
@@ -771,7 +811,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIDenoise.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWIDenoise.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWIDenoise.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -860,7 +902,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.DWIDenoise&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DWIDenoise.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIDenoise.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -905,7 +950,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWIDenoise.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIDenoise.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIDenoise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -916,10 +964,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_map</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DWIExtract"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract">[docs]</a><span class="k">class</span> <span class="nc">DWIExtract</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIExtract">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract">[docs]</a>
+<span class="k">class</span> <span class="nc">DWIExtract</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Extract diffusion-weighted volumes, b=0 volumes,</span>
 <span class="sd">    or certain shells from a DWI dataset (dwiextract command)*</span>
@@ -929,7 +981,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/DWIExtract.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWIExtract.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWIExtract.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1018,7 +1072,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.DWIExtract&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DWIExtract.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIExtract.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1061,7 +1118,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWIExtract.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIExtract.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIExtract</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -1075,10 +1135,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">singleshell</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">singleshell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">singleshell</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DWIPreproc"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc">[docs]</a><span class="k">class</span> <span class="nc">DWIPreproc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIPreproc">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc">[docs]</a>
+<span class="k">class</span> <span class="nc">DWIPreproc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Perform diffusion image pre-processing using FSL’s eddy tool;</span>
 <span class="sd">    including inhomogeneity distortion correction using FSL’s topup</span>
@@ -1089,7 +1153,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIPreproc.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DWIPreproc.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DWIPreproc.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1309,7 +1375,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.DWIPreproc&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DWIPreproc.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIPreproc.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1345,7 +1414,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DWIPreproc.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DWIPreproc.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIPreproc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -1381,10 +1453,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nocleanup</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;-nocleanup&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="EditingTrack"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack">[docs]</a><span class="k">class</span> <span class="nc">EditingTrack</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EditingTrack">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack">[docs]</a>
+<span class="k">class</span> <span class="nc">EditingTrack</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Perform various editing operations on track files.</span>
 <span class="sd">    (tckedit command)*</span>
@@ -1394,7 +1470,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/EditingTrack.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EditingTrack.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EditingTrack.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1662,7 +1740,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EditingTrack.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EditingTrack.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1711,7 +1792,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EditingTrack.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EditingTrack.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EditingTrack</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tckedit&quot;</span><span class="p">]</span>
@@ -1750,10 +1834,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tck_weights_out</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-tck_weights_out&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tck_weights_out</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="FilteringTrack"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack">[docs]</a><span class="k">class</span> <span class="nc">FilteringTrack</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FilteringTrack">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack">[docs]</a>
+<span class="k">class</span> <span class="nc">FilteringTrack</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Filter a whole-brain fibre-tracking data set such that the streamline</span>
 <span class="sd">    densities match the FOD lobe integrals.</span>
@@ -1764,7 +1852,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/FilteringTrack.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FilteringTrack.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FilteringTrack.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2047,7 +2137,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FilteringTrack.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FilteringTrack.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2111,7 +2204,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FilteringTrack.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FilteringTrack.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FilteringTrack</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tcksift&quot;</span><span class="p">]</span>
@@ -2145,10 +2241,14 @@
 
         <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_tracks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_fod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracks_out</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="FitTensor"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor">[docs]</a><span class="k">class</span> <span class="nc">FitTensor</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FitTensor">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor">[docs]</a>
+<span class="k">class</span> <span class="nc">FitTensor</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Convert diffusion-weighted images to tensor images.</span>
 <span class="sd">    (dwi2tensor command)*</span>
@@ -2158,7 +2258,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/FitTensor.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FitTensor.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FitTensor.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2299,7 +2401,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.FitTensor&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FitTensor.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FitTensor.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2364,7 +2469,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FitTensor.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FitTensor.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FitTensor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2385,10 +2493,14 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Generate5ttfsl"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl">[docs]</a><span class="k">class</span> <span class="nc">Generate5ttfsl</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5ttfsl">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl">[docs]</a>
+<span class="k">class</span> <span class="nc">Generate5ttfsl</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generate a 5TT image suitable for ACT using the selected algorithm.</span>
 <span class="sd">    (5ttgen command)*</span>
@@ -2398,7 +2510,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5ttfsl.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Generate5ttfsl.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Generate5ttfsl.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2495,7 +2609,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.Generate5tt&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Generate5ttfsl.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5ttfsl.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2530,7 +2647,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Generate5ttfsl.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5ttfsl.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Generate5ttfsl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2550,10 +2670,14 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Generate5tt2gmwmi"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi">[docs]</a><span class="k">class</span> <span class="nc">Generate5tt2gmwmi</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5tt2gmwmi">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi">[docs]</a>
+<span class="k">class</span> <span class="nc">Generate5tt2gmwmi</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generate a mask image appropriate for seeding streamlines</span>
 <span class="sd">    on the grey matter-white matter interface (5tt2gmwmi command)*</span>
@@ -2563,7 +2687,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5tt2gmwmi.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Generate5tt2gmwmi.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Generate5tt2gmwmi.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2610,7 +2736,10 @@
         <span class="c1"># No nipype command for this process</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Generate5tt2gmwmi.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5tt2gmwmi.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2644,7 +2773,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Generate5tt2gmwmi.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Generate5tt2gmwmi.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Generate5tt2gmwmi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;5tt2gmwmi&quot;</span><span class="p">]</span>
@@ -2652,10 +2784,14 @@
             <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-mask_in&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_mask</span><span class="p">]</span>
         <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MRCat"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat">[docs]</a><span class="k">class</span> <span class="nc">MRCat</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRCat">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat">[docs]</a>
+<span class="k">class</span> <span class="nc">MRCat</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Concatenate several images into one*</span>
 
@@ -2664,7 +2800,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRCat.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MRCat.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MRCat.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2738,7 +2876,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.MRCat&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MRCat.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRCat.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2789,17 +2930,24 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MRCat.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRCat.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRCat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MRConvert"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert">[docs]</a><span class="k">class</span> <span class="nc">MRConvert</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRConvert">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert">[docs]</a>
+<span class="k">class</span> <span class="nc">MRConvert</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Perform conversion between different file types and optionally</span>
 <span class="sd">    extract a subset of the input image. (mrconvert command)*</span>
@@ -2809,7 +2957,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRConvert.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MRConvert.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MRConvert.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3010,12 +3160,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
+
         <span class="c1"># Nipype command not used because only working</span>
         <span class="c1"># for diffusion images (with bvec / bval)</span>
 
         <span class="c1"># self.init_process(&quot;nipype.interfaces.mrtrix3.MRConvert&quot;)</span>
 
-<div class="viewcode-block" id="MRConvert.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MRConvert.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3099,7 +3252,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MRConvert.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRConvert.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRConvert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Nipype command not used because only working</span>
@@ -3158,10 +3314,14 @@
 
         <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MRDeGibbs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs">[docs]</a><span class="k">class</span> <span class="nc">MRDeGibbs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRDeGibbs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs">[docs]</a>
+<span class="k">class</span> <span class="nc">MRDeGibbs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Remove Gibbs ringing artifacts. (mrdegibbs command)*</span>
 
@@ -3170,7 +3330,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRDeGibbs.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MRDeGibbs.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MRDeGibbs.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3267,7 +3429,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.MRDeGibbs&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MRDeGibbs.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRDeGibbs.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3302,7 +3467,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MRDeGibbs.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRDeGibbs.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRDeGibbs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -3312,10 +3480,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">minW</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minW</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nshifts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nshifts</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MRMath"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath">[docs]</a><span class="k">class</span> <span class="nc">MRMath</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRMath">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath">[docs]</a>
+<span class="k">class</span> <span class="nc">MRMath</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Compute summary statistic on image intensities along a</span>
 <span class="sd">    specified axis of a single image (mrmath command)*</span>
@@ -3325,7 +3497,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRMath.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MRMath.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MRMath.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3418,7 +3592,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.MRMath&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MRMath.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRMath.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3458,7 +3635,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MRMath.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRMath.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRMath</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -3466,10 +3646,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MRTransform"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform">[docs]</a><span class="k">class</span> <span class="nc">MRTransform</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRTransform">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform">[docs]</a>
+<span class="k">class</span> <span class="nc">MRTransform</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Apply spatial transformations or reslice images (mrtransform command)*</span>
 
@@ -3478,7 +3662,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRTransform.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MRTransform.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MRTransform.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3707,7 +3893,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.MRTransform&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MRTransform.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRTransform.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3742,7 +3931,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MRTransform.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MRTransform.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRTransform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -3791,10 +3983,14 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MTNormalise"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise">[docs]</a><span class="k">class</span> <span class="nc">MTNormalise</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MTNormalise">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise">[docs]</a>
+<span class="k">class</span> <span class="nc">MTNormalise</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Multi-tissue informed log-domain intensity normalisation.</span>
 <span class="sd">    (mtnormalise command)*</span>
@@ -3804,7 +4000,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MTNormalise.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MTNormalise.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MTNormalise.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3919,7 +4117,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MTNormalise.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MTNormalise.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3957,7 +4158,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MTNormalise.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MTNormalise.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MTNormalise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -3979,10 +4183,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">balanced</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-balanced&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ResponseSDDhollander"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander">[docs]</a><span class="k">class</span> <span class="nc">ResponseSDDhollander</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ResponseSDDhollander">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander">[docs]</a>
+<span class="k">class</span> <span class="nc">ResponseSDDhollander</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimate response function(s) for spherical deconvolution using</span>
 <span class="sd">    the Dhollander algorithm (dwi2response command)*</span>
@@ -3992,7 +4200,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ResponseSDDhollander.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ResponseSDDhollander.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ResponseSDDhollander.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4142,7 +4352,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.ResponseSD&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ResponseSDDhollander.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ResponseSDDhollander.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4193,7 +4406,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ResponseSDDhollander.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ResponseSDDhollander.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResponseSDDhollander</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -4218,10 +4434,14 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SphericalHarmonicExtraction"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction">[docs]</a><span class="k">class</span> <span class="nc">SphericalHarmonicExtraction</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SphericalHarmonicExtraction">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction">[docs]</a>
+<span class="k">class</span> <span class="nc">SphericalHarmonicExtraction</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Extract the peaks of a spherical harmonic function in each voxel.</span>
 <span class="sd">    (sh2peaks command)*</span>
@@ -4232,7 +4452,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SphericalHarmonicExtraction.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SphericalHarmonicExtraction.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4372,7 +4594,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SphericalHarmonicExtraction.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SphericalHarmonicExtraction.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4409,7 +4634,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SphericalHarmonicExtraction.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SphericalHarmonicExtraction.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SphericalHarmonicExtraction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sh2peaks&quot;</span><span class="p">]</span>
@@ -4432,10 +4660,14 @@
 
         <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_SH_coeff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_image</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TensorMetrics"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics">[docs]</a><span class="k">class</span> <span class="nc">TensorMetrics</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TensorMetrics">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics">[docs]</a>
+<span class="k">class</span> <span class="nc">TensorMetrics</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Compute metrics from tensors (tensor2metric command)*</span>
 
@@ -4444,7 +4676,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TensorMetrics.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TensorMetrics.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TensorMetrics.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4694,7 +4928,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.TensorMetrics&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TensorMetrics.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TensorMetrics.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4799,7 +5036,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TensorMetrics.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TensorMetrics.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TensorMetrics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_dti</span>
@@ -4826,10 +5066,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vector</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_evec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_file</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Tractography"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography">[docs]</a><span class="k">class</span> <span class="nc">Tractography</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Tractography">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography">[docs]</a>
+<span class="k">class</span> <span class="nc">Tractography</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Performs streamlines tractography after selecting the appropriate</span>
 <span class="sd">    algorithm. (tckgen command)*</span>
@@ -4839,7 +5083,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Tractography.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Tractography.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tractography.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -5370,7 +5616,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.Tractography&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Tractography.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Tractography.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -5417,7 +5666,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Tractography.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Tractography.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Tractography</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Nipype Tractoraphy process is not up to date for some option</span>
@@ -5493,10 +5745,14 @@
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TransformFSLConvert"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert">[docs]</a><span class="k">class</span> <span class="nc">TransformFSLConvert</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformFSLConvert">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert">[docs]</a>
+<span class="k">class</span> <span class="nc">TransformFSLConvert</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Perform conversion between FSL’s transformation matrix format</span>
 <span class="sd">    to mrtrix3’s. (transformconvert command)*</span>
@@ -5506,7 +5762,9 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TransformFSLConvert.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TransformFSLConvert.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TransformFSLConvert.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -5563,7 +5821,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.TransformFSLConvert&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TransformFSLConvert.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformFSLConvert.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -5599,7 +5860,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TransformFSLConvert.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformFSLConvert.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TransformFSLConvert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">flirt_import</span> <span class="o">=</span> <span class="kc">True</span>
@@ -5608,7 +5872,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_transform</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -5621,8 +5887,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

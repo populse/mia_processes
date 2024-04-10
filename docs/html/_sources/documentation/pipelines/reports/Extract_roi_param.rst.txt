@@ -21,8 +21,6 @@ Produces gray matter masks for various ROIs and means, standard deviations, late
     - `Find_In_List <../../bricks/tools/Find_In_List.html>`_
     - `Files_To_List <../../bricks/tools/Files_To_List.html>`_
     - `ConvROI <../../bricks/preprocess/others/ConvROI.html>`_
-    - `Resample1 <../../bricks/preprocess/others/Resample1.html>`_
-    - `Resample2 <../../bricks/preprocess/others/Resample2.html>`_
     - `Mean_stdDev_calc <../../bricks/reports/Mean_stdDev_calc.html>`_
     - `Concat_to_list <../../bricks/tools/Concat_to_list.html>`_
     - `Result_collector <../../bricks/reports/Result_collector.html>`_
@@ -57,7 +55,7 @@ Produces gray matter masks for various ROIs and means, standard deviations, late
            '/home/username/data/raw_data/beta_0007.nii',
            '/home/username/data/raw_data/beta_0008.nii']
 
-- *mask_002*
+- *mask_003*
     A grey matter mask with a resolution defined previously in the `Spatial_mask <../preprocess/Spatial_mask.html>`_.
 
     ::
@@ -80,38 +78,6 @@ Produces gray matter masks for various ROIs and means, standard deviations, late
 
 **Outputs parameters:**
 
-- *resample2_masks*
-    A list of images, corresponding to `conv_roi_maks` after resampling to the resolution of `spmT_images`.
-
-    ::
-
-      ex. ['/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACA_L_2.nii',
-           '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACA_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACM_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACM_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACP_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACP_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convPICA_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convPICA_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-CING_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-CING_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-FRON_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-FRON_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-INSULA_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-INSULA_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-OCC_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-OCC_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-PAR_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-PAR_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-STR_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-STR_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-TEMP_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-TEMP_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-THA_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-THA_R_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convSCA_L_2.nii',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convSCA_R_2.nii']
-
 - *xls_files*
     A list of xls files containing the means and standard deviations of the parameters in the ROIs defined by the `Concat_to_list_of_list <../../bricks/tools/Concat_to_list_of_list.html>`_ brick.
     The laterality index between the two hemispheres is also calculated (files with ``IL`` in the name).
@@ -128,7 +94,7 @@ Produces gray matter masks for various ROIs and means, standard deviations, late
 	   '/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_std_beta.xls']
 
 - *conv_roi_maks*
-    A list of images, resulting from the convolution of `mask_002` with the ROIs defined by the `Concat_to_list_of_list <../../bricks/tools/Concat_to_list_of_list.html>`_ brick.
+    A list of images, resulting from the convolution of `mask_003` with the ROIs defined by the `Concat_to_list_of_list <../../bricks/tools/Concat_to_list_of_list.html>`_ brick.
 
     ::
 
