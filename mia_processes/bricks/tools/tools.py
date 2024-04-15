@@ -2512,19 +2512,18 @@ class Make_CVR_reg_physio(ProcessMIA):
 
             # Read CoolTerm capture log
             elif self.physio_data.lower().endswith(".txt"):
-                # TODO: Not yet tested
+                # tested: OK
                 print("Data from CoolTerm application detected ...")
-                # Process data and construct phys_trig_data dictionary
-                # ...
+
                 with open(self.physio_data, "r") as fid:
                     lines = fid.readlines()
 
-                data = []
-
-                for line in lines:
-                    line_data = line.strip().split(",")
-                    data.append(line_data)
-
+                # Replacing multiple delimiters with single delimiter
+                lines = [
+                    re.sub(r"[, \t]+", " ", line.strip()) for line in lines
+                ]
+                data = [line.split(" ") for line in lines]
+                data = np.array(data)
                 (
                     comp_date,
                     comp_time,
@@ -2554,21 +2553,13 @@ class Make_CVR_reg_physio(ProcessMIA):
                 ) = zip(*data)
 
                 # Convert sample start and end times to seconds since midnight
-                monitortime = np.array(
-                    [list(map(int, t.split(":"))) for t in monitor_time]
-                )
-                monitortime = (
-                    3600 * monitortime[:, 0]
-                    + 60 * monitortime[:, 1]
-                    + monitortime[:, 2]
-                )
+                def time_to_seconds(time_str):
+                    """Convert time in seconds"""
+                    hours, minutes, seconds = map(int, time_str.split(":"))
+                    return 3600 * hours + 60 * minutes + seconds
+
                 sampletime = np.array(
-                    [list(map(int, t.split(":"))) for t in comp_time]
-                )
-                sampletime = (
-                    3600 * sampletime[:, 0]
-                    + 60 * sampletime[:, 1]
-                    + sampletime[:, 2]
+                    [time_to_seconds(time_str) for time_str in comp_time]
                 )
                 keep_idx = np.where(
                     np.logical_and(
@@ -2583,7 +2574,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 ETCO2 = np.array(ETCO2)[keep_idx].astype(float)
                 SpO2 = np.array(SpO2)[keep_idx].astype(float)
 
-                # Transfer data to structure
+                # Transfer data to phys_trig_data dictionary
                 phys_trig_data = {
                     "HR": {
                         "indx": np.where(~np.isnan(HR))[0],
