@@ -51,6 +51,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
     - **fsl**
 
+      - `Bet <bricks/preprocess/fsl/Bet.html>`_
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
       - `ConvertXFM <bricks/preprocess/fsl/ConvertXFM.html>`_
       - `EpiReg <bricks/preprocess/fsl/EpiReg.html>`_

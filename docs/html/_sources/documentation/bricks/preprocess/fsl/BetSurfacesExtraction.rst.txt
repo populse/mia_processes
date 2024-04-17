@@ -42,7 +42,6 @@ The mask and mesh files (.vtk) are generated.
 
       ex. NIFTI
 
-
 **Outputs parameters:**
 
 - *inskull_mask_file* (a pathlike object or string representing a file)
@@ -52,8 +51,15 @@ The mask and mesh files (.vtk) are generated.
 
       ex. '/home/username/data/derived_data/T1w_brain_inskull_mask.nii'
 
-- *inskull_mesh_file* (a pathlike object or string representing a file)
-    Inskull mesh  (extensions [.vtk])
+- *inskull_mesh_vtk_file* (a pathlike object or string representing a file)
+    Inskull mesh (extensions [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_inskull_mesh.nii'
+
+- *inskull_mesh_vtk_file* (a pathlike object or string representing a file)
+    Inskull mesh (extensions [.vtk])
 
     ::
 
@@ -74,6 +80,13 @@ The mask and mesh files (.vtk) are generated.
       ex. '/home/username/data/derived_data/T1w_brain_outskin_mask.nii'
 
 - *outskin_mesh_file* (a pathlike object or string representing a file)
+    Outskin mesh  (extensions [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskin_mesh.vtk'
+
+- *outskin_mesh_vtk_file* (a pathlike object or string representing a file)
     Outskin mesh  (extensions [.vtk])
 
     ::
@@ -87,8 +100,15 @@ The mask and mesh files (.vtk) are generated.
 
       ex. '/home/username/data/derived_data/T1w_brain_outskull_mask.nii'
 
-- *outskull_mesh_file* (a pathlike object or string representing a file)
+- *outskull_mesh_vtk_file* (a pathlike object or string representing a file)
     Outskull mesh (extensions [.vtk])
+
+    ::
+
+      ex. /home/username/data/derived_data/T1w_brain_outskull_mesh.vtk
+
+- *outskull_mesh_file* (a pathlike object or string representing a file)
+    Outskull mesh (extensions [.nii, .nii.gz])
 
     ::
 
@@ -108,4 +128,4 @@ Usefull links:
 
 `FSL BET <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide>`_
 
-`FSL FAST - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#bet>`_
+`FSL BET - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#bet>`_

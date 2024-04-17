@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bet brick &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
+        <h2 class="heading"><span>Bet brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bet-brick">
+<h1>Bet brick<a class="headerlink" href="#bet-brick" title="Permalink to this headline">¶</a></h1>
+<section id="brain-extraction-with-bet-fsl">
+<h2>Brain Extraction with BET (FSL)<a class="headerlink" href="#brain-extraction-with-bet-fsl" title="Permalink to this headline">¶</a></h2>
+<p>By default, only the brain extraction is done, but there are severals options to generate surfaces, binary mask…</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input file to skull strip. An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>output_type</em> (‘NIFTI’ or ‘NIFTI_GZ’, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">- NIFTI: *.nii</div>
+<div class="line">- NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mask</em> (a boolean, optional, default value is True)</dt><dd><p>Create binary mask image. (Maps to a command-line argument: -m.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mesh</em> (a boolean, optional, default value is False)</dt><dd><p>Generate a vtk mesh brain surface. (Maps to a command-line argument: -e.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>skull</em> (a boolean, optional, default value is False)</dt><dd><p>Create skull image. (Maps to a command-line argument: -s.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>no_output</em> (a boolean, optional, default value is False)</dt><dd><p>Don’t generate segmented output. (Maps to a command-line argument: -n.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outline</em> (a boolean, optional, default value is False)</dt><dd><p>Create surface outline image. (Maps to a command-line argument: -o.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>threshold</em> (a boolean, optional, default value is False)</dt><dd><p>Apply thresholding to segmented brain image and mask. (Maps to a command-line argument: -t.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>frac</em> (a float, optional, default value is 0.5)</dt><dd><p>Fractional intensity threshold. (Maps to a command-line argument: -f)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>vertical_gradient</em> (a float, optional, default value is 0.0)</dt><dd><p>Vertical gradient in fractional intensity threshold (-1, 1). (Maps to a command-line argument: -g)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>functional</em> (a boolean, optional, default value is False)</dt><dd><p>Apply to 4D fMRI data. (Maps to a command-line argument: -F.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>padding</em> (a boolean, optional, default value is False)</dt><dd><p>Improve BET if FOV is very small in Z (by temporarily padding end slices) (Maps to a command-line argument: -Z.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reduce_biais</em> (a boolean, optional, default value is False)</dt><dd><p>Bias field and neck cleanup. (Maps to a command-line argument: -B.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>remove_eyes</em> (a boolean, optional, default value is False)</dt><dd><p>Eye &amp; optic nerve cleanup (can be useful in SIENA) (Maps to a command-line argument: -S.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>robust</em> (a boolean, optional, default value is False)</dt><dd><p>Robust brain centre estimation (iterates BET several times). (Maps to a command-line argument: -R.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>surfaces</em> (a boolean, optional, default value is False)</dt><dd><p>Run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations). (Maps to a command-line argument: -A.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>radius</em> (a integer, optional)</dt><dd><p>Head radius in mm . (Maps to a command-line argument: -r %d.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">65</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>center</em> (a list of at most 3 items which are an integer, optional)</dt><dd><p>Center of gravity in voxels. (Maps to a command-line argument: -c %s.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>t2_guided</em> (a string representing an existing file, optional)</dt><dd><p>R As with creating surfaces, when also feeding in non-brain-extracted T2 (includes registrations). (Maps to a command-line argument: -A2.)
+Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T2w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><p>Skullstripped file (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mask_file</em> (a pathlike object or string representing a file)</dt><dd><p>Brain mask file (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mesh_vtk_file</em> (a pathlike object or string representing a file)</dt><dd><p>Mesh file (extensions: [.vtk])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_mesh.vtk&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outline_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outline file (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_overlay.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>skull_file</em> (a pathlike object or string representing a file)</dt><dd><p>Skull file (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_skull.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inskull_mask_file</em> (a pathlike object or string representing a file)</dt><dd><p>Inskull mask (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_inskull_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inskull_mesh_vtk_file</em> (a pathlike object or string representing a file)</dt><dd><p>Inskull mesh (extensions [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_inskull_mesh.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inskull_mesh_vtk_file</em> (a pathlike object or string representing a file)</dt><dd><p>Inskull mesh (extensions [.vtk])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_inskull_mesh.vtk&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskin_mask_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskin mask (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_outskin_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskin_mesh_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskin mesh  (extensions [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_outskin_mesh.vtk&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskin_mesh_vtk_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskin mesh  (extensions [.vtk])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_outskin_mesh.vtk&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskull_mask_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskull mask (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_outskull_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskull_mesh_vtk_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskull mesh (extensions [.vtk])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">T1w_brain_outskull_mesh</span><span class="o">.</span><span class="n">vtk</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outskull_mesh_file</em> (a pathlike object or string representing a file)</dt><dd><p>Outskull mesh (extensions [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">T1w_brain_outskull_mesh</span><span class="o">.</span><span class="n">vtk</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>skull_mask_file</em> (a pathlike object or string representing a file)</dt><dd><p>Skull mask (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_skull_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide">FSL BET</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#bet">FSL BET - nipype</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

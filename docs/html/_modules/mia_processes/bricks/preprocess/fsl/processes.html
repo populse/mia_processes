@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.5.1-dev+fdc71a29 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=35ead824"></script>
-    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.5.1-dev+fdc71a29 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.fsl.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -71,9 +73,585 @@
 <span class="n">EXT_MATRICE</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;FSL_MATRICE&quot;</span><span class="p">:</span> <span class="s2">&quot;mat&quot;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="BetSurfacesExtraction">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction">[docs]</a>
-<span class="k">class</span> <span class="nc">BetSurfacesExtraction</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Bet"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Bet">[docs]</a><span class="k">class</span> <span class="nc">Bet</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Use BET (FSL)*</span>
+
+<span class="sd">    Please, see the complete documentation for the `Bet brick</span>
+<span class="sd">    in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/Bet.html&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Bet.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Bet.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fsl&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input file to skull strip (a pathlike object&quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Optional inputs with default value description</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output NIfTI image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">center_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Center of gravity in voxels &quot;</span>
+            <span class="s2">&quot;(a list of at most 3 items which are an integer) &quot;</span>
+        <span class="p">)</span>
+        <span class="n">frac_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Fractional intensity threshold. (a float)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Create binary mask (a boolean)&quot;</span>
+        <span class="n">mesh_desc</span> <span class="o">=</span> <span class="s2">&quot;Generate vtk mesh brain surface&quot;</span>
+        <span class="n">functional_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Apply to 4D data (a boolean, mutually exclusif with &quot;</span>
+            <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_output_desc</span> <span class="o">=</span> <span class="s2">&quot;Do not generate segmented output (a boolean)&quot;</span>
+        <span class="n">outline_desc</span> <span class="o">=</span> <span class="s2">&quot;Create surface outline image (a boolean)&quot;</span>
+        <span class="n">radius_desc</span> <span class="o">=</span> <span class="s2">&quot;Head radius (an integer)&quot;</span>
+        <span class="n">skull_desc</span> <span class="o">=</span> <span class="s2">&quot;Create skull image. (a boolean)&quot;</span>
+        <span class="n">threshold_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Apply thresholding to segmented brain image and mask &quot;</span>
+            <span class="s2">&quot;(a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">vertical_gradient_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot; Vertical gradient in fractional intensity threshold (-1, 1) &quot;</span>
+            <span class="s2">&quot;(a float)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">reduce_bias_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Bias field and neck cleanup. (a boolean mutually exclusif with &quot;</span>
+            <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">robust_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot; Robust brain centre estimation (a boolean mutually exclusif  &quot;</span>
+            <span class="s2">&quot;with functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">padding_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Improve BET if FOV is very small in Z (a boolean mutually &quot;</span>
+            <span class="s2">&quot;exclusif with  functional, reduce_bias, robust, padding, &quot;</span>
+            <span class="s2">&quot;remove_eyes, surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">remove_eyes_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Eye &amp; optic nerve cleanup (a boolean mutually exclusif with &quot;</span>
+            <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">surfaces_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Run bet2 and then betsurf to get additional skull and scalp &quot;</span>
+            <span class="s2">&quot;surfaces (a boolean mutually exclusif with &quot;</span>
+            <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">t2_guided_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;As with creating surfaces, when also feeding in &quot;</span>
+            <span class="s2">&quot;non-brain-extracted T2 (a pathlike object or string &quot;</span>
+            <span class="s2">&quot;representing a file, mutually exclusif with &quot;</span>
+            <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+            <span class="s2">&quot;surfaces, t2_guided.)&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Outputs description</span>
+        <span class="n">inskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">inskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">inskull_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Skull stripped image (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskin_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskin_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskin_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">skull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Skull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path/name of binary brain mask (if generated). &quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path/name of vtk mesh file (if generated).&quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outline_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path/name of outline file (if generated).&quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">skull_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path/name of skull file (if generated).&quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Optional inputs with default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">mesh_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;skull&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">skull_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_output&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">no_output_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outline&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">outline_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;frac&quot;</span><span class="p">,</span>
+            <span class="n">Float</span><span class="p">(</span>
+                <span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">frac_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;radius&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">radius_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;vertical_gradient&quot;</span><span class="p">,</span>
+            <span class="n">Float</span><span class="p">(</span>
+                <span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">vertical_gradient_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">List</span><span class="p">(</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">center_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;functional&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">functional_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;padding&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">padding_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;reduce_bias&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">reduce_bias_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;remove_eyes&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">remove_eyes_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;robust&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">robust_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;surfaces&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">surfaces_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;t2_guided&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">t2_guided_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mask_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mask_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mesh_vtk_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mesh_vtk_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outline_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">desc</span><span class="o">=</span><span class="n">outline_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mesh_vtk_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_vtk_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_vtk_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;skull_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">skull_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;skull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">skull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="c1"># To suppress the &quot;FSLOUTPUTTYPE environment</span>
+        <span class="c1"># variable is not set&quot; nipype warning:</span>
+        <span class="k">if</span> <span class="s2">&quot;FSLOUTPUTTYPE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FSLOUTPUTTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.BET&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Bet.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Bet.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="n">t2_guided</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2_guided</span><span class="p">:</span>
+            <span class="n">t2_guided</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">exclusif_params</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">functional</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">robust</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_eyes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
+            <span class="n">t2_guided</span>
+        <span class="p">]</span>
+        <span class="n">true_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exclusif_params</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">true_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Bet brick: Initialisation failed. &quot;</span>
+                <span class="s2">&quot;functional, reduce_bias, robust, padding, remove_eyes, &quot;</span>
+                <span class="s2">&quot;surfaces, t2_guided parameters are mutually exclusive...!&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">EXT</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="p">]</span>
+                <span class="n">out_name</span> <span class="o">=</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_brain&quot;</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_output</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mesh.vtk&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outline</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outline_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_overlay.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skull</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                    <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
+                    <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Bet.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Bet.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">frac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frac</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">skull</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skull</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">outline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">vertical_gradient</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertical_gradient</span>
+
+        <span class="c1"># Params mutually exclusif in Nipype</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">functional</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">functional</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">functional</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">reduce_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_eyes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">remove_eyes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_eyes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">robust</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">robust</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">robust</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">surfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2_guided</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">t2_guided</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2_guided</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="BetSurfacesExtraction"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction">[docs]</a><span class="k">class</span> <span class="nc">BetSurfacesExtraction</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL)*</span>
 
@@ -82,9 +660,7 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/BetSurfacesExtraction.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BetSurfacesExtraction.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BetSurfacesExtraction.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -115,6 +691,10 @@
             <span class="s2">&quot;Inskull mesh file (a pathlike object &quot;</span>
             <span class="s2">&quot;or string representing a file)&quot;</span>
         <span class="p">)</span>
+        <span class="n">inskull_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
         <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Skull stripped image (a pathlike object &quot;</span>
             <span class="s2">&quot;or string representing a file)&quot;</span>
@@ -127,11 +707,19 @@
             <span class="s2">&quot;Outskin mesh file (a pathlike object &quot;</span>
             <span class="s2">&quot;or string representing a file)&quot;</span>
         <span class="p">)</span>
+        <span class="n">outskin_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
         <span class="n">outskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Outskull mask file (a pathlike object &quot;</span>
             <span class="s2">&quot;or string representing a file)&quot;</span>
         <span class="p">)</span>
         <span class="n">outskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mesh_vtk_file_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Outskull mesh file (a pathlike object &quot;</span>
             <span class="s2">&quot;or string representing a file)&quot;</span>
         <span class="p">)</span>
@@ -173,6 +761,11 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mesh_vtk_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mask_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
@@ -180,6 +773,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_vtk_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -191,6 +789,12 @@
             <span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_vtk_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;skull_mask_file&quot;</span><span class="p">,</span>
@@ -206,10 +810,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.BET&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="BetSurfacesExtraction.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BetSurfacesExtraction.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -225,49 +826,61 @@
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">surfaces</span> <span class="o">=</span> <span class="kc">True</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">EXT</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="p">]</span>
+                <span class="n">out_name</span> <span class="o">=</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_brain&quot;</span>
+
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_out_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_skull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span>
                 <span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
@@ -287,10 +900,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="BetSurfacesExtraction.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BetSurfacesExtraction.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BetSurfacesExtraction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -299,14 +909,10 @@
         <span class="c1"># default inputs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">surfaces</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="ConvertXFM">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM">[docs]</a>
-<span class="k">class</span> <span class="nc">ConvertXFM</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ConvertXFM"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM">[docs]</a><span class="k">class</span> <span class="nc">ConvertXFM</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Modify transformation matrice using convert_xfm (FSL)*</span>
 
@@ -315,9 +921,7 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/ConvertXFM.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ConvertXFM.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConvertXFM.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -413,10 +1017,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.ConvertXFM&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="ConvertXFM.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConvertXFM.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -490,10 +1091,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ConvertXFM.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConvertXFM.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ConvertXFM.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConvertXFM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -508,14 +1106,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_xfm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">invert_xfm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_xfm</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="EpiReg">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg">[docs]</a>
-<span class="k">class</span> <span class="nc">EpiReg</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="EpiReg"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg">[docs]</a><span class="k">class</span> <span class="nc">EpiReg</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Run epi_reg script (FSL) to register EPI images to structural images*</span>
 
@@ -524,9 +1118,7 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/EpiReg.html&gt;`_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EpiReg.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EpiReg.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -773,10 +1365,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.EpiReg&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="EpiReg.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EpiReg.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -905,10 +1494,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="EpiReg.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EpiReg.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.EpiReg.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EpiReg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -929,14 +1515,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">echospacing</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">echospacing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">echospacing</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="ExtractROI">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI">[docs]</a>
-<span class="k">class</span> <span class="nc">ExtractROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ExtractROI"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI">[docs]</a><span class="k">class</span> <span class="nc">ExtractROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Extract region of interest (ROI) from an image using FslROI*</span>
 
@@ -946,9 +1528,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ExtractROI.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ExtractROI.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1114,10 +1694,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.ExtractROI&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="ExtractROI.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ExtractROI.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1160,10 +1737,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ExtractROI.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ExtractROI.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.ExtractROI.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ExtractROI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -1186,14 +1760,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Undefined</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">z_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_size</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="FastSegment">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment">[docs]</a>
-<span class="k">class</span> <span class="nc">FastSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="FastSegment"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment">[docs]</a><span class="k">class</span> <span class="nc">FastSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Brain tissue segmentation using fsl.FAST*</span>
 
@@ -1203,9 +1773,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FastSegment.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FastSegment.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1321,10 +1889,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.FAST&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="FastSegment.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FastSegment.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1417,10 +1982,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="FastSegment.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FastSegment.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FastSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">img_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_type</span>
@@ -1432,14 +1994,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">segments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="Flirt">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt">[docs]</a>
-<span class="k">class</span> <span class="nc">Flirt</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Flirt"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt">[docs]</a><span class="k">class</span> <span class="nc">Flirt</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Linear (affine) intra and inter-modal brain image registration</span>
 <span class="sd">    using fsl FLIRT*</span>
@@ -1450,9 +2008,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Flirt.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Flirt.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2071,10 +2627,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.FLIRT&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="Flirt.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Flirt.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2174,10 +2727,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Flirt.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Flirt.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Flirt.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Flirt</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2249,14 +2799,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wmnorms</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">wmnorms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wmnorms</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
-
-<div class="viewcode-block" id="Smooth">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth">[docs]</a>
-<span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *3D Gaussian smoothing of image volumes*</span>
 
@@ -2266,9 +2812,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Smooth.__init__">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Smooth.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2372,10 +2916,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.Smooth&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="Smooth.list_outputs">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Smooth.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2439,10 +2980,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Smooth.run_process_mia">
-<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Smooth.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2457,9 +2995,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">smoothed_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
-</div>
-
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 </pre></div>
 
       </div>
@@ -2472,8 +3008,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

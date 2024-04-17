@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.5.1-dev+a5d09ffc documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=ad6ca273"></script>
-    <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+a5d09ffc documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -165,9 +167,7 @@
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="AnatIQMs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs">[docs]</a>
-<span class="k">class</span> <span class="nc">AnatIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="AnatIQMs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs">[docs]</a><span class="k">class</span> <span class="nc">AnatIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the anatomical IQMs*</span>
 
@@ -180,9 +180,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="AnatIQMs.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AnatIQMs.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -292,10 +290,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="AnatIQMs.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AnatIQMs.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -339,10 +334,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="AnatIQMs.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AnatIQMs.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AnatIQMs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -678,14 +670,10 @@
         <span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">flat_results_dict</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span></div>
-</div>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">flat_results_dict</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="BoldIQMs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs">[docs]</a>
-<span class="k">class</span> <span class="nc">BoldIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs">[docs]</a><span class="k">class</span> <span class="nc">BoldIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the functional IQMs*</span>
 
@@ -698,9 +686,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BoldIQMs.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMs.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -814,10 +800,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="BoldIQMs.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMs.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -862,10 +845,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="BoldIQMs.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMs.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BoldIQMs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1121,23 +1101,17 @@
         <span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">flat_results_dict</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span></div>
-</div>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">flat_results_dict</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="BoldIQMsPlot">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot">[docs]</a>
-<span class="k">class</span> <span class="nc">BoldIQMsPlot</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMsPlot"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot">[docs]</a><span class="k">class</span> <span class="nc">BoldIQMsPlot</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a figure showing the slice-wise signal intensity at the extremes for</span>
 <span class="sd">    the identification of spikes, the outliers metric, the DVARS, the FD and</span>
 <span class="sd">    the carpetplot.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BoldIQMsPlot.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMsPlot.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1227,10 +1201,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="BoldIQMsPlot.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMsPlot.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1280,10 +1251,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="BoldIQMsPlot.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BoldIQMsPlot.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMsPlot.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BoldIQMsPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1320,14 +1288,10 @@
             <span class="n">vlines</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;FD&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fd_thresh</span><span class="p">]},</span>
             <span class="n">nskip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">drop_trs</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span></div>
-</div>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="CarpetParcellation">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation">[docs]</a>
-<span class="k">class</span> <span class="nc">CarpetParcellation</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="CarpetParcellation"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation">[docs]</a><span class="k">class</span> <span class="nc">CarpetParcellation</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Dilate the brain mask, remove it from itself then generate the union</span>
 <span class="sd">    of the obtained crown mask and the EPI parcellation*</span>
@@ -1346,9 +1310,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CarpetParcellation.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CarpetParcellation.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1406,10 +1368,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="CarpetParcellation.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CarpetParcellation.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1460,10 +1419,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="CarpetParcellation.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CarpetParcellation.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CarpetParcellation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1502,14 +1458,10 @@
 
         <span class="n">outimg</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">),</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
         <span class="n">outimg</span><span class="o">.</span><span class="n">set_data_dtype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
-        <span class="n">outimg</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="n">file_out</span><span class="p">)</span></div>
-</div>
+        <span class="n">outimg</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="n">file_out</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="ComputeDVARS">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS">[docs]</a>
-<span class="k">class</span> <span class="nc">ComputeDVARS</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeDVARS"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS">[docs]</a><span class="k">class</span> <span class="nc">ComputeDVARS</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the DVARS*</span>
 
@@ -1522,9 +1474,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ComputeDVARS.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeDVARS.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1628,10 +1578,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ComputeDVARS.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeDVARS.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1679,10 +1626,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="ComputeDVARS.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ComputeDVARS.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ComputeDVARS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1771,14 +1715,10 @@
                 <span class="n">delimiter</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="n">header</span><span class="o">=</span><span class="s2">&quot;std DVARS</span><span class="se">\t</span><span class="s2">non-std DVARS</span><span class="se">\t</span><span class="s2">vx-wise std DVARS&quot;</span><span class="p">,</span>
                 <span class="n">comments</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="p">)</span></div>
-</div>
+            <span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="FramewiseDisplacement">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement">[docs]</a>
-<span class="k">class</span> <span class="nc">FramewiseDisplacement</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="FramewiseDisplacement"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement">[docs]</a><span class="k">class</span> <span class="nc">FramewiseDisplacement</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Calculate the FD (framewise displacement) as in [Power2012]*</span>
 
@@ -1797,9 +1737,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FramewiseDisplacement.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FramewiseDisplacement.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1878,10 +1816,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="FramewiseDisplacement.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FramewiseDisplacement.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1931,10 +1866,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="FramewiseDisplacement.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FramewiseDisplacement.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FramewiseDisplacement</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1966,14 +1898,10 @@
 
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
             <span class="n">file_out</span><span class="p">,</span> <span class="n">fd_res</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FramewiseDisplacement&quot;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-        <span class="p">)</span></div>
-</div>
+        <span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="Mean_stdDev_calc">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc">[docs]</a>
-<span class="k">class</span> <span class="nc">Mean_stdDev_calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Mean_stdDev_calc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc">[docs]</a><span class="k">class</span> <span class="nc">Mean_stdDev_calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Makes the mean and standard deviation of parametric_maps*</span>
 
@@ -1994,9 +1922,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Mean_stdDev_calc.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Mean_stdDev_calc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2082,10 +2008,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Mean_stdDev_calc.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Mean_stdDev_calc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2209,10 +2132,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Mean_stdDev_calc.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Mean_stdDev_calc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
         <span class="c1"># super(Mean_stdDev_calc, self).run_process_mia()</span>
@@ -2317,14 +2237,10 @@
                             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mean_result</span><span class="p">)</span>
 
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">std_result</span><span class="p">)</span></div>
-</div>
+                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">std_result</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="PlotSignalROI">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI">[docs]</a>
-<span class="k">class</span> <span class="nc">PlotSignalROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotSignalROI"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI">[docs]</a><span class="k">class</span> <span class="nc">PlotSignalROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Plot signals from ROI using a segmentation file with label*</span>
 
@@ -2334,9 +2250,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PlotSignalROI.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotSignalROI.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2429,10 +2343,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="PlotSignalROI.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotSignalROI.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2487,10 +2398,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="PlotSignalROI.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PlotSignalROI.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.PlotSignalROI.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PlotSignalROI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">color</span> <span class="o">=</span> <span class="p">[</span>
@@ -2652,14 +2560,10 @@
         <span class="n">ax3</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
         <span class="n">ax3</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_png</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span></div>
-</div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_png</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="Result_collector">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector">[docs]</a>
-<span class="k">class</span> <span class="nc">Result_collector</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Result_collector"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector">[docs]</a><span class="k">class</span> <span class="nc">Result_collector</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Save a file.xlm with the data collection for a patient*</span>
 
@@ -2686,9 +2590,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Result_collector.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Result_collector.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2771,10 +2673,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Result_collector.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Result_collector.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3007,10 +2906,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Result_collector.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Result_collector.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
         <span class="c1"># super(Result_collector, self).run_process_mia()</span>
@@ -3161,14 +3057,10 @@
                                     <span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                         <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">][</span><span class="n">roi</span><span class="p">]</span>
                                     <span class="p">)</span>
-                                <span class="p">)</span></div>
-</div>
+                                <span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="Spikes">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes">[docs]</a>
-<span class="k">class</span> <span class="nc">Spikes</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Spikes"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes">[docs]</a><span class="k">class</span> <span class="nc">Spikes</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the number of spikes*</span>
 
@@ -3185,9 +3077,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Spikes.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spikes.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -3262,10 +3152,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Spikes.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Spikes.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3313,10 +3200,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Spikes.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spikes.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Spikes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -3378,14 +3262,10 @@
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">file_name_no_ext</span> <span class="o">+</span> <span class="s2">&quot;.out&quot;</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">file_out</span><span class="p">,</span> <span class="n">ts_z</span><span class="p">)</span></div>
-</div>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">file_out</span><span class="p">,</span> <span class="n">ts_z</span><span class="p">)</span></div></div>
 
 
-
-<div class="viewcode-block" id="art_qi1">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.art_qi1">[docs]</a>
-<span class="k">def</span> <span class="nf">art_qi1</span><span class="p">(</span><span class="n">airmask</span><span class="p">,</span> <span class="n">artmask</span><span class="p">):</span>
+<div class="viewcode-block" id="art_qi1"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.art_qi1">[docs]</a><span class="k">def</span> <span class="nf">art_qi1</span><span class="p">(</span><span class="n">airmask</span><span class="p">,</span> <span class="n">artmask</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Detect artifacts in the image using the method described in [Mortamet2009].</span>
 
@@ -3410,10 +3290,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">artmask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">airmask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">artmask</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span></div>
 
 
-
-<div class="viewcode-block" id="art_qi2">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.art_qi2">[docs]</a>
-<span class="k">def</span> <span class="nf">art_qi2</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">airmask</span><span class="p">,</span> <span class="n">min_voxels</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">),</span> <span class="n">max_voxels</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">3e5</span><span class="p">)):</span>
+<div class="viewcode-block" id="art_qi2"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.art_qi2">[docs]</a><span class="k">def</span> <span class="nf">art_qi2</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">airmask</span><span class="p">,</span> <span class="n">min_voxels</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">),</span> <span class="n">max_voxels</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">3e5</span><span class="p">)):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates :math:`\text{QI}_2`, based on the goodness-of-fit of a centered</span>
 <span class="sd">    :math:`\chi^2` distribution onto the intensity distribution of</span>
@@ -3475,10 +3352,7 @@
     <span class="k">return</span> <span class="n">gof</span><span class="p">,</span> <span class="n">hist_dict</span></div>
 
 
-
-<div class="viewcode-block" id="cjv">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.cjv">[docs]</a>
-<span class="k">def</span> <span class="nf">cjv</span><span class="p">(</span><span class="n">mu_wm</span><span class="p">,</span> <span class="n">mu_gm</span><span class="p">,</span> <span class="n">sigma_wm</span><span class="p">,</span> <span class="n">sigma_gm</span><span class="p">):</span>
+<div class="viewcode-block" id="cjv"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.cjv">[docs]</a><span class="k">def</span> <span class="nf">cjv</span><span class="p">(</span><span class="n">mu_wm</span><span class="p">,</span> <span class="n">mu_gm</span><span class="p">,</span> <span class="n">sigma_wm</span><span class="p">,</span> <span class="n">sigma_gm</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`CJV (coefficient of joint variation)`, a measure</span>
 <span class="sd">    related to :abbr:`SNR (Signal-to-Noise Ratio)` and</span>
@@ -3503,10 +3377,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">((</span><span class="n">sigma_wm</span> <span class="o">+</span> <span class="n">sigma_gm</span><span class="p">)</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu_wm</span> <span class="o">-</span> <span class="n">mu_gm</span><span class="p">))</span></div>
 
 
-
-<div class="viewcode-block" id="cnr">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.cnr">[docs]</a>
-<span class="k">def</span> <span class="nf">cnr</span><span class="p">(</span><span class="n">mu_wm</span><span class="p">,</span> <span class="n">mu_gm</span><span class="p">,</span> <span class="n">sigma_air</span><span class="p">):</span>
+<div class="viewcode-block" id="cnr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.cnr">[docs]</a><span class="k">def</span> <span class="nf">cnr</span><span class="p">(</span><span class="n">mu_wm</span><span class="p">,</span> <span class="n">mu_gm</span><span class="p">,</span> <span class="n">sigma_air</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`CNR (Contrast-to-Noise Ratio)` [Magnota2006]_.</span>
 
@@ -3531,10 +3402,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mu_wm</span> <span class="o">-</span> <span class="n">mu_gm</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_air</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="efc">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.efc">[docs]</a>
-<span class="k">def</span> <span class="nf">efc</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">framemask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="efc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.efc">[docs]</a><span class="k">def</span> <span class="nf">efc</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">framemask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`EFC (Entropy Focus Criterion)` [Atkinson1997]_.</span>
 
@@ -3584,10 +3452,7 @@
     <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="fber">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fber">[docs]</a>
-<span class="k">def</span> <span class="nf">fber</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">headmask</span><span class="p">,</span> <span class="n">rotmask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="fber"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fber">[docs]</a><span class="k">def</span> <span class="nf">fber</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">headmask</span><span class="p">,</span> <span class="n">rotmask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`FBER (Foreground-Background Energy Ratio)`</span>
 <span class="sd">    [Shehzad2015]_, defined as the mean energy of image values within the</span>
@@ -3617,10 +3482,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">fg_mu</span> <span class="o">/</span> <span class="n">bg_mu</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="find_peaks">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.find_peaks">[docs]</a>
-<span class="k">def</span> <span class="nf">find_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="find_peaks"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.find_peaks">[docs]</a><span class="k">def</span> <span class="nf">find_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param data: a numpy ndarray</span>
 <span class="sd">    :returns: a list</span>
@@ -3632,10 +3494,7 @@
     <span class="k">return</span> <span class="n">t_z</span></div>
 
 
-
-<div class="viewcode-block" id="find_spikes">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.find_spikes">[docs]</a>
-<span class="k">def</span> <span class="nf">find_spikes</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">spike_thresh</span><span class="p">):</span>
+<div class="viewcode-block" id="find_spikes"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.find_spikes">[docs]</a><span class="k">def</span> <span class="nf">find_spikes</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">spike_thresh</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">slice_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -3654,10 +3513,7 @@
     <span class="k">return</span> <span class="n">spike_inds</span><span class="p">,</span> <span class="n">t_z</span></div>
 
 
-
-<div class="viewcode-block" id="fuzzy_jaccard">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fuzzy_jaccard">[docs]</a>
-<span class="k">def</span> <span class="nf">fuzzy_jaccard</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
+<div class="viewcode-block" id="fuzzy_jaccard"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fuzzy_jaccard">[docs]</a><span class="k">def</span> <span class="nf">fuzzy_jaccard</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
     <span class="n">overlaps</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
@@ -3670,10 +3526,7 @@
     <span class="k">return</span> <span class="n">overlaps</span></div>
 
 
-
-<div class="viewcode-block" id="gsr">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.gsr">[docs]</a>
-<span class="k">def</span> <span class="nf">gsr</span><span class="p">(</span><span class="n">epi_data</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">ref_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="gsr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.gsr">[docs]</a><span class="k">def</span> <span class="nf">gsr</span><span class="p">(</span><span class="n">epi_data</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">ref_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the :abbr:`GSR (ghost to signal ratio)` [Giannelli2010]_.</span>
 
@@ -3733,10 +3586,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">ghost</span> <span class="o">/</span> <span class="n">signal</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="image_binary_dilation">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.image_binary_dilation">[docs]</a>
-<span class="k">def</span> <span class="nf">image_binary_dilation</span><span class="p">(</span><span class="n">in_mask</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="image_binary_dilation"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.image_binary_dilation">[docs]</a><span class="k">def</span> <span class="nf">image_binary_dilation</span><span class="p">(</span><span class="n">in_mask</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dilate the input binary mask.</span>
 
@@ -3750,10 +3600,7 @@
     <span class="k">return</span> <span class="n">ndi</span><span class="o">.</span><span class="n">binary_dilation</span><span class="p">(</span><span class="n">in_mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="n">ball</span><span class="p">(</span><span class="n">radius</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="normalize_mc_params">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.normalize_mc_params">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_mc_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<div class="viewcode-block" id="normalize_mc_params"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.normalize_mc_params">[docs]</a><span class="k">def</span> <span class="nf">normalize_mc_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalize a single row of motion parameters to the SPM format.</span>
 
@@ -3779,10 +3626,7 @@
     <span class="k">return</span> <span class="n">params</span></div>
 
 
-
-<div class="viewcode-block" id="regress_poly">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.regress_poly">[docs]</a>
-<span class="k">def</span> <span class="nf">regress_poly</span><span class="p">(</span>
+<div class="viewcode-block" id="regress_poly"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.regress_poly">[docs]</a><span class="k">def</span> <span class="nf">regress_poly</span><span class="p">(</span>
     <span class="n">degree</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">remove_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">failure_mode</span><span class="o">=</span><span class="s2">&quot;error&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -3822,10 +3666,7 @@
     <span class="k">return</span> <span class="n">regressed_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">datashape</span><span class="p">),</span> <span class="n">non_constant_regressors</span></div>
 
 
-
-<div class="viewcode-block" id="rpve">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.rpve">[docs]</a>
-<span class="k">def</span> <span class="nf">rpve</span><span class="p">(</span><span class="n">pvms</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
+<div class="viewcode-block" id="rpve"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.rpve">[docs]</a><span class="k">def</span> <span class="nf">rpve</span><span class="p">(</span><span class="n">pvms</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * | Computes the :abbr:`rPVe (residual partial voluming error)`</span>
 <span class="sd">      | of each tissue class.</span>
@@ -3854,10 +3695,7 @@
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">pvfs</span><span class="o">.</span><span class="n">items</span><span class="p">())}</span></div>
 
 
-
-<div class="viewcode-block" id="snr">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.snr">[docs]</a>
-<span class="k">def</span> <span class="nf">snr</span><span class="p">(</span><span class="n">mu_fg</span><span class="p">,</span> <span class="n">sigma_fg</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="snr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.snr">[docs]</a><span class="k">def</span> <span class="nf">snr</span><span class="p">(</span><span class="n">mu_fg</span><span class="p">,</span> <span class="n">sigma_fg</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.</span>
 
@@ -3879,10 +3717,7 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu_fg</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_fg</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))))</span></div>
 
 
-
-<div class="viewcode-block" id="snr_dietrich">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.snr_dietrich">[docs]</a>
-<span class="k">def</span> <span class="nf">snr_dietrich</span><span class="p">(</span><span class="n">mu_fg</span><span class="p">,</span> <span class="n">mad_air</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma_air</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="snr_dietrich"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.snr_dietrich">[docs]</a><span class="k">def</span> <span class="nf">snr_dietrich</span><span class="p">(</span><span class="n">mu_fg</span><span class="p">,</span> <span class="n">mad_air</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma_air</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.</span>
 
@@ -3912,10 +3747,7 @@
     <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="summary_stats">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.summary_stats">[docs]</a>
-<span class="k">def</span> <span class="nf">summary_stats</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">pvms</span><span class="p">,</span> <span class="n">airmask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">erode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="summary_stats"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.summary_stats">[docs]</a><span class="k">def</span> <span class="nf">summary_stats</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">pvms</span><span class="p">,</span> <span class="n">airmask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">erode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates the mean, the standard deviation, the 95\%</span>
 <span class="sd">    and the 5\% percentiles of each tissue distribution.</span>
@@ -3995,10 +3827,7 @@
     <span class="k">return</span> <span class="n">output</span></div>
 
 
-
-<div class="viewcode-block" id="volume_fraction">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.volume_fraction">[docs]</a>
-<span class="k">def</span> <span class="nf">volume_fraction</span><span class="p">(</span><span class="n">pvms</span><span class="p">):</span>
+<div class="viewcode-block" id="volume_fraction"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.volume_fraction">[docs]</a><span class="k">def</span> <span class="nf">volume_fraction</span><span class="p">(</span><span class="n">pvms</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the :abbr:`ICV (intracranial volume)` fractions corresponding to</span>
 <span class="sd">    the (partial volume maps).</span>
@@ -4022,10 +3851,7 @@
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">tissue_vfs</span><span class="o">.</span><span class="n">items</span><span class="p">())}</span></div>
 
 
-
-<div class="viewcode-block" id="wm2max">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.wm2max">[docs]</a>
-<span class="k">def</span> <span class="nf">wm2max</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mu_wm</span><span class="p">):</span>
+<div class="viewcode-block" id="wm2max"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.wm2max">[docs]</a><span class="k">def</span> <span class="nf">wm2max</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mu_wm</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`WM2MAX (white-matter-to-max ratio)`,</span>
 <span class="sd">    defined as the maximum intensity found in the volume w.r.t. the</span>
@@ -4036,7 +3862,6 @@
 <span class="sd">        \text{WM2MAX} = \frac{\mu_\text{WM}}{P_{99.95}(X)}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu_wm</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mf">99.95</span><span class="p">))</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_AR_est_YW</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">rxx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -4116,8 +3941,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
