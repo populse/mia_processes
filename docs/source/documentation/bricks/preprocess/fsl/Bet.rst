@@ -1,0 +1,296 @@
+:orphan:
+
+.. toctree::
+
++--------------------------------+----------------------------------------------+----------------------------------------------------+
+|`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++--------------------------------+----------------------------------------------+----------------------------------------------------+
+
+=========
+Bet brick
+=========
+
+Brain Extraction with BET (FSL)
+-------------------------------
+
+By default, only the brain extraction is done, but there are severals options to generate surfaces, binary mask...
+
+--------------------------------------
+
+**Mandatory inputs parameters:**
+
+- *in_file* (a string representing an existing file)
+    Input file to skull strip. An existing file (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/raw_data/T1w.nii'
+
+**Optional inputs with default value parameters:**
+
+- *output_type* ('NIFTI' or 'NIFTI_GZ', optional, default value is NIFTI)
+    | Format of the output image (one of NIFTI, NIFTI_GZ).
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
+
+    ::
+
+      ex. NIFTI
+
+- *mask* (a boolean, optional, default value is True)
+    Create binary mask image. (Maps to a command-line argument: -m.)
+
+
+    ::
+
+      ex. True
+
+- *mesh* (a boolean, optional, default value is False)
+    Generate a vtk mesh brain surface. (Maps to a command-line argument: -e.)
+
+    ::
+
+      ex. False
+
+- *skull* (a boolean, optional, default value is False)
+    Create skull image. (Maps to a command-line argument: -s.)
+
+    ::
+
+      ex. False
+
+- *no_output* (a boolean, optional, default value is False)
+    Don’t generate segmented output. (Maps to a command-line argument: -n.)
+
+    ::
+
+      ex. False
+
+- *outline* (a boolean, optional, default value is False)
+    Create surface outline image. (Maps to a command-line argument: -o.)
+
+
+    ::
+
+      ex. False
+
+- *threshold* (a boolean, optional, default value is False)
+    Apply thresholding to segmented brain image and mask. (Maps to a command-line argument: -t.)
+
+    ::
+
+      ex. False
+
+- *frac* (a float, optional, default value is 0.5)
+    Fractional intensity threshold. (Maps to a command-line argument: -f)
+
+
+    ::
+
+      ex. 0.5
+
+- *vertical_gradient* (a float, optional, default value is 0.0)
+    Vertical gradient in fractional intensity threshold (-1, 1). (Maps to a command-line argument: -g)
+
+
+    ::
+
+      ex. 0.0
+
+- *functional* (a boolean, optional, default value is False)
+    Apply to 4D fMRI data. (Maps to a command-line argument: -F.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+- *padding* (a boolean, optional, default value is False)
+    Improve BET if FOV is very small in Z (by temporarily padding end slices) (Maps to a command-line argument: -Z.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+- *reduce_biais* (a boolean, optional, default value is False)
+    Bias field and neck cleanup. (Maps to a command-line argument: -B.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+- *remove_eyes* (a boolean, optional, default value is False)
+    Eye & optic nerve cleanup (can be useful in SIENA) (Maps to a command-line argument: -S.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+- *robust* (a boolean, optional, default value is False)
+    Robust brain centre estimation (iterates BET several times). (Maps to a command-line argument: -R.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+- *surfaces* (a boolean, optional, default value is False)
+    Run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations). (Maps to a command-line argument: -A.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+
+    ::
+
+      ex. False
+
+**Optional inputs:**
+
+- *radius* (a integer, optional)
+    Head radius in mm . (Maps to a command-line argument: -r %d.)
+
+
+    ::
+
+      ex. 65
+
+- *center* (a list of at most 3 items which are an integer, optional)
+    Center of gravity in voxels. (Maps to a command-line argument: -c %s.)
+
+
+    ::
+
+      ex. [1, 1, 1]
+
+- *t2_guided* (a string representing an existing file, optional)
+    R As with creating surfaces, when also feeding in non-brain-extracted T2 (includes registrations). (Maps to a command-line argument: -A2.)
+    Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
+
+    ::
+
+      ex. '/home/username/data/raw_data/T2w.nii'
+
+**Outputs parameters:**
+
+- *out_file* (a pathlike object or string representing a file)
+    Skullstripped file (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain.nii'
+
+- *mask_file* (a pathlike object or string representing a file)
+    Brain mask file (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_mask.nii'
+
+- *mesh_vtk_file* (a pathlike object or string representing a file)
+    Mesh file (extensions: [.vtk])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_mesh.vtk'
+
+- *outline_file* (a pathlike object or string representing a file)
+    Outline file (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_overlay.nii'
+
+
+- *skull_file* (a pathlike object or string representing a file)
+    Skull file (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_skull.nii'
+
+- *inskull_mask_file* (a pathlike object or string representing a file)
+    Inskull mask (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_inskull_mask.nii'
+
+- *inskull_mesh_vtk_file* (a pathlike object or string representing a file)
+    Inskull mesh (extensions [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_inskull_mesh.nii'
+
+- *inskull_mesh_vtk_file* (a pathlike object or string representing a file)
+    Inskull mesh (extensions [.vtk])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_inskull_mesh.vtk'
+
+
+- *outskin_mask_file* (a pathlike object or string representing a file)
+    Outskin mask (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskin_mask.nii'
+
+- *outskin_mesh_file* (a pathlike object or string representing a file)
+    Outskin mesh  (extensions [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskin_mesh.vtk'
+
+- *outskin_mesh_vtk_file* (a pathlike object or string representing a file)
+    Outskin mesh  (extensions [.vtk])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskin_mesh.vtk'
+
+- *outskull_mask_file* (a pathlike object or string representing a file)
+    Outskull mask (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskull_mask.nii'
+
+- *outskull_mesh_vtk_file* (a pathlike object or string representing a file)
+    Outskull mesh (extensions [.vtk])
+
+    ::
+
+      ex. /home/username/data/derived_data/T1w_brain_outskull_mesh.vtk
+
+- *outskull_mesh_file* (a pathlike object or string representing a file)
+    Outskull mesh (extensions [.nii, .nii.gz])
+
+    ::
+
+      ex. /home/username/data/derived_data/T1w_brain_outskull_mesh.vtk
+
+- *skull_mask_file* (a pathlike object or string representing a file)
+    Skull mask (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_skull_mask.nii'
+
+
+-------------
+
+Usefull links:
+
+`FSL BET <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide>`_
+
+`FSL BET - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#bet>`_

@@ -13,6 +13,7 @@ The atomic calculations from fsl.
 ##########################################################################
 
 from .processes import (  # noqa: F401
+    Bet,
     BetSurfacesExtraction,
     ConvertXFM,
     EpiReg,

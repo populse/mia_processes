@@ -41,6 +41,578 @@ EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 EXT_MATRICE = {"FSL_MATRICE": "mat"}
 
 
+class Bet(ProcessMIA):
+    """
+    *Use BET (FSL)*
+
+    Please, see the complete documentation for the `Bet brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/Bet.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Bet, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input file to skull strip (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs with default value description
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        center_desc = (
+            "Center of gravity in voxels "
+            "(a list of at most 3 items which are an integer) "
+        )
+        frac_desc = "Fractional intensity threshold. (a float)"
+        mask_desc = "Create binary mask (a boolean)"
+        mesh_desc = "Generate vtk mesh brain surface"
+        functional_desc = (
+            "Apply to 4D data (a boolean, mutually exclusif with "
+            "functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        no_output_desc = "Do not generate segmented output (a boolean)"
+        outline_desc = "Create surface outline image (a boolean)"
+        radius_desc = "Head radius (an integer)"
+        skull_desc = "Create skull image. (a boolean)"
+        threshold_desc = (
+            "Apply thresholding to segmented brain image and mask "
+            "(a boolean)"
+        )
+        vertical_gradient_desc = (
+            " Vertical gradient in fractional intensity threshold (-1, 1) "
+            "(a float)"
+        )
+        reduce_bias_desc = (
+            "Bias field and neck cleanup. (a boolean mutually exclusif with "
+            "functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        robust_desc = (
+            " Robust brain centre estimation (a boolean mutually exclusif  "
+            "with functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        padding_desc = (
+            "Improve BET if FOV is very small in Z (a boolean mutually "
+            "exclusif with  functional, reduce_bias, robust, padding, "
+            "remove_eyes, surfaces, t2_guided.)"
+        )
+        remove_eyes_desc = (
+            "Eye & optic nerve cleanup (a boolean mutually exclusif with "
+            "functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        surfaces_desc = (
+            "Run bet2 and then betsurf to get additional skull and scalp "
+            "surfaces (a boolean mutually exclusif with "
+            "functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        t2_guided_desc = (
+            "As with creating surfaces, when also feeding in "
+            "non-brain-extracted T2 (a pathlike object or string "
+            "representing a file, mutually exclusif with "
+            "functional, reduce_bias, robust, padding, remove_eyes, "
+            "surfaces, t2_guided.)"
+        )
+        # Outputs description
+        inskull_mask_file_desc = (
+            "Inskull mask file (a pathlike object "
+            "or string representing a file)"
+        )
+        inskull_mesh_file_desc = (
+            "Inskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        inskull_mesh_vtk_file_desc = (
+            "Inskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        out_file_desc = (
+            "Skull stripped image (a pathlike object "
+            "or string representing a file)"
+        )
+        outskin_mask_file_desc = (
+            "Outskin mask file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskin_mesh_file_desc = (
+            "Outskin mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskin_mesh_vtk_file_desc = (
+            "Outskin mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskull_mask_file_desc = (
+            "Outskull mask file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskull_mesh_file_desc = (
+            "Outskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskull_mesh_vtk_file_desc = (
+            "Outskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        skull_mask_file_desc = (
+            "Skull mask file (a pathlike object "
+            "or string representing a file)"
+        )
+        mask_file_desc = (
+            "Path/name of binary brain mask (if generated). "
+            "(a pathlike object or string representing a file)"
+        )
+        mesh_vtk_file_desc = (
+            "Path/name of vtk mesh file (if generated)."
+            "(a pathlike object or string representing a file)"
+        )
+        outline_file_desc = (
+            "Path/name of outline file (if generated)."
+            "(a pathlike object or string representing a file)"
+        )
+        skull_file_desc = (
+            "Path/name of skull file (if generated)."
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs with default value traits
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+        self.add_trait(
+            "mask",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "mesh",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=mesh_desc,
+            ),
+        )
+
+        self.add_trait(
+            "skull",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=skull_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_output",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_output_desc,
+            ),
+        )
+
+        self.add_trait(
+            "outline",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=outline_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=threshold_desc,
+            ),
+        )
+
+        self.add_trait(
+            "frac",
+            Float(
+                0.5,
+                output=False,
+                optional=True,
+                desc=frac_desc,
+            ),
+        )
+        self.add_trait(
+            "radius",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=radius_desc,
+            ),
+        )
+
+        self.add_trait(
+            "vertical_gradient",
+            Float(
+                0.0,
+                output=False,
+                optional=True,
+                desc=vertical_gradient_desc,
+            ),
+        )
+
+        self.add_trait(
+            "center",
+            List(
+                Int(),
+                maxlen=3,
+                output=False,
+                optional=True,
+                desc=center_desc,
+            ),
+        )
+
+        self.add_trait(
+            "functional",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=functional_desc,
+            ),
+        )
+
+        self.add_trait(
+            "padding",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=padding_desc,
+            ),
+        )
+
+        self.add_trait(
+            "reduce_bias",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=reduce_bias_desc,
+            ),
+        )
+
+        self.add_trait(
+            "remove_eyes",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=remove_eyes_desc,
+            ),
+        )
+
+        self.add_trait(
+            "robust",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=robust_desc,
+            ),
+        )
+
+        self.add_trait(
+            "surfaces",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=surfaces_desc,
+            ),
+        )
+
+        self.add_trait(
+            "t2_guided",
+            File(
+                output=False,
+                optional=True,
+                desc=t2_guided_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
+
+        self.add_trait(
+            "mask_file", File(output=True, optional=True, desc=mask_file_desc)
+        )
+
+        self.add_trait(
+            "mesh_vtk_file",
+            File(output=True, optional=True, desc=mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
+            "outline_file",
+            File(output=True, optional=True, desc=outline_file_desc),
+        )
+
+        self.add_trait(
+            "inskull_mask_file",
+            File(output=True, optional=True, desc=inskull_mask_file_desc),
+        )
+
+        self.add_trait(
+            "inskull_mesh_file",
+            File(output=True, optional=True, desc=inskull_mesh_file_desc),
+        )
+
+        self.add_trait(
+            "inskull_mesh_vtk_file",
+            File(output=True, optional=True, desc=inskull_mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
+            "outskin_mask_file",
+            File(output=True, optional=True, desc=outskin_mask_file_desc),
+        )
+
+        self.add_trait(
+            "outskin_mesh_file",
+            File(output=True, optional=True, desc=outskin_mesh_file_desc),
+        )
+
+        self.add_trait(
+            "outskin_mesh_vtk_file",
+            File(output=True, optional=True, desc=outskin_mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
+            "outskull_mask_file",
+            File(output=True, optional=True, desc=outskull_mask_file_desc),
+        )
+
+        self.add_trait(
+            "outskull_mesh_file",
+            File(output=True, optional=True, desc=outskull_mesh_file_desc),
+        )
+
+        self.add_trait(
+            "outskull_mesh_vtk_file",
+            File(output=True, optional=True, desc=outskull_mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
+            "skull_file",
+            File(output=True, optional=True, desc=skull_file_desc),
+        )
+
+        self.add_trait(
+            "skull_mask_file",
+            File(output=True, optional=True, desc=skull_mask_file_desc),
+        )
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.BET")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Bet, self).list_outputs()
+
+        t2_guided = False
+        if self.t2_guided:
+            t2_guided = True
+        exclusif_params = [
+            self.functional,
+            self.reduce_bias,
+            self.robust,
+            self.padding,
+            self.remove_eyes,
+            self.surfaces,
+            t2_guided,
+        ]
+        true_params = [i for i in exclusif_params if i is True]
+        if len(true_params) > 1:
+            print(
+                "\nBet brick: Initialisation failed. "
+                "functional, reduce_bias, robust, padding, remove_eyes, "
+                "surfaces, t2_guided parameters are mutually exclusive...!"
+            )
+            return
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return
+
+            if self.output_directory:
+                ext = EXT[self.output_type]
+                out_name = file_name + "_brain"
+
+                if not self.no_output:
+                    self.outputs["out_file"] = os.path.join(
+                        self.output_directory, out_name + "." + ext
+                    )
+
+                if self.mesh or self.surfaces:
+                    self.outputs["mesh_vtk_file"] = os.path.join(
+                        self.output_directory, out_name + "_mesh.vtk"
+                    )
+                if self.mask or self.reduce_bias:
+                    self.outputs["mask_file"] = os.path.join(
+                        self.output_directory, out_name + "_mask." + ext
+                    )
+                if self.outline:
+                    self.outputs["outline_file"] = os.path.join(
+                        self.output_directory, out_name + "_overlay." + ext
+                    )
+                if self.surfaces:
+                    self.outputs["outskin_mask_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_outskin_mask." + ext,
+                    )
+                    self.outputs["outskin_mesh_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_outskin_mesh." + ext,
+                    )
+                    self.outputs["outskin_mesh_vtk_file"] = os.path.join(
+                        self.output_directory, out_name + "_outskin_mesh.vtk"
+                    )
+                    self.outputs["outskull_mask_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_outskull_mask." + ext,
+                    )
+                    self.outputs["outskull_mesh_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_outskull_mesh." + ext,
+                    )
+                    self.outputs["outskull_mesh_vtk_file"] = os.path.join(
+                        self.output_directory, out_name + "_outskull_mesh.vtk"
+                    )
+                    self.outputs["inskull_mask_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_inskull_mask." + ext,
+                    )
+                    self.outputs["inskull_mesh_file"] = os.path.join(
+                        self.output_directory,
+                        out_name + "_inskull_mesh." + ext,
+                    )
+                    self.outputs["inskull_mesh_vtk_file"] = os.path.join(
+                        self.output_directory, out_name + "_inskull_mesh.vtk"
+                    )
+                    self.outputs["skull_mask_file"] = os.path.join(
+                        self.output_directory, out_name + "_skull_mask." + ext
+                    )
+                if self.skull:
+                    self.outputs["skull_file"] = os.path.join(
+                        self.output_directory, out_name + "_skull." + ext
+                    )
+
+        if self.outputs:
+            for k in list(self.outputs.keys()):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Bet, self).run_process_mia()
+        self.process.output_type = self.output_type
+        self.process.in_file = self.in_file
+        if self.center:
+            self.process.center = self.center
+        self.process.frac = self.frac
+        self.process.radius = self.radius
+        self.process.mask = self.mask
+        self.process.mesh = self.mesh
+        self.process.skull = self.skull
+        self.process.no_output = self.no_output
+        self.process.outline = self.outline
+        self.process.threshold = self.threshold
+        self.process.vertical_gradient = self.vertical_gradient
+
+        # Params mutually exclusif in Nipype
+        if self.functional:
+            self.process.functional = self.functional
+        if self.padding:
+            self.process.padding = self.padding
+        if self.reduce_bias:
+            self.process.reduce_bias = self.reduce_bias
+        if self.remove_eyes:
+            self.process.remove_eyes = self.remove_eyes
+        if self.robust:
+            self.process.robust = self.robust
+        if self.surfaces:
+            self.process.surfaces = self.surfaces
+        if self.t2_guided:
+            self.process.t2_guided = self.t2_guided
+
+        return self.process.run(configuration_dict={})
+
+
 class BetSurfacesExtraction(ProcessMIA):
     """
     *Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL)*
@@ -81,6 +653,10 @@ class BetSurfacesExtraction(ProcessMIA):
             "Inskull mesh file (a pathlike object "
             "or string representing a file)"
         )
+        inskull_mesh_vtk_file_desc = (
+            "Inskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
         out_file_desc = (
             "Skull stripped image (a pathlike object "
             "or string representing a file)"
@@ -93,11 +669,19 @@ class BetSurfacesExtraction(ProcessMIA):
             "Outskin mesh file (a pathlike object "
             "or string representing a file)"
         )
+        outskin_mesh_vtk_file_desc = (
+            "Outskin mesh file (a pathlike object "
+            "or string representing a file)"
+        )
         outskull_mask_file_desc = (
             "Outskull mask file (a pathlike object "
             "or string representing a file)"
         )
         outskull_mesh_file_desc = (
+            "Outskull mesh file (a pathlike object "
+            "or string representing a file)"
+        )
+        outskull_mesh_vtk_file_desc = (
             "Outskull mesh file (a pathlike object "
             "or string representing a file)"
         )
@@ -139,6 +723,11 @@ class BetSurfacesExtraction(ProcessMIA):
         )
 
         self.add_trait(
+            "inskull_mesh_vtk_file",
+            File(output=True, optional=True, desc=inskull_mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
             "outskin_mask_file",
             File(output=True, optional=True, desc=outskin_mask_file_desc),
         )
@@ -149,6 +738,11 @@ class BetSurfacesExtraction(ProcessMIA):
         )
 
         self.add_trait(
+            "outskin_mesh_vtk_file",
+            File(output=True, optional=True, desc=outskin_mesh_vtk_file_desc),
+        )
+
+        self.add_trait(
             "outskull_mask_file",
             File(output=True, optional=True, desc=outskull_mask_file_desc),
         )
@@ -156,6 +750,11 @@ class BetSurfacesExtraction(ProcessMIA):
         self.add_trait(
             "outskull_mesh_file",
             File(output=True, optional=True, desc=outskull_mesh_file_desc),
+        )
+
+        self.add_trait(
+            "outskull_mesh_vtk_file",
+            File(output=True, optional=True, desc=outskull_mesh_vtk_file_desc),
         )
 
         self.add_trait(
@@ -188,49 +787,50 @@ class BetSurfacesExtraction(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return
 
-            self.process.output_type = self.output_type
-            self.process.in_file = self.in_file
-            self.process.surfaces = True
-
             if self.output_directory:
+                ext = EXT[self.output_type]
+                out_name = file_name + "_brain"
+
                 self.outputs["out_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._out_file)[1],
+                    self.output_directory, out_name + "." + ext
                 )
                 self.outputs["outskin_mask_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._outskin_mask_file)[1],
+                    self.output_directory, out_name + "_outskin_mask." + ext
                 )
                 self.outputs["outskin_mesh_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._outskin_mesh_file)[1],
+                    self.output_directory, out_name + "_outskin_mesh." + ext
+                )
+                self.outputs["outskin_mesh_vtk_file"] = os.path.join(
+                    self.output_directory, out_name + "_outskin_mesh.vtk"
                 )
                 self.outputs["outskull_mask_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._outskull_mask_file)[1],
+                    self.output_directory, out_name + "_outskull_mask." + ext
                 )
                 self.outputs["outskull_mesh_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._outskull_mesh_file)[1],
+                    self.output_directory, out_name + "_outskull_mesh." + ext
+                )
+                self.outputs["outskull_mesh_vtk_file"] = os.path.join(
+                    self.output_directory, out_name + "_outskull_mesh.vtk"
                 )
                 self.outputs["inskull_mask_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._inskull_mask_file)[1],
+                    self.output_directory, out_name + "_inskull_mask." + ext
                 )
                 self.outputs["inskull_mesh_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._inskull_mesh_file)[1],
+                    self.output_directory, out_name + "_inskull_mesh." + ext
+                )
+                self.outputs["inskull_mesh_vtk_file"] = os.path.join(
+                    self.output_directory, out_name + "_inskull_mesh.vtk"
                 )
                 self.outputs["skull_mask_file"] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.process._skull_mask_file)[1],
+                    self.output_directory, out_name + "_skull_mask." + ext
                 )
+
         if self.outputs:
             for k in (
                 "out_file",
