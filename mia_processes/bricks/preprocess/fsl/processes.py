@@ -8,6 +8,7 @@ populse_mia.
 
 :Contains:
     :Class:
+        - Bet
         - BetSurfacesExtraction
         - ConvertXFM
         - EpiReg
