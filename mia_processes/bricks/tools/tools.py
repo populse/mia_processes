@@ -571,7 +571,7 @@ class Filter_Files_List(ProcessMIA):
         self.add_trait(
             "filtered_list", traits.List(output=True, desc=filtered_list_desc)
         )
-        self.filtered_list = traits.Undefined
+        # self.filtered_list = traits.Undefined
 
         self.init_default_traits()
 

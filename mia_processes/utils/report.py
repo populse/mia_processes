@@ -34,6 +34,7 @@ import openpyxl
 
 # capsul import
 from capsul import info as capsul_info
+from nilearn.plotting import plot_carpet
 
 # nipype import
 from nipype import info as nipype_info
@@ -68,6 +69,7 @@ from mia_processes.utils import (
     PageNumCanvas,
     ReportLine,
     plot_qi2,
+    plot_realignment_parameters,
     plot_segmentation,
     plot_slice_planes,
 )
@@ -229,6 +231,49 @@ class Report:
                 "PATIENT AGE",
                 "PATHOLOGY",
                 "REFERENCE GROUP",
+                "SOFTWARES",
+            ]
+
+        elif "GE2REC" in kwargs:
+            self.make_report = self.ge2rec_make_report
+            ref_exp = {
+                "norm_anat": self.norm_anat,
+                "norm_func_gene": self.norm_func_gene,
+                "norm_func_reco": self.norm_func_reco,
+                "norm_func_recall": self.norm_func_recall,
+            }
+            self.title = (
+                "<font size=18><b>{0} report: </b>{1}"
+                "</font>".format(
+                    self.dict4runtime["norm_anat"]["PatientName"],
+                    today_date.split(" ")[0],
+                )
+            )
+
+            self.header_title = (
+                "<font size=30><b>GE2REC - Langage et " "mémoire</b></font>"
+            )
+            infos = [
+                self.dict4runtime["norm_anat"][i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "Sex",
+                    "Age",
+                    "Pathology",
+                )
+            ]
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "PATHOLOGY",
                 "SOFTWARES",
             ]
 
@@ -421,6 +466,13 @@ class Report:
             "Mia. L'utilisateur reconnaît utiliser ces "
             "informations sous sa seule et entière "
             "responsabilité.</i> </font>"
+        )
+
+        self.neuro_conv = (
+            "<font size=9 > <i> 'Neurological' "
+            "convention, the left side of the "
+            "image corresponds to the left side of "
+            "the brain. </i> <br/> </font>"
         )
 
         # Output document template definition for page; margins and pages size
@@ -2172,6 +2224,1204 @@ class Report:
         )
         data.hAlign = "CENTER"
         self.report.append(data)
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+        tmpdir.cleanup()
+
+    def ge2rec_make_report(self):
+        """Make GE2REC report"""
+        norm_func_cmap = "Greys_r"
+        norm_anat_cmap = "Greys_r"
+        spmT_cmap = "rainbow"
+        # axial fig
+        norm_anat_fig_rows = 3
+        norm_anat_fig_cols = 5
+        norm_anat_inf_slice_start = 45
+        norm_anat_slices_gap = 5
+        norm_func_fig_rows = 4
+        norm_func_fig_cols = 5
+        norm_func_inf_slice_start = 10
+        norm_func_slices_gap = 2
+        # sag fig
+        norm_anat_fig_rows_sag = 2
+        norm_anat_fig_cols_sag = 5
+        norm_anat_inf_slice_start_sag = 35
+        norm_anat_slices_gap_sag = 10
+        # c0r fig
+        norm_anat_fig_rows_cor = 1
+        norm_anat_fig_cols_cor = 5
+        norm_anat_inf_slice_start_cor = 60
+        norm_anat_slices_gap_cor = 15
+
+        # page 1 - cover ##################################################
+        ###################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
+        self.report.append(PageBreak())
+
+        # page 2 - Generation task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Production langage</b> - "
+                "Carte Statistique<br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                "<b>Activation cérébrales pour la tâche de génération de "
+                "phrases à partir de mots entendus</b>:"
+                "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 3 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=95 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 3 - Generation task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Production langage</b> - "
+                "Evaluation quantitative<br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >" "blabla sur lateralite" "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        self.report.append(PageBreak())
+
+        # page 4 - Generation task with memory############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Mémoire encodage implicite</b> - "
+                "Carte Statistique<br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                "<b>Activations cérébrales pour l'encodage implicite </b>"
+                "(obtenues à partir de la tâche de génération):"
+                "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        self.report.append(PageBreak())
+
+        # page 5 - Recognition task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Mémoire reconnaissance</b> "
+                "- Carte Statistique <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        m1 = Paragraph(
+            "<font size=10 >"
+            "<b>Performances comportementales </b> "
+            "(mesurées pendant la tâche de reconnaisance "
+            "des mots entendus à la tâche précédente à partir d'image)"
+            "</font>",
+            self.styles["Left"],
+        )
+
+        m2 = Paragraph("<font size=10 ><b>% CR</b></font>")
+        m3 = Paragraph("<font size=10 ><b>% erreur</b></font>")
+        m4 = Paragraph("<font size=10 ><b>anciens mots</b></font>")
+        m5 = Paragraph("<font size=10 ><b>nouveaux mots</b></font>")
+        behavioural_data = [
+            [m1, "", m2, m3],
+            ["", m4, "x", "a"],
+            ["", m5, "y", "z"],
+        ]
+        t = Table(behavioural_data)
+        t.setStyle(
+            TableStyle(
+                [
+                    ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+                    ("SPAN", (0, 0), (0, -1)),
+                ]
+            )
+        )
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                " <b>Activation cérébrales pour la tâche de mémoire</b>"
+                " (reconnaisance des mots entendus à la tâche précédente "
+                "à partir d'image):</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_reco,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_reco,
+            plane="cor",
+            fig_rows=norm_anat_fig_rows_cor,
+            fig_cols=norm_anat_fig_cols_cor,
+            slice_start=norm_anat_inf_slice_start_cor,
+            slice_step=norm_anat_slices_gap_cor,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=50 * mm)
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 5 - Recall task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Mémoire rappel </b> - "
+                "Carte Statistique <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                "<b>Activation cérébrales pour la tâche de rappel libre</b>"
+                "(reconnaisance des mots entendus lors de la première tâche "
+                "à partir du son et générartion de la même phrase):"
+                "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_recall,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_recall,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=95 * mm)
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 6 - Anat -QC
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRM anatomique </b> - "
+                "Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_anat}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_anat"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_anat"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_anat"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_anat"]["RepetitionTime"]
+        te = self.dict4runtime["norm_anat"]["EchoTime"]
+        flipang = self.dict4runtime["norm_anat"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=80 * mm)
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 7 - fMRI gene -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de génération </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_gene}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_gene']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_gene']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_gene"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_gene"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_gene"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_gene"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_gene"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_gene"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_gene"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_gene,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 9 - fMRI gene -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de génération "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_gene,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "gene_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "gene_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "gene_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_gene,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
+
+        # page 10 - fMRI reco -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de reconnaissance </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_reco}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font>"
+                f"{self.dict4runtime['norm_func_reco']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> </font>"
+                f"{self.dict4runtime['norm_func_reco']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_reco"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_reco"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_reco"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_reco"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_reco"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_reco"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_reco"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_reco,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 11 - fMRI reco -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de reconnaissance "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_reco,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "reco_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "reco_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "reco_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_reco,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements " " </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
+
+        # page 12- fMRI recall -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de rappel </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_recall}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_recall']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_recall']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_recall"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_recall"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_recall"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_recall"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_recall"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_recall"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_recall"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_recall,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 13 - fMRI recall -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de rappel "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_recall,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "recall_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "recall_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "recall_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_recall,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements " " </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

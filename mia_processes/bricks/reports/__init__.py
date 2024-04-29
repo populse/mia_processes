@@ -29,5 +29,6 @@ from .reporting import (  # noqa: F401
     ReportAnatMriqc,
     ReportCO2inhalCvr,
     ReportFuncMriqc,
+    ReportGE2REC,
     ReportGroupMriqc,
 )
