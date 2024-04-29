@@ -674,6 +674,7 @@ def set_dbFieldValue(project, document, tag_to_add):
 def plot_slice_planes(
     data_1,
     data_2=None,
+    plane="ax",
     fig_rows=4,
     fig_cols=4,
     slice_start=None,
@@ -693,8 +694,7 @@ def plot_slice_planes(
 
     Several images can be overlaid. data_1, the only mandatory argument,
     is the background image (or the only image displayed). data_2 is the
-    image (or images) superimposed on data_1. Currently, only axial slices
-    are displayed.
+    image (or images) superimposed on data_1.
 
     fig_rows, fig_cols, slice_start and slice_step are optional. If they are
     not known, plot_slice_planes will try to adapt as best it can to obtain
@@ -704,6 +704,7 @@ def plot_slice_planes(
     :param data_1: an existing, image file (valid extensions: .nii).
     :param data_2: an existing, image file or a list of existing image files
                    (valid extensions: .nii).
+    :param plane: orientation plane (ax, sag or cor)
     :param fig_rows: the number of rows in the images panel (integer).
     :param fig_cols: the number of columns in the images panel (integer).
     :param slice_start: starting slice number to be displayed (integer).
@@ -723,6 +724,10 @@ def plot_slice_planes(
     Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,
           rainbow_r, jet_r, seismic_r, bwr_r
     """
+
+    if plane not in ["ax", "cor", "sag"]:
+        print("Parameter plane should be either ax, sag or cor")
+        return
 
     brain_img_1 = nib.as_closest_canonical(nib.load(data_1))
     brain_data_1 = brain_img_1.get_fdata()
@@ -940,32 +945,82 @@ def plot_slice_planes(
             ind_slice = ind_slices[slice_numb]
             displ_2 = brain_data_2
 
-        phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
-        ax.imshow(
-            np.swapaxes(displ_1[:, :, ind_slice], 0, 1),
-            vmin=vmin_1,
-            vmax=vmax_1,
-            cmap=cmap_1,
-            interpolation="nearest",
-            origin="lower",
-            extent=[0, phys_sp[0], 0, phys_sp[1]],
-        )
+        if plane == "ax":
+            phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
+            ax.imshow(
+                np.swapaxes(displ_1[:, :, ind_slice], 0, 1),
+                vmin=vmin_1,
+                vmax=vmax_1,
+                cmap=cmap_1,
+                interpolation="nearest",
+                origin="lower",
+                extent=[0, phys_sp[0], 0, phys_sp[1]],
+            )
+        elif plane == "sag":
+            phys_sp = np.array(zooms[:2]) * brain_data_1[ind_slice, :, :].shape
+            ax.imshow(
+                np.swapaxes(displ_1[ind_slice, :, :], 0, 1),
+                vmin=vmin_1,
+                vmax=vmax_1,
+                cmap=cmap_1,
+                interpolation="nearest",
+                origin="lower",
+                extent=[0, phys_sp[0], 0, phys_sp[1]],
+            )
+        elif plane == "cor":
+            phys_sp = np.array(zooms[:2]) * brain_data_1[:, ind_slice, :].shape
+            ax.imshow(
+                np.swapaxes(displ_1[:, ind_slice, :], 0, 1),
+                vmin=vmin_1,
+                vmax=vmax_1,
+                cmap=cmap_1,
+                interpolation="nearest",
+                origin="lower",
+                extent=[0, phys_sp[0], 0, phys_sp[1]],
+            )
 
         if displ_2 is not None:
 
             for i, displ in enumerate(displ_2):
-                data = np.swapaxes(displ[:, :, ind_slice], 0, 1)
-                im2 = ax.imshow(
-                    data,
-                    vmin=vmin_2[i],
-                    vmax=vmax_2[i],
-                    cmap=cmap_2[i],
-                    alpha=np.where(data <= vmin_2[i], 0, 0.5),
-                    # alpha=np.where(data <= vmin_2[i], 0, 1.0),
-                    interpolation="nearest",
-                    origin="lower",
-                    extent=[0, phys_sp[0], 0, phys_sp[1]],
-                )
+                if plane == "ax":
+                    data = np.swapaxes(displ[:, :, ind_slice], 0, 1)
+                    im2 = ax.imshow(
+                        data,
+                        vmin=vmin_2[i],
+                        vmax=vmax_2[i],
+                        cmap=cmap_2[i],
+                        alpha=np.where(data <= vmin_2[i], 0, 0.5),
+                        # alpha=np.where(data <= vmin_2[i], 0, 1.0),
+                        interpolation="nearest",
+                        origin="lower",
+                        extent=[0, phys_sp[0], 0, phys_sp[1]],
+                    )
+                elif plane == "sag":
+                    data = np.swapaxes(displ[ind_slice, :, :], 0, 1)
+                    im2 = ax.imshow(
+                        data,
+                        vmin=vmin_2[i],
+                        vmax=vmax_2[i],
+                        cmap=cmap_2[i],
+                        alpha=np.where(data <= vmin_2[i], 0, 0.5),
+                        # alpha=np.where(data <= vmin_2[i], 0, 1.0),
+                        interpolation="nearest",
+                        origin="lower",
+                        extent=[0, phys_sp[0], 0, phys_sp[1]],
+                    )
+                elif plane == "cor":
+                    data = np.swapaxes(displ[:, ind_slice, :], 0, 1)
+                    im2 = ax.imshow(
+                        data,
+                        vmin=vmin_2[i],
+                        vmax=vmax_2[i],
+                        cmap=cmap_2[i],
+                        alpha=np.where(data <= vmin_2[i], 0, 0.5),
+                        # alpha=np.where(data <= vmin_2[i], 0, 1.0),
+                        interpolation="nearest",
+                        origin="lower",
+                        extent=[0, phys_sp[0], 0, phys_sp[1]],
+                    )
 
         ax.set_xticklabels([])
         ax.set_yticklabels([])
