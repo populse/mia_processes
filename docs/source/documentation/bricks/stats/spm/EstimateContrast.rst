@@ -35,6 +35,16 @@ To define a new F-contrast:
 
         ex. '/home/username/data/derived_data/SPM.mat'
 
+- *out_dir_name*
+    Out directory name (a string, default is "stats").
+    It will be used only if the SPM.mat file is not already in "project/data/derived_data/subjectName_data"
+    (for example, an SPM.mat file added in the database with the import or download button).
+    This directory will be created in a the folder "project/data/derived_data/subjectName_data".
+
+    :
+
+      ex. "stats"
+
 - *beta_images* (a list of items which are a pathlike object or string representing an existing file)
     Estimated regression coefficients.
 
