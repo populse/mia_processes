@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.6.1-dev+5a45c6e4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
     <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+5a45c6e4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.fsl.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -40,6 +40,7 @@
 
 <span class="sd">:Contains:</span>
 <span class="sd">    :Class:</span>
+<span class="sd">        - Bet</span>
 <span class="sd">        - BetSurfacesExtraction</span>
 <span class="sd">        - ConvertXFM</span>
 <span class="sd">        - EpiReg</span>
@@ -108,9 +109,7 @@
             <span class="s2">&quot;Center of gravity in voxels &quot;</span>
             <span class="s2">&quot;(a list of at most 3 items which are an integer) &quot;</span>
         <span class="p">)</span>
-        <span class="n">frac_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Fractional intensity threshold. (a float)&quot;</span>
-        <span class="p">)</span>
+        <span class="n">frac_desc</span> <span class="o">=</span> <span class="s2">&quot;Fractional intensity threshold. (a float)&quot;</span>
         <span class="n">mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Create binary mask (a boolean)&quot;</span>
         <span class="n">mesh_desc</span> <span class="o">=</span> <span class="s2">&quot;Generate vtk mesh brain surface&quot;</span>
         <span class="n">functional_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -422,12 +421,13 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;mesh_vtk_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mesh_vtk_file_desc</span><span class="p">)</span>
+            <span class="s2">&quot;mesh_vtk_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mesh_vtk_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;outline_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                 <span class="n">desc</span><span class="o">=</span><span class="n">outline_file_desc</span><span class="p">)</span>
+            <span class="s2">&quot;outline_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outline_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -512,9 +512,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t2_guided</span><span class="p">:</span>
             <span class="n">t2_guided</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">exclusif_params</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">functional</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">robust</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_eyes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
-            <span class="n">t2_guided</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">functional</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">robust</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_eyes</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span>
+            <span class="n">t2_guided</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">true_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exclusif_params</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">true_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -539,74 +543,65 @@
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_output</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                     <span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mesh.vtk&quot;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mesh.vtk&quot;</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_bias</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outline</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outline_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_overlay.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_overlay.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skull</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                     <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
                     <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
                     <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
@@ -795,7 +790,6 @@
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_vtk_file_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;skull_mask_file&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">skull_mask_file_desc</span><span class="p">),</span>
@@ -837,48 +831,37 @@
                 <span class="n">out_name</span> <span class="o">=</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_brain&quot;</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
-                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskin_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_outskull_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_vtk_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_inskull_mesh.vtk&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_skull_mask.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
                 <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>

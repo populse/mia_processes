@@ -15,6 +15,14 @@ fMRI model specification for GLM analysis.
 
 **Inputs parameters:**
 
+- *out_dir_name*
+    Out directory name (a string, default is "stats").
+    This directory will be created in a the folder "project/data/derived_data/subjectName_data".
+
+    :
+
+      ex. "stats"
+
 - *timing_units <=> timing.units* [#label]_
     Units for specification of events or blocks onsets. One of 'scans' or 'secs'.
 
