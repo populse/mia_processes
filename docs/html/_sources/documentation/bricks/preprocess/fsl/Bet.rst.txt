@@ -39,7 +39,7 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *mask* (a boolean, optional, default value is True)
     Create binary mask image. (Maps to a command-line argument: -m.)
-   
+
 
     ::
 
@@ -68,7 +68,7 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *outline* (a boolean, optional, default value is False)
     Create surface outline image. (Maps to a command-line argument: -o.)
-   
+
 
     ::
 
@@ -83,7 +83,7 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *frac* (a float, optional, default value is 0.5)
     Fractional intensity threshold. (Maps to a command-line argument: -f)
-    
+
 
     ::
 
@@ -91,61 +91,61 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *vertical_gradient* (a float, optional, default value is 0.0)
     Vertical gradient in fractional intensity threshold (-1, 1). (Maps to a command-line argument: -g)
-    
+
 
     ::
 
       ex. 0.0
 
 - *functional* (a boolean, optional, default value is False)
-    Apply to 4D fMRI data. (Maps to a command-line argument: -F.) 
+    Apply to 4D fMRI data. (Maps to a command-line argument: -F.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
       ex. False
 
 - *padding* (a boolean, optional, default value is False)
-    Improve BET if FOV is very small in Z (by temporarily padding end slices) (Maps to a command-line argument: -Z.) 
+    Improve BET if FOV is very small in Z (by temporarily padding end slices) (Maps to a command-line argument: -Z.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
       ex. False
 
 - *reduce_biais* (a boolean, optional, default value is False)
-    Bias field and neck cleanup. (Maps to a command-line argument: -B.) 
+    Bias field and neck cleanup. (Maps to a command-line argument: -B.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
       ex. False
 
 - *remove_eyes* (a boolean, optional, default value is False)
-    Eye & optic nerve cleanup (can be useful in SIENA) (Maps to a command-line argument: -S.) 
+    Eye & optic nerve cleanup (can be useful in SIENA) (Maps to a command-line argument: -S.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
       ex. False
 
 - *robust* (a boolean, optional, default value is False)
-    Robust brain centre estimation (iterates BET several times). (Maps to a command-line argument: -R.) 
+    Robust brain centre estimation (iterates BET several times). (Maps to a command-line argument: -R.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
       ex. False
 
 - *surfaces* (a boolean, optional, default value is False)
-    Run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations). (Maps to a command-line argument: -A.) 
+    Run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations). (Maps to a command-line argument: -A.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
-    
+
 
     ::
 
@@ -155,7 +155,7 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *radius* (a integer, optional)
     Head radius in mm . (Maps to a command-line argument: -r %d.)
-    
+
 
     ::
 
@@ -163,14 +163,14 @@ By default, only the brain extraction is done, but there are severals options to
 
 - *center* (a list of at most 3 items which are an integer, optional)
     Center of gravity in voxels. (Maps to a command-line argument: -c %s.)
-    
+
 
     ::
 
       ex. [1, 1, 1]
 
 - *t2_guided* (a string representing an existing file, optional)
-    R As with creating surfaces, when also feeding in non-brain-extracted T2 (includes registrations). (Maps to a command-line argument: -A2.) 
+    R As with creating surfaces, when also feeding in non-brain-extracted T2 (includes registrations). (Maps to a command-line argument: -A2.)
     Mutually exclusive with inputs: functional, reduce_bias, robust, padding, remove_eyes, surfaces, t2_guided.
 
     ::

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+5a45c6e4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+5a45c6e4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -2544,19 +2544,18 @@
 
             <span class="c1"># Read CoolTerm capture log</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">):</span>
-                <span class="c1"># TODO: Not yet tested</span>
+                <span class="c1"># tested: OK</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data from CoolTerm application detected ...&quot;</span><span class="p">)</span>
-                <span class="c1"># Process data and construct phys_trig_data dictionary</span>
-                <span class="c1"># ...</span>
+
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">physio_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
                     <span class="n">lines</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
-                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-
-                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
-                    <span class="n">line_data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_data</span><span class="p">)</span>
-
+                <span class="c1"># Replacing multiple delimiters with single delimiter</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[, \t]+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span>
+                <span class="p">]</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                 <span class="p">(</span>
                     <span class="n">comp_date</span><span class="p">,</span>
                     <span class="n">comp_time</span><span class="p">,</span>
@@ -2586,21 +2585,13 @@
                 <span class="p">)</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span>
 
                 <span class="c1"># Convert sample start and end times to seconds since midnight</span>
-                <span class="n">monitortime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                    <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">monitor_time</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">monitortime</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="mi">3600</span> <span class="o">*</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="n">monitortime</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="k">def</span> <span class="nf">time_to_seconds</span><span class="p">(</span><span class="n">time_str</span><span class="p">):</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Convert time in seconds&quot;&quot;&quot;</span>
+                    <span class="n">hours</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">time_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="mi">3600</span> <span class="o">*</span> <span class="n">hours</span> <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">minutes</span> <span class="o">+</span> <span class="n">seconds</span>
+
                 <span class="n">sampletime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                    <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">comp_time</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">sampletime</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="mi">3600</span> <span class="o">*</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="n">sampletime</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+                    <span class="p">[</span><span class="n">time_to_seconds</span><span class="p">(</span><span class="n">time_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">time_str</span> <span class="ow">in</span> <span class="n">comp_time</span><span class="p">]</span>
                 <span class="p">)</span>
                 <span class="n">keep_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
@@ -2615,7 +2606,7 @@
                 <span class="n">ETCO2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ETCO2</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
                 <span class="n">SpO2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">SpO2</span><span class="p">)[</span><span class="n">keep_idx</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
-                <span class="c1"># Transfer data to structure</span>
+                <span class="c1"># Transfer data to phys_trig_data dictionary</span>
                 <span class="n">phys_trig_data</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s2">&quot;HR&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;indx&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">HR</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span>

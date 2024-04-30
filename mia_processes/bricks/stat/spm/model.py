@@ -57,6 +57,8 @@ from traits.api import Undefined
 # mia_processes import
 from mia_processes.utils import get_dbFieldValue
 
+EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
+
 
 class EstimateContrast(ProcessMIA):
     """
@@ -85,6 +87,7 @@ class EstimateContrast(ProcessMIA):
         spm_mat_file_desc = (
             "SPM.mat file (a pathlike object or string representing a file)"
         )
+        out_dir_name_desc = "Out directory name"
         T_contrast_names_desc = "Name of T contrasts (a list of string)"
         T_condition_names_desc = (
             "Conditions information (a list of list of string)"
@@ -121,6 +124,13 @@ class EstimateContrast(ProcessMIA):
         self.add_trait(
             "spm_mat_file",
             File(output=False, copyfile=True, desc=spm_mat_file_desc),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "stats", output=False, optional=True, des=out_dir_name_desc
+            ),
         )
 
         self.add_trait(
@@ -392,12 +402,22 @@ class EstimateContrast(ProcessMIA):
                         )
                         return self.make_initResult()
 
+                    if self.out_dir_name is None:
+                        print(
+                            "\nEstimateContrast brick initialisation failed. "
+                            "Please, fill 'out_dir_name'  parameter as "
+                            "'SPM.mat' file is not already in a folder ..."
+                        )
+                        return self.make_initResult()
+
                     out_directory = os.path.join(
-                        self.output_directory, sub_name + "_data"
+                        self.output_directory,
+                        sub_name + "_data",
+                        self.out_dir_name,
                     )
 
                     if not os.path.exists(out_directory):
-                        os.mkdir(out_directory)
+                        os.makedirs(out_directory)
 
                 self.output_directory = out_directory
 
@@ -599,6 +619,7 @@ class EstimateModel(ProcessMIA):
             "The SPM.mat file that contains the design "
             "specification (a file object)"
         )
+        out_dir_name_desc = "Out directory name"
         estimation_method_desc = "A dictionary : Classical: 1"
         write_residuals_desc = "Write individual residual images (a boolean)"
         version_desc = "Version of spm (a string)"
@@ -699,6 +720,13 @@ class EstimateModel(ProcessMIA):
         self.add_trait(
             "spm_mat_file",
             File(output=False, optional=False, desc=spm_mat_file_desc),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "stats", output=False, optional=True, des=out_dir_name_desc
+            ),
         )
 
         # EstimateModel brick only works for classical method
@@ -975,12 +1003,22 @@ class EstimateModel(ProcessMIA):
                         )
                         return self.make_initResult()
 
+                    if self.out_dir_name is None:
+                        print(
+                            "\nEstimateContrast brick initialisation failed. "
+                            "Please, fill 'out_dir_name'  parameter as "
+                            "'SPM.mat' file is not already in a folder ..."
+                        )
+                        return self.make_initResult()
+
                     out_directory = os.path.join(
-                        self.output_directory, sub_name + "_data"
+                        self.output_directory,
+                        sub_name + "_data",
+                        self.out_dir_name,
                     )
 
                     if not os.path.exists(out_directory):
-                        os.mkdir(out_directory)
+                        os.makedirs(out_directory)
                 self.output_directory = out_directory
             else:
                 print(
@@ -1261,6 +1299,7 @@ class Level1Design(ProcessMIA):
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
+        out_dir_name_desc = "Out directory name"
         timing_units_desc = "One of 'scans' or 'secs'"
         interscan_interval_desc = "TR in secs (a float)"
         microtime_resolution_desc = (
@@ -1393,6 +1432,12 @@ class Level1Design(ProcessMIA):
         )
 
         # Inputs traits
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "stats", output=False, optional=True, des=out_dir_name_desc
+            ),
+        )
         self.add_trait(
             "timing_units",
             traits.Enum(
@@ -1995,7 +2040,8 @@ class Level1Design(ProcessMIA):
 
             dir_name = ""
             subjects_names = []
-            for idx_session in range(len(self.sess_scans)):
+            # files_names = ""
+            for idx_session, scan in enumerate(self.sess_scans):
                 sub_name = get_dbFieldValue(
                     self.project, self.sess_scans[idx_session], "PatientName"
                 )
@@ -2014,10 +2060,10 @@ class Level1Design(ProcessMIA):
             if self.output_directory:
                 # Create a directory for this analysis
                 out_directory = os.path.join(
-                    self.output_directory, dir_name + "data"
+                    self.output_directory, dir_name + "data", self.out_dir_name
                 )
                 if not os.path.exists(out_directory):
-                    os.mkdir(out_directory)
+                    os.makedirs(out_directory)
                 self.process.output_directory = out_directory
                 self.dict4runtime["out_directory"] = out_directory
             else:
