@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>EstimateModel brick &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <title>EstimateModel brick &#8212; mia_processes 2.6.1-dev+b384b856 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -17,7 +17,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+b384b856 documentation</span></a></h1>
         <h2 class="heading"><span>EstimateModel brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -71,6 +71,18 @@ It is strongly recommended to use the Mia V1 controller with this brick (see: Fi
 </ul>
 <p><strong>Optional inputs parameters with a default value:</strong></p>
 <ul>
+<li><dl>
+<dt><em>out_dir_name</em></dt><dd><p>Out directory name (a string, default is “stats”).
+It will be used only if the SPM.mat file is not already in “project/data/derived_data/subjectName_data”
+(for example, an SPM.mat file added in the database with the import or download button).
+This directory will be created in a the folder “project/data/derived_data/subjectName_data”.</p>
+<p>:</p>
+<blockquote>
+<div><p>ex. “stats”</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
 <li><dl>
 <dt><em>estimation_method</em> &lt;=&gt; method (a dictionary, optional, default value is {‘Classical’: 1}):</dt><dd><dl class="simple">
 <dt>Estimation procedures for fMRI models:</dt><dd><ul class="simple">

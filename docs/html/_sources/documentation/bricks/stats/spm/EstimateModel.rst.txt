@@ -35,6 +35,16 @@ Bayesian methods are not currently implemented in this brick. If you need to use
 
 **Optional inputs parameters with a default value:**
 
+- *out_dir_name*
+    Out directory name (a string, default is "stats").
+    It will be used only if the SPM.mat file is not already in "project/data/derived_data/subjectName_data"
+    (for example, an SPM.mat file added in the database with the import or download button).
+    This directory will be created in a the folder "project/data/derived_data/subjectName_data".
+
+    :
+
+      ex. "stats"
+
 - *estimation_method* <=> method (a dictionary, optional, default value is {‘Classical’: 1}):
     Estimation procedures for fMRI models:
         - Classical: model parameters are estimated using Restricted Maximum Likelihood (ReML). This correlation can be specified using either an AR(1) or an Independent and Identically Distributed (IID) error model (options chosen at the `model specification stage <bricks/stats/spm/Level1Design.html>`_)

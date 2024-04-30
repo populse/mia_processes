@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Level1Design brick &#8212; mia_processes 2.6.1-dev+8d666fdb documentation</title>
+    <title>Level1Design brick &#8212; mia_processes 2.6.1-dev+b384b856 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -17,7 +17,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+8d666fdb documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+b384b856 documentation</span></a></h1>
         <h2 class="heading"><span>Level1Design brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -51,6 +51,16 @@
 <h2>fMRI model specification for GLM analysis.<a class="headerlink" href="#fmri-model-specification-for-glm-analysis" title="Permalink to this headline">¶</a></h2>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
+<li><dl>
+<dt><em>out_dir_name</em></dt><dd><p>Out directory name (a string, default is “stats”).
+This directory will be created in a the folder “project/data/derived_data/subjectName_data”.</p>
+<p>:</p>
+<blockquote>
+<div><p>ex. “stats”</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
 <li><dl>
 <dt><em>timing_units &lt;=&gt; timing.units</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>Units for specification of events or blocks onsets. One of ‘scans’ or ‘secs’.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">secs</span>
