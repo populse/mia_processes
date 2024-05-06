@@ -2236,7 +2236,7 @@ class Report:
         # axial fig
         norm_anat_fig_rows = 3
         norm_anat_fig_cols = 5
-        norm_anat_inf_slice_start = 45
+        norm_anat_inf_slice_start = 55
         norm_anat_slices_gap = 5
         norm_func_fig_rows = 4
         norm_func_fig_cols = 5

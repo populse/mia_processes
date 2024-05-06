@@ -2682,7 +2682,7 @@ class ReportGE2REC(ProcessMIA):
             spmT_reco=self.spmT_reco,
             spmT_recall=self.spmT_recall,
             spmT_vmin=self.spmT_vmin,
-            spmT_vmax=self.spmT_vmin,
+            spmT_vmax=self.spmT_vmax,
             output_directory=self.output_directory,
         )
 

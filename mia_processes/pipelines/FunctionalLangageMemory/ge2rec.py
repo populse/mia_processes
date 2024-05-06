@@ -40,31 +40,18 @@ class Ge2rec(Pipeline):
         )
         self.add_process(
             "1_preprocessing",
-            "mia_processes.pipelines.preprocess.bold_spatial_preprocessing1."
-            "Bold_spatial_preprocessing1",
+            "mia_processes.pipelines.preprocess.bold_spatial_preprocessing3."
+            "Bold_spatial_preprocessing3",
         )
         self.nodes["1_preprocessing"].process.nodes_activation = {
             "newsegment": True,
             "realign": True,
-            "list_duplicate": True,
+            "slicetiming": True,
             "normalize12_1": True,
             "normalize12_2": True,
             "smooth": True,
             "coregister": True,
         }
-        self.nodes["1_preprocessing"].process.nodes[
-            "normalize12_1"
-        ].process.write_voxel_sizes = [1.0, 1.0, 1.0]
-        self.nodes["1_preprocessing"].process.nodes[
-            "normalize12_2"
-        ].process.write_voxel_sizes = [3.0, 3.0, 3.0]
-        self.nodes["1_preprocessing"].process.trait(
-            "coregistered_source"
-        ).userlevel = 1
-        self.export_parameter(
-            "1_preprocessing", "coregistered_source", is_optional=False
-        )
-
         self.add_process(
             "filter_files_list_1",
             "mia_processes.bricks.tools.tools.Filter_Files_List",
@@ -127,11 +114,11 @@ class Ge2rec(Pipeline):
         self.nodes["2a_gene_level1design"].process.sess_hpf = [128.0]
         self.add_process(
             "2b_gene_estimateModel",
-            "mia_processes.bricks.stat.spm.model." "EstimateModel",
+            "mia_processes.bricks.stat.spm.model.EstimateModel",
         )
         self.add_process(
             "2c_gene_estimateContrast",
-            "mia_processes.bricks.stat.spm.model." "EstimateContrast",
+            "mia_processes.bricks.stat.spm.model.EstimateContrast",
         )
         self.nodes["2c_gene_estimateContrast"].process.T_contrast_names = [
             "GENE-CONTROL",
@@ -294,11 +281,11 @@ class Ge2rec(Pipeline):
         self.nodes["3a_reco_level1design"].process.sess_hpf = [128.0]
         self.add_process(
             "3b_reco_estimateModel",
-            "mia_processes.bricks.stat.spm.model." "EstimateModel",
+            "mia_processes.bricks.stat.spm.model.EstimateModel",
         )
         self.add_process(
             "3c_reco_estimateContrast",
-            "mia_processes.bricks.stat.spm.model." "EstimateContrast",
+            "mia_processes.bricks.stat.spm.model.EstimateContrast",
         )
         self.nodes["3c_reco_estimateContrast"].process.T_contrast_names = [
             "OLD-CONTROL",
@@ -498,28 +485,28 @@ class Ge2rec(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "inputs": (-900.0, -260),
-            "files_to_list": (-686, -158),
-            "1_preprocessing": (-700.0, -314),
-            "filter_files_list_1": (-65, -671.8044843685886),
-            "filter_files_list_2": (-65, -302.38649739872164),
-            "filter_files_list_3": (-65, 260.67801499889794),
-            "filter_files_list_4": (-65, 647.9710658544036),
-            "filter_files_list_5": (-65, 1185.7125710807024),
-            "filter_files_list_6": (-465, 1580.4535652218892),
-            "make_a_list_1": (312.31121725366285, -280.0518231067058),
-            "make_a_list_2": (338.23780514863375, 418.7650015170469),
-            "make_a_list_3": (239.47112906454464, 2239.654481700065),
-            "2a_gene_level1design": (30, -864),
-            "2b_gene_estimateModel": (425, -864),
-            "2c_gene_estimateContrast": (800, -864),
-            "3a_reco_level1design": (30, 37),
-            "3b_reco_estimateModel": (425, 37),
-            "3c_reco_estimateContrast": (800, 37),
-            "4a_recall_level1design": (30, 937),
-            "4b_recall_estimateModel": (425, 937),
-            "4c_recall_estimateContrast": (800, 937),
-            "outputs": (1300, 37),
+            "inputs": (-880.0, 30),
+            "files_to_list": (-663, 30),
+            "1_preprocessing": (-510.0, 30),
+            "filter_files_list_1": (-98, -886),
+            "filter_files_list_2": (-98, -756),
+            "make_a_list_1": (-98, -636),
+            "filter_files_list_3": (-98, 30),
+            "filter_files_list_4": (-98, 150),
+            "make_a_list_2": (-98, 280),
+            "filter_files_list_5": (-98, 1030),
+            "filter_files_list_6": (-98, 1150),
+            "make_a_list_3": (-98, 1270),
+            "2a_gene_level1design": (150, -886),
+            "2b_gene_estimateModel": (550, -886),
+            "2c_gene_estimateContrast": (900, -886),
+            "3a_reco_level1design": (150, 30),
+            "3b_reco_estimateModel": (550, 30),
+            "3c_reco_estimateContrast": (900, 30),
+            "4a_recall_level1design": (150, 1030),
+            "4b_recall_estimateModel": (550, 1030),
+            "4c_recall_estimateContrast": (900, 1030),
+            "outputs": (1300, 30),
         }
 
         # nodes dimensions
