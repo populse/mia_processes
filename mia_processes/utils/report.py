@@ -178,10 +178,10 @@ class Report:
 
         elif "CVR" in kwargs:
             self.make_report = self.co2_inhal_cvr_make_report
-            ref_exp = {
-                "norm_anat": self.norm_anat,
-                "norm_func": self.norm_func,
-            }
+            # ref_exp = {
+            #     "norm_anat": self.norm_anat,
+            #     "norm_func": self.norm_func,
+            # }
             self.title = (
                 "<font size=18><b>{0} report: </b>{1}"
                 "</font>".format(
@@ -214,7 +214,7 @@ class Report:
                 )
             ]
             infos.insert(4, today_date)
-            infos.insert(5, ref_exp)
+            # infos.insert(5, ref_exp)
             infos.insert(10, "Undefined")
 
             headers = [
@@ -223,7 +223,7 @@ class Report:
                 "STUDY NAME",
                 "EXAMINATION DATE",
                 "CVR CALCULATION DATE",
-                "NAME OF THE INPUT DATA",
+                # "NAME OF THE INPUT DATA",
                 "PATIENT REFERENCE",
                 "PATIENT SEX",
                 "PATIENT AGE",
@@ -518,11 +518,11 @@ class Report:
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 18 * mm))
         self.report.append(Paragraph(self.title, self.styles["Center"]))
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(self.cover_data)
-        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(
             Paragraph(self.textDisclaimer, self.styles["Justify"])
         )
