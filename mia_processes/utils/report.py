@@ -215,7 +215,9 @@ class Report:
             ]
             infos.insert(4, today_date)
             # infos.insert(5, ref_exp)
-            infos.insert(10, "Undefined")
+            # Hard-coded, we know the ref data used for IL in the
+            # CVR CO2 pipeline:
+            infos.insert(10, "CVR_temoins_IL")
 
             headers = [
                 "SITE",
@@ -526,7 +528,6 @@ class Report:
         self.report.append(
             Paragraph(self.textDisclaimer, self.styles["Justify"])
         )
-        # self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(PageBreak())
 
         # page 2 - Anatomical MRI - Acq & Post-pro parameters############
@@ -549,13 +550,16 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 5 * mm))
-        # TODO: We don't currently have the "Acquisition nbr" tag in the raw
-        #       anat data. Would you like this to come from mri_conv?
+        acq_num = self.dict4runtime["norm_anat"]["AcquisitionNumber"]
+
+        if isinstance(acq_num, list):
+            acq_num = acq_num[0]
+
         self.report.append(
             Paragraph(
-                f"<font size=11> <b> Protocol name / Acquisition nr: </b> "
+                f"<font size=11> <b> Protocol name / Acquisition nbr: </b> "
                 f"</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
-                f"{self.dict4runtime['norm_anat']['Acquisition nbr']}",
+                f"{acq_num}",
                 self.styles["Bullet1"],
             )
         )
@@ -593,29 +597,10 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
-
-        if not sl_thick == "Undefined":
-            sl_thick = sl_thick[0]
-
-        st_end_sl = self.dict4runtime["norm_anat"]["Start/end slice"]
-
-        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
-            st_end_sl = 0.0
-
-        self.report.append(
-            Paragraph(
-                f"<font size=11> <b> Slice thickness "
-                f"/ Slice gap [mm]:</b> "
-                f"</font> {sl_thick} / {st_end_sl}",
-                self.styles["Bullet2"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 1 * mm))
         fov = self.dict4runtime["norm_anat"]["FOV"]
 
         if fov == "Undefined":
-            fov = ["Undefined"] * 3
+            fov = ["Undefined"] * d_dim[0]
 
         if all(isinstance(elt, (int, float)) for elt in fov):
             fov = [round(elt, 1) for elt in fov]
@@ -623,16 +608,51 @@ class Report:
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
-                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                f"{' / '.join(str(fov[i]) for i in range(d_dim[0]))}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        # TODO: I don't know how to obtain the scan resolution parameter yet
+        num_sli = self.dict4runtime["norm_anat"]["MaxNumOfSlices"]
+
+        if isinstance(num_sli, list):
+            num_sli = num_sli[0]
+
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Scan resolution  "
-                "(x / y):</b> </font> Undefined",
+                f"<font size=11> <b> Number of slices:</b> "
+                f"</font> {num_sli}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
+        sl_gap = self.dict4runtime["norm_anat"]["SliceGap"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        if not sl_gap == "Undefined":
+            sl_gap = sl_gap[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {sl_gap}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_res = self.dict4runtime["norm_anat"]["ScanResolution"]
+
+        if scan_res == "Undefined":
+            scan_res = ["Undefined"] * 2
+
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b> Scan resolution  (x / y):</b> </font> "
+                f"{' / '.join(str(scan_res[i]) for i in range(2))}",
                 self.styles["Bullet2"],
             )
         )
@@ -698,12 +718,15 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        # TODO: I don't know how to obtain the acquisition duration
-        #       parameter yet
+        scan_dur = self.dict4runtime["norm_anat"]["ScanDuration"]
+
+        if isinstance(scan_dur, list):
+            scan_dur = scan_dur[0]
+
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Acquisition duration [s]:"
-                "</b> </font> Undefined",
+                f"<font size=11> <b> Acquisition duration [s]:</b> "
+                f"</font> {scan_dur}",
                 self.styles["Bullet2"],
             )
         )
@@ -837,10 +860,10 @@ class Report:
         #       anat data. Would you like this to come from mri_conv?
         self.report.append(
             Paragraph(
-                f"<font size=11> <b> Protocol name / Acquisition nr: "
+                f"<font size=11> <b> Protocol name / Acquisition nbr: "
                 f"</b> </font> "
                 f"{self.dict4runtime['norm_func']['ProtocolName']} / "
-                f"{self.dict4runtime['norm_func']['Acquisition nbr']}",
+                f"{self.dict4runtime['norm_func']['AcquisitionNumber'][0]}",
                 self.styles["Bullet1"],
             )
         )
@@ -989,8 +1012,8 @@ class Report:
         #       parameter yet
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Acquisition duration [s]:"
-                "</b> </font> Undefined",
+                "<font size=11> <b> Acquisition duration [s]:</b> "
+                f"</font> {self.dict4runtime['norm_func']['ScanDuration'][0]}",
                 self.styles["Bullet2"],
             )
         )
