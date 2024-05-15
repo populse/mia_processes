@@ -196,8 +196,8 @@ class Report:
                 "<font size=30><b>V</b></font>"
                 "<font size=11>ascular</font>"
                 "<font size=30><b> R</b></font>"
-                "<font size=11>reactivity <br/></font>"
-                "<font size=7>with CO<sub>2</sub> inhalation "
+                "<font size=11>eactivity<br/></font>"
+                "<font size=7>assessed using CO<sub>2</sub> inhalation "
                 "as a physiological challenge</font>"
             )
             infos = [
@@ -514,7 +514,7 @@ class Report:
 
         self.report.append(self.image_cov)
         # width, height
-        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(Paragraph(self.header_title, self.styles["Center"]))
         self.report.append(Spacer(0 * mm, 10 * mm))
         line = ReportLine(150)
@@ -589,26 +589,30 @@ class Report:
         d_dim = self.dict4runtime["norm_anat"][
             "Dataset dimensions (Count, X,Y,Z,T...)"
         ]
+
+        if isinstance(d_dim, list):
+            d_dim = d_dim[1:]
+
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Dataset dimension:</b> "
-                f"</font> {d_dim[1:]}",
+                f"</font> {d_dim}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         fov = self.dict4runtime["norm_anat"]["FOV"]
 
-        if fov == "Undefined":
-            fov = ["Undefined"] * d_dim[0]
-
         if all(isinstance(elt, (int, float)) for elt in fov):
             fov = [round(elt, 1) for elt in fov]
 
+        if isinstance(fov, list):
+            fov = " / ".join(map(str, fov))
+
         self.report.append(
             Paragraph(
-                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
-                f"{' / '.join(str(fov[i]) for i in range(d_dim[0]))}",
+                f"<font size=11><b> FOV (ap / fh / rl) [mm]:</b></font> "
+                f"{fov}",
                 self.styles["Bullet2"],
             )
         )
@@ -629,10 +633,10 @@ class Report:
         sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
         sl_gap = self.dict4runtime["norm_anat"]["SliceGap"]
 
-        if not sl_thick == "Undefined":
+        if isinstance(sl_thick, list):
             sl_thick = sl_thick[0]
 
-        if not sl_gap == "Undefined":
+        if isinstance(sl_gap, list):
             sl_gap = sl_gap[0]
 
         self.report.append(
@@ -646,13 +650,13 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         scan_res = self.dict4runtime["norm_anat"]["ScanResolution"]
 
-        if scan_res == "Undefined":
-            scan_res = ["Undefined"] * 2
+        if isinstance(scan_res, list):
+            scan_res = " / ".join(map(str, scan_res))
 
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Scan resolution  (x / y):</b> </font> "
-                f"{' / '.join(str(scan_res[i]) for i in range(2))}",
+                "<font size=11><b> Scan resolution  (x / y):</b></font> "
+                f"{scan_res}",
                 self.styles["Bullet2"],
             )
         )
@@ -661,16 +665,16 @@ class Report:
             "Grid spacings (X,Y,Z,T,...)"
         ]
 
-        if vox_size == "Undefined":
-            vox_size = ["Undefined"] * 3
-
         if all(isinstance(elt, (int, float)) for elt in vox_size):
             vox_size = [round(elt, 1) for elt in vox_size]
+
+        if isinstance(vox_size, list):
+            vox_size = " / ".join(map(str, vox_size))
 
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
-                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                f"</b> </font> {vox_size}",
                 self.styles["Bullet2"],
             )
         )
@@ -686,29 +690,34 @@ class Report:
         te = self.dict4runtime["norm_anat"]["EchoTime"]
         flipang = self.dict4runtime["norm_anat"]["FlipAngle"]
 
-        if flipang != "Undefined":
+        if isinstance(flipang, list):
             flipang = round(flipang[0], 1)
 
-        if te != "Undefined":
+        if isinstance(te, list):
             te = round(te[0], 1)
 
-        if tr != "Undefined":
+        if isinstance(tr, list):
             tr = round(tr[0], 1)
 
         self.report.append(
             Paragraph(
-                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f"<font size=11> <b> TR [ms] / TE [ms] / flip angle"
                 f" [deg]:</b> </font> {tr} / {te} / {flipang}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
 
-        if len(d_dim) == 4:
+        if len(d_dim) == 3:
             dyn_nb = 1
 
-        elif len(d_dim) == 5:
+        elif len(d_dim) == 4:
             dyn_nb = d_dim[-1]
+
+        else:
+            # TODO: What do we do for 5D. Here if d_dim == "Undefined" or if
+            #       d_dim > 4, then dyn_nb = "Undefined"
+            dyn_nb = "Undefined"
 
         self.report.append(
             Paragraph(
@@ -749,7 +758,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Spatial " "normalization:</b> </font> Yes",
+                "<font size=11> <b> Spatial normalization:</b> </font> Y",
                 self.styles["Bullet2"],
             )
         )
@@ -765,19 +774,19 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        vox_size = self.dict4runtime["norm_anat"]["Voxel sizes"]
+        f_vox_size = self.dict4runtime["norm_anat"]["Voxel sizes"]
 
-        if vox_size == "Undefined":
-            vox_size = ["Undefined"] * 3
+        if all(isinstance(elt, (int, float)) for elt in f_vox_size):
+            f_vox_size = [round(elt, 1) for elt in f_vox_size]
 
-        if all(isinstance(elt, (int, float)) for elt in vox_size):
-            vox_size = [round(elt, 1) for elt in vox_size]
+        if isinstance(f_vox_size, list):
+            f_vox_size = " / ".join(map(str, f_vox_size))
 
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Final voxel size "
                 f"(x / y / z) [mm]:</b> "
-                f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                f"</font> {f_vox_size}",
                 self.styles["Bullet2"],
             )
         )
@@ -856,14 +865,17 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 5 * mm))
-        # TODO: We don't currently have the "Acquisition nbr" tag in the raw
-        #       anat data. Would you like this to come from mri_conv?
+        acq_num = self.dict4runtime["norm_func"]["AcquisitionNumber"]
+
+        if isinstance(acq_num, list):
+            acq_num = acq_num[0]
+
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Protocol name / Acquisition nbr: "
                 f"</b> </font> "
                 f"{self.dict4runtime['norm_func']['ProtocolName']} / "
-                f"{self.dict4runtime['norm_func']['AcquisitionNumber'][0]}",
+                f"{acq_num}",
                 self.styles["Bullet1"],
             )
         )
@@ -893,74 +905,98 @@ class Report:
         d_dim = self.dict4runtime["norm_func"][
             "Dataset dimensions (Count, X,Y,Z,T...)"
         ]
+
+        if isinstance(d_dim, list):
+            d_dim = d_dim[1:]
+
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Dataset dimension:</b> "
-                f"</font> {d_dim[1:-1]}",
-                self.styles["Bullet2"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        sl_thick = self.dict4runtime["norm_func"]["SliceThickness"]
-
-        if not sl_thick == "Undefined":
-            sl_thick = sl_thick[0]
-
-        st_end_sl = self.dict4runtime["norm_func"]["Start/end slice"]
-
-        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
-            st_end_sl = 0.0
-
-        self.report.append(
-            Paragraph(
-                f"<font size=11> <b> Slice thickness "
-                f"/ Slice gap [mm]:</b> "
-                f"</font> {sl_thick} / {st_end_sl}",
+                f"</font> {d_dim}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         fov = self.dict4runtime["norm_func"]["FOV"]
 
-        if fov == "Undefined":
-            fov = ["Undefined"] * 3
-
         if all(isinstance(elt, (int, float)) for elt in fov):
             fov = [round(elt, 1) for elt in fov]
 
+        if isinstance(fov, list):
+            fov = " / ".join(map(str, fov))
+
         self.report.append(
             Paragraph(
-                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
-                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                f"<font size=11><b> FOV (ap / fh / rl) [mm]:</b></font> "
+                f"{fov}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        # TODO: I don't know how to obtain the scan resolution parameter yet
+        num_sli = self.dict4runtime["norm_func"]["MaxNumOfSlices"]
+
+        if isinstance(num_sli, list):
+            num_sli = num_sli[0]
+
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Scan resolution  "
-                "(x / y):</b> </font> Undefined",
+                f"<font size=11> <b> Number of slices:</b> "
+                f"</font> {num_sli}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        raw_func_vox_size = self.dict4runtime["norm_func"][
+        sl_thick = self.dict4runtime["norm_func"]["SliceThickness"]
+        sl_gap = self.dict4runtime["norm_func"]["SliceGap"]
+
+        if isinstance(sl_thick, list):
+            sl_thick = sl_thick[0]
+
+        if isinstance(sl_gap, list):
+            sl_gap = sl_gap[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {sl_gap}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_res = self.dict4runtime["norm_func"]["ScanResolution"]
+
+        if isinstance(scan_res, list):
+            scan_res = " / ".join(map(str, scan_res))
+
+        self.report.append(
+            Paragraph(
+                "<font size=11><b> Scan resolution  (x / y):</b></font> "
+                f"{scan_res}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        raw_func_vox_size_orig = self.dict4runtime["norm_func"][
             "Grid spacings (X,Y,Z,T,...)"
         ]
+        if all(
+            isinstance(elt, (int, float)) for elt in raw_func_vox_size_orig
+        ):
+            raw_func_vox_size = [
+                round(elt, 1) for elt in raw_func_vox_size_orig
+            ]
 
-        if raw_func_vox_size == "Undefined":
-            raw_func_vox_size = ["Undefined"] * 3
+        if isinstance(raw_func_vox_size, list):
+            raw_func_vox_size = " / ".join(map(str, raw_func_vox_size))
 
-        if all(isinstance(elt, (int, float)) for elt in raw_func_vox_size):
-            raw_func_vox_size = [round(elt, 1) for elt in raw_func_vox_size]
+        else:
+            raw_func_vox_size = "Undefined"
 
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Voxel size (x / y / z) [mm]:</b> "
-                f"</font> {raw_func_vox_size[0]} "
-                f"/ {raw_func_vox_size[1]} "
-                f"/ {raw_func_vox_size[2]}",
+                f"</font> {raw_func_vox_size} ",
                 self.styles["Bullet2"],
             )
         )
@@ -976,13 +1012,13 @@ class Report:
         te = self.dict4runtime["norm_func"]["EchoTime"]
         flipang = self.dict4runtime["norm_func"]["FlipAngle"]
 
-        if flipang != "Undefined":
+        if isinstance(flipang, list):
             flipang = round(flipang[0], 1)
 
-        if te != "Undefined":
+        if isinstance(te, list):
             te = round(te[0], 1)
 
-        if tr != "Undefined":
+        if isinstance(tr, list):
             tr = round(tr[0], 1)
 
         self.report.append(
@@ -994,11 +1030,16 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
 
-        if len(d_dim) == 4:
+        if len(d_dim) == 3:
             dyn_nb = 1
 
-        elif len(d_dim) == 5:
+        elif len(d_dim) == 4:
             dyn_nb = d_dim[-1]
+
+        else:
+            # TODO: What do we do for 5D. Here if d_dim == "Undefined" or if
+            #       d_dim > 4, then dyn_nb = "Undefined"
+            dyn_nb = "Undefined"
 
         self.report.append(
             Paragraph(
@@ -1008,18 +1049,19 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        # TODO: I don't know how to obtain the acquisition duration
-        #       parameter yet
+        scan_dur = self.dict4runtime["norm_func"]["ScanDuration"]
+
+        if isinstance(scan_dur, list):
+            scan_dur = scan_dur[0]
+
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Acquisition duration [s]:</b> "
-                f"</font> {self.dict4runtime['norm_func']['ScanDuration'][0]}",
+                f"<font size=11> <b> Acquisition duration [s]:</b> "
+                f"</font> {scan_dur}",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 2 * mm))
-        # TODO: I don't know how to obtain the CVR regressor (Individual or
-        #       Standard) parameter yet
         self.report.append(
             Paragraph(
                 "<font size=11> <b>Stimulus and performance</b> </font>",
@@ -1048,7 +1090,7 @@ class Report:
         #       value from the patient_info dictionary?
         self.report.append(
             Paragraph(
-                "<font size=11> <b>Stimulus:</b> </font> 8% CO<sub>2</sub>",
+                "<font size=11><b>Stimulus:</b></font> 8% CO<sub>2</sub>",
                 self.styles["Bullet2"],
             )
         )
@@ -1071,7 +1113,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size=11> <b> Spatial " "normalization:</b> </font> Yes",
+                "<font size=11> <b> Spatial normalization:</b> </font> Y",
                 self.styles["Bullet2"],
             )
         )
@@ -1087,19 +1129,19 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        vox_size = self.dict4runtime["norm_func"]["Voxel sizes"]
+        f_vox_size = self.dict4runtime["norm_func"]["Voxel sizes"]
 
-        if vox_size == "Undefined":
-            vox_size = ["Undefined"] * 3
+        if all(isinstance(elt, (int, float)) for elt in f_vox_size):
+            f_vox_size = [round(elt, 1) for elt in f_vox_size]
 
-        if all(isinstance(elt, (int, float)) for elt in vox_size):
-            vox_size = [round(elt, 1) for elt in vox_size]
+        if isinstance(f_vox_size, list):
+            f_vox_size = " / ".join(map(str, f_vox_size))
 
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Voxel size after normalization "
                 f"(x / z / y) [mm]:</b> "
-                f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                f"</font> {f_vox_size}",
                 self.styles["Bullet2"],
             )
         )
@@ -1108,17 +1150,16 @@ class Report:
             "FWHM (X, Y, Z) for Smooth"
         ]
 
-        if fwhm == "Undefined":
-            fwhm = ["Undefined"] * 3
-
         if all(isinstance(elt, (int, float)) for elt in fwhm):
             fwhm = [round(elt, 1) for elt in fwhm]
+
+        if isinstance(fwhm, list):
+            fwhm = " / ".join(map(str, fwhm))
 
         self.report.append(
             Paragraph(
                 f"<font size=11> <b>Spatial smoothing "
-                f"(fwhm) [mm]:</b> </font> {fwhm[0]} "
-                f"/ {fwhm[1]} / {fwhm[2]}",
+                f"(fwhm) [mm]:</b> </font> {fwhm}",
                 self.styles["Bullet2"],
             )
         )
@@ -1127,7 +1168,7 @@ class Report:
             Paragraph(
                 "<font size=11> <b>Head motion as "
                 "nuisance regressor in GLM:"
-                "</b> </font> Yes",
+                "</b> </font> Y",
                 self.styles["Bullet2"],
             )
         )
@@ -1136,7 +1177,7 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=11> <b>Artifact detection "
-                "tools (ART):</b> </font> No",
+                "tools (ART):</b> </font> N",
                 self.styles["Bullet2"],
             )
         )
@@ -1298,20 +1339,20 @@ class Report:
             if abs(minRot) > maxRot:
                 maxRotCheck = abs(minRot)
 
-            if "Undefined" not in raw_func_vox_size:
+            if raw_func_vox_size_orig != "Undefined":
                 # Mean x,y,z voxel dimension calculation.
                 traLim = (
                     (
-                        raw_func_vox_size[0]
-                        + raw_func_vox_size[1]
-                        + raw_func_vox_size[2]
+                        raw_func_vox_size_orig[0]
+                        + raw_func_vox_size_orig[1]
+                        + raw_func_vox_size_orig[2]
                     )
                     * 1
                     / 3
                 )
 
                 # maxRot for quality fixed to 2deg
-                # maxTra(nslation) for quality fixed to
+                # maxTranslation for quality fixed to
                 # mean x,y,z voxel dim (traLim)
                 if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
                     # 912px × 892px
