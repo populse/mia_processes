@@ -13,8 +13,9 @@ compute necessary values for reporting.
         - CarpetParcellation
         - ComputeDVARS
         - FramewiseDisplacement
-        - PlotSignalROI
+        - LateralizationIndexCurve
         - Mean_stdDev_calc
+        - PlotSignalROI
         - Result_collector
         - Spikes
 
@@ -123,6 +124,7 @@ from niworkflows.viz.plots import fMRIPlot
 from numpy.polynomial import Legendre
 
 # populse_mia import
+from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy.stats import kurtosis  # pylint: disable=E0611
 
@@ -1869,6 +1871,132 @@ class FramewiseDisplacement(ProcessMIA):
         )
 
 
+class LateralizationIndexCurve(ProcessMIA):
+    """
+    **
+
+    Please, see the complete documentation for the
+    `LateralizationIndexCurve brick in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/LateralizationIndexCurve.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(LateralizationIndexCurve, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = (
+            "Input image (a pathlike object or string representing a file)."
+        )
+        ROI_desc = "ROI to sue (a string among frontal or temporal)"
+
+        # Outputs description
+        out_png_desc = (
+            "Out file (a pathlike object or string representing a file)"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "ROI",
+            traits.List(
+                traits.Enum("temporal", "frontal"),
+                value=["temporal", "frontal"],
+                output=False,
+                optional=True,
+                desc=ROI_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_png",
+            traits.List(
+                File(), output=True, optional=False, desc=out_png_desc
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(LateralizationIndexCurve, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            if self.output_directory:
+                valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+                if not valid_ext:
+                    print(
+                        "LateralizationIndexCurve brick: "
+                        "The input image format is not recognized...!"
+                    )
+                    return
+                out_files = []
+                for roi in self.ROI:
+                    out_files.append(
+                        os.path.join(
+                            os.path.dirname(self.in_file),
+                            file_name + "_LI_" + roi + ".png",
+                        )
+                    )
+                if out_files:
+                    self.outputs["out_png"] = out_files
+                if self.outputs:
+                    for out_val in self.outputs["out_png"]:
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=out_val,
+                        )
+            else:
+                print(
+                    "LateralizationIndexCurve brick: "
+                    "No output_directory was found...!\n"
+                )
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(LateralizationIndexCurve, self).run_process_mia()
+
+        config = Config()
+        roi_path = os.path.join(config.get_resources_path(), "ROIs")
+        mask_right = os.path.join(roi_path, "LI-right.nii")
+        mask_left = os.path.join(roi_path, "LI-left.nii")
+
+        for i, roi in enumerate(self.ROI):
+            mask = os.path.join(roi_path, f"LI-{roi}-mask.nii")
+            lateralization_index_iter_curves(
+                self.in_file, mask, mask_right, mask_left, roi, self.out_png[i]
+            )
+
+
 class Mean_stdDev_calc(ProcessMIA):
     """
     *Makes the mean and standard deviation of parametric_maps*
@@ -3566,6 +3694,171 @@ def image_binary_dilation(in_mask, radius=2):
     from skimage.morphology import ball
 
     return ndi.binary_dilation(in_mask.astype(bool), ball(radius)).astype(int)
+
+
+def lateralization_index_iter_curves(
+    in_file, mask, mask_right, mask_left, roi_name, out_png
+):
+    """
+    Function to iteratively calculate lateralization indices.
+    Partial python adaptation of the LI-toolbox
+    (https://www.fil.ion.ucl.ac.uk/spm/ext/#LI)
+    (LI_iter.m)
+
+    :param string that represents a path in_file: SPMT filepath
+    :param string that represents a path mask: main inclusive mask filepath
+    :param string that represents a path mask_left: mask left filepath
+    :param string that represents a path mask_right: mask right filepath
+    :param string roi_name: main inclusive mask name
+    :param string that represents a out_png: out path
+
+    """
+    vol_data = np.asarray(nib.load(in_file).dataobj)
+    vol_mask = np.asarray(nib.load(mask).dataobj)
+    vol_mask_right = np.asarray(nib.load(mask_right).dataobj)
+    vol_mask_left = np.asarray(nib.load(mask_left).dataobj)
+
+    if (
+        (vol_mask_left.shape[0] != vol_data.shape[0])
+        or (vol_mask_left.shape[1] != vol_data.shape[1])
+        or (vol_mask_left.shape[2] != vol_data.shape[2])
+    ):
+        # Resample volume
+        print("Input data resample to mask data")
+        new_data = resample_to_img(in_file, mask_left)
+        vol_data_new = new_data.dataobj
+    else:
+        vol_data_new = vol_data
+
+    iteration = 20
+    mx = 0
+    min_cluster_size = 5
+    min_nb_voxel = 5
+
+    # Compute mask weighting factor
+    # (represent the relation of the volumes of the masks)
+    mwf = np.sum((vol_mask_left > 0.1) * (vol_mask > 0.1)) / np.sum(
+        (vol_mask_right > 0.1) * (vol_mask > 0.1)
+    )
+
+    indexes = []
+    thresholds = []
+    number_voxels_right = []
+    number_voxels_left = []
+
+    for j in range(1, iteration + 1):
+        # Get threshold
+        if j == 1:
+            thr = 0
+        else:
+            thr = (j - 1) * mx / iteration
+
+        vol_data_thr = np.where(vol_data_new > thr, vol_data_new, 0)
+        res_left = vol_data_thr * (vol_mask > 0.1) * (vol_mask_left > 0.1)
+        res_right = vol_data_thr * (vol_mask > 0.1) * (vol_mask_right > 0.1)
+        if j == 1:
+            # Update max voxel value in masked input image to get threshold
+            mx = np.max(res_left + res_right)
+
+        # Labelling
+        labels_right, num_right = nd.label(res_right)
+        labels_left, num_left = nd.label(res_left)
+        labels_right = np.sort(labels_right.ravel())
+        labels_right = labels_right[labels_right != 0]
+        labels_left = np.sort(labels_left.ravel())
+        labels_left = labels_left[labels_left != 0]
+
+        # Get number of voxels decision is based on
+        nvoxr = labels_right.size
+        nvoxl = labels_left.size
+        if nvoxl < min_nb_voxel or nvoxr < min_nb_voxel:
+            print(
+                f"WARNING, number of voxel for threshold {thr} "
+                "is below the required minium, abort iteration"
+            )
+            break
+        # Check if there is at least one cluster > min_cluster_size
+        cluster_left = 0
+        cluster_right = 0
+        for i in range(1, num_right + 1):
+            cluster = np.where(labels_right == i, labels_right, 0)
+            if np.sum(cluster) > min_cluster_size:
+                cluster_right = 1
+            if cluster_right == 1:
+                # only need one cluster
+                break
+        for i in range(1, num_left + 1):
+            cluster = np.where(labels_left == i, labels_left, 0)
+            if np.sum(cluster) > min_cluster_size:
+                cluster_left = 1
+            if cluster_left == 1:
+                # only need one cluster
+                break
+        if cluster_left == 0 or cluster_right == 0:
+            print(
+                f"WARNING, cluster size for threshold {thr} "
+                "is below the required minium, abort iteration"
+            )
+            break
+
+        # Compute Lateralization index
+        activation_left = np.sum(res_left)
+        activation_right = np.sum(res_right)
+
+        lateralization_index = (activation_left / mwf - activation_right) / (
+            activation_left / mwf + activation_right
+        )
+        thresholds.append(round(thr, 4))
+        indexes.append(round(lateralization_index, 4))
+        number_voxels_right.append(nvoxr)
+        number_voxels_left.append(nvoxl)
+
+    # Plot LI
+    fig = plt.figure(figsize=(12, 5.6), facecolor="white")
+    ax = fig.add_subplot(111)
+    fig.subplots_adjust(
+        left=None,
+        bottom=None,
+        right=None,
+        top=None,
+        wspace=None,
+        hspace=None,
+    )
+    ax.set_title(f"Lateralization index {roi_name}", fontsize=20, y=1.03)
+    ax.set_xlabel("Threshold", fontsize=14)
+    ax.set_ylabel("Lateralization Index", fontsize=14)
+    ax.plot(thresholds, indexes, color="black")
+    ax.set_xlim(0, max(thresholds))
+    ax.set_ylim(-1, 1)
+    ax2 = ax.twinx()
+    y_1 = np.linspace(-100, -40, len(thresholds))
+    ax2.scatter(thresholds, y_1, s=1, color="blue")
+    for i, txt in enumerate(number_voxels_right):
+        ax2.annotate(str(txt), (thresholds[i], y_1[i]))
+    y_2 = np.linspace(100, 40, len(thresholds))
+    ax2.scatter(thresholds, y_2, s=1, color="red")
+    for i, txt in enumerate(number_voxels_left):
+        ax2.annotate(str(txt), (thresholds[i], y_2[i]))
+    ax2.set_axis_off()
+    ax.yaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    ax.xaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    ax.fill_between(thresholds, -0.2, 0.2, facecolor="lightgreen", alpha=0.5)
+    ax.fill_between(thresholds, 0.2, 1, facecolor="lightcoral", alpha=0.5)
+    ax.fill_between(thresholds, -0.2, -1, facecolor="lightblue", alpha=0.5)
+    ax.annotate(
+        "right hemispheric dominance", (0.2, -0.6), color="blue", fontsize=12
+    )
+    ax.annotate(
+        "left hemispheric dominance", (0.2, 0.6), color="red", fontsize=12
+    )
+    ax.annotate(
+        "bilateral representation", (0.2, 0.0), color="green", fontsize=12
+    )
+    ax.annotate("# of voxels (L)", (max(thresholds) - 1, 0.6), color="red")
+    ax.annotate("# of voxels (R)", (max(thresholds) - 1, -0.6), color="blue")
+    ax.get_yaxis().set_tick_params(direction="out")
+    ax.get_xaxis().set_tick_params(direction="out")
+    plt.savefig(out_png, bbox_inches="tight")
 
 
 def normalize_mc_params(params, source):
