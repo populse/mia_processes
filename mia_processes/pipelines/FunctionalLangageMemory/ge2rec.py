@@ -338,6 +338,61 @@ class Ge2rec(Pipeline):
             ["RAPPEL"]
         ]
 
+        # Report
+        self.add_process(
+            "list_to_file_1",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_1"].process.index_filter = [2]
+        self.add_process(
+            "list_to_file_2",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_2"].process.index_filter = [1]
+        # self.add_process(
+        #     "list_to_file_3",
+        #     "mia_processes.bricks.tools.tools.List_To_File",
+        # )
+        # self.nodes["list_to_file_3"].process.index_filter = [1]
+        self.add_process(
+            "list_to_file_4",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_4"].process.index_filter = [1]
+        self.add_process(
+            "list_to_file_5",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_5"].process.index_filter = [2]
+        self.add_process(
+            "list_to_file_6",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_6"].process.index_filter = [3]
+        self.add_process(
+            "list_to_file_7",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_7"].process.index_filter = [1]
+        self.add_process(
+            "list_to_file_8",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_8"].process.index_filter = [2]
+        self.add_process(
+            "list_to_file_9",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_9"].process.index_filter = [3]
+        self.add_process(
+            "5_lateralization_index",
+            "mia_processes.bricks.reports.LateralizationIndexCurve",
+        )
+        self.add_process(
+            "6_report",
+            "mia_processes.bricks.reports.ReportGE2REC",
+        )
+
         # links
         self.export_parameter(
             "1_preprocessing", "anat_file", "anat_file", is_optional=False
@@ -469,7 +524,70 @@ class Ge2rec(Pipeline):
             "out_spm_mat_file_rappel",
             is_optional=False,
         )
-
+        self.add_link(
+            "2c_gene_estimateContrast.spmT_images->" "list_to_file_1.file_list"
+        )
+        self.add_link(
+            "3c_reco_estimateContrast.spmT_images->" "list_to_file_2.file_list"
+        )
+        # self.add_link(
+        #     "4c_recall_estimateContrast.spmT_images->"
+        #     "list_to_file_3.file_list"
+        # )
+        self.add_link(
+            "4c_recall_estimateContrast.spmT_images->" "6_report.spmT_recall"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->" "list_to_file_4.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->" "list_to_file_5.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->" "list_to_file_6.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.realignment_parameters->"
+            "list_to_file_7.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.realignment_parameters->"
+            "list_to_file_8.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.realignment_parameters->"
+            "list_to_file_9.file_list"
+        )
+        self.add_link("list_to_file_1.file->" "5_lateralization_index.in_file")
+        self.add_link("5_lateralization_index.out_png->" "6_report.li_curves")
+        self.add_link("1_preprocessing.normalized_anat->" "6_report.norm_anat")
+        self.add_link("list_to_file_4.file->" "6_report.norm_func_gene")
+        self.add_link("list_to_file_5.file->" "6_report.norm_func_reco")
+        self.add_link("list_to_file_6.file->" "6_report.norm_func_recall")
+        self.add_link(
+            "list_to_file_7.file->" "6_report.realignment_parameters_gene"
+        )
+        self.add_link(
+            "list_to_file_8.file->" "6_report.realignment_parameters_reco"
+        )
+        self.add_link(
+            "list_to_file_9.file->" "6_report.realignment_parameters_recall"
+        )
+        self.add_link("list_to_file_1.file->" "6_report.spmT_gene")
+        self.add_link("list_to_file_2.file->" "6_report.spmT_reco")
+        # self.add_link(
+        #     "list_to_file_3.file->"
+        #     "6_report.spmT_recall"
+        # )
+        self.add_link(
+            "2b_gene_estimateModel.mask_image->" "6_report.norm_func_mask"
+        )
+        self.export_parameter(
+            "6_report", "patient_info", "patient_info", is_optional=False
+        )
+        self.export_parameter(
+            "6_report", "report", "report", is_optional=False
+        )
         # parameters order
         self.reorder_traits(
             (
@@ -488,33 +606,42 @@ class Ge2rec(Pipeline):
             "inputs": (-880.0, 30),
             "files_to_list": (-663, 30),
             "1_preprocessing": (-510.0, 30),
-            "filter_files_list_1": (-98, -886),
-            "filter_files_list_2": (-98, -756),
-            "make_a_list_1": (-98, -636),
+            "filter_files_list_1": (-98, -800),
+            "filter_files_list_2": (-98, -650),
+            "make_a_list_1": (-98, -500),
             "filter_files_list_3": (-98, 30),
             "filter_files_list_4": (-98, 150),
             "make_a_list_2": (-98, 280),
             "filter_files_list_5": (-98, 1030),
             "filter_files_list_6": (-98, 1150),
             "make_a_list_3": (-98, 1270),
-            "2a_gene_level1design": (150, -886),
-            "2b_gene_estimateModel": (550, -886),
-            "2c_gene_estimateContrast": (900, -886),
+            "2a_gene_level1design": (150, -800),
+            "2b_gene_estimateModel": (550, -800),
+            "2c_gene_estimateContrast": (900, -800),
             "3a_reco_level1design": (150, 30),
             "3b_reco_estimateModel": (550, 30),
             "3c_reco_estimateContrast": (900, 30),
             "4a_recall_level1design": (150, 1030),
             "4b_recall_estimateModel": (550, 1030),
             "4c_recall_estimateContrast": (900, 1030),
-            "outputs": (1300, 30),
+            "list_to_file_1": (1300, -800),
+            "list_to_file_2": (1300, 30),
+            # "list_to_file_3": (1300, 1030),
+            "list_to_file_4": (1300, -650),
+            "list_to_file_5": (1300, 180),
+            "list_to_file_6": (1300, 1180),
+            "list_to_file_7": (1300, -500),
+            "list_to_file_8": (1300, 330),
+            "list_to_file_9": (1300, 1330),
+            "5_lateralization_index": (1300, -100),
+            "6_report": (1500, 30),
+            "outputs": (1800, 30),
         }
 
         # nodes dimensions
         self.node_dimension = {
             "inputs": (152.5318872392954, 140.0),
             "1_preprocessing": (294.734375, 320.0),
-            "2_preprocessing_reco": (384.59375, 145.0),
-            "3_preprocessing_recall": (384.59375, 145.0),
             "2a_gene_level1design": (349.03125, 880.0),
             "2b_gene_estimateModel": (297.53125, 390.0),
             "2c_gene_estimateContrast": (304.0625, 425.0),
@@ -524,7 +651,18 @@ class Ge2rec(Pipeline):
             "4a_recall_level1design": (349.03125, 880.0),
             "4b_recall_estimateModel": (297.53125, 390.0),
             "4c_recall_estimateContrast": (304.0625, 425.0),
+            "5_lateralization_index": (294.734375, 320.0),
+            "6_report": (294.734375, 320.0),
             "files_to_list": (118.8125, 145.0),
+            "list_to_file_1": (118.8125, 145.0),
+            "list_to_file_2": (118.8125, 145.0),
+            # "list_to_file_3": (118.8125, 145.0),
+            "list_to_file_4": (118.8125, 145.0),
+            "list_to_file_5": (118.8125, 145.0),
+            "list_to_file_6": (118.8125, 145.0),
+            "list_to_file_7": (118.8125, 145.0),
+            "list_to_file_8": (118.8125, 145.0),
+            "list_to_file_9": (118.8125, 145.0),
             "filter_files_list_1": (202.390625, 110.0),
             "filter_files_list_2": (199.390625, 110.0),
             "filter_files_list_3": (199.390625, 110.0),

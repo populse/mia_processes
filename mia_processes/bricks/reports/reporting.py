@@ -2271,6 +2271,7 @@ class ReportGE2REC(ProcessMIA):
         spmT_vmax_desc = (
             "Maximum value in the data range covered by the color map"
         )
+        li_curves_desc = ""
 
         patient_info_desc = (
             "Optional dictionary with information about the patient "
@@ -2397,6 +2398,16 @@ class ReportGE2REC(ProcessMIA):
             ),
         )
         self.spmT_vmax = 5.0
+
+        self.add_trait(
+            "li_curves",
+            traits.List(
+                File(),
+                output=False,
+                optional=True,
+                desc=li_curves_desc,
+            ),
+        )
 
         self.add_trait(
             "patient_info",
@@ -2683,6 +2694,7 @@ class ReportGE2REC(ProcessMIA):
             spmT_recall=self.spmT_recall,
             spmT_vmin=self.spmT_vmin,
             spmT_vmax=self.spmT_vmax,
+            li_curves=self.li_curves,
             output_directory=self.output_directory,
         )
 

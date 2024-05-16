@@ -2351,11 +2351,21 @@ class Report:
         self.report.append(Spacer(0 * mm, 4 * mm))
         self.report.append(
             Paragraph(
-                "<font size=10 >" "blabla sur lateralite" "</font>",
+                "<font size=10 > Représentation de la latéralisation de la "
+                "production du langage pour la région frontale et la région "
+                "temporal. <br/> Les courbes noires montrent l'évolution de "
+                "l'indexe de latéralité en fonction du seuil statistique. "
+                "<br/> <b>N.B: </b> <i>Plus le seuil est élevé moins il "
+                "existe de faux positifs </i> </font>",
                 self.styles["Left"],
             )
         )
         self.report.append(Spacer(0 * mm, 4 * mm))
+        for li_curve in self.li_curves:
+            im = Image(li_curve, 6.468 * inch, 3.018 * inch)
+            im.hAlign = "CENTER"
+            self.report.append(im)
+            self.report.append(Spacer(0 * mm, 5 * mm))
 
         self.report.append(PageBreak())
 
@@ -2475,7 +2485,7 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 5 - Recall task############
+        # page 6 - Recall task############
         #################################################################
         self.report.append(
             Paragraph(
@@ -2539,7 +2549,52 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 6 - Anat -QC
+        # page 7 - Explications protocole
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Protocole GE2REC </b> - "
+                "Informations <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        self.report.append(
+            Paragraph(
+                "<font size=12 > Le protocole GE2REC est composé de trois "
+                "tâches interdépendantes : la génération de phrases avec "
+                "encodage implicite (GE) et deux tâches de mémoire "
+                "de rappel (2REC) qui sont la reconnaissance (RECO) "
+                "et le rappel (RE) explication <br/> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > Le but est de cartographier l’interaction "
+                "des fonctions cognitives du langage et de la mémoire au "
+                "niveau individuel."
+                "Il fournit une évaluation exhaustive en incluant "
+                "des modalités verbales, visuelles et divers processus "
+                "langagiers et mémoriels. </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+
+        self.report.append(
+            Paragraph(
+                "details des tâches à rajouter ? + info sur comment "
+                "interpréter les résultats ? ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(PageBreak())
+
+        # page 8 - Anat -QC
         #################################################################
         self.report.append(
             Paragraph(
@@ -2692,7 +2747,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # page 7 - fMRI gene -QC
+        # page 9 - fMRI gene -QC
         ######################################################################
         self.report.append(
             Paragraph(
@@ -2843,7 +2898,7 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 9 - fMRI gene -Qc
+        # page 10 - fMRI gene -Qc
         ######################################################################
         self.report.append(
             Paragraph(
@@ -2936,7 +2991,7 @@ class Report:
         self.report.append(im_rot)
         self.report.append(PageBreak())
 
-        # page 10 - fMRI reco -QC
+        # page 11 - fMRI reco -QC
         ######################################################################
         self.report.append(
             Paragraph(
@@ -3086,7 +3141,7 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 11 - fMRI reco -Qc
+        # page 12 - fMRI reco -Qc
         ######################################################################
         self.report.append(
             Paragraph(
@@ -3162,7 +3217,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Mouvements " " </b> </font>",
+            "<font size=14 > <b> Mouvements </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
@@ -3179,7 +3234,7 @@ class Report:
         self.report.append(im_rot)
         self.report.append(PageBreak())
 
-        # page 12- fMRI recall -QC
+        # page 13- fMRI recall -QC
         ######################################################################
         self.report.append(
             Paragraph(
@@ -3330,7 +3385,7 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 13 - fMRI recall -Qc
+        # page 14 - fMRI recall -Qc
         ######################################################################
         self.report.append(
             Paragraph(
