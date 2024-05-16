@@ -17,6 +17,7 @@ Module that contains multiple functions used across mia_processes
         - plot_qi2
         - plot_segmentation
         - plot_slice_planes
+        - plot_realignment_parameters
         - set_dbFieldValue
 """
 
