@@ -35,11 +35,11 @@ class Perfdsc(Pipeline):
 
         # nodes
         self.add_process(
-            "1_spatial_preprocessing1",
+            "1_spatial_preprocessing",
             "mia_processes.pipelines.preprocess.bold_spatial_preprocessing1."
             "Bold_spatial_preprocessing1",
         )
-        self.nodes["1_spatial_preprocessing1"].process.nodes_activation = {
+        self.nodes["1_spatial_preprocessing"].process.nodes_activation = {
             "newsegment": True,
             "realign": True,
             "list_duplicate": True,
@@ -87,25 +87,25 @@ class Perfdsc(Pipeline):
 
         # links
         self.export_parameter(
-            "1_spatial_preprocessing1", "anat_file", is_optional=False
+            "1_spatial_preprocessing", "anat_file", is_optional=False
         )
         self.export_parameter(
-            "1_spatial_preprocessing1", "func_files", is_optional=False
+            "1_spatial_preprocessing", "func_files", is_optional=False
         )
         self.add_link(
-            "1_spatial_preprocessing1.native_class_images->"
+            "1_spatial_preprocessing.native_class_images->"
             "2_spatial_mask.native_class_images"
         )
         self.add_link(
-            "1_spatial_preprocessing1.forward_deformation_field->"
+            "1_spatial_preprocessing.forward_deformation_field->"
             "2_spatial_mask.deformation_file"
         )
         self.add_link(
-            "1_spatial_preprocessing1.smoothed_func->"
+            "1_spatial_preprocessing.smoothed_func->"
             "2_spatial_mask.smoothed_func"
         )
         self.export_parameter(
-            "1_spatial_preprocessing1",
+            "1_spatial_preprocessing",
             "coregistered_source",
             is_optional=False,
         )
@@ -119,7 +119,7 @@ class Perfdsc(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "1_spatial_preprocessing1": (-369.0, -166.0),
+            "1_spatial_preprocessing": (-369.0, -166.0),
             "2_spatial_mask": (42.0, -76.0),
             "outputs": (337.00279291855725, -76.0),
             "inputs": (-548.5783216389599, -167.0),
@@ -127,7 +127,7 @@ class Perfdsc(Pipeline):
 
         # nodes dimensions
         self.node_dimension = {
-            "1_spatial_preprocessing1": (239.515625, 355.0),
+            "1_spatial_preprocessing": (239.515625, 355.0),
             "2_spatial_mask": (200.15625, 145.0),
             "outputs": (135.8125, 110.0),
             "inputs": (92.79751223929541, 110.0),
