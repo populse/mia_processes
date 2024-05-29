@@ -134,6 +134,7 @@ REQUIRES = [
     "nipype",
     "nitime",
     "nitransforms",
+    "niworkflows",
     "numpy",
     "openpyxl",
     "paramiko",

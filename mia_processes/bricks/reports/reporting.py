@@ -1294,7 +1294,8 @@ class ReportCO2inhalCvr(ProcessMIA):
         db_file_norm_func = self.norm_func[file_position:]
         # TODO: Do we need to explicitly take the smoothed func as input,
         #       or can we simply add the prefix 's' to the normalized func?
-        db_file_smooth_norm_func = "s" + db_file_norm_func
+        folder, fil = os.path.split(db_file_norm_func)
+        db_file_smooth_norm_func = os.path.join(folder, "s" + fil)
         db_file_regressor_physio = self.regressor_physio[file_position:]
 
         # As we do not have access to the database at the runtime (see #272),
@@ -1306,7 +1307,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.project.session,
             db_file_norm_anat,
             "AcquisitionDate",
-            "Acquisition nbr",
+            "AcquisitionNumber",
             "Affine regularization type",
             "Age",
             "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -1314,6 +1315,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             "FlipAngle",
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
+            "MaxNumOfSlices",
             "Pathology",
             "PatientName",
             "PatientRef",
@@ -1321,7 +1323,10 @@ class ReportCO2inhalCvr(ProcessMIA):
             "RepetitionTime",
             "SequenceName",
             "Sex",
+            "ScanDuration",
+            "ScanResolution",
             "Site",
+            "SliceGap",
             "SliceThickness",
             "Spectro",
             "Start/end slice",
@@ -1333,7 +1338,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime["norm_func"],
             self.project.session,
             db_file_norm_func,
-            "Acquisition nbr",
+            "AcquisitionNumber",
             "Affine regularization type",
             "Dataset dimensions (Count, X,Y,Z,T...)",
             "EchoTime",
@@ -1342,9 +1347,13 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Gas",
             "GasAdmin",
             "Grid spacings (X,Y,Z,T,...)",
+            "MaxNumOfSlices",
             "ProtocolName",
             "RepetitionTime",
             "SequenceName",
+            "ScanDuration",
+            "ScanResolution",
+            "SliceGap",
             "SliceThickness",
             "Start/end slice",
             "Voxel sizes",
