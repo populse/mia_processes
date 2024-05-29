@@ -69,19 +69,22 @@
 * The populse project uses Git Large File Storage (LFS). In developer mode (without installing the source codes), after cloning the source codes, it is advisable to retrieve the large files with Git LFS:
 
     * If Git LFS is not already installed on your system, you need to install it first.
+
         * Ex. on Fedora:
 
-            sudo dnf install git-lfs
+              sudo dnf install git-lfs
 
     * Initialize Git LFS
+
         * On a reposirory:
 
-            git lfs install
+              git lfs install
 
     * Retrieve Files with Git LFS
+
         * On a repository:
 
-            git lfs pull
+              git lfs pull
 
 # Third-party softwares
 
