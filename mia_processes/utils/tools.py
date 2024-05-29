@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import pandas as pd
-from matplotlib.cm import get_cmap
+from matplotlib import colormaps
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
 from nilearn.image import resample_to_img
@@ -592,7 +592,7 @@ def plot_slice_planes(
     if cmap_1 in (None, Undefined):
         cmap_1 = "Greys_r"
 
-    cmap_1 = get_cmap(cmap_1)
+    cmap_1 = colormaps.get_cmap(cmap_1)
     cmap_1.set_bad(color="black")
     brain_data_2 = None
 
@@ -632,7 +632,7 @@ def plot_slice_planes(
                 )
 
             else:
-                cmap = get_cmap(cmap)
+                cmap = colormaps.get_cmap(cmap)
 
             cmap.set_bad(alpha=0)
 
