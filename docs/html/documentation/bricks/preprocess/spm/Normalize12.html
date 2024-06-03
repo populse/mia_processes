@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Normalize12 brick &#8212; mia_processes 2.6.1-dev+b384b856 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+    <title>Normalize12 brick &#8212; mia_processes 2.6.1-dev+de1cb8a6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=eac47572"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+b384b856 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+de1cb8a6 documentation</span></a></h1>
         <h2 class="heading"><span>Normalize12 brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -33,11 +31,6 @@
   <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 35%" />
-<col style="width: 40%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
 <td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
@@ -46,13 +39,13 @@
 </tbody>
 </table>
 <section id="normalize12-brick">
-<h1>Normalize12 brick<a class="headerlink" href="#normalize12-brick" title="Permalink to this headline">¶</a></h1>
+<h1>Normalize12 brick<a class="headerlink" href="#normalize12-brick" title="Link to this heading">¶</a></h1>
 <section id="computes-the-deformation-that-best-aligns-the-model-atlas-with-an-image-then-if-necessary-apply-this-deformation-to-spatially-normalize-images">
-<h2>Computes the deformation that best aligns the model (atlas) with an image, then if necessary, apply this deformation to spatially normalize images<a class="headerlink" href="#computes-the-deformation-that-best-aligns-the-model-atlas-with-an-image-then-if-necessary-apply-this-deformation-to-spatially-normalize-images" title="Permalink to this headline">¶</a></h2>
+<h2>Computes the deformation that best aligns the model (atlas) with an image, then if necessary, apply this deformation to spatially normalize images<a class="headerlink" href="#computes-the-deformation-that-best-aligns-the-model-atlas-with-an-image-then-if-necessary-apply-this-deformation-to-spatially-normalize-images" title="Link to this heading">¶</a></h2>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>image_to_align &lt;=&gt; subj.vol</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>The image that the template (atlas) data is warped into alignment with. Mutually exclusive with <em>deformation_file</em> parameter. A
+<dt><em>image_to_align &lt;=&gt; subj.vol</em> <a class="footnote-reference brackets" href="#label" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The image that the template (atlas) data is warped into alignment with. Mutually exclusive with <em>deformation_file</em> parameter. A
 pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
@@ -61,7 +54,7 @@ pathlike object or string representing an existing file (valid extensions in [.i
 </dl>
 </li>
 <li><dl>
-<dt><em>deformation_file &lt;=&gt; subj.def</em>  <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with <em>image_to_align</em> and
+<dt><em>deformation_file &lt;=&gt; subj.def</em>  <a class="footnote-reference brackets" href="#label" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with <em>image_to_align</em> and
 <em>tpm</em> parameters. A pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
@@ -70,7 +63,7 @@ pathlike object or string representing an existing file (valid extensions in [.i
 </dl>
 </li>
 <li><dl>
-<dt><em>apply_to_files &lt;=&gt; subj.resample</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><p>Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list
+<dt><em>apply_to_files &lt;=&gt; subj.resample</em> <a class="footnote-reference brackets" href="#label" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list
 of items which are an existing, uncompressed file (valid extensions in [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
@@ -102,7 +95,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>bias_regularization &lt;=&gt; eoptions.biasreg</em>  <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in the data, so it doesn’t try to model it (a float between 0 and 10).</p>
+<dt><em>bias_regularization &lt;=&gt; eoptions.biasreg</em>  <a class="footnote-reference brackets" href="#label" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in the data, so it doesn’t try to model it (a float between 0 and 10).</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- 0 No regularisation</div>
@@ -119,7 +112,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>bias_fwhm &lt;=&gt; eoptions.biasfwhm</em> <a class="footnote-reference brackets" href="#label" id="id5">1</a></dt><dd><p>Full Width at Half Maximum of Gaussian smoothness of bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, ‘Inf’). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 30 mm cutoff).</p>
+<dt><em>bias_fwhm &lt;=&gt; eoptions.biasfwhm</em> <a class="footnote-reference brackets" href="#label" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Full Width at Half Maximum of Gaussian smoothness of bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, ‘Inf’). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 30 mm cutoff).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">60</span>
 </pre></div>
 </div>
@@ -127,7 +120,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>tpm &lt;=&gt; eoptions.tpm</em> <a class="footnote-reference brackets" href="#label" id="id6">1</a></dt><dd><p>The template in form of tissue probability atlas (a pathlike object or string representing an existing file). Mutually exclusive with the <em>deformation_file</em> parameter.</p>
+<dt><em>tpm &lt;=&gt; eoptions.tpm</em> <a class="footnote-reference brackets" href="#label" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The template in form of tissue probability atlas (a pathlike object or string representing an existing file). Mutually exclusive with the <em>deformation_file</em> parameter.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spm12</span><span class="o">/</span><span class="n">tpm</span><span class="o">/</span><span class="n">TPM</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
@@ -135,7 +128,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>affine_regularization_type &lt;=&gt; eoptions.affreg</em> <a class="footnote-reference brackets" href="#label" id="id7">1</a></dt><dd><p>Standard space for affine registration (‘mni’ or ‘size’ or ‘none’).</p>
+<dt><em>affine_regularization_type &lt;=&gt; eoptions.affreg</em> <a class="footnote-reference brackets" href="#label" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Standard space for affine registration (‘mni’ or ‘size’ or ‘none’).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">mni</span>
 </pre></div>
 </div>
@@ -143,7 +136,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>warping_regularization &lt;=&gt; eoptions.reg</em> <a class="footnote-reference brackets" href="#label" id="id8">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (list of floats).</p>
+<dt><em>warping_regularization &lt;=&gt; eoptions.reg</em> <a class="footnote-reference brackets" href="#label" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (list of floats).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -151,7 +144,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>smoothness &lt;=&gt; eoptions.fwhm</em> <a class="footnote-reference brackets" href="#label" id="id9">1</a></dt><dd><p>Value to smooth the data before normalization (a float; in mm). 0 is a good value for MRI.</p>
+<dt><em>smoothness &lt;=&gt; eoptions.fwhm</em> <a class="footnote-reference brackets" href="#label" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Value to smooth the data before normalization (a float; in mm). 0 is a good value for MRI.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
@@ -159,7 +152,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>sampling_distance &lt;=&gt; eoptions.samp</em> <a class="footnote-reference brackets" href="#label" id="id10">1</a></dt><dd><p>Approximate distance between sampled points when estimating the model parameters (a float).</p>
+<dt><em>sampling_distance &lt;=&gt; eoptions.samp</em> <a class="footnote-reference brackets" href="#label" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>Approximate distance between sampled points when estimating the model parameters (a float).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">3.0</span>
 </pre></div>
 </div>
@@ -167,7 +160,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>write_bounding_box &lt;=&gt; woptions.bb</em> <a class="footnote-reference brackets" href="#label" id="id11">1</a></dt><dd><p>A list of 2 items which are a list of items which are a float. This is the bounding box (in mm) of the volume which is to be written (relative to the anterior commissure).</p>
+<dt><em>write_bounding_box &lt;=&gt; woptions.bb</em> <a class="footnote-reference brackets" href="#label" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>A list of 2 items which are a list of items which are a float. This is the bounding box (in mm) of the volume which is to be written (relative to the anterior commissure).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="o">-</span><span class="mi">78</span><span class="p">,</span> <span class="o">-</span><span class="mi">112</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">85</span><span class="p">]]</span>
 </pre></div>
 </div>
@@ -175,7 +168,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>write_voxel_sizes &lt;=&gt; woptions.vox</em> <a class="footnote-reference brackets" href="#label" id="id12">1</a></dt><dd><p>A list of 3 items which are a float. This is the voxel sizes of the written normalised images.</p>
+<dt><em>write_voxel_sizes &lt;=&gt; woptions.vox</em> <a class="footnote-reference brackets" href="#label" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>A list of 3 items which are a float. This is the voxel sizes of the written normalised images.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -183,7 +176,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>write_interp  &lt;=&gt; woptions.interp</em> <a class="footnote-reference brackets" href="#label" id="id13">1</a></dt><dd><p>This is the method by which the images are sampled when being written in a different space (0 &lt;= a long integer &lt;= 7).</p>
+<dt><em>write_interp  &lt;=&gt; woptions.interp</em> <a class="footnote-reference brackets" href="#label" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>This is the method by which the images are sampled when being written in a different space (0 &lt;= a long integer &lt;= 7).</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- 0 Nearest neighbour</div>
@@ -200,7 +193,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </dl>
 </li>
 <li><dl>
-<dt><em>out_prefix &lt;=&gt; woptions.prefix</em> <a class="footnote-reference brackets" href="#label" id="id14">1</a></dt><dd><p>The prefix for the normalized outputs (a string).</p>
+<dt><em>out_prefix &lt;=&gt; woptions.prefix</em> <a class="footnote-reference brackets" href="#label" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></dt><dd><p>The prefix for the normalized outputs (a string).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">w</span>
 </pre></div>
 </div>
@@ -228,14 +221,16 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>,<a href="#id6">6</a>,<a href="#id7">7</a>,<a href="#id8">8</a>,<a href="#id9">9</a>,<a href="#id10">10</a>,<a href="#id11">11</a>,<a href="#id12">12</a>,<a href="#id13">13</a>,<a href="#id14">14</a>)</span></dt>
-<dd><p>Syntax: mia_processes/nipype Normalize12 &lt;=&gt; SPM12 Normalise.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="label" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>,<a role="doc-backlink" href="#id7">7</a>,<a role="doc-backlink" href="#id8">8</a>,<a role="doc-backlink" href="#id9">9</a>,<a role="doc-backlink" href="#id10">10</a>,<a role="doc-backlink" href="#id11">11</a>,<a role="doc-backlink" href="#id12">12</a>,<a role="doc-backlink" href="#id13">13</a>,<a role="doc-backlink" href="#id14">14</a>)</span>
+<p>Syntax: mia_processes/nipype Normalize12 &lt;=&gt; SPM12 Normalise.</p>
 <p>Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=51">SPM12 Normalise</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize12">nipype Normalize12</a></p>
-</dd>
-</dl>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -250,8 +245,8 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
