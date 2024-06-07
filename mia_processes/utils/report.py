@@ -3379,7 +3379,7 @@ class Report:
                 "<font size = 9 > <i>Summary plot, "
                 "showing the slice-wise signal intensity at the extremes for "
                 "the identification of spikes, the outliers metric, "
-                "the DVARS, the FD and the carpetplot. "
+                "the DVARS, the FD and the carpet plot. "
                 "The carpet plot rows correspond to voxelwise time series, "
                 "and are separated into regions: cortical gray matter, "
                 "deep gray matter, white matter and cerebrospinal fluid, "
@@ -3548,7 +3548,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # Nineth page - slice planes display - Background #####
+        # Ninth page - slice planes display - Background #####
         #######################################################################
         self.report.append(
             Paragraph(
@@ -3599,7 +3599,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # Ninth page - slice planes display - Segmentation #####
+        # Tenth page - slice planes display - Segmentation #####
         #######################################################################
         self.report.append(
             Paragraph(
@@ -3614,7 +3614,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 > Mean unctional "
+                "<font size = 14 > Mean functional "
                 "image with segmentation</font>",
                 self.styles["Center"],
             )
