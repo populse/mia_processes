@@ -1876,7 +1876,7 @@ class Make_AIF(ProcessMIA):
         scores = [[None] * 9 for _ in range(nb_vox)]
         wmax = round(wmaxr * ndynamics)
         # TODO: can we use head_mask directly instead of roi?
-        roi = head_mask.copy
+        roi = head_mask.copy()
         # remove voxels with inf and NaN values (not necessarily required)
         roi &= ~np.any(np.isinf(data), axis=3) & ~np.any(
             np.isnan(data), axis=3
