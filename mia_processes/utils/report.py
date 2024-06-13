@@ -26,7 +26,7 @@ from datetime import datetime
 from math import floor, log10, modf, pi, sqrt
 from sys import version
 
-import matplotlib.collections as collections
+# import matplotlib.collections as collections
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
@@ -1923,8 +1923,13 @@ class Report:
         #     facecolor=(127.0 / 255.0, 255.0 / 255.0, 0),
         #     alpha=0.2,
         # )
-        ax.fill_between(np.linspace(xlim[0], xlim[1], 3), 0, ylim[0],
-                facecolor=(127.0 / 255.0, 255.0 / 255.0, 0), alpha=0.2)
+        ax.fill_between(
+            np.linspace(xlim[0], xlim[1], 3),
+            0,
+            ylim[0],
+            facecolor=(127.0 / 255.0, 255.0 / 255.0, 0),
+            alpha=0.2,
+        )
         # RGB color lavender
         # c2 = collections.BrokenBarHCollection(
         #     [xlim],
@@ -1932,10 +1937,15 @@ class Report:
         #     facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0),
         #     alpha=0.5,
         # )
-        ax.fill_between(np.linspace(xlim[0], xlim[1], 3), 0, ylim[1],
-                facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0), alpha=0.5)
-        #ax.add_collection(c1)
-        #ax.add_collection(c2)
+        ax.fill_between(
+            np.linspace(xlim[0], xlim[1], 3),
+            0,
+            ylim[1],
+            facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0),
+            alpha=0.5,
+        )
+        # ax.add_collection(c1)
+        # ax.add_collection(c2)
         ax.set_ylim(ylim)
 
         for i, j in enumerate(IL_Pat_list, start=1):
