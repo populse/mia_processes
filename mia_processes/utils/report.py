@@ -1901,34 +1901,41 @@ class Report:
             "bo-",
         )
 
+        # Adjust tick labels
         for label in ax.yaxis.get_majorticklabels():
             label.set_fontsize(14)
 
-        ax.set_ylim(auto=1)
+        # Set x-axis properties
         ax.set_xticklabels(xticklab, rotation=45, fontsize=14)
-        # ax.tick_params(axis='x', rotation=45, fontsize=14)
         ax.set_xticks(range(1, len(xticklab) + 1))
         ax.set_xlim(0, len(xticklab) + 1)
-        ax.get_yaxis().set_tick_params(direction="out")
         ax.get_xaxis().set_tick_params(direction="out")
+        # Set y-axis properties
+        ax.set_ylim(auto=True)
+        ax.get_yaxis().set_tick_params(direction="out")
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         # RGB color chartreuse
-        c1 = collections.BrokenBarHCollection(
-            [xlim],
-            (0, ylim[0]),
-            facecolor=(127.0 / 255.0, 255.0 / 255.0, 0),
-            alpha=0.2,
-        )
+        # BrokenBarHCollection is deprecated since matplotlib 3.7
+        # c1 = collections.BrokenBarHCollection(
+        #     [xlim],
+        #     (0, ylim[0]),
+        #     facecolor=(127.0 / 255.0, 255.0 / 255.0, 0),
+        #     alpha=0.2,
+        # )
+        ax.fill_between(np.linspace(xlim[0], xlim[1], 3), 0, ylim[0],
+                facecolor=(127.0 / 255.0, 255.0 / 255.0, 0), alpha=0.2)
         # RGB color lavender
-        c2 = collections.BrokenBarHCollection(
-            [xlim],
-            (0, ylim[1]),
-            facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0),
-            alpha=0.5,
-        )
-        ax.add_collection(c1)
-        ax.add_collection(c2)
+        # c2 = collections.BrokenBarHCollection(
+        #     [xlim],
+        #     (0, ylim[1]),
+        #     facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0),
+        #     alpha=0.5,
+        # )
+        ax.fill_between(np.linspace(xlim[0], xlim[1], 3), 0, ylim[1],
+                facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0), alpha=0.5)
+        #ax.add_collection(c1)
+        #ax.add_collection(c2)
         ax.set_ylim(ylim)
 
         for i, j in enumerate(IL_Pat_list, start=1):
