@@ -1889,8 +1889,8 @@ class Make_AIF(ProcessMIA):
         roi &= ~noisy
         # calculation of peak heights
         base_line = min_val = np.zeros((ncol, nrow, nslices))
-        base_line[roi] = np.mean(data[..., 1:6][roi], axis=3)
-        min_val[roi] = np.min(data[roi], axis=3)
+        base_line[roi] = np.mean(data[..., 1:6][roi], axis=1)
+        min_val[roi] = np.min(data[roi], axis=1)
         delta_base_min = base_line - min_val
         # calculation of peak widths
         half_width_peak = ndynamics * np.ones((ncol, nrow, nslices))
@@ -1906,7 +1906,7 @@ class Make_AIF(ProcessMIA):
 
         half_width_peak[half_width_peak == 0] = ndynamics
         # keep only non-saturated voxels
-        saturated_voxel = np.zeros((ncol, nrow, nslices))
+        saturated_voxel = np.zeros((ncol, nrow, nslices), dtype=bool)
 
         for idx in zip(*np.where(roi)):
             idx = tuple(idx)
