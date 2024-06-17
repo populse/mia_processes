@@ -54,7 +54,7 @@ class Perfdsc(Pipeline):
         ].process.register_to_mean = False
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
-        ].process.write_voxel_sizes = [2.0, 2.0, 2.0]
+        ].process.write_voxel_sizes = [1.0, 1.0, 1.0]
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
         ].process.write_bounding_box = [
@@ -64,6 +64,9 @@ class Perfdsc(Pipeline):
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
         ].process.write_interp = 1
+        self.nodes["1_spatial_preprocessing"].process.nodes[
+            "normalize12_2"
+        ].process.write_voxel_sizes = [2.0, 2.0, 2.0]
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_2"
         ].process.write_bounding_box = [
@@ -108,6 +111,10 @@ class Perfdsc(Pipeline):
             "1_spatial_preprocessing",
             "coregistered_source",
             is_optional=False,
+        )
+        # Only done for normalize12_2 activation!
+        self.export_parameter(
+            "1_spatial_preprocessing", "normalized_anat", is_optional=False
         )
         self.export_parameter("2_spatial_mask", "mask_003", is_optional=False)
 
