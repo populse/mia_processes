@@ -2272,6 +2272,8 @@ class ReportGE2REC(ProcessMIA):
             "Stat images from a t-contrast from GENE task "
             "(valid extensions:.nii)"
         )
+        spmT_gene_enco_desc = ()
+        correct_response_desc = ()
 
         spmT_vmin_desc = (
             "Minimum value in the data range covered by the color map"
@@ -2383,6 +2385,10 @@ class ReportGE2REC(ProcessMIA):
             "spmT_recall",
             File(output=False, optional=False, desc=spmT_recall_desc),
         )
+        self.add_trait(
+            "spmT_gene_enco",
+            File(output=False, optional=False, desc=spmT_gene_enco_desc),
+        )
 
         self.add_trait(
             "spmT_vmin",
@@ -2419,15 +2425,25 @@ class ReportGE2REC(ProcessMIA):
         )
 
         self.add_trait(
+            "correct_response",
+            File(
+                output=False,
+                optional=True,
+                desc=correct_response_desc,
+            ),
+        )
+
+        self.add_trait(
             "patient_info",
             traits.Dict(output=False, optional=True, desc=patient_info_desc),
         )
         self.patient_info = dict(
-            PatientRef=Undefined,
             Pathology=Undefined,
             Age=Undefined,
             Sex=Undefined,
             AcquisitionDate=Undefined,
+            DominantHand=Undefined,
+            LateralizationPathology=Undefined,
         )
 
         # Outputs traits
@@ -2498,6 +2514,8 @@ class ReportGE2REC(ProcessMIA):
             "Start/end slice",
             "StudyName",
             "Voxel sizes",
+            "DominantHand",
+            "LateralizationPathology",
         )
 
         if self.dict4runtime["norm_anat"]["AcquisitionDate"] != "Undefined":
@@ -2553,6 +2571,28 @@ class ReportGE2REC(ProcessMIA):
         else:
             self.dict4runtime["norm_anat"]["Pathology"] = (
                 self.patient_info.get("Pathology")
+            )
+        if (
+            self.patient_info.get("LateralizationPathology") is None
+            or self.patient_info["LateralizationPathology"] == Undefined
+        ):
+            self.patient_info["LateralizationPathology"] = self.dict4runtime[
+                "norm_anat"
+            ]["LateralizationPathology"]
+        else:
+            self.dict4runtime["norm_anat"]["LateralizationPathology"] = (
+                self.patient_info.get("LateralizationPathology")
+            )
+        if (
+            self.patient_info.get("DominantHand") is None
+            or self.patient_info["DominantHand"] == Undefined
+        ):
+            self.patient_info["DominantHand"] = self.dict4runtime["norm_anat"][
+                "DominantHand"
+            ]
+        else:
+            self.dict4runtime["norm_anat"]["DominantHand"] = (
+                self.patient_info.get("DominantHand")
             )
 
         if (
@@ -2701,9 +2741,11 @@ class ReportGE2REC(ProcessMIA):
             spmT_gene=self.spmT_gene,
             spmT_reco=self.spmT_reco,
             spmT_recall=self.spmT_recall,
+            spmT_gene_enco=self.spmT_gene_enco,
             spmT_vmin=self.spmT_vmin,
             spmT_vmax=self.spmT_vmax,
             li_curves=self.li_curves,
+            correct_response=self.correct_response,
             output_directory=self.output_directory,
         )
 

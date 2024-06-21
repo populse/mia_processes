@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import openpyxl
+import pandas as pd
 
 # capsul import
 from capsul import info as capsul_info
@@ -265,6 +266,8 @@ class Report:
                     "Sex",
                     "Age",
                     "Pathology",
+                    "LateralizationPathology",
+                    "DominantHand",
                 )
             ]
 
@@ -276,6 +279,8 @@ class Report:
                 "PATIENT SEX",
                 "PATIENT AGE",
                 "PATHOLOGY",
+                "LATERALIZATION PATHOLOGY",
+                "DOMINANT HAND",
                 "SOFTWARES",
             ]
 
@@ -2447,11 +2452,49 @@ class Report:
             Paragraph(
                 "<font size=10 >"
                 "<b>Activations cérébrales pour l'encodage implicite </b>"
-                "(obtenues à partir de la tâche de génération):"
+                "(obtenues à partir de la tâche de génération en prenant "
+                "en compte seulement les mots dont le sujet se souvent "
+                "lors de la tâche de reconnaissance):"
                 "</font>",
                 self.styles["Left"],
             )
         )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene_enco,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene_enco,
+            plane="cor",
+            fig_rows=norm_anat_fig_rows_cor,
+            fig_cols=norm_anat_fig_cols_cor,
+            slice_start=norm_anat_inf_slice_start_cor,
+            slice_step=norm_anat_slices_gap_cor,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=50 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
         self.report.append(Spacer(0 * mm, 4 * mm))
 
         self.report.append(PageBreak())
@@ -2479,10 +2522,12 @@ class Report:
         m3 = Paragraph("<font size=10 ><b>% erreur</b></font>")
         m4 = Paragraph("<font size=10 ><b>anciens mots</b></font>")
         m5 = Paragraph("<font size=10 ><b>nouveaux mots</b></font>")
+        df = pd.read_csv(self.correct_response)
+
         behavioural_data = [
             [m1, "", m2, m3],
-            ["", m4, "x", "a"],
-            ["", m5, "y", "z"],
+            ["", m4, df["correct_old"][0], df["error_old"][0]],
+            ["", m5, df["correct_new"][0], df["error_new"][0]],
         ]
         t = Table(behavioural_data)
         t.setStyle(
@@ -2622,36 +2667,79 @@ class Report:
                 self.styles["Left"],
             )
         )
-        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(Spacer(0 * mm, 5 * mm))
 
         self.report.append(
             Paragraph(
                 "<font size=12 > Le protocole GE2REC est composé de trois "
                 "tâches interdépendantes : la génération de phrases avec "
-                "encodage implicite (GE) et deux tâches de mémoire "
+                "encodage implicite (GE) et deux tâches de mémoire "
                 "de rappel (2REC) qui sont la reconnaissance (RECO) "
                 "et le rappel (RE) explication <br/> </font>",
                 self.styles["Left"],
             )
         )
-        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(Spacer(0 * mm, 4 * mm))
         self.report.append(
             Paragraph(
-                "<font size=12 > Le but est de cartographier l’interaction "
-                "des fonctions cognitives du langage et de la mémoire au "
-                "niveau individuel."
+                "<font size=12 > Ce protocole permet de cartographier "
+                "l’interaction des fonctions du langage et de la mémoire "
+                "(LMN language memory network) au niveau individuel."
                 "Il fournit une évaluation exhaustive en incluant "
                 "des modalités verbales, visuelles et divers processus "
                 "langagiers et mémoriels. </font>",
                 self.styles["Left"],
             )
         )
-        self.report.append(Spacer(0 * mm, 5 * mm))
-
+        self.report.append(Spacer(0 * mm, 4 * mm))
         self.report.append(
             Paragraph(
-                "details des tâches à rajouter ? + info sur comment "
-                "interpréter les résultats ? ",
+                "<font size=12 > <b> Première tâche – Stimuli et tâche "
+                "de génération de phrases avec encodage implicite "
+                "(GE)</b><br/>"
+                "Il s'agit d'une séquence en bloc de génération de "
+                "phrases avec encodage implicite (durée de 7,3 minutes)."
+                "Les sujets écoutent des mots à travers un casque et doivent "
+                "générer des phrases de manière implicite. Lors des périodes "
+                "de contrôle, des pseudo-mots sont diffusés au sujet afin "
+                "qu’il n’y ait pas de génération. "
+                "Une croix de fixation apparaît lors des périodes de repos."
+                "</font> ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > <b> Deuxième tâche – Reconnaissance (RECO)"
+                "</b><br/>"
+                "La deuxième tâche est un paradigme évènementiel "
+                "(durée de 6,8min). "
+                "Des images sont présentées aux sujets selon un mode "
+                "pseudo-aléatoire de 2,5 secondes. "
+                "Ils doivent alors indiquer s’ils reconnaissent les images "
+                "des objets dont les noms ont été diffusés lors de "
+                "la première tâche GE. Dans le cadre clinique,"
+                "le choix proposé est binaire. "
+                "Soit le sujet indique qu’il reconnaît l’image (OLD), "
+                "soit qu’il s’agit d’un nouvel item (NEW)."
+                "</font> ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > <b> Troisième tâche – Rappel (RA)"
+                "</b><br/>"
+                "La troisième tâche est un paradigme en bloc en modalité "
+                "auditive (durrée de 4,17 minutes). Les participants "
+                "entendent les mots de la tâche GE et doivent se souvenir "
+                "de manière implicite des phrases précédemment "
+                "générées lors de la première tâche."
+                "</font> ",
                 self.styles["Left"],
             )
         )

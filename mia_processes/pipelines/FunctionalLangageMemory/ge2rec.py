@@ -39,6 +39,9 @@ class Ge2rec(Pipeline):
             "files_to_list", "mia_processes.bricks.tools.tools.Files_To_List"
         )
         self.add_process(
+            "Eprime", "mia_processes.bricks.tools." "Get_Eprime_Info_Ge2rec"
+        )
+        self.add_process(
             "1_preprocessing",
             "mia_processes.pipelines.preprocess.bold_spatial_preprocessing3."
             "Bold_spatial_preprocessing3",
@@ -299,7 +302,6 @@ class Ge2rec(Pipeline):
             [1.0, -1.0],
             [1.0],
         ]
-
         # STATS RECALL
         self.add_process(
             "4a_recall_level1design",
@@ -337,7 +339,70 @@ class Ge2rec(Pipeline):
         self.nodes["4c_recall_estimateContrast"].process.T_condition_names = [
             ["RAPPEL"]
         ]
-
+        # STATS GENE WITH RECO ENCODAGE
+        self.add_process(
+            "list_to_file_10",
+            "mia_processes.bricks.tools.tools.List_To_File",
+        )
+        self.nodes["list_to_file_10"].process.index_filter = [1]
+        self.add_process(
+            "make_a_list_4", "mia_processes.bricks.tools.tools.Make_A_List"
+        )
+        self.add_process(
+            "make_a_list_5", "mia_processes.bricks.tools.tools.Make_A_List"
+        )
+        self.add_process(
+            "5a_gene_encoding_level1design",
+            "mia_processes.bricks.stat.spm.model.Level1Design",
+        )
+        self.nodes["5a_gene_encoding_level1design"].process.out_dir_name = (
+            "stats_gene_encodage"
+        )
+        self.nodes["5a_gene_encoding_level1design"].process.timing_units = (
+            "secs"
+        )
+        self.nodes["5a_gene_encoding_level1design"].process.sess_cond_names = [
+            ["GENE", "CONTROL"]
+        ]
+        self.nodes[
+            "5a_gene_encoding_level1design"
+        ].process.sess_cond_onsets = [
+            [
+                [0.0, 90.0, 180.0, 270.0, 360.0],
+                [50.0, 140.0, 230.0, 320.0, 410.0],
+            ]
+        ]
+        self.nodes[
+            "5a_gene_encoding_level1design"
+        ].process.sess_cond_durations = [
+            [[40.0, 40.0, 40.0, 40.0, 40.0], [40.0, 40.0, 40.0, 40.0, 40.0]]
+        ]
+        self.nodes["5a_gene_encoding_level1design"].process.sess_cond_tmod = [
+            [0, 0]
+        ]
+        self.nodes["5a_gene_encoding_level1design"].process.sess_cond_orth = [
+            [1, 1]
+        ]
+        self.nodes["5a_gene_encoding_level1design"].process.sess_hpf = [128.0]
+        self.add_process(
+            "5a_gene_encoding_estimatemodel",
+            "mia_processes.bricks.stat.spm.model.EstimateModel",
+        )
+        self.add_process(
+            "5a_gene_encoding_estimatecontrast",
+            "mia_processes.bricks.stat.spm.model.EstimateContrast",
+        )
+        self.nodes[
+            "5a_gene_encoding_estimatecontrast"
+        ].process.T_contrast_names = ["Encoding"]
+        self.nodes[
+            "5a_gene_encoding_estimatecontrast"
+        ].process.T_condition_names = [
+            ["GENE", "CONTROL", "ENCODAGE"],
+        ]
+        self.nodes[
+            "5a_gene_encoding_estimatecontrast"
+        ].process.T_contrast_weights = [[0.0, 0.0, 1.0]]
         # Report
         self.add_process(
             "list_to_file_1",
@@ -348,12 +413,7 @@ class Ge2rec(Pipeline):
             "list_to_file_2",
             "mia_processes.bricks.tools.tools.List_To_File",
         )
-        self.nodes["list_to_file_2"].process.index_filter = [1]
-        # self.add_process(
-        #     "list_to_file_3",
-        #     "mia_processes.bricks.tools.tools.List_To_File",
-        # )
-        # self.nodes["list_to_file_3"].process.index_filter = [1]
+        self.nodes["list_to_file_2"].process.index_filter = [2]
         self.add_process(
             "list_to_file_4",
             "mia_processes.bricks.tools.tools.List_To_File",
@@ -385,15 +445,18 @@ class Ge2rec(Pipeline):
         )
         self.nodes["list_to_file_9"].process.index_filter = [3]
         self.add_process(
-            "5_lateralization_index",
+            "6_lateralization_index",
             "mia_processes.bricks.reports.LateralizationIndexCurve",
         )
         self.add_process(
-            "6_report",
+            "7_report",
             "mia_processes.bricks.reports.ReportGE2REC",
         )
 
         # links
+        self.export_parameter(
+            "Eprime", "eprime_file", "eprime_file", is_optional=False
+        )
         self.export_parameter(
             "1_preprocessing", "anat_file", "anat_file", is_optional=False
         )
@@ -447,6 +510,10 @@ class Ge2rec(Pipeline):
         self.add_link(
             "filter_files_list_5.filtered_list->"
             "4a_recall_level1design.sess_scans"
+        )
+        self.add_link(
+            "filter_files_list_1.filtered_list->"
+            "5a_gene_encoding_level1design.sess_scans"
         )
         self.add_link("filter_files_list_6.filtered_list->make_a_list_3.obj1")
         self.add_link(
@@ -525,26 +592,54 @@ class Ge2rec(Pipeline):
             is_optional=False,
         )
         self.add_link(
-            "2c_gene_estimateContrast.spmT_images->" "list_to_file_1.file_list"
+            "filter_files_list_2.filtered_list->list_to_file_10.file_list"
+        )
+        self.add_link("list_to_file_10.file->make_a_list_4.obj1")
+        self.add_link("make_a_list_4.obj_list->" "make_a_list_5.obj1")
+        self.add_link(
+            "make_a_list_5.obj_list->"
+            "5a_gene_encoding_level1design.sess_multi_reg"
         )
         self.add_link(
-            "3c_reco_estimateContrast.spmT_images->" "list_to_file_2.file_list"
-        )
-        # self.add_link(
-        #     "4c_recall_estimateContrast.spmT_images->"
-        #     "list_to_file_3.file_list"
-        # )
-        self.add_link(
-            "4c_recall_estimateContrast.spmT_images->" "6_report.spmT_recall"
+            "Eprime.sess_regress_level1design->"
+            "5a_gene_encoding_level1design.sess_regress"
         )
         self.add_link(
-            "1_preprocessing.smoothed_func->" "list_to_file_4.file_list"
+            "5a_gene_encoding_level1design.spm_mat_file->"
+            "5a_gene_encoding_estimatemodel.spm_mat_file"
         )
         self.add_link(
-            "1_preprocessing.smoothed_func->" "list_to_file_5.file_list"
+            "5a_gene_encoding_estimatemodel.out_spm_mat_file->"
+            "5a_gene_encoding_estimatecontrast.spm_mat_file"
         )
         self.add_link(
-            "1_preprocessing.smoothed_func->" "list_to_file_6.file_list"
+            "5a_gene_encoding_estimatemodel.beta_images->"
+            "5a_gene_encoding_estimatecontrast.beta_images"
+        )
+        self.add_link(
+            "5a_gene_encoding_estimatemodel.residual_image->"
+            "5a_gene_encoding_estimatecontrast.residual_image"
+        )
+        self.export_parameter(
+            "5a_gene_encoding_estimatecontrast",
+            "out_spm_mat_file",
+            "out_spm_mat_file_gene_enco",
+            is_optional=False,
+        )
+        self.add_link(
+            "2c_gene_estimateContrast.spmT_images->list_to_file_1.file_list"
+        )
+        self.add_link(
+            "3c_reco_estimateContrast.spmT_images->list_to_file_2.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->list_to_file_4.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->list_to_file_5.file_list"
+        )
+        self.add_link(
+            "1_preprocessing.smoothed_func->list_to_file_6.file_list"
         )
         self.add_link(
             "1_preprocessing.realignment_parameters->"
@@ -558,35 +653,39 @@ class Ge2rec(Pipeline):
             "1_preprocessing.realignment_parameters->"
             "list_to_file_9.file_list"
         )
-        self.add_link("list_to_file_1.file->" "5_lateralization_index.in_file")
-        self.add_link("5_lateralization_index.out_png->" "6_report.li_curves")
-        self.add_link("1_preprocessing.normalized_anat->" "6_report.norm_anat")
-        self.add_link("list_to_file_4.file->" "6_report.norm_func_gene")
-        self.add_link("list_to_file_5.file->" "6_report.norm_func_reco")
-        self.add_link("list_to_file_6.file->" "6_report.norm_func_recall")
+        self.add_link("list_to_file_1.file->6_lateralization_index.in_file")
+        self.add_link("6_lateralization_index.out_png->7_report.li_curves")
+        self.add_link("1_preprocessing.normalized_anat->7_report.norm_anat")
+        self.add_link("list_to_file_4.file->7_report.norm_func_gene")
+        self.add_link("list_to_file_5.file->7_report.norm_func_reco")
+        self.add_link("list_to_file_6.file->7_report.norm_func_recall")
         self.add_link(
-            "list_to_file_7.file->" "6_report.realignment_parameters_gene"
+            "list_to_file_7.file->7_report.realignment_parameters_gene"
         )
         self.add_link(
-            "list_to_file_8.file->" "6_report.realignment_parameters_reco"
+            "list_to_file_8.file->7_report.realignment_parameters_reco"
         )
         self.add_link(
-            "list_to_file_9.file->" "6_report.realignment_parameters_recall"
+            "list_to_file_9.file->7_report.realignment_parameters_recall"
         )
-        self.add_link("list_to_file_1.file->" "6_report.spmT_gene")
-        self.add_link("list_to_file_2.file->" "6_report.spmT_reco")
-        # self.add_link(
-        #     "list_to_file_3.file->"
-        #     "6_report.spmT_recall"
-        # )
+        self.add_link("list_to_file_1.file->7_report.spmT_gene")
+        self.add_link("list_to_file_2.file->7_report.spmT_reco")
         self.add_link(
-            "2b_gene_estimateModel.mask_image->" "6_report.norm_func_mask"
+            "4c_recall_estimateContrast.spmT_images->7_report.spmT_recall"
+        )
+        self.add_link(
+            "5a_gene_encoding_estimatecontrast.spmT_images->"
+            "7_report.spmT_gene_enco"
+        )
+        self.add_link(
+            "2b_gene_estimateModel.mask_image->7_report.norm_func_mask"
+        )
+        self.add_link("Eprime.csv_correct_response->7_report.correct_response")
+        self.export_parameter(
+            "7_report", "patient_info", "patient_info", is_optional=False
         )
         self.export_parameter(
-            "6_report", "patient_info", "patient_info", is_optional=False
-        )
-        self.export_parameter(
-            "6_report", "report", "report", is_optional=False
+            "7_report", "report", "report", is_optional=False
         )
         # parameters order
         self.reorder_traits(
@@ -595,6 +694,8 @@ class Ge2rec(Pipeline):
                 "func_gene_file",
                 "func_reco_file",
                 "func_recall_file",
+                "eprime_file",
+                "patient_info",
                 "out_spm_mat_file_gene",
                 "out_spm_mat_file_reco",
                 "out_spm_mat_file_rappel",
@@ -604,7 +705,8 @@ class Ge2rec(Pipeline):
         # nodes positions
         self.node_position = {
             "inputs": (-880.0, 30),
-            "files_to_list": (-663, 30),
+            "files_to_list": (-660, 30),
+            "Eprime": (-660, 380),
             "1_preprocessing": (-510.0, 30),
             "filter_files_list_1": (-98, -800),
             "filter_files_list_2": (-98, -650),
@@ -633,9 +735,15 @@ class Ge2rec(Pipeline):
             "list_to_file_7": (1300, -500),
             "list_to_file_8": (1300, 330),
             "list_to_file_9": (1300, 1330),
-            "5_lateralization_index": (1300, -100),
-            "6_report": (1500, 30),
+            "6_lateralization_index": (1300, -100),
+            "7_report": (1500, 30),
             "outputs": (1800, 30),
+            "5a_gene_encoding_level1design": (150, 2000),
+            "5a_gene_encoding_estimatemodel": (550, 2000),
+            "5a_gene_encoding_estimatecontrast": (900, 2000),
+            "list_to_file_10": (-70, 1800),
+            "make_a_list_4": (-70, 2000),
+            "make_a_list_5": (-70, 2200),
         }
 
         # nodes dimensions
@@ -651,10 +759,11 @@ class Ge2rec(Pipeline):
             "4a_recall_level1design": (349.03125, 880.0),
             "4b_recall_estimateModel": (297.53125, 390.0),
             "4c_recall_estimateContrast": (304.0625, 425.0),
-            "5_lateralization_index": (294.734375, 320.0),
-            "6_report": (294.734375, 320.0),
+            "6_lateralization_index": (294.734375, 320.0),
+            "7_report": (294.734375, 320.0),
             "files_to_list": (118.8125, 145.0),
             "list_to_file_1": (118.8125, 145.0),
+            "list_to_file_10": (118.8125, 145.0),
             "list_to_file_2": (118.8125, 145.0),
             # "list_to_file_3": (118.8125, 145.0),
             "list_to_file_4": (118.8125, 145.0),
@@ -673,6 +782,11 @@ class Ge2rec(Pipeline):
             "make_a_list_2": (114.890625, 110.0),
             "make_a_list_3": (114.890625, 110.0),
             "outputs": (205.10242003946317, 115.0),
+            "5a_gene_encoding_level1design": (349.03125, 915.0),
+            "5a_gene_encoding_estimatemodel": (297.53125, 390.0),
+            "5a_gene_encoding_estimatecontrast": (304.0625, 460.0),
+            "make_a_list_4": (118.359375, 110.0),
+            "make_a_list_5": (118.359375, 110.0),
         }
 
         self.do_autoexport_nodes_parameters = False
