@@ -43,84 +43,84 @@ Based on a large ensemble of convolution neural networks, AssemblyNet segment a 
 
     ::
 
-      ex. '/home/username/data/derived_data/native_t1_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_t1_T1w.nii'
 
 - *mni_t1* (a pathlike object or string representing a file)
     Filtered and normalized T1 image in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_t1_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_t1_T1w.nii'
 
 - *native_mask* (a pathlike object or string representing a file)
     Intracranial Cavity mask image in native space.
 
     ::
 
-      ex. '/home/username/data/derived_data/native_mask_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_mask_T1w.nii'
 
 - *mni_mask* (a pathlike object or string representing a file)
     Intracranial Cavity mask image in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_masks_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_masks_T1w.nii'
 
 - *native_structures* (a pathlike object or string representing a file)
     Structures segmentation in native space.
 
     ::
 
-      ex. '/home/username/data/derived_data/native_structures_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_structures_T1w.nii'
 
 - *mni_structures* (a pathlike object or string representing a file)
     Structures segmentation in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_structures_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_structures_T1w.nii'
 
 - *native_macrostructures* (a pathlike object or string representing a file)
     Macrostructures segmentation in native space.
 
     ::
 
-      ex. '/home/username/data/derived_data/native_macrostructures_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_macrostructures_T1w.nii'
 
 - *mni_macrostructures* (a pathlike object or string representing a file)
     Macrostructures segmentation in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_macrostructures_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_macrostructures_T1w.nii'
 
 - *native_lobes* (a pathlike object or string representing a file)
     Lobes segmentation in native space.
 
     ::
 
-      ex. '/home/username/data/derived_data/native_lobes_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_lobes_T1w.nii'
 
 - *mni_lobes* (a pathlike object or string representing a file)
     Lobes segmentation in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_lobes_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_lobes_T1w.nii'
 
 - *native_tissues* (a pathlike object or string representing a file)
     Tissues segmentation in native space.
 
     ::
 
-      ex. '/home/username/data/derived_data/native_tissues_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/native_tissues_T1w.nii'
 
 - *mni_tissues* (a pathlike object or string representing a file)
     Tissues segmentation in MNI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/mni_tissues_T1w.nii.gz'
+      ex. '/home/username/data/derived_data/mni_tissues_T1w.nii'
 
 - *matrix_affine* (a pathlike object or string representing a file)
     ITK transformation matrix from native to MNI space

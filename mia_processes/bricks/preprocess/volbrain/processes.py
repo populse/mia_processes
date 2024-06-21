@@ -235,48 +235,48 @@ class AssemblyNetDocker(ProcessMIA):
 
             if self.output_directory:
                 self.outputs["native_t1"] = os.path.join(
-                    self.output_directory, "native_t1_" + file_name + ".nii.gz"
+                    self.output_directory, "native_t1_" + file_name + ".nii"
                 )
                 self.outputs["native_structures"] = os.path.join(
                     self.output_directory,
-                    "native_structures_" + file_name + ".nii.gz",
+                    "native_structures_" + file_name + ".nii",
                 )
                 self.outputs["native_mask"] = os.path.join(
                     self.output_directory,
-                    "native_mask_" + file_name + ".nii.gz",
+                    "native_mask_" + file_name + ".nii",
                 )
                 self.outputs["native_lobes"] = os.path.join(
                     self.output_directory,
-                    "native_lobes_" + file_name + ".nii.gz",
+                    "native_lobes_" + file_name + ".nii",
                 )
                 self.outputs["native_macrostructures"] = os.path.join(
                     self.output_directory,
-                    "native_macrostructures_" + file_name + ".nii.gz",
+                    "native_macrostructures_" + file_name + ".nii",
                 )
                 self.outputs["native_tissues"] = os.path.join(
                     self.output_directory,
-                    "native_tissues_" + file_name + ".nii.gz",
+                    "native_tissues_" + file_name + ".nii",
                 )
                 self.outputs["mni_t1"] = os.path.join(
-                    self.output_directory, "mni_t1_" + file_name + ".nii.gz"
+                    self.output_directory, "mni_t1_" + file_name + ".nii"
                 )
                 self.outputs["mni_structures"] = os.path.join(
                     self.output_directory,
-                    "mni_structures_" + file_name + ".nii.gz",
+                    "mni_structures_" + file_name + ".nii",
                 )
                 self.outputs["mni_mask"] = os.path.join(
-                    self.output_directory, "mni_mask_" + file_name + ".nii.gz"
+                    self.output_directory, "mni_mask_" + file_name + ".nii"
                 )
                 self.outputs["mni_lobes"] = os.path.join(
-                    self.output_directory, "mni_lobes_" + file_name + ".nii.gz"
+                    self.output_directory, "mni_lobes_" + file_name + ".nii"
                 )
                 self.outputs["mni_macrostructures"] = os.path.join(
                     self.output_directory,
-                    "mni_macrostructures_" + file_name + ".nii.gz",
+                    "mni_macrostructures_" + file_name + ".nii",
                 )
                 self.outputs["mni_tissues"] = os.path.join(
                     self.output_directory,
-                    "mni_tissues_" + file_name + ".nii.gz",
+                    "mni_tissues_" + file_name + ".nii",
                 )
                 self.outputs["matrix_affine"] = os.path.join(
                     self.output_directory,
@@ -361,6 +361,42 @@ class AssemblyNetDocker(ProcessMIA):
             print("sdtoutl: ", sdtoutl.decode())
         if str(stderrl) != "":
             print("stderrl: ", stderrl.decode())
+
+        # Unzip result
+        out_files = [
+            self.native_t1,
+            self.native_structures,
+            self.native_mask,
+            self.native_lobes,
+            self.native_macrostructures,
+            self.native_tissues,
+            self.mni_t1,
+            self.mni_structures,
+            self.mni_mask,
+            self.mni_lobes,
+            self.mni_macrostructures,
+            self.mni_tissues,
+        ]
+
+        for out_file in out_files:
+            cmd = ["gunzip", out_file.replace(".nii", ".nii.gz")]
+            p = subprocess.Popen(
+                cmd,
+                shell=False,
+                bufsize=-1,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                close_fds=True,
+            )
+
+            print("--------->PID:", p.pid)
+
+            (sdtoutl, stderrl) = p.communicate()
+            if str(sdtoutl) != "":
+                print("sdtoutl: ", sdtoutl.decode())
+            if str(stderrl) != "":
+                print("stderrl: ", stderrl.decode())
 
 
 class GetLabels(ProcessMIA):
