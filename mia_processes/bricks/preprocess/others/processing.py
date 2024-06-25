@@ -1681,7 +1681,11 @@ class ExtractROIbyLabel(ProcessMIA):
         self.add_trait(
             "labels",
             traits.List(
-                traits.Int(), output=False, optional=False, desc=labels_desc
+                traits.Int(),
+                output=False,
+                optional=True,
+                desc=labels_desc,
+                default=[1],
             ),
         )
         self.add_trait(

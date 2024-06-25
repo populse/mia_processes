@@ -1201,7 +1201,6 @@ class Import_Data(ProcessMIA):
                 filters = self.rois_list
 
             list_out = []
-            print("all_ref_files", all_ref_files)
             for ref_file in all_ref_files:
                 for _filter in filters:
                     if self.starts_with is True and ref_file.startswith(
@@ -1219,7 +1218,6 @@ class Import_Data(ProcessMIA):
                         list_out.append(
                             os.path.join(roi_raw_data_dir, ref_file)
                         )
-                        print("ref_file", ref_file)
                         self.dict4runtime[
                             os.path.join(self.lib_dir, ref_file)
                         ] = os.path.join(roi_raw_data_dir, ref_file)
