@@ -21,6 +21,7 @@ needed to run other higher-level bricks.
         - Input_Filter
         - List_Duplicate
         - List_To_File
+        - Make_AIF
         - Make_A_List
         - Make_CVR_reg_physio
 
@@ -35,16 +36,17 @@ needed to run other higher-level bricks.
 ##########################################################################
 # fmt: off
 # fmt: on
+
+# Other imports
 import csv
 import os
 import re
 import shutil
 import tempfile
 import traceback
-
-# Other imports
 from ast import literal_eval
 
+import nibabel as nib
 import numpy as np
 import pandas as pd
 
@@ -69,6 +71,7 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import io, signal
 from scipy.interpolate import interp1d
 from scipy.special import gammaln
+from skimage.filters import threshold_otsu
 from traits.api import Either, Undefined
 
 # mia_processes imports
@@ -1633,7 +1636,6 @@ class Import_Data(ProcessMIA):
                 filters = self.rois_list
 
             list_out = []
-
             for ref_file in all_ref_files:
                 for _filter in filters:
                     if self.starts_with is True and ref_file.startswith(
@@ -2112,6 +2114,323 @@ class Make_A_List(ProcessMIA):
         return
 
 
+class Make_AIF(ProcessMIA):
+    """
+    Creating an Arterial Input Function (AIF) for Dynamic Susceptibility
+    Contrast (DSC) Magnetic Resonance Imaging (MRI)
+
+    Please, see the complete documentation for the
+    `Make_AIF in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_AIF.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Make_AIF, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []  # no need of third party software!
+
+        # Inputs description
+        func_file_desc = "The DSC MRI scan (a NIfTI file)"
+
+        # Outputs description
+        aif_file_desc = "The file containing the calculated AIF (a .mat file)"
+
+        # Inputs traits
+        self.add_trait(
+            "func_file",
+            Either(
+                ImageFileSPM(),
+                Undefined,
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=func_file_desc,
+            ),
+        )
+        self.func_file = traits.Undefined
+
+        # Outputs traits
+        self.add_trait("aif_file", File(output=True, desc=aif_file_desc))
+        self.cvr_reg = traits.Undefined
+
+        self.init_default_traits()
+
+    def bol_ar_time(self, data):
+        """Compute bolus arrival time
+
+        :param data:
+        :returns: the bolus arrival time
+        """
+        window_size = 8
+        th = 2.0
+        dim = len(data)
+        mean = std = np.zeros(dim - window_size)
+
+        for t in range(dim - window_size):
+            # fmt: off
+            mean[t] = np.mean(data[t:t + window_size])
+            std[t] = np.std(data[t:t + window_size])
+            # fmt: on
+
+        tlog = data[window_size:] < (mean - th * std)
+        t0 = np.argmax(tlog)
+        t0 += window_size - 1
+        ttp = np.argmin(data)
+
+        if t0 == window_size or t0 > ttp:
+            t0 = 40
+
+        return t0
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Make_AIF, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.func_file and self.func_file not in [
+            "<undefined>",
+            traits.Undefined,
+        ]:
+
+            if self.output_directory:
+                _, file_name = os.path.split(self.func_file)
+                file_name_no_ext, _ = os.path.splitext(file_name)
+                self.outputs["aif_file"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_aif.mat"
+                )
+
+            else:
+                print(
+                    "Make_AIF brick: No output directory found, "
+                    "initialization step cannot be performed...!\n"
+                )
+                return self.make_initResult()
+
+            self.tags_inheritance(self.func_file, self.outputs["aif_file"])
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def load_nii(self, file_path, scaled=True, matlab_like=False):
+        """Return the header and the data of a nibabel image object
+
+        MATLAB and Python (in particular NumPy) treat the order of dimensions
+        and the origin of the coordinate system differently. MATLAB uses main
+        column order (also known as Fortran order). NumPy (and Python in
+        general) uses the order of the main rows (C order). For a 3D array
+        data(x, y, z) in MATLAB, the equivalent in NumPy is data[y, x, z].
+        MATLAB and NumPy also handle the origin of the coordinate system
+        differently:
+        MATLAB's coordinate system starts with the origin in the lower
+        left-hand corner (as in traditional matrix mathematics).
+        NumPy's coordinate system starts with the origin in the top left-hand
+        corner.
+        When taking matlab_like=True as argument, the numpy matrix is
+        rearranged to follow MATLAB conventions.
+        Using scaled=False generates a raw unscaled data matrix (as in MATLAB
+        with `header = loadnifti(fnii)` and `header.reco.data`).
+
+        :param file_path: the path to a NIfTI file
+        :param scaled: A boolean, if True the data is scaled
+        :param matlab_like: A Boolean, if True the data is rearranged to match
+                            the order of the dimensions and the origin of the
+                            coordinate system in Matlab
+        """
+        img = nib.load(file_path)
+        header = img.header
+
+        if scaled is True:
+            data = img.get_fdata()
+
+        elif scaled is False:
+            data = img.dataobj.get_unscaled()
+
+        else:
+            print("Make_AIF brick: scaled argument must be True or False")
+
+        if matlab_like is True:
+
+            if data.ndim == 3:
+                data = np.transpose(data, (1, 0, 2))
+
+            if data.ndim == 4:
+                data = np.transpose(data, (1, 0, 2, 3))
+
+            # TODO: Should transpose for ndim>4 cases be implemented?
+
+            data = np.flip(data, axis=0)
+
+        return header, data
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Make_AIF, self).run_process_mia()
+        header, data = self.load_nii(self.func_file, False, False)
+        # TODO: Perhaps we should do here a test to find out whether it's a
+        #       4D or a 3D? using a try statement ?
+        ncol, nrow, nslices, ndynamics = header.get_data_shape()
+        # TODO: Do we really need thres?
+        thres = np.zeros(nslices)
+
+        for aux in range(nslices):
+            thres[aux] = threshold_otsu(data[:, :, aux, 0])
+
+        head_mask = np.all(data, axis=3)
+        # AIF computation
+        ##################################################
+        # data length report
+        wmaxr = 0.5
+        # ??
+        nb_vox_cand = 50
+        # ??
+        nb_vox = 5
+        # score of each selected voxel, the number of warnings, and the reasons
+        scores = [[None] * 9 for _ in range(nb_vox)]
+        wmax = round(wmaxr * ndynamics)
+        # TODO: can we use head_mask directly instead of roi?
+        roi = head_mask.copy()
+        # remove voxels with inf and NaN values (not necessarily required)
+        roi &= ~np.any(np.isinf(data), axis=3) & ~np.any(
+            np.isnan(data), axis=3
+        )
+        # remove null voxels
+        roi &= np.all(data, axis=3)
+        # remove noisy voxels
+        data_mean = np.mean(data[roi])
+        noisy = np.mean(data, axis=3) < data_mean
+        roi &= ~noisy
+        # calculation of peak heights
+        base_line = min_val = np.zeros((ncol, nrow, nslices))
+        base_line[roi] = np.mean(data[..., 1:6][roi], axis=1)
+        min_val[roi] = np.min(data[roi], axis=1)
+        delta_base_min = base_line - min_val
+        # calculation of peak widths
+        half_width_peak = ndynamics * np.ones((ncol, nrow, nslices))
+
+        for idx in zip(*np.where(roi)):
+            idx = tuple(idx)
+            condition = data[idx] <= (min_val[idx] + delta_base_min[idx] / 2)
+
+            if np.any(condition):
+                half_width_peak[idx] = np.argmax(condition[::-1]) - np.argmax(
+                    condition
+                )
+
+        half_width_peak[half_width_peak == 0] = ndynamics
+        # keep only non-saturated voxels
+        saturated_voxel = np.zeros((ncol, nrow, nslices), dtype=bool)
+
+        for idx in zip(*np.where(roi)):
+            idx = tuple(idx)
+            t1 = np.argmax(
+                data[idx] <= min_val[idx] + 4 * np.std(data[idx, 1:7])
+            )
+            t2 = len(data[idx]) - np.argmax(
+                (data[idx][::-1] <= min_val[idx] + 4 * np.std(data[idx, 1:7]))[
+                    ::-1
+                ]
+            )
+            saturated_voxel[idx] = np.any(np.diff(data[idx, t1:t2], n=2) < 0)
+
+        roi &= ~saturated_voxel
+        # keep only voxels with a width less than a specified value
+        roi &= (half_width_peak < wmax) & (half_width_peak > 0)
+        tmp_data = data[roi].reshape(-1, ndynamics)
+        # sorting of voxels, the height is recalculated beforehand to remove
+        # voxels with excessive width
+        delta_base_min[~roi] = 0
+        tmp_delta_base_min = delta_base_min[roi].flatten()
+        sorting = np.argsort(tmp_delta_base_min)[::-1]
+        # score calculation
+        idx_min = np.argmin(data, axis=3)
+        score = np.zeros(nb_vox_cand)
+
+        for i in range(nb_vox_cand):
+            # calculation of arrival time
+            t0 = self.bol_ar_time(tmp_data[sorting[i], :])
+            initslop = delta_base_min.flatten()[sorting[i]] / (
+                idx_min.flatten()[sorting[i]] - t0
+            )
+            score[i] = (delta_base_min.flatten()[sorting[i]] * initslop) / (
+                half_width_peak.flatten()[sorting[i]] * t0
+            )
+
+        sorted_score = np.argsort(score)[::-1]
+        aif = np.mean(tmp_data[sorting[sorted_score[:nb_vox]], :], axis=0)
+        roi = np.zeros((ncol, nrow, nslices), dtype=bool)
+
+        for i in range(nb_vox):
+            roi.flat[sorting[sorted_score[i]]] = True
+
+        # i, j, k correspond to the indexes in the brain (3D) for
+        # the best results
+        i, j, k = np.where(roi)
+
+        for v in range(nb_vox):
+            warn = 0
+            scores[v][0:4] = [score[sorted_score[v]], i[v], j[v], k[v]]
+
+            # Pre-bolus baseline test
+            std_basepre = np.std(tmp_data[sorting[sorted_score[v]], 1:7])
+            mean_basepre = np.mean(tmp_data[sorting[sorted_score[v]], 1:7])
+
+            if std_basepre >= mean_basepre / 10:
+                warn += 1
+                scores[v][4 + warn] = (
+                    "The pre-bolus baseline of the voxel " "is too noisy"
+                )
+
+            # Post-bolus baseline test
+            std_basepost = np.std(tmp_data[sorting[sorted_score[v]], -6:])
+            mean_basepost = np.mean(tmp_data[sorting[sorted_score[v]], -6:])
+
+            if std_basepost >= mean_basepost / 10:
+                warn += 1
+                scores[v][4 + warn] = (
+                    "The post-bolus baseline of the voxel " "is too noisy"
+                )
+
+            # t0 point test
+            t0 = self.bol_ar_time(tmp_data[sorting[sorted_score[v]], :])
+
+            if tmp_data[sorting[sorted_score[v]], t0] >= 1.1 * mean_basepre:
+                warn += 1
+                scores[v][4 + warn] = "The voxel value at t0 is too high"
+
+            # Pre-bolus baseline length test
+            if t0 < 8:
+                warn += 1
+                scores[v][4 + warn] = "The voxel baseline is too short"
+
+            scores[v][4] = warn
+        ###################################################
+        # TODO: May be we don't need to save in matlab file format?
+        io.savemat(self.aif_file, {"aif": aif, "scores": scores})
+        print(f"Make_AIF brick: {self.aif_file} created!")
+
+
 class Make_CVR_reg_physio(ProcessMIA):
     """
     *Generate the physiological regressor for CVR*
@@ -2371,20 +2690,12 @@ class Make_CVR_reg_physio(ProcessMIA):
                             if len(colonidxs) == 2:
                                 # fmt: off
                                 this_time_s = (
-                                    3600
-                                    * int(
+                                    3600 * int(
                                         line[colonidxs[0] - 2:colonidxs[0]]
-                                    )
-                                    + 60
-                                    * int(
-                                        line[
-                                            colonidxs[0] + 1:colonidxs[1] - 1
-                                        ]
-                                    )
-                                    + int(
-                                        line[
-                                            colonidxs[1] + 1:colonidxs[1] + 2
-                                        ]
+                                    ) + 60 * int(
+                                        line[colonidxs[0] + 1:colonidxs[1] - 1]
+                                    ) + int(
+                                        line[colonidxs[1] + 1:colonidxs[1] + 2]
                                     )
                                 )
                                 # fmt: on
@@ -2420,18 +2731,12 @@ class Make_CVR_reg_physio(ProcessMIA):
                             if len(colonidxs) == 2:
                                 # fmt: off
                                 this_time_s = (
-                                    3600
-                                    * int(
+                                    3600 * int(
                                         line[colonidxs[0] - 2:colonidxs[0]]
-                                    )
-                                    + 60
-                                    * int(
+                                    ) + 60 * int(
                                         line[colonidxs[0] + 1:colonidxs[1]]
-                                    )
-                                    + float(
-                                        line[
-                                            colonidxs[1] + 1:colonidxs[1] + 5
-                                        ]
+                                    ) + float(
+                                        line[colonidxs[1] + 1:colonidxs[1] + 5]
                                     )
                                 )
                                 # fmt: on

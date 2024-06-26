@@ -1,22 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+5a45c6e4 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+de1cb8a6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=eac47572"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+5a45c6e4 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+de1cb8a6 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -76,7 +74,9 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="ReportAnatMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for anatomical data in MRIQC pipeline*</span>
 
@@ -86,7 +86,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportAnatMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportAnatMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -331,7 +333,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportAnatMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportAnatMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -832,7 +837,10 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -857,10 +865,14 @@
             <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportCO2inhalCvr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr">[docs]</a><span class="k">class</span> <span class="nc">ReportCO2inhalCvr</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportCO2inhalCvr">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportCO2inhalCvr</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates report for CVR study by CO2 inhalation task*</span>
 
@@ -870,7 +882,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportCO2inhalCvr.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportCO2inhalCvr.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1302,7 +1316,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportCO2inhalCvr.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportCO2inhalCvr.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1325,7 +1342,8 @@
         <span class="n">db_file_norm_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="c1"># TODO: Do we need to explicitly take the smoothed func as input,</span>
         <span class="c1">#       or can we simply add the prefix &#39;s&#39; to the normalized func?</span>
-        <span class="n">db_file_smooth_norm_func</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">db_file_norm_func</span>
+        <span class="n">folder</span><span class="p">,</span> <span class="n">fil</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">db_file_norm_func</span><span class="p">)</span>
+        <span class="n">db_file_smooth_norm_func</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">fil</span><span class="p">)</span>
         <span class="n">db_file_regressor_physio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regressor_physio</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
 
         <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
@@ -1337,7 +1355,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_anat</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Acquisition nbr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -1345,6 +1363,7 @@
             <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
             <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientRef&quot;</span><span class="p">,</span>
@@ -1352,7 +1371,10 @@
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
@@ -1364,7 +1386,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_func</span><span class="p">,</span>
-            <span class="s2">&quot;Acquisition nbr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
@@ -1373,9 +1395,13 @@
             <span class="s2">&quot;Gas&quot;</span><span class="p">,</span>
             <span class="s2">&quot;GasAdmin&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
@@ -1558,7 +1584,10 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportCO2inhalCvr.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportCO2inhalCvr.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportCO2inhalCvr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -1595,10 +1624,14 @@
             <span class="n">output_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportFuncMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for functional data in MRIQC pipeline*</span>
 
@@ -1608,7 +1641,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportFuncMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportFuncMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1839,7 +1874,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportFuncMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2187,7 +2225,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -2211,10 +2252,14 @@
             <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportGroupMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates a group report for mriqc pipelines*</span>
 
@@ -2224,7 +2269,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportGroupMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportGroupMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2263,7 +2310,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportGroupMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2352,7 +2402,10 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportGroupMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Get all info in a tsv file and in a panda dataframe</span>
@@ -2488,7 +2541,9 @@
 
         <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span>
 
-        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div></div>
+        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -2501,8 +2556,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

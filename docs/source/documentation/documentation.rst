@@ -184,7 +184,11 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
   - **DWITractography**
 
-    - `DWI_whole_brain_tractograpy <pipelines/DWITractography/DWI_whole_brain_tractograpy.html>`_
+    - `Dwi_whole_brain_tractograpy <pipelines/DWITractography/Dwi_whole_brain_tractograpy.html>`_
+
+  - **Perfusion**
+
+    - `Perfdsc <pipelines/Perfusion/Perfdsc.html>`_
 
   - **preprocess**
 
