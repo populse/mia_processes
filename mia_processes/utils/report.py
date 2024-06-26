@@ -32,6 +32,7 @@ import nibabel as nib
 import numpy as np
 import openpyxl
 import pandas as pd
+import traits.api as traits
 
 # capsul import
 from capsul import info as capsul_info
@@ -2440,64 +2441,69 @@ class Report:
 
         # page 4 - Generation task with memory############
         #################################################################
-        self.report.append(
-            Paragraph(
-                "<font size=18 ><b>Mémoire encodage implicite</b> - "
-                "Carte Statistique<br/></font>",
-                self.styles["Left"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        self.report.append(
-            Paragraph(
-                "<font size=10 >"
-                "<b>Activations cérébrales pour l'encodage implicite </b>"
-                "(obtenues à partir de la tâche de génération en prenant "
-                "en compte seulement les mots dont le sujet se souvent "
-                "lors de la tâche de reconnaissance):"
-                "</font>",
-                self.styles["Left"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        slices_image = plot_slice_planes(
-            data_1=self.norm_anat,
-            data_2=self.spmT_gene_enco,
-            fig_rows=norm_anat_fig_rows,
-            fig_cols=norm_anat_fig_cols,
-            slice_start=norm_anat_inf_slice_start,
-            slice_step=norm_anat_slices_gap,
-            cmap_1=norm_anat_cmap,
-            cmap_2=spmT_cmap,
-            vmin_2=self.spmT_vmin,
-            vmax_2=self.spmT_vmax,
-            out_dir=tmpdir.name,
-        )
-        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
-        slices_image.hAlign = "CENTER"
-        self.report.append(slices_image)
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        slices_image = plot_slice_planes(
-            data_1=self.norm_anat,
-            data_2=self.spmT_gene_enco,
-            plane="cor",
-            fig_rows=norm_anat_fig_rows_cor,
-            fig_cols=norm_anat_fig_cols_cor,
-            slice_start=norm_anat_inf_slice_start_cor,
-            slice_step=norm_anat_slices_gap_cor,
-            cmap_1=norm_anat_cmap,
-            cmap_2=spmT_cmap,
-            vmin_2=self.spmT_vmin,
-            vmax_2=self.spmT_vmax,
-            out_dir=tmpdir.name,
-        )
-        slices_image = Image(slices_image, width=177 * mm, height=50 * mm)
-        slices_image.hAlign = "CENTER"
-        self.report.append(slices_image)
+        if self.spmT_gene_enco:
+            if self.spmT_gene_enco not in ["<undefined>", traits.Undefined]:
+                self.report.append(
+                    Paragraph(
+                        "<font size=18 ><b>Mémoire encodage implicite</b> - "
+                        "Carte Statistique<br/></font>",
+                        self.styles["Left"],
+                    )
+                )
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                self.report.append(
+                    Paragraph(
+                        "<font size=10 >"
+                        "<b>Activations cérébrales pour l'encodage implicite "
+                        "</b> (obtenues à partir de la tâche de génération "
+                        "en prenant en compte seulement les mots dont le "
+                        "sujet se souvent lors de la tâche de </font>",
+                        self.styles["Left"],
+                    )
+                )
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                slices_image = plot_slice_planes(
+                    data_1=self.norm_anat,
+                    data_2=self.spmT_gene_enco,
+                    fig_rows=norm_anat_fig_rows,
+                    fig_cols=norm_anat_fig_cols,
+                    slice_start=norm_anat_inf_slice_start,
+                    slice_step=norm_anat_slices_gap,
+                    cmap_1=norm_anat_cmap,
+                    cmap_2=spmT_cmap,
+                    vmin_2=self.spmT_vmin,
+                    vmax_2=self.spmT_vmax,
+                    out_dir=tmpdir.name,
+                )
+                slices_image = Image(
+                    slices_image, width=177 * mm, height=127 * mm
+                )
+                slices_image.hAlign = "CENTER"
+                self.report.append(slices_image)
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                slices_image = plot_slice_planes(
+                    data_1=self.norm_anat,
+                    data_2=self.spmT_gene_enco,
+                    plane="cor",
+                    fig_rows=norm_anat_fig_rows_cor,
+                    fig_cols=norm_anat_fig_cols_cor,
+                    slice_start=norm_anat_inf_slice_start_cor,
+                    slice_step=norm_anat_slices_gap_cor,
+                    cmap_1=norm_anat_cmap,
+                    cmap_2=spmT_cmap,
+                    vmin_2=self.spmT_vmin,
+                    vmax_2=self.spmT_vmax,
+                    out_dir=tmpdir.name,
+                )
+                slices_image = Image(
+                    slices_image, width=177 * mm, height=50 * mm
+                )
+                slices_image.hAlign = "CENTER"
+                self.report.append(slices_image)
 
-        self.report.append(Spacer(0 * mm, 4 * mm))
+                self.report.append(Spacer(0 * mm, 4 * mm))
 
-        self.report.append(PageBreak())
+                self.report.append(PageBreak())
 
         # page 5 - Recognition task############
         #################################################################
@@ -2509,37 +2515,39 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 4 * mm))
-        m1 = Paragraph(
-            "<font size=10 >"
-            "<b>Performances comportementales </b> "
-            "(mesurées pendant la tâche de reconnaisance "
-            "des mots entendus à la tâche précédente à partir d'image)"
-            "</font>",
-            self.styles["Left"],
-        )
+        if self.correct_response:
+            if self.correct_response not in ["<undefined>", traits.Undefined]:
+                m1 = Paragraph(
+                    "<font size=10 >"
+                    "<b>Performances comportementales </b> "
+                    "(mesurées pendant la tâche de reconnaisance "
+                    "des mots entendus à la tâche précédente à partir d'image)"
+                    "</font>",
+                    self.styles["Left"],
+                )
 
-        m2 = Paragraph("<font size=10 ><b>% CR</b></font>")
-        m3 = Paragraph("<font size=10 ><b>% erreur</b></font>")
-        m4 = Paragraph("<font size=10 ><b>anciens mots</b></font>")
-        m5 = Paragraph("<font size=10 ><b>nouveaux mots</b></font>")
-        df = pd.read_csv(self.correct_response)
+                m2 = Paragraph("<font size=10 ><b>% CR</b></font>")
+                m3 = Paragraph("<font size=10 ><b>% erreur</b></font>")
+                m4 = Paragraph("<font size=10 ><b>anciens mots</b></font>")
+                m5 = Paragraph("<font size=10 ><b>nouveaux mots</b></font>")
+                df = pd.read_csv(self.correct_response)
 
-        behavioural_data = [
-            [m1, "", m2, m3],
-            ["", m4, df["correct_old"][0], df["error_old"][0]],
-            ["", m5, df["correct_new"][0], df["error_new"][0]],
-        ]
-        t = Table(behavioural_data)
-        t.setStyle(
-            TableStyle(
-                [
-                    ("GRID", (0, 0), (-1, -1), 1, colors.grey),
-                    ("SPAN", (0, 0), (0, -1)),
+                behavioural_data = [
+                    [m1, "", m2, m3],
+                    ["", m4, df["correct_old"][0], df["error_old"][0]],
+                    ["", m5, df["correct_new"][0], df["error_new"][0]],
                 ]
-            )
-        )
-        t.hAlign = "LEFT"
-        self.report.append(t)
+                t = Table(behavioural_data)
+                t.setStyle(
+                    TableStyle(
+                        [
+                            ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+                            ("SPAN", (0, 0), (0, -1)),
+                        ]
+                    )
+                )
+                t.hAlign = "LEFT"
+                self.report.append(t)
         self.report.append(Spacer(0 * mm, 4 * mm))
         self.report.append(
             Paragraph(

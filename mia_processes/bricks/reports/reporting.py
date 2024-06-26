@@ -9,6 +9,7 @@ generate automatic report at the end of a pipeline calculation.
         - ReportAnatMriqc
         - ReportCO2inhalCvr
         - ReportFuncMriqc
+        - ReportGE2REC
         - ReportGroupMriqc
 
 """
@@ -2387,7 +2388,7 @@ class ReportGE2REC(ProcessMIA):
         )
         self.add_trait(
             "spmT_gene_enco",
-            File(output=False, optional=False, desc=spmT_gene_enco_desc),
+            File(output=False, optional=True, desc=spmT_gene_enco_desc),
         )
 
         self.add_trait(
@@ -2518,20 +2519,22 @@ class ReportGE2REC(ProcessMIA):
             "LateralizationPathology",
         )
 
-        if self.dict4runtime["norm_anat"]["AcquisitionDate"] != "Undefined":
-            self.patient_info["AcquisitionDate"] = self.dict4runtime[
-                "norm_anat"
-            ]["AcquisitionDate"]
+        if (
+            self.patient_info.get("AcquisitionDate") is None
+            or self.patient_info["AcquisitionDate"] == Undefined
+        ):
+            if (
+                self.dict4runtime["norm_anat"]["AcquisitionDate"]
+                != "Undefined"
+            ):
+                self.patient_info["AcquisitionDate"] = self.dict4runtime[
+                    "norm_anat"
+                ]["AcquisitionDate"]
 
         else:
-            if (
-                self.patient_info.get("Pathology") is None
-                or self.patient_info["Pathology"] == Undefined
-            ):
-                self.dict4runtime["norm_anat"]["AcquisitionDate"] = (
-                    self.patient_info.get("AcquisitionDate")
-                )
-
+            self.dict4runtime["norm_anat"]["AcquisitionDate"] = (
+                self.patient_info.get("AcquisitionDate")
+            )
         if (
             self.patient_info.get("Age") is None
             or self.patient_info["Age"] == Undefined
