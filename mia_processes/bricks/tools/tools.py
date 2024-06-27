@@ -1852,10 +1852,10 @@ class Make_AIF(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Make_AIF, self).run_process_mia()
-        header, data = self.load_nii(self.func_file, False, False)
+        header, data = self.load_nii(self.func_file, False, True)
         # TODO: Perhaps we should do here a test to find out whether it's a
         #       4D or a 3D? using a try statement ?
-        ncol, nrow, nslices, ndynamics = header.get_data_shape()
+        ncol, nrow, nslices, ndynamics = data.shape
         # TODO: Do we really need thres?
         thres = np.zeros(nslices)
 
@@ -1888,7 +1888,15 @@ class Make_AIF(ProcessMIA):
         roi &= ~noisy
         # calculation of peak heights
         base_line = min_val = np.zeros((ncol, nrow, nslices))
-        base_line[roi] = np.mean(data[..., 1:6][roi], axis=1)
+        # Replicate the roi array ndynamics times along the 4th dimension
+        roi_replicated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
+        # Apply the mask to data
+        masked_data = data[roi_replicated].reshape(-1, ndynamics)
+        # Calculate the mean along the second axis
+        # (ignoring the first frame, so use frames 2-6)
+        mean_values = np.mean(masked_data[:, 1:6], axis=1)
+        # Assign the mean values to base_line at the positions of roi
+        base_line[roi] = mean_values
         min_val[roi] = np.min(data[roi], axis=1)
         delta_base_min = base_line - min_val
         # calculation of peak widths
