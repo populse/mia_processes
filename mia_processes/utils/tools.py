@@ -17,6 +17,7 @@ Module that contains multiple functions used across mia_processes
         - plot_qi2
         - plot_segmentation
         - plot_slice_planes
+        - plot_realignment_parameters
         - set_dbFieldValue
 """
 
@@ -32,6 +33,7 @@ import datetime
 import glob
 import json
 import os
+from math import pi, sqrt
 
 import matplotlib.pyplot as plt
 import nibabel as nib
@@ -312,6 +314,149 @@ def mriqc_group_iqms_tsv(modality, output_directory):
     dataframe[cols].to_csv(str(out_tsv), index=False, sep="\t")
 
     return dataframe, out_tsv
+
+
+def plot_realignment_parameters(
+    realignment_parameters, vox_size, out_file_tra, out_file_rot
+):
+    """
+    Plot SPM realignment parameters
+    :param realignment_parameters: realignment parameters file
+                                   (a string representing an existing file)
+    :param vox_size: voxel size of the data (a list of 3 float or integer)
+    :param out_file_tra: out path for the translation figure
+                        (a string representing a path file)
+    :param out_file_rot: out path for the rotation figure
+                        (a string representing a path file)
+
+    """
+    (
+        rmsdTra,
+        maxRmsdTra,
+        maxTra,
+        maxTraCheck,
+        minTra,
+        rmsdRot,
+        maxRmsdRot,
+        maxRot,
+        maxRotCheck,
+        minRot,
+    ) = np.zeros(10)
+
+    data_rp = np.loadtxt(realignment_parameters)
+    data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
+
+    xLim = len(data_rp)
+
+    for i in range(3):
+        for n in data_rp[:, i]:
+            rmsdTra = rmsdTra + n**2
+
+        rmsdTra = sqrt(rmsdTra / len(data_rp[:, i]))
+
+        if rmsdTra > maxRmsdTra:
+            # maxRmsdTra: Maximum root-mean-square deviation for
+            # x, y, z linear motion
+            maxRmsdTra = rmsdTra
+
+        rmsdTra = 0
+
+        if max(data_rp[:, i]) > maxTra:
+            # maxTra: Maximum x, y, z linear motion in
+            # POSITIVE direction
+            maxTra = max(data_rp[:, i])
+
+        if min(data_rp[:, i]) < minTra:
+            # minTra: Maximum x, y, z linear motion in
+            # NEGATIVE direction
+            minTra = min(data_rp[:, i])
+
+    maxTraCheck = maxTra
+
+    if abs(minTra) > maxTra:
+        maxTraCheck = abs(minTra)
+
+    for i in range(3, 6):
+        for n in data_rp[:, i]:
+            rmsdRot = rmsdRot + n**2
+
+        rmsdRot = sqrt(rmsdRot / len(data_rp[:, i]))
+
+        if rmsdRot > maxRmsdRot:
+            # maxRmsdRot: Maximum root-mean-square deviation for
+            # roll, pitch, yaw rotational motion
+            maxRmsdRot = rmsdRot
+
+        rmsdRot = 0
+
+        if max(data_rp[:, i]) > maxRot:
+            # maxRot: Maximum roll, pitch, yaw rotational motion in
+            # POSITIVE direction
+            maxRot = max(data_rp[:, i])
+
+        if min(data_rp[:, i]) < minRot:
+            # minRot: Maximum roll, pitch, yaw rotational motion in
+            # NEGATIVE direction
+            minRot = min(data_rp[:, i])
+
+    maxRotCheck = maxRot
+
+    if abs(minRot) > maxRot:
+        maxRotCheck = abs(minRot)
+
+    if "Undefined" not in vox_size:
+        # Mean x,y,z voxel dimension calculation.
+        traLim = (vox_size[0] + vox_size[1] + vox_size[2]) * 1 / 3
+
+        # maxRot for quality fixed to 2deg
+        # maxTra(nslation) for quality fixed to
+        # mean x,y,z voxel dim (traLim)
+        if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
+            qc = 0
+        else:
+            qc = 1
+
+    # Plot translation
+    fig = plt.figure(figsize=(12, 5.6), facecolor="white")
+    ax = fig.add_subplot(111)
+    fig.subplots_adjust(
+        left=None,
+        bottom=None,
+        right=None,
+        top=None,
+        wspace=None,
+        hspace=None,
+    )
+    ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
+    ax.set_xlabel("Dynamic scans", fontsize=14)
+    ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
+    ax.plot(data_rp[:, :3], label=("X", "Y", "Z"))
+    ax.legend(loc="best")
+    ax.set_xlim(0, xLim)
+    ax.set_ylim(minTra * 1.1, maxTra * 1.1)
+    ax.yaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    ax.xaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    ax.get_yaxis().set_tick_params(direction="out")
+    ax.get_xaxis().set_tick_params(direction="out")
+
+    # High resolution: 2000px × 1118px.
+    fig.savefig(out_file_tra, format="png", dpi=200)
+
+    # Plot rotation
+    ax.clear()
+    ax.set_title("Rotational head motion parameters", fontsize=20, y=1.03)
+    ax.set_xlabel("Dynamic scans", fontsize=14)
+    ax.set_ylabel("Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14)
+    ax.plot(data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
+    ax.legend(loc="best")
+    ax.set_xlim(0, xLim)
+    ax.set_ylim(minRot * 1.1, maxRot * 1.1)
+    ax.yaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    ax.xaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
+    # High resolution: 2000px × 1118px.
+    fig.savefig(out_file_rot, format="png", dpi=200)
+
+    return qc
 
 
 def plot_boxplot_points(dataframe, title, ylabel, out_file=None):

@@ -14,7 +14,9 @@ needed to run other higher-level bricks.
         - Filter_Files_List
         - Find_In_List
         - Get_Conditions_From_csv
+        - Get_Eprime_Info_GE2REC
         - Get_Patient_Name
+        - Get_Regressors_From_csv
         - Import_Data
         - Input_Filter
         - List_Duplicate
@@ -36,6 +38,7 @@ needed to run other higher-level bricks.
 # fmt: on
 
 # Other imports
+import csv
 import os
 import re
 import shutil
@@ -574,7 +577,7 @@ class Filter_Files_List(ProcessMIA):
         self.add_trait(
             "filtered_list", traits.List(output=True, desc=filtered_list_desc)
         )
-        self.filtered_list = traits.Undefined
+        # self.filtered_list = traits.Undefined
 
         self.init_default_traits()
 
@@ -875,12 +878,10 @@ class Get_Conditions_From_csv(ProcessMIA):
         all_cond_onsets = []
         all_cond_durations = []
 
-        for i in range(len(self.csv_files)):
+        for i, csv_file in enumerate(self.csv_files):
             cond_names = []
             cond_onsets = []
             cond_durations = []
-
-            csv_file = self.csv_files[i]
             design = self.design_type[i]
             # Check extension
             valid_bool, in_ext, file_name = checkFileExt(
@@ -898,12 +899,12 @@ class Get_Conditions_From_csv(ProcessMIA):
             col_names = list(df.columns)
             if design == "bloc":
                 cond_names = []
-                for i in range(len(col_names)):
-                    if "duration" not in col_names[i]:
+                for col_name in col_names:
+                    if "duration" not in col_name:
                         # Check that we have duration for each condition
                         try:
-                            df.loc[:, col_names[i] + " duration"]
-                            cond_names.append(col_names[i])
+                            df.loc[:, col_name + " duration"]
+                            cond_names.append(col_name)
                         except Exception:
                             print(
                                 "\nGet_Conditions_From_csv brick: "
@@ -948,6 +949,325 @@ class Get_Conditions_From_csv(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         # super(Get_Conditions_From_csv, self).run_process_mia()
+        return
+
+
+class Get_Eprime_Info_GE2REC(ProcessMIA):
+    """
+    *Get info from an E-Prime file for GE2REC protocol*
+
+    Please, see the complete documentation for the `Get_Eprime_Info_GE2REC
+    brick in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Eprime_Info_GE2REC.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Get_Eprime_Info_GE2REC, self).__init__()
+
+        # Inputs description
+        eprime_file_desc = "Eprime file"
+
+        # Outputs description
+        # csv_gene_desc = "Onset gene"
+        # csv_reco_desc = "Onset reco"
+        # csv_recall_desc = "Onset recall"
+        csv_encodage_reco_desc = "CSV file with Encoding performance "
+        csv_correct_response_desc = "CSV file with correct responses"
+        sess_regress_level1design_desc = (
+            "Informations for sess_regress (level1design brick)"
+        )
+
+        # Input traits
+        self.add_trait(
+            "eprime_file",
+            File(
+                output=False,
+                copyfile=True,
+                optional=False,
+                desc=eprime_file_desc,
+            ),
+        )
+
+        # Output traits
+        # self.add_trait(
+        #     "csv_gene",
+        #     traits.File(output=True, optional=True, desc=csv_gene_desc),
+        # )
+        # self.add_trait(
+        #     "csv_reco",
+        #     traits.File(output=True, optional=True, desc=csv_reco_desc),
+        # )
+        # self.add_trait(
+        #     "csv_recall",
+        #     traits.File(output=True, optional=True, desc=csv_recall_desc),
+        # )
+        self.add_trait(
+            "csv_encodage_reco",
+            traits.File(
+                output=True, optional=True, desc=csv_encodage_reco_desc
+            ),
+        )
+        self.add_trait(
+            "csv_correct_response",
+            traits.File(
+                output=True, optional=True, desc=csv_correct_response_desc
+            ),
+        )
+        self.add_trait(
+            "sess_regress_level1design",
+            traits.List(
+                traits.List(
+                    traits.Dict(
+                        traits.Enum("name", "val"),
+                        traits.Union(traits.Str, traits.List(traits.Float())),
+                    )
+                ),
+                value=[[]],
+                output=True,
+                optional=True,
+                desc=sess_regress_level1design_desc,
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Get_Eprime_Info_GE2REC, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.eprime_file:
+            ifile = os.path.split(self.eprime_file)[-1]
+            file_name, in_ext = ifile.rsplit(".", 1)
+            if self.output_directory:
+                # self.outputs["csv_gene"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_gene.csv"
+                # )
+                # self.outputs["csv_reco"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_reco.csv"
+                # )
+                # self.outputs["csv_recall"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_recall.csv"
+                # )
+                self.outputs["csv_encodage_reco"] = os.path.join(
+                    self.output_directory, file_name + "_encodage_reco.csv"
+                )
+                self.outputs["csv_correct_response"] = os.path.join(
+                    self.output_directory,
+                    file_name + "_correct_response.csv",
+                )
+
+                # Obtains all information from EPRIME files
+                # df_gene = pd.read_excel(self.eprime_file, sheet_name="GENE")
+                df_reco = pd.read_excel(self.eprime_file, sheet_name="RECO")
+                # df_recall = pd.read_excel(self.eprime_file,
+                # sheet_name="RAPPEL")
+
+                # # Get onset time in second for generation task (bloc design)
+                # zero = df_gene["SON.OnsetTime"].dropna().to_list()[0]
+                # onset_gene_eprime = (
+                #     df_gene[df_gene["CONDITION"] == "task"]["SON.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_gene = []
+                # for i, time in enumerate(onset_gene_eprime):
+                #     # block design, take only the first onset of the bloc
+                #     if i in [0, 8, 16, 24, 32]:
+                #         onset_gene.append((time - zero) / 1000)
+                # onset_ctrl_eprime = (
+                #     df_gene[
+                #      df_gene["CONDITION"] == "control"]["SON.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_ctrl = []
+                # for i, time in enumerate(onset_ctrl_eprime):
+                #     if i in [0, 8, 16, 24, 32]:
+                #         onset_ctrl.append((time - zero) / 1000)
+
+                # data = {
+                #     "GENE": onset_gene,
+                #     "GENE duration": [40] * len(onset_gene),
+                #     "CONTROL": onset_ctrl,
+                #     "CONTROL duration": [40] * len(onset_ctrl),
+                # }
+                # df_onset_gene = pd.DataFrame(data)
+                # df_onset_gene.to_csv(self.outputs["csv_gene"], index=False)
+
+                # # Get onset time in second for reco (event)
+                # zero = df_reco["image.OnsetTime"].dropna().to_list()[0]
+                # onset_new_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "NEW"]["image.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_new = []
+                # for time in onset_new_eprime:
+                #     onset_new.append((time - zero) / 1000)
+                # onset_ctrl_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "CONTROL"][
+                #         "image.OnsetTime"
+                #     ]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_ctrl = []
+                # for time in onset_ctrl_eprime:
+                #     onset_ctrl.append((time - zero) / 1000)
+                # onset_old_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "OLD"]["image.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_old = []
+                # for time in onset_old_eprime:
+                #     onset_old.append((time - zero) / 1000)
+                # data = {
+                #     "OLD": onset_old,
+                #     "CONTROL": onset_ctrl,
+                #     "NEW": onset_new,
+                # }
+                # df_onset_reco = pd.DataFrame(data)
+                # df_onset_reco.to_csv(self.outputs["csv_reco"], index=False)
+
+                # Get encodage regressor from reco
+                # Create a dataframe with only the OLD condition
+                # And get encodage, if good anwser = 2 and if not encodage = 1
+                df_old = df_reco[df_reco["CONDITION"] == "OLD"]
+                info_responses = df_old[
+                    ["IMAGE", "REPONSE", "image.RESP"]
+                ].to_dict("records")
+                encodage_old = []
+                good_response_old = 0
+                bad_response_old = 0
+                for i, info in enumerate(info_responses):
+                    if info["image.RESP"] == info["REPONSE"]:
+                        encodage_old.append(2)
+                        good_response_old += 1
+                    else:
+                        # bad response or no response
+                        encodage_old.append(1)
+                        bad_response_old += 1
+                cr_old = (good_response_old / len(info_responses)) * 100
+                er_old = (bad_response_old / len(info_responses)) * 100
+
+                def sort_list(list1, list2):
+                    """Sort list1 using list2 order"""
+                    zipped_pairs = zip(list2, list1)
+                    z = [x for _, x in sorted(zipped_pairs)]
+                    return z
+
+                # Sort encodage following the order during generation task
+                order_gene = df_old["ORDRE_GENERATION"].dropna().to_list()
+                encodage_old_sort = sort_list(encodage_old, order_gene)
+                # Duplicate encodage because generation during 2TR
+                encodage_old = []
+                for i in encodage_old_sort:
+                    encodage_old.extend([i, i])
+                # Add encodage = 0 during rest and  1 during controlcontrol
+                # rest = 4 TR ctrl = 8 * 2TR
+                encodage_old_all = []
+                encodage_old_all.extend(encodage_old[0:16])
+                encodage_old_all.extend([0] * 4)
+                encodage_old_all.extend([1] * 16)
+                encodage_old_all.extend(encodage_old[16:32])
+                encodage_old_all.extend([0] * 4)
+                encodage_old_all.extend([1] * 16)
+                encodage_old_all.extend(encodage_old[32:48])
+                encodage_old_all.extend([0] * 4)
+                encodage_old_all.extend([1] * 16)
+                encodage_old_all.extend(encodage_old[48:64])
+                encodage_old_all.extend([0] * 4)
+                encodage_old_all.extend([1] * 16)
+                encodage_old_all.extend(encodage_old[64:80])
+                encodage_old_all.extend([0] * 4)
+                encodage_old_all.extend([1] * 16)
+
+                with open(
+                    self.outputs["csv_encodage_reco"], "w", encoding="utf-8"
+                ) as f:
+                    write = csv.writer(f)
+                    write.writerow(["ENCODAGE"])
+                    for i in encodage_old_all:
+                        write.writerow([i])
+
+                # Variable for level1design brick
+                self.outputs["sess_regress_level1design"] = [
+                    [{"name": "ENCODAGE", "val": encodage_old_all}]
+                ]
+
+                # Get correct response / error for NEW condition
+                df_new = df_reco[df_reco["CONDITION"] == "NEW"]
+                info_responses = df_new[
+                    ["IMAGE", "REPONSE", "image.RESP"]
+                ].to_dict("records")
+                good_response_new = 0
+                bad_response_new = 0
+                for i, info in enumerate(info_responses):
+                    if info["image.RESP"] == info["REPONSE"]:
+                        good_response_new += 1
+                    else:
+                        # bad response or no response
+                        bad_response_new += 1
+                cr_new = (good_response_new / len(info_responses)) * 100
+                er_new = (bad_response_new / len(info_responses)) * 100
+
+                data = {
+                    "correct_old": [cr_old],
+                    "error_old": [er_old],
+                    "correct_new": [cr_new],
+                    "error_new": [er_new],
+                }
+                df = pd.DataFrame(data)
+                df.to_csv(self.outputs["csv_correct_response"], index=False)
+
+        if self.outputs:
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_gene"]
+            # )
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_reco"]
+            # )
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_recall"]
+            # )
+            self.tags_inheritance(
+                in_file=self.eprime_file,
+                out_file=self.outputs["csv_encodage_reco"],
+            )
+            self.tags_inheritance(
+                in_file=self.eprime_file,
+                out_file=self.outputs["csv_correct_response"],
+            )
+            self.outputs["notInDb"] = ["sess_regress_level1design"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # super(Get_Eprime_Info_GE2REC, self).run_process_mia()
         return
 
 
@@ -1032,6 +1352,122 @@ class Get_Patient_Name(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Get_Regressors_From_csv(ProcessMIA):
+    """
+    *Get regressors information (regressors names, values and session)
+    for Level1Design brick using csv files.*
+
+    Please, see the complete documentation for
+    the `Get_Conditions_From_csv brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Regressors_From_csv.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Get_Regressors_From_csv, self).__init__()
+
+        # Inputs description
+        csv_files_desc = (
+            ".csv files contening the regressors (one column by regressors),"
+            "one for each session (existing .csv files)"
+        )
+
+        # Outputs description
+        sess_regress_level1design_desc = "Informations for sess_regress"
+
+        # Input traits
+        self.add_trait(
+            "csv_files",
+            InputMultiPath(
+                traits.File(),
+                output=False,
+                optional=False,
+                desc=csv_files_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "sess_regress_level1design",
+            traits.List(
+                traits.List(
+                    traits.Dict(
+                        traits.Enum("name", "val"),
+                        traits.Union(traits.Str, traits.List(traits.Float())),
+                    )
+                ),
+                value=[[]],
+                output=True,
+                optional=True,
+                desc=sess_regress_level1design_desc,
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Get_Regressors_From_csv, self).list_outputs()
+        sess_regress_level1design = []
+        for csv_file in self.csv_files:
+            # Check extension
+            valid_bool, in_ext, file_name = checkFileExt(
+                csv_file, {"csv": "csv"}
+            )
+            if not valid_bool:
+                print(
+                    "\nGet_Conditions_From_csv brick: Initialization "
+                    "failed... One of the file is not a .csv file ...!"
+                )
+                return self.make_initResult()
+
+            regressor_sess = []
+            df = pd.read_csv(csv_file)
+            for col in df.columns:
+                dico = {"name": col, "val": df[col].values.tolist()}
+                regressor_sess.append(dico)
+            sess_regress_level1design.append(regressor_sess)
+
+        # Outputs definition and tags inheritance (optional)
+        if sess_regress_level1design:
+            self.outputs["sess_regress_level1design"] = (
+                sess_regress_level1design
+            )
+
+        if self.outputs:
+            self.outputs["notInDb"] = [
+                "sess_regress_level1design",
+            ]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # super(Get_Regressors_From_csv, self).run_process_mia()
         return
 
 

@@ -9,6 +9,7 @@ generate automatic report at the end of a pipeline calculation.
         - ReportAnatMriqc
         - ReportCO2inhalCvr
         - ReportFuncMriqc
+        - ReportGE2REC
         - ReportGroupMriqc
 
 """
@@ -38,6 +39,7 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from mia_processes.utils import (
     Report,
     dict4runtime_update,
+    get_dbFieldValue,
     mriqc_get_all_run,
     mriqc_group_iqms_tsv,
     plot_boxplot_points,
@@ -2186,6 +2188,568 @@ class ReportFuncMriqc(ProcessMIA):
             norm_func_fig_cols=self.norm_func_fig_cols,
             norm_func_inf_slice_start=self.norm_func_inf_slice_start,
             norm_func_slices_gap=self.norm_func_slices_gap,
+        )
+
+        report.make_report()
+
+
+class ReportGE2REC(ProcessMIA):
+    """
+    **
+
+    Please, see the complete documentation for the `ReportGE2REC brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportGE2REC.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ReportGE2REC, self).__init__()
+
+        # Third party software required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        norm_anat_desc = (
+            "An existing, uncompressed normalised anatomical "
+            "image file (valid extensions: .nii)"
+        )
+
+        norm_func_gene_desc = (
+            "An existing, uncompressed normalised functional image file "
+            "(valid extensions: .nii, .nii.gz)"
+        )
+
+        norm_func_reco_desc = (
+            "An existing, uncompressed normalised functional image file "
+            "(valid extensions: .nii, .nii.gz)"
+        )
+
+        norm_func_recall_desc = (
+            "An existing, uncompressed normalised functional image file "
+            "(valid extensions: .nii, .nii.gz)"
+        )
+
+        norm_func_mask_desc = "Mask"
+        realignment_parameters_gene_desc = (
+            "Estimation of translation and rotation parameters when "
+            "realigning functional data (a pathlike object or a"
+            "string representing a file, or a list "
+            "of pathlike objects or strings "
+            "representing a file)"
+        )
+        realignment_parameters_reco_desc = (
+            "Estimation of translation and rotation parameters when "
+            "realigning functional data (a pathlike object or a"
+            "string representing a file, or a list "
+            "of pathlike objects or strings "
+            "representing a file)"
+        )
+        realignment_parameters_recall_desc = (
+            "Estimation of translation and rotation parameters when "
+            "realigning functional data (a pathlike object or a"
+            "string representing a file, or a list "
+            "of pathlike objects or strings "
+            "representing a file)"
+        )
+
+        spmT_gene_desc = (
+            "Stat images from a t-contrast from GENE task "
+            "(valid extensions:.nii)"
+        )
+
+        spmT_reco_desc = (
+            "Stat images from a t-contrast from GENE task "
+            "(valid extensions:.nii)"
+        )
+        spmT_recall_desc = (
+            "Stat images from a t-contrast from GENE task "
+            "(valid extensions:.nii)"
+        )
+        spmT_gene_enco_desc = ()
+        correct_response_desc = ()
+
+        spmT_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        spmT_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+        li_curves_desc = ""
+
+        patient_info_desc = (
+            "Optional dictionary with information about the patient "
+            "(e.g. {"
+            "'AcquisitionDate': '20240415', 'Pathology': 'ACMD', "
+            "'Age': 64, 'Sex': 'M'}"
+        )
+
+        # Outputs description
+        report_desc = "The generated report (pdf)"
+
+        # Inputs traits
+        self.add_trait(
+            "norm_anat",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_anat_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_gene",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_gene_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_reco",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_reco_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_recall",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_recall_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "realignment_parameters_gene",
+            File(
+                output=False,
+                optional=False,
+                desc=realignment_parameters_gene_desc,
+            ),
+        )
+
+        self.add_trait(
+            "realignment_parameters_reco",
+            File(
+                output=False,
+                optional=False,
+                desc=realignment_parameters_reco_desc,
+            ),
+        )
+
+        self.add_trait(
+            "realignment_parameters_recall",
+            File(
+                output=False,
+                optional=False,
+                desc=realignment_parameters_recall_desc,
+            ),
+        )
+
+        self.add_trait(
+            "spmT_gene",
+            File(output=False, optional=False, desc=spmT_gene_desc),
+        )
+
+        self.add_trait(
+            "spmT_reco",
+            File(output=False, optional=False, desc=spmT_reco_desc),
+        )
+        self.add_trait(
+            "spmT_recall",
+            File(output=False, optional=False, desc=spmT_recall_desc),
+        )
+        self.add_trait(
+            "spmT_gene_enco",
+            File(output=False, optional=True, desc=spmT_gene_enco_desc),
+        )
+
+        self.add_trait(
+            "spmT_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=spmT_vmin_desc,
+            ),
+        )
+        self.spmT_vmin = 2.5
+
+        self.add_trait(
+            "spmT_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=spmT_vmax_desc,
+            ),
+        )
+        self.spmT_vmax = 5.0
+
+        self.add_trait(
+            "li_curves",
+            traits.List(
+                File(),
+                output=False,
+                optional=True,
+                desc=li_curves_desc,
+            ),
+        )
+
+        self.add_trait(
+            "correct_response",
+            File(
+                output=False,
+                optional=True,
+                desc=correct_response_desc,
+            ),
+        )
+
+        self.add_trait(
+            "patient_info",
+            traits.Dict(output=False, optional=True, desc=patient_info_desc),
+        )
+        self.patient_info = dict(
+            Pathology=Undefined,
+            Age=Undefined,
+            Sex=Undefined,
+            AcquisitionDate=Undefined,
+            DominantHand=Undefined,
+            LateralizationPathology=Undefined,
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "report",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=report_desc
+            ),
+        )
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ReportGE2REC, self).list_outputs()
+
+        file_position = (
+            self.norm_anat.find(self.project.getName())
+            + len(self.project.getName())
+            + 1
+        )
+        db_file_norm_anat = self.norm_anat[file_position:]
+        db_file_norm_func_gene = self.norm_func_gene[file_position:]
+        db_file_norm_func_reco = self.norm_func_reco[file_position:]
+        db_file_norm_func_recall = self.norm_func_recall[file_position:]
+
+        # As we do not have access to the database at the runtime (see #272),
+        # we prepare here the data that the run_process_mia method will need
+        # via dict4runtime parameter:
+        self.dict4runtime["norm_anat"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_anat"],
+            self.project.session,
+            db_file_norm_anat,
+            "AcquisitionDate",
+            "Acquisition nbr",
+            "Affine regularization type",
+            "Age",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Grid spacings (X,Y,Z,T,...)",
+            "Pathology",
+            "PatientName",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "Sex",
+            "Site",
+            "SliceThickness",
+            "Spectro",
+            "Start/end slice",
+            "StudyName",
+            "Voxel sizes",
+            "DominantHand",
+            "LateralizationPathology",
+        )
+
+        if (
+            self.patient_info.get("AcquisitionDate") is None
+            or self.patient_info["AcquisitionDate"] == Undefined
+        ):
+            if (
+                self.dict4runtime["norm_anat"]["AcquisitionDate"]
+                != "Undefined"
+            ):
+                self.patient_info["AcquisitionDate"] = self.dict4runtime[
+                    "norm_anat"
+                ]["AcquisitionDate"]
+
+        else:
+            self.dict4runtime["norm_anat"]["AcquisitionDate"] = (
+                self.patient_info.get("AcquisitionDate")
+            )
+        if (
+            self.patient_info.get("Age") is None
+            or self.patient_info["Age"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["norm_anat"][
+                    "Age"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Age"] = self.patient_info.get(
+                "Age"
+            )
+
+        if (
+            self.patient_info.get("Sex") is None
+            or self.patient_info["Sex"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Sex"] != "Undefined":
+                self.patient_info["Sex"] = self.dict4runtime["norm_anat"][
+                    "Sex"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Sex"] = self.patient_info.get(
+                "Sex"
+            )
+        if (
+            self.patient_info.get("Pathology") is None
+            or self.patient_info["Pathology"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Pathology"] != "Undefined":
+                self.patient_info["Pathology"] = self.dict4runtime[
+                    "norm_anat"
+                ]["Pathology"]
+
+        else:
+            self.dict4runtime["norm_anat"]["Pathology"] = (
+                self.patient_info.get("Pathology")
+            )
+        if (
+            self.patient_info.get("LateralizationPathology") is None
+            or self.patient_info["LateralizationPathology"] == Undefined
+        ):
+            self.patient_info["LateralizationPathology"] = self.dict4runtime[
+                "norm_anat"
+            ]["LateralizationPathology"]
+        else:
+            self.dict4runtime["norm_anat"]["LateralizationPathology"] = (
+                self.patient_info.get("LateralizationPathology")
+            )
+        if (
+            self.patient_info.get("DominantHand") is None
+            or self.patient_info["DominantHand"] == Undefined
+        ):
+            self.patient_info["DominantHand"] = self.dict4runtime["norm_anat"][
+                "DominantHand"
+            ]
+        else:
+            self.dict4runtime["norm_anat"]["DominantHand"] = (
+                self.patient_info.get("DominantHand")
+            )
+
+        if (
+            self.patient_info.get("Age") is None
+            or self.patient_info["Age"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["norm_anat"][
+                    "Age"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Age"] = self.patient_info.get(
+                "Age"
+            )
+
+        if (
+            self.patient_info.get("Sex") is None
+            or self.patient_info["Sex"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Sex"] != "Undefined":
+                self.patient_info["Sex"] = self.dict4runtime["norm_anat"][
+                    "Sex"
+                ]
+        else:
+            self.dict4runtime["norm_anat"]["Sex"] = self.patient_info.get(
+                "Sex"
+            )
+        self.dict4runtime["norm_func_gene"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_func_gene"],
+            self.project.session,
+            db_file_norm_func_gene,
+            "Acquisition nbr",
+            "Affine regularization type",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Gas",
+            "GasAdmin",
+            "Grid spacings (X,Y,Z,T,...)",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "SliceThickness",
+            "Start/end slice",
+            "Voxel sizes",
+        )
+        self.dict4runtime["norm_func_reco"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_func_reco"],
+            self.project.session,
+            db_file_norm_func_reco,
+            "Acquisition nbr",
+            "Affine regularization type",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Gas",
+            "GasAdmin",
+            "Grid spacings (X,Y,Z,T,...)",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "SliceThickness",
+            "Start/end slice",
+            "Voxel sizes",
+        )
+        self.dict4runtime["norm_func_recall"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_func_recall"],
+            self.project.session,
+            db_file_norm_func_recall,
+            "Acquisition nbr",
+            "Affine regularization type",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Gas",
+            "GasAdmin",
+            "Grid spacings (X,Y,Z,T,...)",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "SliceThickness",
+            "Start/end slice",
+            "Voxel sizes",
+        )
+
+        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
+        #        should be found to retrieve them automatically or to put them
+        #        in the input parameters of the brick:
+        # Site
+        if self.dict4runtime["norm_anat"]["Site"] in ("", "Undefined"):
+            self.dict4runtime["norm_anat"][
+                "Site"
+            ] = "Grenoble University Hospital - CLUNI"
+
+        # MriScanner
+        if self.dict4runtime["norm_anat"]["Spectro"] in ("", "Undefined"):
+            self.dict4runtime["norm_anat"][
+                "Spectro"
+            ] = "Philips Achieva 3.0T TX"
+
+        # Generate an output name
+        if self.norm_anat and self.norm_anat not in [
+            "<undefined>",
+            traits.Undefined,
+        ]:
+            date = datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22]
+            patient_name = get_dbFieldValue(
+                self.project, self.norm_anat, "PatientName"
+            )
+            self.outputs["report"] = os.path.join(
+                self.output_directory,
+                f"{patient_name}_GE2REC_Report_" f"{date}.pdf",
+            )
+        else:
+            return self.make_initResult()
+
+        self.tags_inheritance(
+            self.norm_anat,
+            self.outputs["report"],
+        )
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ReportGE2REC, self).run_process_mia()
+
+        report = Report(
+            self.report,
+            self.dict4runtime,
+            GE2REC=True,
+            norm_anat=self.norm_anat,
+            norm_func_gene=self.norm_func_gene,
+            norm_func_reco=self.norm_func_reco,
+            norm_func_recall=self.norm_func_recall,
+            norm_func_mask=self.norm_func_mask,
+            realignment_parameters_gene=self.realignment_parameters_gene,
+            realignment_parameters_reco=self.realignment_parameters_reco,
+            realignment_parameters_recall=self.realignment_parameters_recall,
+            spmT_gene=self.spmT_gene,
+            spmT_reco=self.spmT_reco,
+            spmT_recall=self.spmT_recall,
+            spmT_gene_enco=self.spmT_gene_enco,
+            spmT_vmin=self.spmT_vmin,
+            spmT_vmax=self.spmT_vmax,
+            li_curves=self.li_curves,
+            correct_response=self.correct_response,
+            output_directory=self.output_directory,
         )
 
         report.make_report()
