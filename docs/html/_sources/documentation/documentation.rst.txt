@@ -138,11 +138,13 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
+    - `LateralizationIndexCurve <bricks/reports/LateralizationIndexCurve.html>`_
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `PlotSignalROI <bricks/reports/PlotSignalROI.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportCO2inhalCvr <bricks/reports/ReportCO2inhalCvr.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
+    - `ReportGE2REC <bricks/reports/ReportGE2REC.html>`_
     - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_
     - `Result_collector <bricks/reports/Result_collector.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
@@ -168,6 +170,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Find_In_List <bricks/tools/Find_In_List.html>`_
     - `Get_Conditions_From_csv <bricks/tools/Get_Conditions_From_csv.html>`_
+    - `Get_Eprime_info_GE2REC <bricks/tools/Get_Eprime_info_GE2REC.html>`_
     - `Get_Patient_Name <bricks/tools/Get_Patient_Name.html>`_
     - `Import_Data <bricks/tools/Import_Data.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
@@ -186,11 +189,16 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
     - `Dwi_whole_brain_tractograpy <pipelines/DWITractography/Dwi_whole_brain_tractograpy.html>`_
 
+  - **FunctionalLangageMemory**
+
+    - `GE2REC <pipelines/FunctionalLangageMemory/GE2REC.html>`_
+    - `GE2REC without behavioural data <pipelines/FunctionalLangageMemory/GE2REC_without_behavioural_data.html>`_
+
   - **Perfusion**
 
     - `Perfdsc <pipelines/Perfusion/Perfdsc.html>`_
 
-  - **preprocess**
+  - **Preprocess**
 
     - `Anat_airmask <pipelines/preprocess/Anat_airmask.html>`_
     - `Anat_headmask <pipelines/preprocess/Anat_headmask.html>`_
@@ -202,22 +210,23 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
     - `Bold_spatial_preprocessing1 <pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
     - `Bold_spatial_preprocessing2 <pipelines/preprocess/Bold_spatial_preprocessing2.html>`_
+    - `Bold_spatial_preprocessing3 <pipelines/preprocess/Bold_spatial_preprocessing3.html>`_
     - `Dwi_fod_msmt_csd <pipelines/preprocess/Dwi_fod_msmt_csd.html>`_
     - `Dwi_preprocessing <pipelines/preprocess/Dwi_preprocessing.html>`_
     - `Dwi_tissue_boundaries <pipelines/preprocess/Dwi_tissue_boundaries.html>`_
     - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_
 
-  - **qualityControl**
+  - **QualityControl**
 
     - `Anat_mriqc <pipelines/qualityControl/Anat_mriqc.html>`_
     - `Bold_mri_qc <pipelines/qualityControl/Bold_mriqc.html>`_
     - `Bold_signals_roi <pipelines/qualityControl/Bold_signals_roi.html>`_
 
-  - **reports**
+  - **Reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
     - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_
 
-  - **stat**
+  - **Stat**
 
     - `Bold_stat_cvr <pipelines/stat/Bold_stat_cvr.html>`_

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bold_spatial_preprocessing3 pipeline &#8212; mia_processes 2.6.1-dev+0eb064ac documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=ab2743f7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.6.1-dev+0eb064ac documentation</span></a></h1>
+        <h2 class="heading"><span>Bold_spatial_preprocessing3 pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bold-spatial-preprocessing3-pipeline">
+<h1>Bold_spatial_preprocessing3 pipeline<a class="headerlink" href="#bold-spatial-preprocessing3-pipeline" title="Permalink to this heading">¶</a></h1>
+<section id="an-example-of-fmri-data-pre-processing">
+<h2>An example of fMRI data pre-processing<a class="headerlink" href="#an-example-of-fmri-data-pre-processing" title="Permalink to this heading">¶</a></h2>
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">The Bold_spatial_preprocessing2 pipeline combines the following bricks:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/Realign.html">Realign</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/SliceTiming.html">Slice timing</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/NewSegment.html">NewSegment</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/Coregister.html">Coregister Estimate</a></div>
+<div class="line-block">
+<div class="line">(default values: jobtype = ‘estimate’)</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/Normalize12.html">Normalize12 Write</a> (for T1w data)</div>
+<div class="line-block">
+<div class="line">(default values:</div>
+<div class="line-block">
+<div class="line">jobtype = ‘write’, write_interp = 4,</div>
+<div class="line">write_bounding_box = [[-78.0, -112.0, -70.0], [78.0, 76.0, 85.0]],</div>
+<div class="line">write_voxel_size = [1.0, 1.0, 1.0]</div>
+</div>
+<div class="line">)</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/Normalize12.html">Normalize12 Write</a> (for functional data)</div>
+<div class="line-block">
+<div class="line">(default values:</div>
+<div class="line-block">
+<div class="line">jobtype = ‘write’, write_interp = 4,</div>
+<div class="line">write_bounding_box = [[-78.0, -112.0, -70.0], [78.0, 76.0, 85.0]],</div>
+<div class="line">write_voxel_size = [3.0, 3.0, 3.0]</div>
+</div>
+<div class="line">)</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/spm/Smooth..html">Smooth</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Bold_spatial_preprocessing3_pipeline.png"><img alt="spatial preprocessing3 pipeline" src="../../../_images/Bold_spatial_preprocessing3_pipeline.png" style="width: 1000px;" /></a>
+<hr class="docutils" />
+<p><strong>Inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>anat_file</em> (an existing uncompressed file):</dt><dd><p>An anatomical image (valid extensions: [.nii]). Ex. 3D T1 sequence sush as T1 turbo field echo.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>func_files</em> (A list of items which are an existing uncompressed file)</dt><dd><p>Functional images (valid extensions: [.nii]). Ex. 4D T2* sequence sush as echo planar imaging.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Inputs parameters with default values</strong></p>
+<ul>
+<li><dl>
+<dt><em>st_acquistion</em> (a string, default is sequential ascending)</dt><dd><p>Type of the acquisition, either sequential ascending, sequential descending, interleaved (middle-top), interleaved (bottom-up) or interleaved (top-down).
+Slice ordering is assumed to be from foot to head and bottom slice = 1.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;sequential ascending&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>func_out_voxel_sizes(a list of three integer, default is [3.0, 3.0, 3.0])</dt><dd><p>Voxel size of the out functional data (used for write_voxel_size in Normalize12 Write for functional data)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>anat_out_voxel_sizes(a list of three integer, default is [1.0, 1.0, 1.0])</dt><dd><p>Voxel size of the out anatomical data (used for write_voxel_size in Normalize12 Write for anatomical data)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>bias_corrected_images</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>The bias corrected images.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/mAnat.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bias_field_images</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>The estimated bias field.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/bias.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>native_class_images</em> (a list of items which are a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>Native space probability maps .</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/derived_data/c1Anat.nii&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/c2Anat.nii&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/c3Anat.nii&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/c4Anat.nii&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/c5Anat.nii&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>forward_deformation_field</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>Forward deformation field. Could be used for spatially normalising images
+to MNI space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/y_Anat.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>realignment_parameters</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>The estimated translation and rotation parameters during the realign
+stage.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/rp_Func.txt&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>normalized_anat</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>The final normalised anatomical image .</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/wAnat.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>normalized_func</em> (a list of items which are an existing file name)</dt><dd><p>Functional images, realigned, registered with the anatomical image and
+normalized.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/wrFunc.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>smoothed_func</em> (a list of items which are an existing file name)</dt><dd><p>The final, realigned then registered with the anatomical image, then
+normalised then smoothed, functional images .</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/swrFunc.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>
