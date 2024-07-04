@@ -1243,15 +1243,15 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
                 df.to_csv(self.outputs["csv_correct_response"], index=False)
 
         if self.outputs:
-            self.tags_inheritance(
-                in_file=self.eprime_file, out_file=self.outputs["csv_gene"]
-            )
-            self.tags_inheritance(
-                in_file=self.eprime_file, out_file=self.outputs["csv_reco"]
-            )
-            self.tags_inheritance(
-                in_file=self.eprime_file, out_file=self.outputs["csv_recall"]
-            )
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_gene"]
+            # )
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_reco"]
+            # )
+            # self.tags_inheritance(
+            #     in_file=self.eprime_file, out_file=self.outputs["csv_recall"]
+            # )
             self.tags_inheritance(
                 in_file=self.eprime_file,
                 out_file=self.outputs["csv_encodage_reco"],
