@@ -519,6 +519,9 @@ class GE2REC(Pipeline):
         self.add_link(
             "make_a_list_3.obj_list->4a_recall_level1design.sess_multi_reg"
         )
+        self.nodes["1_preprocessing"].process.trait(
+            "normalized_anat"
+        ).userlevel = 1
         self.export_parameter(
             "1_preprocessing", "normalized_anat", is_optional=True
         )
@@ -539,13 +542,15 @@ class GE2REC(Pipeline):
             "2b_gene_estimateModel.residual_image->"
             "2c_gene_estimateContrast.residual_image"
         )
+        self.nodes["2c_gene_estimateContrast"].process.trait(
+            "out_spm_mat_file"
+        ).userlevel = 1
         self.export_parameter(
             "2c_gene_estimateContrast",
             "out_spm_mat_file",
             "out_spm_mat_file_gene",
             is_optional=False,
         )
-
         self.add_link(
             "3a_reco_level1design.spm_mat_file->"
             "3b_reco_estimateModel.spm_mat_file"
@@ -562,6 +567,9 @@ class GE2REC(Pipeline):
             "3b_reco_estimateModel.residual_image->"
             "3c_reco_estimateContrast.residual_image"
         )
+        self.nodes["3c_reco_estimateContrast"].process.trait(
+            "out_spm_mat_file"
+        ).userlevel = 1
         self.export_parameter(
             "3c_reco_estimateContrast",
             "out_spm_mat_file",
@@ -585,6 +593,9 @@ class GE2REC(Pipeline):
             "4b_recall_estimateModel.residual_image->"
             "4c_recall_estimateContrast.residual_image"
         )
+        self.nodes["4c_recall_estimateContrast"].process.trait(
+            "out_spm_mat_file"
+        ).userlevel = 1
         self.export_parameter(
             "4c_recall_estimateContrast",
             "out_spm_mat_file",
@@ -620,6 +631,9 @@ class GE2REC(Pipeline):
             "5a_gene_encoding_estimatemodel.residual_image->"
             "5a_gene_encoding_estimatecontrast.residual_image"
         )
+        self.nodes["5a_gene_encoding_estimatecontrast"].process.trait(
+            "out_spm_mat_file"
+        ).userlevel = 1
         self.export_parameter(
             "5a_gene_encoding_estimatecontrast",
             "out_spm_mat_file",
