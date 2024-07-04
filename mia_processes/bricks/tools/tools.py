@@ -1361,7 +1361,7 @@ class Get_Regressors_From_csv(ProcessMIA):
     for Level1Design brick using csv files.*
 
     Please, see the complete documentation for
-    the `Get_Conditions_From_csv brick
+    the `Get_Regressors_From_csv brick
     in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Regressors_From_csv.html>`_
 
@@ -1439,7 +1439,7 @@ class Get_Regressors_From_csv(ProcessMIA):
             )
             if not valid_bool:
                 print(
-                    "\nGet_Conditions_From_csv brick: Initialization "
+                    "\nGet_Regressors_From_csv brick: Initialization "
                     "failed... One of the file is not a .csv file ...!"
                 )
                 return self.make_initResult()
