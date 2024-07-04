@@ -2195,7 +2195,7 @@ class ReportFuncMriqc(ProcessMIA):
 
 class ReportGE2REC(ProcessMIA):
     """
-    **
+    Report for GE2REC pipeline
 
     Please, see the complete documentation for the `ReportGE2REC brick
     in the mia_processes website

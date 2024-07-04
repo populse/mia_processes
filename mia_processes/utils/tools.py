@@ -322,12 +322,12 @@ def plot_realignment_parameters(
     """
     Plot SPM realignment parameters
     :param realignment_parameters: realignment parameters file
-                                   (a string representing an existing file)
+    (a string representing an existing file)
     :param vox_size: voxel size of the data (a list of 3 float or integer)
     :param out_file_tra: out path for the translation figure
-                        (a string representing a path file)
+    (a string representing a path file)
     :param out_file_rot: out path for the rotation figure
-                        (a string representing a path file)
+    (a string representing a path file)
 
     """
     (
