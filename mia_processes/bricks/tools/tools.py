@@ -14,7 +14,7 @@ needed to run other higher-level bricks.
         - Filter_Files_List
         - Find_In_List
         - Get_Conditions_From_csv
-        - Get_Eprime_Info_Ge2rec
+        - Get_Eprime_Info_GE2REC
         - Get_Patient_Name
         - Get_Regressors_From_csv
         - Import_Data
@@ -952,13 +952,13 @@ class Get_Conditions_From_csv(ProcessMIA):
         return
 
 
-class Get_Eprime_Info_Ge2rec(ProcessMIA):
+class Get_Eprime_Info_GE2REC(ProcessMIA):
     """
-    *Get info from an Eprime file for GE2REC protocol*
+    *Get info from an E-Prime file for GE2REC protocol*
 
-    Please, see the complete documentation for the `Get_Eprime_Info_Ge2rec
+    Please, see the complete documentation for the `Get_Eprime_Info_GE2REC
     brick in the mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Eprime_Info_Ge2rec.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Eprime_Info_GE2REC.html>`_
 
     """
 
@@ -970,17 +970,17 @@ class Get_Eprime_Info_Ge2rec(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Eprime_Info_Ge2rec, self).__init__()
+        super(Get_Eprime_Info_GE2REC, self).__init__()
 
         # Inputs description
         eprime_file_desc = "Eprime file"
 
         # Outputs description
-        csv_gene_desc = "Onset gene"
-        csv_reco_desc = "Onset reco"
-        csv_recall_desc = "Onset recall"
-        csv_encodage_reco_desc = "encodage reco"
-        csv_correct_response_desc = ""
+        # csv_gene_desc = "Onset gene"
+        # csv_reco_desc = "Onset reco"
+        # csv_recall_desc = "Onset recall"
+        csv_encodage_reco_desc = "CSV file with Encoding performance "
+        csv_correct_response_desc = "CSV file with correct responses"
         sess_regress_level1design_desc = (
             "Informations for sess_regress (level1design brick)"
         )
@@ -997,18 +997,18 @@ class Get_Eprime_Info_Ge2rec(ProcessMIA):
         )
 
         # Output traits
-        self.add_trait(
-            "csv_gene",
-            traits.File(output=True, optional=True, desc=csv_gene_desc),
-        )
-        self.add_trait(
-            "csv_reco",
-            traits.File(output=True, optional=True, desc=csv_reco_desc),
-        )
-        self.add_trait(
-            "csv_recall",
-            traits.File(output=True, optional=True, desc=csv_recall_desc),
-        )
+        # self.add_trait(
+        #     "csv_gene",
+        #     traits.File(output=True, optional=True, desc=csv_gene_desc),
+        # )
+        # self.add_trait(
+        #     "csv_reco",
+        #     traits.File(output=True, optional=True, desc=csv_reco_desc),
+        # )
+        # self.add_trait(
+        #     "csv_recall",
+        #     traits.File(output=True, optional=True, desc=csv_recall_desc),
+        # )
         self.add_trait(
             "csv_encodage_reco",
             traits.File(
@@ -1053,102 +1053,103 @@ class Get_Eprime_Info_Ge2rec(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Eprime_Info_Ge2rec, self).list_outputs()
+        super(Get_Eprime_Info_GE2REC, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.eprime_file:
             ifile = os.path.split(self.eprime_file)[-1]
             file_name, in_ext = ifile.rsplit(".", 1)
             if self.output_directory:
-                self.outputs["csv_gene"] = os.path.join(
-                    self.output_directory, file_name + "_onset_gene.csv"
-                )
-                self.outputs["csv_reco"] = os.path.join(
-                    self.output_directory, file_name + "_onset_reco.csv"
-                )
-                self.outputs["csv_recall"] = os.path.join(
-                    self.output_directory, file_name + "_onset_recall.csv"
-                )
+                # self.outputs["csv_gene"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_gene.csv"
+                # )
+                # self.outputs["csv_reco"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_reco.csv"
+                # )
+                # self.outputs["csv_recall"] = os.path.join(
+                #     self.output_directory, file_name + "_onset_recall.csv"
+                # )
                 self.outputs["csv_encodage_reco"] = os.path.join(
-                    self.output_directory, file_name + "_csv_encodage_reco.csv"
+                    self.output_directory, file_name + "_encodage_reco.csv"
                 )
                 self.outputs["csv_correct_response"] = os.path.join(
                     self.output_directory,
-                    file_name + "_csv_correct_response.csv",
+                    file_name + "_correct_response.csv",
                 )
 
                 # Obtains all information from EPRIME files
-                df_gene = pd.read_excel(self.eprime_file, sheet_name="GENE")
+                # df_gene = pd.read_excel(self.eprime_file, sheet_name="GENE")
                 df_reco = pd.read_excel(self.eprime_file, sheet_name="RECO")
                 # df_recall = pd.read_excel(self.eprime_file,
                 # sheet_name="RAPPEL")
 
-                # Get onset time in second for generation task (bloc design)
-                zero = df_gene["SON.OnsetTime"].dropna().to_list()[0]
-                onset_gene_eprime = (
-                    df_gene[df_gene["CONDITION"] == "task"]["SON.OnsetTime"]
-                    .dropna()
-                    .to_list()
-                )
-                onset_gene = []
-                for i, time in enumerate(onset_gene_eprime):
-                    # block design, take only the first onset of the bloc
-                    if i in [0, 8, 16, 24, 32]:
-                        onset_gene.append((time - zero) / 1000)
-                onset_ctrl_eprime = (
-                    df_gene[df_gene["CONDITION"] == "control"]["SON.OnsetTime"]
-                    .dropna()
-                    .to_list()
-                )
-                onset_ctrl = []
-                for i, time in enumerate(onset_ctrl_eprime):
-                    if i in [0, 8, 16, 24, 32]:
-                        onset_ctrl.append((time - zero) / 1000)
+                # # Get onset time in second for generation task (bloc design)
+                # zero = df_gene["SON.OnsetTime"].dropna().to_list()[0]
+                # onset_gene_eprime = (
+                #     df_gene[df_gene["CONDITION"] == "task"]["SON.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_gene = []
+                # for i, time in enumerate(onset_gene_eprime):
+                #     # block design, take only the first onset of the bloc
+                #     if i in [0, 8, 16, 24, 32]:
+                #         onset_gene.append((time - zero) / 1000)
+                # onset_ctrl_eprime = (
+                #     df_gene[
+                #      df_gene["CONDITION"] == "control"]["SON.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_ctrl = []
+                # for i, time in enumerate(onset_ctrl_eprime):
+                #     if i in [0, 8, 16, 24, 32]:
+                #         onset_ctrl.append((time - zero) / 1000)
 
-                data = {
-                    "GENE": onset_gene,
-                    "GENE duration": [40] * len(onset_gene),
-                    "CONTROL": onset_ctrl,
-                    "CONTROL duration": [40] * len(onset_ctrl),
-                }
-                df_onset_gene = pd.DataFrame(data)
-                df_onset_gene.to_csv(self.outputs["csv_gene"], index=False)
+                # data = {
+                #     "GENE": onset_gene,
+                #     "GENE duration": [40] * len(onset_gene),
+                #     "CONTROL": onset_ctrl,
+                #     "CONTROL duration": [40] * len(onset_ctrl),
+                # }
+                # df_onset_gene = pd.DataFrame(data)
+                # df_onset_gene.to_csv(self.outputs["csv_gene"], index=False)
 
-                # Get onset time in second for reco (event)
-                zero = df_reco["image.OnsetTime"].dropna().to_list()[0]
-                onset_new_eprime = (
-                    df_reco[df_reco["CONDITION"] == "NEW"]["image.OnsetTime"]
-                    .dropna()
-                    .to_list()
-                )
-                onset_new = []
-                for time in onset_new_eprime:
-                    onset_new.append((time - zero) / 1000)
-                onset_ctrl_eprime = (
-                    df_reco[df_reco["CONDITION"] == "CONTROL"][
-                        "image.OnsetTime"
-                    ]
-                    .dropna()
-                    .to_list()
-                )
-                onset_ctrl = []
-                for time in onset_ctrl_eprime:
-                    onset_ctrl.append((time - zero) / 1000)
-                onset_old_eprime = (
-                    df_reco[df_reco["CONDITION"] == "OLD"]["image.OnsetTime"]
-                    .dropna()
-                    .to_list()
-                )
-                onset_old = []
-                for time in onset_old_eprime:
-                    onset_old.append((time - zero) / 1000)
-                data = {
-                    "OLD": onset_old,
-                    "CONTROL": onset_ctrl,
-                    "NEW": onset_new,
-                }
-                df_onset_reco = pd.DataFrame(data)
-                df_onset_reco.to_csv(self.outputs["csv_reco"], index=False)
+                # # Get onset time in second for reco (event)
+                # zero = df_reco["image.OnsetTime"].dropna().to_list()[0]
+                # onset_new_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "NEW"]["image.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_new = []
+                # for time in onset_new_eprime:
+                #     onset_new.append((time - zero) / 1000)
+                # onset_ctrl_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "CONTROL"][
+                #         "image.OnsetTime"
+                #     ]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_ctrl = []
+                # for time in onset_ctrl_eprime:
+                #     onset_ctrl.append((time - zero) / 1000)
+                # onset_old_eprime = (
+                #     df_reco[df_reco["CONDITION"] == "OLD"]["image.OnsetTime"]
+                #     .dropna()
+                #     .to_list()
+                # )
+                # onset_old = []
+                # for time in onset_old_eprime:
+                #     onset_old.append((time - zero) / 1000)
+                # data = {
+                #     "OLD": onset_old,
+                #     "CONTROL": onset_ctrl,
+                #     "NEW": onset_new,
+                # }
+                # df_onset_reco = pd.DataFrame(data)
+                # df_onset_reco.to_csv(self.outputs["csv_reco"], index=False)
 
                 # Get encodage regressor from reco
                 # Create a dataframe with only the OLD condition
@@ -1266,7 +1267,7 @@ class Get_Eprime_Info_Ge2rec(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        # super(Get_Eprime_Info_Ge2rec, self).run_process_mia()
+        # super(Get_Eprime_Info_GE2REC, self).run_process_mia()
         return
 
 

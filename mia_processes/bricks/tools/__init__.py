@@ -21,7 +21,7 @@ from .tools import (  # noqa: F401
     Filter_Files_List,
     Find_In_List,
     Get_Conditions_From_csv,
-    Get_Eprime_Info_Ge2rec,
+    Get_Eprime_Info_GE2REC,
     Get_Patient_Name,
     Get_Regressors_From_csv,
     Import_Data,

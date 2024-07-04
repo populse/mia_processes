@@ -12,5 +12,7 @@ The pipelines used for the CerebroVascular Reactivity evaluation.
 # for details.
 ##########################################################################
 
-from .ge2rec import Ge2rec  # noqa: F401
-from .ge2rec_without_eprime import Ge2rec_without_eprime  # noqa: F401
+from .ge2rec import GE2REC  # noqa: F401
+from .ge2rec_without_behavioural_data import (  # noqa: F401
+    GE2REC_without_behavioural_data,
+)

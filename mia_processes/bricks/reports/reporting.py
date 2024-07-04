@@ -2401,7 +2401,7 @@ class ReportGE2REC(ProcessMIA):
                 desc=spmT_vmin_desc,
             ),
         )
-        self.spmT_vmin = 2.0
+        self.spmT_vmin = 2.5
 
         self.add_trait(
             "spmT_vmax",

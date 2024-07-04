@@ -1873,7 +1873,15 @@ class FramewiseDisplacement(ProcessMIA):
 
 class LateralizationIndexCurve(ProcessMIA):
     """
-    **
+    Compute iteratively the lateralization of activation in
+    functional MRI data.
+
+    It is a python adaptation of the part 'Iterative (LI-curves)' of the SPM
+    `LI-toolbox (Matlab) <https://www.fil.ion.ucl.ac.uk/spm/ext/#LI>`_
+
+    If you are using this brick please cite:
+    - Wilke M & Lidzba K: LI-tool: A new toolbox to assess
+    lateralization in functional MR-data, J Neurosci Meth, 2007, 163: 128-136
 
     Please, see the complete documentation for the
     `LateralizationIndexCurve brick in the mia_processes website
@@ -3725,7 +3733,7 @@ def lateralization_index_iter_curves(
     ):
         # Resample volume
         print("Input data resample to mask data")
-        new_data = resample_to_img(in_file, mask_left)
+        new_data = resample_to_img(in_file, mask_left, interpolation="linear")
         vol_data_new = new_data.dataobj
     else:
         vol_data_new = vol_data

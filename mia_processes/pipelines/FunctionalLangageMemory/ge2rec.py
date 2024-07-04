@@ -6,7 +6,7 @@ The GE2REc pipeline
 
 :Contains:
     :Class:
-        - Ge2rec
+        - GE2REC
 
 """
 
@@ -21,13 +21,13 @@ The GE2REc pipeline
 from capsul.api import Pipeline
 
 
-class Ge2rec(Pipeline):
+class GE2REC(Pipeline):
     """
     *GE2REC pipelinee*
 
     Please, see the complete documentation for the
-    `Ge2rec pipeline in the mia_processes website:
-    <https://populse.github.io/mia_processes/html/documentation/pipelines/FunctionallangageMemory/Ge2rec.html>`_
+    `GE2REC pipeline in the mia_processes website:
+    <https://populse.github.io/mia_processes/html/documentation/pipelines/FunctionallangageMemory/GE2REC.html>`_
     """
 
     def pipeline_definition(self):
@@ -39,7 +39,7 @@ class Ge2rec(Pipeline):
             "files_to_list", "mia_processes.bricks.tools.tools.Files_To_List"
         )
         self.add_process(
-            "Eprime", "mia_processes.bricks.tools." "Get_Eprime_Info_Ge2rec"
+            "Eprime", "mia_processes.bricks.tools." "Get_Eprime_Info_GE2REC"
         )
         self.add_process(
             "1_preprocessing",

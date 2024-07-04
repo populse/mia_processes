@@ -2441,9 +2441,10 @@ class Report:
                 "<font size=10 > Représentation de la latéralisation de la "
                 "production du langage pour la région frontale et la région "
                 "temporal. <br/> Les courbes noires montrent l'évolution de "
-                "l'indexe de latéralité en fonction du seuil statistique. "
+                "l'index de latéralité en fonction du seuil statistique. "
                 "<br/> <b>N.B: </b> <i>Plus le seuil est élevé moins il "
-                "existe de faux positifs </i> </font>",
+                "existe de faux positifs. Il est fortement conseillé de "
+                "prendre en compte un seuil supérieur à 3. </i> </font>",
                 self.styles["Left"],
             )
         )
@@ -2453,6 +2454,22 @@ class Report:
             im.hAlign = "CENTER"
             self.report.append(im)
             self.report.append(Spacer(0 * mm, 5 * mm))
+
+        self.report.append(Spacer(0 * mm, 15 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 > <i> <b>Réference</b>: LI toolboxe - "
+                "Wilke, Marko, and Karen Lidzba. "
+                "“LI-Tool: A New Toolbox to Assess Lateralization in "
+                "Functional MR-Data.” Journal of Neuroscience Methods "
+                "163, no. 1 (June 15, 2007): 128–36. "
+                "https://doi.org/10.1016/j.jneumeth.2007.01.026.<br/>"
+                "Veuillez noter que ce logiciel n'a pas de maquage "
+                "CE ou FDA. </i> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
 
         self.report.append(PageBreak())
 
@@ -2760,9 +2777,9 @@ class Report:
                 "<font size=12 > <b> Troisième tâche – Rappel (RA)"
                 "</b><br/>"
                 "La troisième tâche est un paradigme en bloc en modalité "
-                "auditive (durrée de 4,17 minutes). Les participants "
+                "auditive (durée de 4,17 minutes). Les participants "
                 "entendent les mots de la tâche GE et doivent se souvenir "
-                "de manière implicite des phrases précédemment "
+                "de manière explicite des phrases précédemment "
                 "générées lors de la première tâche."
                 "</font> ",
                 self.styles["Left"],

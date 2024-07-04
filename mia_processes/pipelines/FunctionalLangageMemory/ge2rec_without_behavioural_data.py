@@ -2,11 +2,11 @@
 
 """The pipelines library of the mia_processes package.
 
-The Ge2rec_without_eprime pipeline
+The GE2REC_without_behavioural_data pipeline
 
 :Contains:
     :Class:
-        - Ge2rec_without_eprime
+        - GE2REC_without_behavioural_data
 
 """
 
@@ -21,13 +21,13 @@ The Ge2rec_without_eprime pipeline
 from capsul.api import Pipeline
 
 
-class Ge2rec_without_eprime(Pipeline):
+class GE2REC_without_behavioural_data(Pipeline):
     """
-    *GE2REC pipelinee*
+    *GE2REC_without_behavioural_data pipelinee*
 
     # Please, see the complete documentation for the
-    # `Ge2rec pipeline in the mia_processes website:
-    # <https://populse.github.io/mia_processes/html/documentation/pipelines/FunctionallangageMemory/Ge2rec.html>`_
+    # `GE2REC pipeline in the mia_processes website:
+    # <https://populse.github.io/mia_processes/html/documentation/pipelines/FunctionallangageMemory/GE2REC_without_behavioural_data.html>`_
     """
 
     def pipeline_definition(self):
