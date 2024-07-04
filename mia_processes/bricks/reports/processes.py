@@ -1994,7 +1994,9 @@ class LateralizationIndexCurve(ProcessMIA):
         super(LateralizationIndexCurve, self).run_process_mia()
 
         config = Config()
-        roi_path = os.path.join(config.get_resources_path(), "ROIs")
+        roi_path = os.path.join(
+            config.get_resources_path(), "ROIs", "LI-toolbox"
+        )
         mask_right = os.path.join(roi_path, "LI-right.nii")
         mask_left = os.path.join(roi_path, "LI-left.nii")
 

@@ -2458,7 +2458,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 15 * mm))
         self.report.append(
             Paragraph(
-                "<font size=10 > <i> <b>Réference</b>: LI toolboxe - "
+                "<font size=10 > <i> <b>Réference</b>: LI toolbox - "
                 "Wilke, Marko, and Karen Lidzba. "
                 "“LI-Tool: A New Toolbox to Assess Lateralization in "
                 "Functional MR-Data.” Journal of Neuroscience Methods "
