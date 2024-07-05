@@ -1855,7 +1855,7 @@ class Make_AIF(ProcessMIA):
         header, data = self.load_nii(self.func_file, False, True)
         # TODO: Perhaps we should do here a test to find out whether it's a
         #       4D or a 3D? using a try statement ?
-        ncol, nrow, nslices, ndynamics = data.shape
+        nrow, ncol, nslices, ndynamics = data.shape
         # TODO: Do we really need thres?
         thres = np.zeros(nslices)
 
@@ -1865,7 +1865,7 @@ class Make_AIF(ProcessMIA):
         head_mask = np.all(data, axis=3)
         # AIF computation
         ##################################################
-        # data length report
+        # ratio of dynamic numbers to define maximum peak width
         wmaxr = 0.5
         # ??
         nb_vox_cand = 50
@@ -1886,51 +1886,75 @@ class Make_AIF(ProcessMIA):
         data_mean = np.mean(data[roi])
         noisy = np.mean(data, axis=3) < data_mean
         roi &= ~noisy
-        # calculation of peak heights
-        base_line = min_val = np.zeros((ncol, nrow, nslices))
-        # Replicate the roi array ndynamics times along the 4th dimension
+        # calculation of peak heights - delta_base_min:
+        # Replicate the roi array, ndynamics times along the 4th dimension
         roi_replicated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
         # Apply the mask to data
         masked_data = data[roi_replicated].reshape(-1, ndynamics)
         # Calculate the mean along the second axis
         # (ignoring the first frame, so use frames 2-6)
-        mean_values = np.mean(masked_data[:, 1:6], axis=1)
-        # Assign the mean values to base_line at the positions of roi
+        mean_values = masked_data[:, 1:6].mean(axis=1)
+        # Assign the mean values to base_line at the positions of roi:
+        # Average intensity for the first 5 dynamics, i.e. over the whole of
+        # the beginning before the passage (excluding the first dynamic).
+        # Outside the mask, the value is 0:
+        base_line = np.zeros((nrow, ncol, nslices))
         base_line[roi] = mean_values
-        min_val[roi] = np.min(data[roi], axis=1)
+        # Assign the minimum values to base_line at the positions of roi:
+        # Minimum value for all dynamics. Outside the mask, the value is 0:
+        min_val = np.zeros((nrow, ncol, nslices))
+        min_val[roi] = masked_data.min(axis=1)
+        # Delta between the intensity at the start and the minimum of the
+        # first pass curve
         delta_base_min = base_line - min_val
-        # calculation of peak widths
-        half_width_peak = ndynamics * np.ones((ncol, nrow, nslices))
+        # calculation of peak widths - half_width_peak:
+        half_width_peak = ndynamics * np.ones((nrow, ncol, nslices))
 
+        # Loop through non-zero elements of roi
         for idx in zip(*np.where(roi)):
-            idx = tuple(idx)
             condition = data[idx] <= (min_val[idx] + delta_base_min[idx] / 2)
 
             if np.any(condition):
-                half_width_peak[idx] = np.argmax(condition[::-1]) - np.argmax(
-                    condition
-                )
+                first_idx = np.argmax(condition)
+                last_idx = len(condition) - np.argmax(condition[::-1]) - 1
+                half_width_peak[idx] = last_idx - first_idx
 
+        # Assign ndynamics to entries in half_width_peak that are still zero.
+        # So, half_width_peak is a brain whose peak width is at half-height.
+        # If the intensity is zero during dynamics, the value of the
+        # corresponding voxel is set ndynamics value.
         half_width_peak[half_width_peak == 0] = ndynamics
         # keep only non-saturated voxels
-        saturated_voxel = np.zeros((ncol, nrow, nslices), dtype=bool)
+        saturated_voxel = np.zeros((nrow, ncol, nslices), dtype=bool)
 
         for idx in zip(*np.where(roi)):
-            idx = tuple(idx)
-            t1 = np.argmax(
-                data[idx] <= min_val[idx] + 4 * np.std(data[idx, 1:7])
-            )
-            t2 = len(data[idx]) - np.argmax(
-                (data[idx][::-1] <= min_val[idx] + 4 * np.std(data[idx, 1:7]))[
-                    ::-1
-                ]
-            )
-            saturated_voxel[idx] = np.any(np.diff(data[idx, t1:t2], n=2) < 0)
+            std_val = np.std(data[idx][1:6], ddof=1)
+            # Calculate t1 and t2
+            threshold = min_val[idx] + 4 * std_val
+            t1 = np.argmax(data[idx] <= threshold)
+            t2 = len(data[idx]) - 1 - np.argmax((data[idx][::-1] <= threshold))
+
+            # Calculate saturated_voxel
+            if t1 < t2:
+                # fmt: off
+                saturated_voxel[idx] = np.any(
+                    np.diff(data[idx][t1:t2 + 1], n=2) < 0
+                )
+                # fmt: on
 
         roi &= ~saturated_voxel
-        # keep only voxels with a width less than a specified value
+        # keep only voxels with a width less than a specified value. The width
+        # of the peak must be less than wmaxr*ndynamics range
+        # and greater than 0
         roi &= (half_width_peak < wmax) & (half_width_peak > 0)
-        tmp_data = data[roi].reshape(-1, ndynamics)
+        # TODO: Do we really need to copy data?
+        tmp_data = data.copy()
+        roi_repeated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
+        tmp_data[~roi_repeated] = 0
+        # tmp_data corresponds to data with the roi mask applied and
+        # remodelled in the form of a matrix of n rows x ndynamics columns
+        # (each column therefore has a dynamic, i.e. a brain).
+        tmp_data = tmp_data.reshape(-1, ndynamics)
         # sorting of voxels, the height is recalculated beforehand to remove
         # voxels with excessive width
         delta_base_min[~roi] = 0
@@ -1952,7 +1976,7 @@ class Make_AIF(ProcessMIA):
 
         sorted_score = np.argsort(score)[::-1]
         aif = np.mean(tmp_data[sorting[sorted_score[:nb_vox]], :], axis=0)
-        roi = np.zeros((ncol, nrow, nslices), dtype=bool)
+        roi = np.zeros((nrow, ncol, nslices), dtype=bool)
 
         for i in range(nb_vox):
             roi.flat[sorting[sorted_score[i]]] = True
