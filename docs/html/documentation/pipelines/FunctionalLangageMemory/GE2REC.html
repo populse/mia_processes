@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GE2REC pipeline &#8212; mia_processes 2.6.1-dev+0eb064ac documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=ab2743f7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.6.1-dev+0eb064ac documentation</span></a></h1>
+        <h2 class="heading"><span>GE2REC pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="ge2rec-pipeline">
+<h1>GE2REC pipeline<a class="headerlink" href="#ge2rec-pipeline" title="Permalink to this heading">¶</a></h1>
+<section id="interactive-mapping-of-language-and-memory-with-the-ge2rec-protocol">
+<h2>Interactive mapping of language and memory with the GE2REC protocol<a class="headerlink" href="#interactive-mapping-of-language-and-memory-with-the-ge2rec-protocol" title="Permalink to this heading">¶</a></h2>
+<p>The purpose of this pipeline is to process functional MRI data from the GE2REC protocol.</p>
+<p>This pipeline require the E-Prime (E-Prime 3.0 Psychology Software Tools) file of the experiment
+(behavioural data are used).</p>
+<p>The GE2REC protocol is used to map the interaction between the functions of language and
+memory functions (LMN language memory network) at an individual level.</p>
+<p>This protocol consists of three interdependent tasks:</p>
+<ul class="simple">
+<li><p>The first task is a block sequence of sentence generation with implicit encoding (GE). Subjects heard words through headphones and have to generate sentences in internal language. During the control periods, a pseudoword is broadcast to the subjects  and they have to listen the pseudoword and not to talk covertly. The run also includ rest period (with a fixation cross displayed).</p></li>
+<li><p>The second task is a recognition event paradigm (RECO). Images are presented to the subjects in a pseudo-random modeand they have to indicate whether they recognise the images of the objects whose names had been broadcast during the first GE task. The choice was binary. Either the subject indicates that they recognised the image (OLD), or that it was a new item (NEW). The run also included 40 control images showing the button that needed to be pressed in order to control for the motor activations during button pressing.</p></li>
+<li><p>The third task is a block paradigm (RA) in auditory modality. Participants hear the words from the GE task and must remember and repeat the sentences previously generated in the first task.</p></li>
+</ul>
+<p>In this pipeline, the fMRI data are analyzed using a GLM approach after pre-processing.
+GE and RA runs are analysed as a block design while RECO run is analysed as an event-related design.</p>
+<p>Lateralization indexes are computed using an iterative approach on the GE run.</p>
+<p>Based on the responses during the RECO run, we calculated behavioral performances during this task.
+The encoding performance during GE run was indirectly determined via thoses responses and
+the GE run is analysed using the encoding performance as a regressor.</p>
+<p>A report is generated at the end of the analysis with the main statistical results obtained.</p>
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p>Banjac S., Interactive cartography of language and memory in patients with focal and pharmaco- resistant pilepsy. Multimodal assessment. Psychology. Université Grenoble Alpes [2020-..], 2021. English. NNT : 2021GRALS037 . tel- 03641888.</p></li>
+<li><p>Banjac S and al. Mapping of Language-and-Memory Networks in Patients With Temporal Lobe Epilepsy by Using the GE2REC Protocol. Front Hum Neurosci. 2022 Jan 6;15:752138. doi: 10.3389/fnhum.2021.752138. PMID: 35069148; PMCID:PMC8772037.</p></li>
+<li><p>Banjac and al. (2020). Interactive mapping of language and memory with the GE2REC protocol. Brain Imaging Behav. 15, 1562‒1579. doi: 10.1007/s11682-020-00355-x.</p></li>
+</ul>
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">The GE2REC pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../preprocess/Bold_spatial_preprocessing3.html">Preprocessing</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/tools/Get_Eprime_info_GE2REC.html">Get E-Prime informations</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/stats/spm/Level1Design.html">Level1Design</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/stats/spm/EstimateModel.html">EstimateModel</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/stats/spm/EstimateContrast.html">EstimateContrast</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/LateralizationIndexCurve.html">Compute lateralization index</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/ReportGE2REC.html">Report</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/GE2REC_pipeline.png"><img alt="GE2REC pipeline" src="../../../_images/GE2REC_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>anat_file</em> (a string representing an existing file)</dt><dd><p>An anatomical image
+An existing, uncompressed file (valid extensions: [.nii]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>func_gene_file</em> (a string representing an existing file)</dt><dd><p>Functional image of the generation run (valid extensions: [.nii]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/Func_gene.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>func_reco_file</em> (a string representing an existing file)</dt><dd><p>Functional image of the recognition run (valid extensions: [.nii]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/Func_reco.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>func_recall_file</em> (a string representing an existing file)</dt><dd><p>Functional image of the recall run (valid extensions: [.nii]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/Func_recall.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eprime_file</em> (a string representing an existing file)</dt><dd><p>Eprime file (valid extensions: [.xlsx]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/eprime.xlsx&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>report</em></dt><dd><p>The output generated report (.pdf).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/PatientName_GE2REC_Report_2024_03_19_11_01_15_04.pdf&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

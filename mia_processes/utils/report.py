@@ -23,7 +23,7 @@ import platform
 import tempfile
 import time
 from datetime import datetime
-from math import floor, log10, modf, pi, sqrt
+from math import floor, log10, modf
 from sys import version
 
 # import matplotlib.collections as collections
@@ -31,9 +31,12 @@ import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import openpyxl
+import pandas as pd
+import traits.api as traits
 
 # capsul import
 from capsul import info as capsul_info
+from nilearn.plotting import plot_carpet
 
 # nipype import
 from nipype import info as nipype_info
@@ -68,6 +71,7 @@ from mia_processes.utils import (
     PageNumCanvas,
     ReportLine,
     plot_qi2,
+    plot_realignment_parameters,
     plot_segmentation,
     plot_slice_planes,
 )
@@ -78,10 +82,13 @@ class Report:
 
     IQMs_file --> mriqc individual report (with all IQMs)
     mriqc_group --> mriqc report group
+    CVR --> CVR report
+    GE2REC --> GE2REC report
 
     Methods:
       - get_iqms_data
       - co2_inhal_cvr_make_report
+      - ge2rec_make_report
       - mriqc_anat_make_report
       - mriqc_func_make_report
       - mriqc_group_make_report
@@ -231,6 +238,53 @@ class Report:
                 "PATIENT AGE",
                 "PATHOLOGY",
                 "REFERENCE GROUP",
+                "SOFTWARES",
+            ]
+
+        elif "GE2REC" in kwargs:
+            self.make_report = self.ge2rec_make_report
+            ref_exp = {
+                "norm_anat": self.norm_anat,
+                "norm_func_gene": self.norm_func_gene,
+                "norm_func_reco": self.norm_func_reco,
+                "norm_func_recall": self.norm_func_recall,
+            }
+            self.title = (
+                "<font size=18><b>{0} report: </b>{1}"
+                "</font>".format(
+                    self.dict4runtime["norm_anat"]["PatientName"],
+                    today_date.split(" ")[0],
+                )
+            )
+
+            self.header_title = (
+                "<font size=30><b>GE2REC - Langage et " "mémoire</b></font>"
+            )
+            infos = [
+                self.dict4runtime["norm_anat"][i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "Sex",
+                    "Age",
+                    "Pathology",
+                    "LateralizationPathology",
+                    "DominantHand",
+                )
+            ]
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "PATHOLOGY",
+                "LATERALIZATION PATHOLOGY",
+                "DOMINANT HAND",
                 "SOFTWARES",
             ]
 
@@ -423,6 +477,13 @@ class Report:
             "Mia. L'utilisateur reconnaît utiliser ces "
             "informations sous sa seule et entière "
             "responsabilité.</i> </font>"
+        )
+
+        self.neuro_conv = (
+            "<font size=9 > <i> 'Neurological' "
+            "convention, the left side of the "
+            "image corresponds to the left side of "
+            "the brain. </i> <br/> </font>"
         )
 
         # Output document template definition for page; margins and pages size
@@ -1197,22 +1258,8 @@ class Report:
         sources_images_dir = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "sources_images"
         )
-        (
-            rmsdTra,
-            maxRmsdTra,
-            maxTra,
-            maxTraCheck,
-            minTra,
-            rmsdRot,
-            maxRmsdRot,
-            maxRot,
-            maxRotCheck,
-            minRot,
-        ) = np.zeros(10)
-
         try:
             data_rp = np.loadtxt(self.realignment_parameters)
-            data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
 
         except IOError:
             print(
@@ -1264,6 +1311,41 @@ class Report:
         im_qualCheckRot = None
         im_qualCheckReg = None
         im_qualCheckBoldTC = None
+
+        if data_rp is not None:
+            out_file_tra = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_translation.png",
+            )
+            out_file_rot = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_Rotation.png",
+            )
+            qc = plot_realignment_parameters(
+                self.realignment_parameters,
+                raw_func_vox_size_orig,
+                out_file_tra,
+                out_file_rot,
+            )
+            if qc == 0:
+                # 912px × 892px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "No-check-mark.png"),
+                    13.0 * mm,
+                    12.7 * mm,
+                )
+            elif qc == 1:
+                # 940px × 893px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "OK-check-mark.png"),
+                    13.0 * mm,
+                    12.4 * mm,
+                )
+            im_qualCheckTra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+            im_qualCheckRot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+
         # figsize in inches
         fig = plt.figure(figsize=(12, 5.6), facecolor="white")
         # fig.set_size_inches(254 / 25.4, 142 / 25.4)
@@ -1277,151 +1359,6 @@ class Report:
             hspace=None,
         )
         xLim = None
-
-        if data_rp is not None:
-            xLim = len(data_rp)
-
-            for i in range(3):
-
-                for n in data_rp[:, i]:
-                    rmsdTra = rmsdTra + n**2
-
-                rmsdTra = sqrt(rmsdTra / len(data_rp[:, i]))
-
-                if rmsdTra > maxRmsdTra:
-                    # maxRmsdTra: Maximum root-mean-square deviation for
-                    # x, y, z linear motion
-                    maxRmsdTra = rmsdTra
-
-                rmsdTra = 0
-
-                if max(data_rp[:, i]) > maxTra:
-                    # maxTra: Maximum x, y, z linear motion in
-                    # POSITIVE direction
-                    maxTra = max(data_rp[:, i])
-
-                if min(data_rp[:, i]) < minTra:
-                    # minTra: Maximum x, y, z linear motion in
-                    # NEGATIVE direction
-                    minTra = min(data_rp[:, i])
-
-            maxTraCheck = maxTra
-
-            if abs(minTra) > maxTra:
-                maxTraCheck = abs(minTra)
-
-            for i in range(3, 6):
-
-                for n in data_rp[:, i]:
-                    rmsdRot = rmsdRot + n**2
-
-                rmsdRot = sqrt(rmsdRot / len(data_rp[:, i]))
-
-                if rmsdRot > maxRmsdRot:
-                    # maxRmsdRot: Maximum root-mean-square deviation for
-                    # roll, pitch, yaw rotational motion
-                    maxRmsdRot = rmsdRot
-
-                rmsdRot = 0
-
-                if max(data_rp[:, i]) > maxRot:
-                    # maxRot: Maximum roll, pitch, yaw rotational motion in
-                    # POSITIVE direction
-                    maxRot = max(data_rp[:, i])
-
-                if min(data_rp[:, i]) < minRot:
-                    # minRot: Maximum roll, pitch, yaw rotational motion in
-                    # NEGATIVE direction
-                    minRot = min(data_rp[:, i])
-
-            maxRotCheck = maxRot
-
-            if abs(minRot) > maxRot:
-                maxRotCheck = abs(minRot)
-
-            if raw_func_vox_size_orig != "Undefined":
-                # Mean x,y,z voxel dimension calculation.
-                traLim = (
-                    (
-                        raw_func_vox_size_orig[0]
-                        + raw_func_vox_size_orig[1]
-                        + raw_func_vox_size_orig[2]
-                    )
-                    * 1
-                    / 3
-                )
-
-                # maxRot for quality fixed to 2deg
-                # maxTranslation for quality fixed to
-                # mean x,y,z voxel dim (traLim)
-                if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
-                    # 912px × 892px
-                    im_qualCheck = Image(
-                        os.path.join(sources_images_dir, "No-check-mark.png"),
-                        13.0 * mm,
-                        12.7 * mm,
-                    )
-
-                else:
-                    # 940px × 893px
-                    im_qualCheck = Image(
-                        os.path.join(sources_images_dir, "OK-check-mark.png"),
-                        13.0 * mm,
-                        12.4 * mm,
-                    )
-
-            ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
-            ax.set_xlabel("Dynamic scans", fontsize=14)
-            ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
-            ax.plot(data_rp[:, :3], label=("X", "Y", "Z"))
-            ax.legend(loc="best")
-            ax.set_xlim(0, xLim)
-            ax.set_ylim(minTra * 1.1, maxTra * 1.1)
-            ax.yaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.xaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.get_yaxis().set_tick_params(direction="out")
-            ax.get_xaxis().set_tick_params(direction="out")
-
-            out_file_tra = os.path.join(
-                tmpdir.name,
-                self.dict4runtime["norm_anat"]["PatientRef"]
-                + "_CVR_QualityControlMeasure_translation.png",
-            )
-            # High resolution: 2000px × 1118px.
-            fig.savefig(out_file_tra, format="png", dpi=200)
-            # im_qualCheckTra = Image(out_file_tra, 153.91 * mm, 86 * mm)
-            im_qualCheckTra = Image(out_file_tra, 7.187 * inch, 3.354 * inch)
-            ax.clear()
-            ax.set_title(
-                "Rotational head motion parameters", fontsize=20, y=1.03
-            )
-            ax.set_xlabel("Dynamic scans", fontsize=14)
-            ax.set_ylabel(
-                "Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14
-            )
-            ax.plot(data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
-            ax.legend(loc="best")
-            ax.set_xlim(0, xLim)
-            ax.set_ylim(minRot * 1.1, maxRot * 1.1)
-            ax.yaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.xaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            out_file_rot = os.path.join(
-                tmpdir.name,
-                self.dict4runtime["norm_anat"]["PatientRef"]
-                + "_CVR_QualityControlMeasure_Rotation.png",
-            )
-            # High resolution: 2000px × 1118px.
-            fig.savefig(out_file_rot, format="png", dpi=200)
-            im_qualCheckRot = Image(out_file_rot, 7.187 * inch, 3.354 * inch)
-
         if matDataReg is not None:
 
             if xLim is None:
@@ -1806,6 +1743,7 @@ class Report:
         #       exist. We can also add this data as input. In this case,
         #       the brick will wait until the files exist.
         #       This would be cleaner.
+        i = 0
         while not os.path.exists(res_anal_data):
 
             if time.time() - start_time > max_timeout:
@@ -2253,6 +2191,1366 @@ class Report:
         )
         data.hAlign = "CENTER"
         self.report.append(data)
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+        tmpdir.cleanup()
+
+    def ge2rec_make_report(self):
+        """Make GE2REC report"""
+        norm_func_cmap = "Greys_r"
+        norm_anat_cmap = "Greys_r"
+        spmT_cmap = "rainbow"
+        # axial fig
+        norm_anat_fig_rows = 3
+        norm_anat_fig_cols = 5
+        norm_anat_inf_slice_start = 55
+        norm_anat_slices_gap = 5
+        norm_func_fig_rows = 4
+        norm_func_fig_cols = 5
+        norm_func_inf_slice_start = 10
+        norm_func_slices_gap = 2
+        # sag fig
+        norm_anat_fig_rows_sag = 2
+        norm_anat_fig_cols_sag = 5
+        norm_anat_inf_slice_start_sag = 35
+        norm_anat_slices_gap_sag = 10
+        # c0r fig
+        norm_anat_fig_rows_cor = 1
+        norm_anat_fig_cols_cor = 5
+        norm_anat_inf_slice_start_cor = 60
+        norm_anat_slices_gap_cor = 15
+
+        # page 1 - cover ##################################################
+        ###################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
+        self.report.append(PageBreak())
+
+        # page 2 - Generation task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Production langage</b> - "
+                "Carte Statistique<br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                "<b>Activation cérébrales pour la tâche de génération de "
+                "phrases à partir de mots entendus</b>:"
+                "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 3 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_gene,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=95 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 3 - Generation task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Production langage</b> - "
+                "Evaluation quantitative<br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 > Représentation de la latéralisation de la "
+                "production du langage pour la région frontale et la région "
+                "temporal. <br/> Les courbes noires montrent l'évolution de "
+                "l'index de latéralité en fonction du seuil statistique. "
+                "<br/> <b>N.B: </b> <i>Plus le seuil est élevé moins il "
+                "existe de faux positifs. Il est fortement conseillé de "
+                "prendre en compte un seuil supérieur à 3. </i> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        for li_curve in self.li_curves:
+            im = Image(li_curve, 6.468 * inch, 3.018 * inch)
+            im.hAlign = "CENTER"
+            self.report.append(im)
+            self.report.append(Spacer(0 * mm, 5 * mm))
+
+        self.report.append(Spacer(0 * mm, 15 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 > <i> <b>Réference</b>: LI toolbox - "
+                "Wilke, Marko, and Karen Lidzba. "
+                "“LI-Tool: A New Toolbox to Assess Lateralization in "
+                "Functional MR-Data.” Journal of Neuroscience Methods "
+                "163, no. 1 (June 15, 2007): 128–36. "
+                "https://doi.org/10.1016/j.jneumeth.2007.01.026.<br/>"
+                "Veuillez noter que ce logiciel n'a pas de maquage "
+                "CE ou FDA. </i> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        self.report.append(PageBreak())
+
+        # page 4 - Generation task with memory############
+        #################################################################
+        if self.spmT_gene_enco:
+            if self.spmT_gene_enco not in ["<undefined>", traits.Undefined]:
+                self.report.append(
+                    Paragraph(
+                        "<font size=18 ><b>Mémoire encodage implicite</b> - "
+                        "Carte Statistique<br/></font>",
+                        self.styles["Left"],
+                    )
+                )
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                self.report.append(
+                    Paragraph(
+                        "<font size=10 >"
+                        "<b>Activations cérébrales pour l'encodage implicite "
+                        "</b> (obtenues à partir de la tâche de génération "
+                        "en prenant en compte seulement les mots dont le "
+                        "sujet se souvent lors de la tâche de </font>",
+                        self.styles["Left"],
+                    )
+                )
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                slices_image = plot_slice_planes(
+                    data_1=self.norm_anat,
+                    data_2=self.spmT_gene_enco,
+                    fig_rows=norm_anat_fig_rows,
+                    fig_cols=norm_anat_fig_cols,
+                    slice_start=norm_anat_inf_slice_start,
+                    slice_step=norm_anat_slices_gap,
+                    cmap_1=norm_anat_cmap,
+                    cmap_2=spmT_cmap,
+                    vmin_2=self.spmT_vmin,
+                    vmax_2=self.spmT_vmax,
+                    out_dir=tmpdir.name,
+                )
+                slices_image = Image(
+                    slices_image, width=177 * mm, height=127 * mm
+                )
+                slices_image.hAlign = "CENTER"
+                self.report.append(slices_image)
+                self.report.append(Spacer(0 * mm, 4 * mm))
+                slices_image = plot_slice_planes(
+                    data_1=self.norm_anat,
+                    data_2=self.spmT_gene_enco,
+                    plane="cor",
+                    fig_rows=norm_anat_fig_rows_cor,
+                    fig_cols=norm_anat_fig_cols_cor,
+                    slice_start=norm_anat_inf_slice_start_cor,
+                    slice_step=norm_anat_slices_gap_cor,
+                    cmap_1=norm_anat_cmap,
+                    cmap_2=spmT_cmap,
+                    vmin_2=self.spmT_vmin,
+                    vmax_2=self.spmT_vmax,
+                    out_dir=tmpdir.name,
+                )
+                slices_image = Image(
+                    slices_image, width=177 * mm, height=50 * mm
+                )
+                slices_image.hAlign = "CENTER"
+                self.report.append(slices_image)
+
+                self.report.append(Spacer(0 * mm, 4 * mm))
+
+                self.report.append(PageBreak())
+
+        # page 5 - Recognition task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Mémoire reconnaissance</b> "
+                "- Carte Statistique <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        if self.correct_response:
+            if self.correct_response not in ["<undefined>", traits.Undefined]:
+                m1 = Paragraph(
+                    "<font size=10 >"
+                    "<b>Performances comportementales </b> "
+                    "(mesurées pendant la tâche de reconnaisance "
+                    "des mots entendus à la tâche précédente à partir d'image)"
+                    "</font>",
+                    self.styles["Left"],
+                )
+
+                m2 = Paragraph("<font size=10 ><b>% CR</b></font>")
+                m3 = Paragraph("<font size=10 ><b>% erreur</b></font>")
+                m4 = Paragraph("<font size=10 ><b>anciens mots</b></font>")
+                m5 = Paragraph("<font size=10 ><b>nouveaux mots</b></font>")
+                df = pd.read_csv(self.correct_response)
+
+                behavioural_data = [
+                    [m1, "", m2, m3],
+                    ["", m4, df["correct_old"][0], df["error_old"][0]],
+                    ["", m5, df["correct_new"][0], df["error_new"][0]],
+                ]
+                t = Table(behavioural_data)
+                t.setStyle(
+                    TableStyle(
+                        [
+                            ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+                            ("SPAN", (0, 0), (0, -1)),
+                        ]
+                    )
+                )
+                t.hAlign = "LEFT"
+                self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                " <b>Activation cérébrales pour la tâche de mémoire</b>"
+                " (reconnaisance des mots entendus à la tâche précédente "
+                "à partir d'image):</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_reco,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_reco,
+            plane="cor",
+            fig_rows=norm_anat_fig_rows_cor,
+            fig_cols=norm_anat_fig_cols_cor,
+            slice_start=norm_anat_inf_slice_start_cor,
+            slice_step=norm_anat_slices_gap_cor,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=50 * mm)
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 6 - Recall task############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Mémoire rappel </b> - "
+                "Carte Statistique <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=10 >"
+                "<b>Activation cérébrales pour la tâche de rappel libre</b>"
+                "(reconnaisance des mots entendus lors de la première tâche "
+                "à partir du son et générartion de la même phrase):"
+                "</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_recall,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_recall,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=95 * mm)
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 7 - Explications protocole
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Protocole GE2REC </b> - "
+                "Informations <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+
+        self.report.append(
+            Paragraph(
+                "<font size=12 > Le protocole GE2REC est composé de trois "
+                "tâches interdépendantes : la génération de phrases avec "
+                "encodage implicite (GE) et deux tâches de mémoire "
+                "de rappel (2REC) qui sont la reconnaissance (RECO) "
+                "et le rappel (RE) explication <br/> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > Ce protocole permet de cartographier "
+                "l’interaction des fonctions du langage et de la mémoire "
+                "(LMN language memory network) au niveau individuel."
+                "Il fournit une évaluation exhaustive en incluant "
+                "des modalités verbales, visuelles et divers processus "
+                "langagiers et mémoriels. </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > <b> Première tâche – Stimuli et tâche "
+                "de génération de phrases avec encodage implicite "
+                "(GE)</b><br/>"
+                "Il s'agit d'une séquence en bloc de génération de "
+                "phrases avec encodage implicite (durée de 7,3 minutes)."
+                "Les sujets écoutent des mots à travers un casque et doivent "
+                "générer des phrases de manière implicite. Lors des périodes "
+                "de contrôle, des pseudo-mots sont diffusés au sujet afin "
+                "qu’il n’y ait pas de génération. "
+                "Une croix de fixation apparaît lors des périodes de repos."
+                "</font> ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > <b> Deuxième tâche – Reconnaissance (RECO)"
+                "</b><br/>"
+                "La deuxième tâche est un paradigme évènementiel "
+                "(durée de 6,8min). "
+                "Des images sont présentées aux sujets selon un mode "
+                "pseudo-aléatoire de 2,5 secondes. "
+                "Ils doivent alors indiquer s’ils reconnaissent les images "
+                "des objets dont les noms ont été diffusés lors de "
+                "la première tâche GE. Dans le cadre clinique,"
+                "le choix proposé est binaire. "
+                "Soit le sujet indique qu’il reconnaît l’image (OLD), "
+                "soit qu’il s’agit d’un nouvel item (NEW)."
+                "</font> ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 > <b> Troisième tâche – Rappel (RA)"
+                "</b><br/>"
+                "La troisième tâche est un paradigme en bloc en modalité "
+                "auditive (durée de 4,17 minutes). Les participants "
+                "entendent les mots de la tâche GE et doivent se souvenir "
+                "de manière explicite des phrases précédemment "
+                "générées lors de la première tâche."
+                "</font> ",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(PageBreak())
+
+        # page 8 - Anat -QC
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRM anatomique </b> - "
+                "Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_anat}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_anat"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_anat"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_anat"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_anat"]["RepetitionTime"]
+        te = self.dict4runtime["norm_anat"]["EchoTime"]
+        flipang = self.dict4runtime["norm_anat"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            fig_rows=norm_anat_fig_rows,
+            fig_cols=norm_anat_fig_cols,
+            slice_start=norm_anat_inf_slice_start,
+            slice_step=norm_anat_slices_gap,
+            cmap_1=norm_anat_cmap,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=127 * mm)
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            plane="sag",
+            fig_rows=norm_anat_fig_rows_sag,
+            fig_cols=norm_anat_fig_cols_sag,
+            slice_start=norm_anat_inf_slice_start_sag,
+            slice_step=norm_anat_slices_gap_sag,
+            cmap_1=norm_anat_cmap,
+            cmap_2=spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
+        )
+        slices_image = Image(slices_image, width=177 * mm, height=80 * mm)
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 9 - fMRI gene -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de génération </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_gene}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_gene']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_gene']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_gene"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_gene"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_gene"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_gene"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_gene"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_gene"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_gene"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_gene,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 10 - fMRI gene -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de génération "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_gene,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "gene_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "gene_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "gene_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_gene,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
+
+        # page 11 - fMRI reco -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de reconnaissance </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_reco}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font>"
+                f"{self.dict4runtime['norm_func_reco']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> </font>"
+                f"{self.dict4runtime['norm_func_reco']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_reco"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_reco"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_reco"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_reco"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_reco"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_reco"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_reco"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_reco,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 12 - fMRI reco -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de reconnaissance "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_reco,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "reco_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "reco_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "reco_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_reco,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
+
+        # page 13- fMRI recall -QC
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de rappel </b> "
+                "- Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Donnée d'entrée:</b></font> "
+                f"<font size=10><i>{self.norm_func_recall}</i></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Paramètres d'acquistions:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom du procotocole d'acquistion: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_recall']['ProtocolName']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Nom de la séquence: </b> "
+                f"</font> "
+                f"{self.dict4runtime['norm_func_recall']['SequenceName']}",
+                self.styles["Bullet1"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func_recall"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func_recall"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Epaisseure de coupe "
+                f"/ écart entre les coupes [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func_recall"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func_recall"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func_recall"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func_recall"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func_recall"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b> Image fonctionnelle normalisée (MNI) "
+                "(1er dynamique):<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                self.neuro_conv,
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func_recall,
+            fig_rows=norm_func_fig_rows,
+            fig_cols=norm_func_fig_cols,
+            slice_start=norm_func_inf_slice_start,
+            slice_step=norm_func_slices_gap,
+            cmap_1=norm_func_cmap,
+            out_dir=tmpdir.name,
+        )
+
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=7.2 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 14 - fMRI recall -Qc
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>IRMf tâche de rappel "
+                "</b> - Contrôle qualité <br/></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        # Carpet plot
+        self.report.append(
+            Paragraph(
+                "<font size=12 ><b>Intensité des voxels au cours du "
+                "temps <i>(image normalisée)</i>:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        carpet = plot_carpet(
+            self.norm_func_recall,
+            self.norm_func_mask,
+            t_r=tr / 1000,
+            standardize="zscore_sample",
+            title="global patterns over time",
+        )
+        out_carpet_plot = os.path.join(
+            tmpdir.name,
+            "recall_carpet.png",
+        )
+        carpet.savefig(out_carpet_plot, format="png", dpi=200)
+        im_carpet = Image(out_carpet_plot, 6.468 * inch, 3.018 * inch)
+        im_carpet.hAlign = "CENTER"
+        self.report.append(im_carpet)
+
+        # Realignment
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        im_check = None
+        im_tra = None
+        im_rot = None
+        out_file_tra = os.path.join(
+            tmpdir.name,
+            "recall_QC_translation.png",
+        )
+        out_file_rot = os.path.join(
+            tmpdir.name,
+            "recall_QC_rotation.png",
+        )
+        qc = plot_realignment_parameters(
+            self.realignment_parameters_recall,
+            vox_size,
+            out_file_tra,
+            out_file_rot,
+        )
+
+        if qc == 0:
+            # 912px × 892px
+            im_check = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+        elif qc == 1:
+            # 940px × 893px
+            im_check = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+        im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+        message = Paragraph(
+            "<font size=14 > <b> Mouvements " " </b> </font>",
+            self.styles["Left"],
+        )
+        im_check.hAlign = "CENTER"
+        title = [[message, im_check]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_tra.hAlign = "CENTER"
+        self.report.append(im_tra)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        im_rot.hAlign = "CENTER"
+        self.report.append(im_rot)
+        self.report.append(PageBreak())
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

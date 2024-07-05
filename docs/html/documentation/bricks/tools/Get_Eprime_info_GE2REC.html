@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Get_Eprime_info_GE2REC brick &#8212; mia_processes 2.6.1-dev+0eb064ac documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=ab2743f7"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.6.1-dev+0eb064ac documentation</span></a></h1>
+        <h2 class="heading"><span>Get_Eprime_info_GE2REC brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="get-eprime-info-ge2rec-brick">
+<h1>Get_Eprime_info_GE2REC brick<a class="headerlink" href="#get-eprime-info-ge2rec-brick" title="Permalink to this heading">¶</a></h1>
+<section id="obtain-usuful-information-for-ge2rec-pipeline-from-e-prime-file">
+<h2>Obtain usuful information for GE2REC pipeline from E-Prime file<a class="headerlink" href="#obtain-usuful-information-for-ge2rec-pipeline-from-e-prime-file" title="Permalink to this heading">¶</a></h2>
+<p>The E-Prime experimentation is available on request.</p>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>eprime_file</em> (an existing xlsx file):</dt><dd><p>The E-Prime file obtain during the experiment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/MIA_projects/data/downloaded_data/001_eprime.xlsx&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>csv_correct_response</em> (a file):</dt><dd><p>The percentage of good responses given by the subject during the RECO run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/MIA_projects/data/downloaded_data/001_eprime_correct_response.xlsx&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>csv_encodage_reco</em> (a file):</dt><dd><div class="line-block">
+<div class="line">Encoding performance during GE run indirectly determine by the responses given during the RECO run:</div>
+<div class="line">- if the response is correct: encoding set to 2</div>
+<div class="line">- if the response is bad: encoding set to 1</div>
+<div class="line">- if it is a control question: encoding set to 1</div>
+<div class="line">- during rest: encoding set to 0</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/MIA_projects/data/downloaded_data/001_eprime_encodage_reco.xlsx&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>sess_regress_level1design</em> (a list of items which are a list of items which are a dictionary with keys which are ‘name’ or ‘val’ and with values which are a string or a list of float):</dt><dd><p>Encoding performance during GE run (indirectly determine by the responses given during the RECO run)
+to use in the Level1Design brick for sess_regress parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span>
+      <span class="p">[</span>
+         <span class="p">{</span>
+             <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;ENCODAGE&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+         <span class="p">}</span>
+     <span class="p">]</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

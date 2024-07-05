@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+de1cb8a6 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=eac47572"></script>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+0eb064ac documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=659b1fac" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=d31ea6cb" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=ab2743f7"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+de1cb8a6 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+0eb064ac documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -44,11 +44,14 @@
 <span class="sd">        - Filter_Files_List</span>
 <span class="sd">        - Find_In_List</span>
 <span class="sd">        - Get_Conditions_From_csv</span>
+<span class="sd">        - Get_Eprime_Info_GE2REC</span>
 <span class="sd">        - Get_Patient_Name</span>
+<span class="sd">        - Get_Regressors_From_csv</span>
 <span class="sd">        - Import_Data</span>
 <span class="sd">        - Input_Filter</span>
 <span class="sd">        - List_Duplicate</span>
 <span class="sd">        - List_To_File</span>
+<span class="sd">        - Make_AIF</span>
 <span class="sd">        - Make_A_List</span>
 <span class="sd">        - Make_CVR_reg_physio</span>
 
@@ -63,15 +66,17 @@
 <span class="c1">##########################################################################</span>
 <span class="c1"># fmt: off</span>
 <span class="c1"># fmt: on</span>
+
+<span class="c1"># Other imports</span>
+<span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
-
-<span class="c1"># Other imports</span>
 <span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
 
+<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -96,15 +101,14 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">signal</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">gammaln</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">threshold_otsu</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Undefined</span>
 
 <span class="c1"># mia_processes imports</span>
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span><span class="p">,</span> <span class="n">get_dbFieldValue</span>
 
 
-<div class="viewcode-block" id="Concat_to_list">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list">[docs]</a>
-<span class="k">class</span> <span class="nc">Concat_to_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list">[docs]</a><span class="k">class</span> <span class="nc">Concat_to_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Make an output list corresponding to the concatenation of list1 and list2*</span>
 
@@ -117,9 +121,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Concat_to_list.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -159,10 +161,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Concat_to_list.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -191,19 +190,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Concat_to_list.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Concat_to_list_of_list">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list">[docs]</a>
-<span class="k">class</span> <span class="nc">Concat_to_list_of_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list_of_list"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list">[docs]</a><span class="k">class</span> <span class="nc">Concat_to_list_of_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Iteration of input list1 with each element of input list2*</span>
 
@@ -218,9 +210,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Concat_to_list_of_list.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list_of_list.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -273,10 +263,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Concat_to_list_of_list.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list_of_list.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -307,19 +294,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Concat_to_list_of_list.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Concat_to_list_of_list.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Delete_data">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data">[docs]</a>
-<span class="k">class</span> <span class="nc">Delete_data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Delete_data"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data">[docs]</a><span class="k">class</span> <span class="nc">Delete_data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Delete from database data*</span>
 
@@ -329,9 +309,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Delete_data.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Delete_data.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -393,10 +371,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Delete_data.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Delete_data.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -462,19 +437,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Delete_data.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Delete_data.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Files_To_List">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List">[docs]</a>
-<span class="k">class</span> <span class="nc">Files_To_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Files_To_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List">[docs]</a><span class="k">class</span> <span class="nc">Files_To_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From 3 file names, generating a list containing all these file names*</span>
 
@@ -484,9 +452,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Files_To_List.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Files_To_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -533,10 +499,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Files_To_List.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Files_To_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -585,19 +548,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Files_To_List.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Files_To_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Filter_Files_List">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List">[docs]</a>
-<span class="k">class</span> <span class="nc">Filter_Files_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Filter_Files_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List">[docs]</a><span class="k">class</span> <span class="nc">Filter_Files_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Selects one or more (slicing) element(s) from a list*</span>
 
@@ -607,9 +563,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Filter_Files_List.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Filter_Files_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -653,14 +607,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;filtered_list&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">filtered_list_desc</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="c1"># self.filtered_list = traits.Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Filter_Files_List.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Filter_Files_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -735,19 +686,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Filter_Files_List.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Filter_Files_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Find_In_List">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List">[docs]</a>
-<span class="k">class</span> <span class="nc">Find_In_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Find_In_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List">[docs]</a><span class="k">class</span> <span class="nc">Find_In_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From a list of files, select the 1rst element that contains a pattern*</span>
 
@@ -757,9 +701,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Find_In_List.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Find_In_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -808,10 +750,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Find_In_List.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Find_In_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -843,19 +782,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Find_In_List.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Find_In_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Get_Conditions_From_csv">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv">[docs]</a>
-<span class="k">class</span> <span class="nc">Get_Conditions_From_csv</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Conditions_From_csv"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv">[docs]</a><span class="k">class</span> <span class="nc">Get_Conditions_From_csv</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Get conditions information (conditions names, onsets and durations)</span>
 <span class="sd">    for Level1Design brick using csv files.*</span>
@@ -867,9 +799,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Get_Conditions_From_csv.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Conditions_From_csv.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -951,10 +881,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Get_Conditions_From_csv.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Conditions_From_csv.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -981,12 +908,10 @@
         <span class="n">all_cond_onsets</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">all_cond_durations</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">csv_file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">):</span>
             <span class="n">cond_names</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">cond_onsets</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">cond_durations</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="n">csv_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">design</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="c1"># Check extension</span>
             <span class="n">valid_bool</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span>
@@ -1004,12 +929,12 @@
             <span class="n">col_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">design</span> <span class="o">==</span> <span class="s2">&quot;bloc&quot;</span><span class="p">:</span>
                 <span class="n">cond_names</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col_names</span><span class="p">)):</span>
-                    <span class="k">if</span> <span class="s2">&quot;duration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">col_names</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;duration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">col_name</span><span class="p">:</span>
                         <span class="c1"># Check that we have duration for each condition</span>
                         <span class="k">try</span><span class="p">:</span>
-                            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; duration&quot;</span><span class="p">]</span>
-                            <span class="n">cond_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">col_name</span> <span class="o">+</span> <span class="s2">&quot; duration&quot;</span><span class="p">]</span>
+                            <span class="n">cond_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
                         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span>
                                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Get_Conditions_From_csv brick: &quot;</span>
@@ -1051,20 +976,332 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Get_Conditions_From_csv.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Conditions_From_csv.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># super(Get_Conditions_From_csv, self).run_process_mia()</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
+<div class="viewcode-block" id="Get_Eprime_Info_GE2REC"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Eprime_Info_GE2REC">[docs]</a><span class="k">class</span> <span class="nc">Get_Eprime_Info_GE2REC</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Get info from an E-Prime file for GE2REC protocol*</span>
 
-<div class="viewcode-block" id="Get_Patient_Name">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name">[docs]</a>
-<span class="k">class</span> <span class="nc">Get_Patient_Name</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="sd">    Please, see the complete documentation for the `Get_Eprime_Info_GE2REC</span>
+<span class="sd">    brick in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Eprime_Info_GE2REC.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Get_Eprime_Info_GE2REC.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Eprime_Info_GE2REC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Eprime_Info_GE2REC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">eprime_file_desc</span> <span class="o">=</span> <span class="s2">&quot;Eprime file&quot;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="c1"># csv_gene_desc = &quot;Onset gene&quot;</span>
+        <span class="c1"># csv_reco_desc = &quot;Onset reco&quot;</span>
+        <span class="c1"># csv_recall_desc = &quot;Onset recall&quot;</span>
+        <span class="n">csv_encodage_reco_desc</span> <span class="o">=</span> <span class="s2">&quot;CSV file with Encoding performance &quot;</span>
+        <span class="n">csv_correct_response_desc</span> <span class="o">=</span> <span class="s2">&quot;CSV file with correct responses&quot;</span>
+        <span class="n">sess_regress_level1design_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Informations for sess_regress (level1design brick)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Input traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;eprime_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">eprime_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;csv_gene&quot;,</span>
+        <span class="c1">#     traits.File(output=True, optional=True, desc=csv_gene_desc),</span>
+        <span class="c1"># )</span>
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;csv_reco&quot;,</span>
+        <span class="c1">#     traits.File(output=True, optional=True, desc=csv_reco_desc),</span>
+        <span class="c1"># )</span>
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;csv_recall&quot;,</span>
+        <span class="c1">#     traits.File(output=True, optional=True, desc=csv_recall_desc),</span>
+        <span class="c1"># )</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;csv_encodage_reco&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">csv_encodage_reco_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;csv_correct_response&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">csv_correct_response_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
+                        <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">),</span>
+                        <span class="n">traits</span><span class="o">.</span><span class="n">Union</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Str</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">())),</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[[]],</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">sess_regress_level1design_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Get_Eprime_Info_GE2REC.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Eprime_Info_GE2REC.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Eprime_Info_GE2REC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eprime_file</span><span class="p">:</span>
+            <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eprime_file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">file_name</span><span class="p">,</span> <span class="n">in_ext</span> <span class="o">=</span> <span class="n">ifile</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="c1"># self.outputs[&quot;csv_gene&quot;] = os.path.join(</span>
+                <span class="c1">#     self.output_directory, file_name + &quot;_onset_gene.csv&quot;</span>
+                <span class="c1"># )</span>
+                <span class="c1"># self.outputs[&quot;csv_reco&quot;] = os.path.join(</span>
+                <span class="c1">#     self.output_directory, file_name + &quot;_onset_reco.csv&quot;</span>
+                <span class="c1"># )</span>
+                <span class="c1"># self.outputs[&quot;csv_recall&quot;] = os.path.join(</span>
+                <span class="c1">#     self.output_directory, file_name + &quot;_onset_recall.csv&quot;</span>
+                <span class="c1"># )</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_encodage_reco&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_encodage_reco.csv&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_correct_response&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_correct_response.csv&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Obtains all information from EPRIME files</span>
+                <span class="c1"># df_gene = pd.read_excel(self.eprime_file, sheet_name=&quot;GENE&quot;)</span>
+                <span class="n">df_reco</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eprime_file</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s2">&quot;RECO&quot;</span><span class="p">)</span>
+                <span class="c1"># df_recall = pd.read_excel(self.eprime_file,</span>
+                <span class="c1"># sheet_name=&quot;RAPPEL&quot;)</span>
+
+                <span class="c1"># # Get onset time in second for generation task (bloc design)</span>
+                <span class="c1"># zero = df_gene[&quot;SON.OnsetTime&quot;].dropna().to_list()[0]</span>
+                <span class="c1"># onset_gene_eprime = (</span>
+                <span class="c1">#     df_gene[df_gene[&quot;CONDITION&quot;] == &quot;task&quot;][&quot;SON.OnsetTime&quot;]</span>
+                <span class="c1">#     .dropna()</span>
+                <span class="c1">#     .to_list()</span>
+                <span class="c1"># )</span>
+                <span class="c1"># onset_gene = []</span>
+                <span class="c1"># for i, time in enumerate(onset_gene_eprime):</span>
+                <span class="c1">#     # block design, take only the first onset of the bloc</span>
+                <span class="c1">#     if i in [0, 8, 16, 24, 32]:</span>
+                <span class="c1">#         onset_gene.append((time - zero) / 1000)</span>
+                <span class="c1"># onset_ctrl_eprime = (</span>
+                <span class="c1">#     df_gene[</span>
+                <span class="c1">#      df_gene[&quot;CONDITION&quot;] == &quot;control&quot;][&quot;SON.OnsetTime&quot;]</span>
+                <span class="c1">#     .dropna()</span>
+                <span class="c1">#     .to_list()</span>
+                <span class="c1"># )</span>
+                <span class="c1"># onset_ctrl = []</span>
+                <span class="c1"># for i, time in enumerate(onset_ctrl_eprime):</span>
+                <span class="c1">#     if i in [0, 8, 16, 24, 32]:</span>
+                <span class="c1">#         onset_ctrl.append((time - zero) / 1000)</span>
+
+                <span class="c1"># data = {</span>
+                <span class="c1">#     &quot;GENE&quot;: onset_gene,</span>
+                <span class="c1">#     &quot;GENE duration&quot;: [40] * len(onset_gene),</span>
+                <span class="c1">#     &quot;CONTROL&quot;: onset_ctrl,</span>
+                <span class="c1">#     &quot;CONTROL duration&quot;: [40] * len(onset_ctrl),</span>
+                <span class="c1"># }</span>
+                <span class="c1"># df_onset_gene = pd.DataFrame(data)</span>
+                <span class="c1"># df_onset_gene.to_csv(self.outputs[&quot;csv_gene&quot;], index=False)</span>
+
+                <span class="c1"># # Get onset time in second for reco (event)</span>
+                <span class="c1"># zero = df_reco[&quot;image.OnsetTime&quot;].dropna().to_list()[0]</span>
+                <span class="c1"># onset_new_eprime = (</span>
+                <span class="c1">#     df_reco[df_reco[&quot;CONDITION&quot;] == &quot;NEW&quot;][&quot;image.OnsetTime&quot;]</span>
+                <span class="c1">#     .dropna()</span>
+                <span class="c1">#     .to_list()</span>
+                <span class="c1"># )</span>
+                <span class="c1"># onset_new = []</span>
+                <span class="c1"># for time in onset_new_eprime:</span>
+                <span class="c1">#     onset_new.append((time - zero) / 1000)</span>
+                <span class="c1"># onset_ctrl_eprime = (</span>
+                <span class="c1">#     df_reco[df_reco[&quot;CONDITION&quot;] == &quot;CONTROL&quot;][</span>
+                <span class="c1">#         &quot;image.OnsetTime&quot;</span>
+                <span class="c1">#     ]</span>
+                <span class="c1">#     .dropna()</span>
+                <span class="c1">#     .to_list()</span>
+                <span class="c1"># )</span>
+                <span class="c1"># onset_ctrl = []</span>
+                <span class="c1"># for time in onset_ctrl_eprime:</span>
+                <span class="c1">#     onset_ctrl.append((time - zero) / 1000)</span>
+                <span class="c1"># onset_old_eprime = (</span>
+                <span class="c1">#     df_reco[df_reco[&quot;CONDITION&quot;] == &quot;OLD&quot;][&quot;image.OnsetTime&quot;]</span>
+                <span class="c1">#     .dropna()</span>
+                <span class="c1">#     .to_list()</span>
+                <span class="c1"># )</span>
+                <span class="c1"># onset_old = []</span>
+                <span class="c1"># for time in onset_old_eprime:</span>
+                <span class="c1">#     onset_old.append((time - zero) / 1000)</span>
+                <span class="c1"># data = {</span>
+                <span class="c1">#     &quot;OLD&quot;: onset_old,</span>
+                <span class="c1">#     &quot;CONTROL&quot;: onset_ctrl,</span>
+                <span class="c1">#     &quot;NEW&quot;: onset_new,</span>
+                <span class="c1"># }</span>
+                <span class="c1"># df_onset_reco = pd.DataFrame(data)</span>
+                <span class="c1"># df_onset_reco.to_csv(self.outputs[&quot;csv_reco&quot;], index=False)</span>
+
+                <span class="c1"># Get encodage regressor from reco</span>
+                <span class="c1"># Create a dataframe with only the OLD condition</span>
+                <span class="c1"># And get encodage, if good anwser = 2 and if not encodage = 1</span>
+                <span class="n">df_old</span> <span class="o">=</span> <span class="n">df_reco</span><span class="p">[</span><span class="n">df_reco</span><span class="p">[</span><span class="s2">&quot;CONDITION&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OLD&quot;</span><span class="p">]</span>
+                <span class="n">info_responses</span> <span class="o">=</span> <span class="n">df_old</span><span class="p">[</span>
+                    <span class="p">[</span><span class="s2">&quot;IMAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;REPONSE&quot;</span><span class="p">,</span> <span class="s2">&quot;image.RESP&quot;</span><span class="p">]</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+                <span class="n">encodage_old</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">good_response_old</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">bad_response_old</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">info_responses</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;image.RESP&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;REPONSE&quot;</span><span class="p">]:</span>
+                        <span class="n">encodage_old</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                        <span class="n">good_response_old</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># bad response or no response</span>
+                        <span class="n">encodage_old</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">bad_response_old</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">cr_old</span> <span class="o">=</span> <span class="p">(</span><span class="n">good_response_old</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">info_responses</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+                <span class="n">er_old</span> <span class="o">=</span> <span class="p">(</span><span class="n">bad_response_old</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">info_responses</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+
+                <span class="k">def</span> <span class="nf">sort_list</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">list2</span><span class="p">):</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Sort list1 using list2 order&quot;&quot;&quot;</span>
+                    <span class="n">zipped_pairs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">list2</span><span class="p">,</span> <span class="n">list1</span><span class="p">)</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">zipped_pairs</span><span class="p">)]</span>
+                    <span class="k">return</span> <span class="n">z</span>
+
+                <span class="c1"># Sort encodage following the order during generation task</span>
+                <span class="n">order_gene</span> <span class="o">=</span> <span class="n">df_old</span><span class="p">[</span><span class="s2">&quot;ORDRE_GENERATION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+                <span class="n">encodage_old_sort</span> <span class="o">=</span> <span class="n">sort_list</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">,</span> <span class="n">order_gene</span><span class="p">)</span>
+                <span class="c1"># Duplicate encodage because generation during 2TR</span>
+                <span class="n">encodage_old</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">encodage_old_sort</span><span class="p">:</span>
+                    <span class="n">encodage_old</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
+                <span class="c1"># Add encodage = 0 during rest and  1 during controlcontrol</span>
+                <span class="c1"># rest = 4 TR ctrl = 8 * 2TR</span>
+                <span class="n">encodage_old_all</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">])</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="mi">32</span><span class="p">])</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">[</span><span class="mi">32</span><span class="p">:</span><span class="mi">48</span><span class="p">])</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">[</span><span class="mi">48</span><span class="p">:</span><span class="mi">64</span><span class="p">])</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodage_old</span><span class="p">[</span><span class="mi">64</span><span class="p">:</span><span class="mi">80</span><span class="p">])</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">encodage_old_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_encodage_reco&quot;</span><span class="p">],</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">write</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="n">write</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;ENCODAGE&quot;</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">encodage_old_all</span><span class="p">:</span>
+                        <span class="n">write</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="c1"># Variable for level1design brick</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ENCODAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">:</span> <span class="n">encodage_old_all</span><span class="p">}]</span>
+                <span class="p">]</span>
+
+                <span class="c1"># Get correct response / error for NEW condition</span>
+                <span class="n">df_new</span> <span class="o">=</span> <span class="n">df_reco</span><span class="p">[</span><span class="n">df_reco</span><span class="p">[</span><span class="s2">&quot;CONDITION&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;NEW&quot;</span><span class="p">]</span>
+                <span class="n">info_responses</span> <span class="o">=</span> <span class="n">df_new</span><span class="p">[</span>
+                    <span class="p">[</span><span class="s2">&quot;IMAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;REPONSE&quot;</span><span class="p">,</span> <span class="s2">&quot;image.RESP&quot;</span><span class="p">]</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+                <span class="n">good_response_new</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">bad_response_new</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">info_responses</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;image.RESP&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;REPONSE&quot;</span><span class="p">]:</span>
+                        <span class="n">good_response_new</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># bad response or no response</span>
+                        <span class="n">bad_response_new</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">cr_new</span> <span class="o">=</span> <span class="p">(</span><span class="n">good_response_new</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">info_responses</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+                <span class="n">er_new</span> <span class="o">=</span> <span class="p">(</span><span class="n">bad_response_new</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">info_responses</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+
+                <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;correct_old&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cr_old</span><span class="p">],</span>
+                    <span class="s2">&quot;error_old&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">er_old</span><span class="p">],</span>
+                    <span class="s2">&quot;correct_new&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cr_new</span><span class="p">],</span>
+                    <span class="s2">&quot;error_new&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">er_new</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_correct_response&quot;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="c1"># self.tags_inheritance(</span>
+            <span class="c1">#     in_file=self.eprime_file, out_file=self.outputs[&quot;csv_gene&quot;]</span>
+            <span class="c1"># )</span>
+            <span class="c1"># self.tags_inheritance(</span>
+            <span class="c1">#     in_file=self.eprime_file, out_file=self.outputs[&quot;csv_reco&quot;]</span>
+            <span class="c1"># )</span>
+            <span class="c1"># self.tags_inheritance(</span>
+            <span class="c1">#     in_file=self.eprime_file, out_file=self.outputs[&quot;csv_recall&quot;]</span>
+            <span class="c1"># )</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eprime_file</span><span class="p">,</span>
+                <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_encodage_reco&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eprime_file</span><span class="p">,</span>
+                <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;csv_correct_response&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Get_Eprime_Info_GE2REC.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Eprime_Info_GE2REC.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="c1"># super(Get_Eprime_Info_GE2REC, self).run_process_mia()</span>
+        <span class="k">return</span></div></div>
+
+
+<div class="viewcode-block" id="Get_Patient_Name"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name">[docs]</a><span class="k">class</span> <span class="nc">Get_Patient_Name</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Get patient name from a file*</span>
 
@@ -1074,9 +1311,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Get_Patient_Name.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Patient_Name.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1110,10 +1345,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Get_Patient_Name.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Patient_Name.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1148,19 +1380,128 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Get_Patient_Name.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Get_Patient_Name.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Patient_Name.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
+<div class="viewcode-block" id="Get_Regressors_From_csv"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Regressors_From_csv">[docs]</a><span class="k">class</span> <span class="nc">Get_Regressors_From_csv</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Get regressors information (regressors names, values and session)</span>
+<span class="sd">    for Level1Design brick using csv files.*</span>
 
-<div class="viewcode-block" id="Import_Data">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data">[docs]</a>
-<span class="k">class</span> <span class="nc">Import_Data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="sd">    Please, see the complete documentation for</span>
+<span class="sd">    the `Get_Regressors_From_csv brick</span>
+<span class="sd">    in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Regressors_From_csv.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Get_Regressors_From_csv.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Regressors_From_csv.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Regressors_From_csv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">csv_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;.csv files contening the regressors (one column by regressors),&quot;</span>
+            <span class="s2">&quot;one for each session (existing .csv files)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">sess_regress_level1design_desc</span> <span class="o">=</span> <span class="s2">&quot;Informations for sess_regress&quot;</span>
+
+        <span class="c1"># Input traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;csv_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">csv_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span>
+                        <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">),</span>
+                        <span class="n">traits</span><span class="o">.</span><span class="n">Union</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Str</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">())),</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[[]],</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">sess_regress_level1design_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Get_Regressors_From_csv.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Regressors_From_csv.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Regressors_From_csv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="n">sess_regress_level1design</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">csv_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">:</span>
+            <span class="c1"># Check extension</span>
+            <span class="n">valid_bool</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span>
+                <span class="n">csv_file</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;csv&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_bool</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Get_Regressors_From_csv brick: Initialization &quot;</span>
+                    <span class="s2">&quot;failed... One of the file is not a .csv file ...!&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="n">regressor_sess</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">dico</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}</span>
+                <span class="n">regressor_sess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dico</span><span class="p">)</span>
+            <span class="n">sess_regress_level1design</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">regressor_sess</span><span class="p">)</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="n">sess_regress_level1design</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">sess_regress_level1design</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;sess_regress_level1design&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Get_Regressors_From_csv.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Regressors_From_csv.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="c1"># super(Get_Regressors_From_csv, self).run_process_mia()</span>
+        <span class="k">return</span></div></div>
+
+
+<div class="viewcode-block" id="Import_Data"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data">[docs]</a><span class="k">class</span> <span class="nc">Import_Data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Import reference data into the current pipeline*</span>
 
@@ -1178,9 +1519,7 @@
 <span class="sd">      output_directory/PatientName_data/ROI_data/raw_data directory.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Import_Data.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Import_Data.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1264,10 +1603,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Import_Data.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Import_Data.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1331,7 +1667,6 @@
                 <span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rois_list</span>
 
             <span class="n">list_out</span> <span class="o">=</span> <span class="p">[]</span>
-
             <span class="k">for</span> <span class="n">ref_file</span> <span class="ow">in</span> <span class="n">all_ref_files</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">_filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starts_with</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">ref_file</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
@@ -1361,10 +1696,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Import_Data.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Import_Data.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
         <span class="c1"># super(Import_Data, self).run_process_mia()</span>
@@ -1405,14 +1737,10 @@
         <span class="c1"># to roi_raw_data_dir</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;patient_name&quot;</span><span class="p">:</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></div>
-</div>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></div></div>
 
 
-
-<div class="viewcode-block" id="Input_Filter">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter">[docs]</a>
-<span class="k">class</span> <span class="nc">Input_Filter</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Input_Filter"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter">[docs]</a><span class="k">class</span> <span class="nc">Input_Filter</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *To filter the Data Browser tab or the output data of another brick*</span>
 
@@ -1422,9 +1750,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Input_Filter.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Input_Filter.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1465,10 +1791,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Input_Filter.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Input_Filter.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1533,19 +1856,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Input_Filter.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Input_Filter.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="List_Duplicate">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate">[docs]</a>
-<span class="k">class</span> <span class="nc">List_Duplicate</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="List_Duplicate"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate">[docs]</a><span class="k">class</span> <span class="nc">List_Duplicate</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From a file name, generate a list containing that file name and the</span>
 <span class="sd">    file name itself*</span>
@@ -1556,9 +1872,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="List_Duplicate.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="List_Duplicate.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1597,10 +1911,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="List_Duplicate.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="List_Duplicate.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1625,19 +1936,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="List_Duplicate.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="List_Duplicate.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="List_To_File">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File">[docs]</a>
-<span class="k">class</span> <span class="nc">List_To_File</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="List_To_File"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File">[docs]</a><span class="k">class</span> <span class="nc">List_To_File</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From several filenames, selects and generates a file*</span>
 
@@ -1647,9 +1951,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="List_To_File.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="List_To_File.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1695,10 +1997,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="List_To_File.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="List_To_File.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1741,19 +2040,12 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="List_To_File.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="List_To_File.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
-
-<div class="viewcode-block" id="Make_A_List">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List">[docs]</a>
-<span class="k">class</span> <span class="nc">Make_A_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_A_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List">[docs]</a><span class="k">class</span> <span class="nc">Make_A_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From 2 objects, generating a list containing all these objects*</span>
 
@@ -1763,9 +2055,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Make_A_List.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_A_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1802,10 +2092,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Make_A_List.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_A_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1853,19 +2140,337 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Make_A_List.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_A_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="k">return</span></div>
-</div>
+        <span class="k">return</span></div></div>
 
 
+<div class="viewcode-block" id="Make_AIF"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF">[docs]</a><span class="k">class</span> <span class="nc">Make_AIF</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creating an Arterial Input Function (AIF) for Dynamic Susceptibility</span>
+<span class="sd">    Contrast (DSC) Magnetic Resonance Imaging (MRI)</span>
 
-<div class="viewcode-block" id="Make_CVR_reg_physio">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio">[docs]</a>
-<span class="k">class</span> <span class="nc">Make_CVR_reg_physio</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Make_AIF in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_AIF.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Make_AIF.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Make_AIF</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># no need of third party software!</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">func_file_desc</span> <span class="o">=</span> <span class="s2">&quot;The DSC MRI scan (a NIfTI file)&quot;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">aif_file_desc</span> <span class="o">=</span> <span class="s2">&quot;The file containing the calculated AIF (a .mat file)&quot;</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;func_file&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">ImageFileSPM</span><span class="p">(),</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">func_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;aif_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">aif_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cvr_reg</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Make_AIF.bol_ar_time"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF.bol_ar_time">[docs]</a>    <span class="k">def</span> <span class="nf">bol_ar_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute bolus arrival time</span>
+
+<span class="sd">        :param data:</span>
+<span class="sd">        :returns: the bolus arrival time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">window_size</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">):</span>
+            <span class="c1"># fmt: off</span>
+            <span class="n">mean</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">t</span><span class="p">:</span><span class="n">t</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">])</span>
+            <span class="n">std</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">t</span><span class="p">:</span><span class="n">t</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">])</span>
+            <span class="c1"># fmt: on</span>
+
+        <span class="n">tlog</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">window_size</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">mean</span> <span class="o">-</span> <span class="n">th</span> <span class="o">*</span> <span class="n">std</span><span class="p">)</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">tlog</span><span class="p">)</span>
+        <span class="n">t0</span> <span class="o">+=</span> <span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ttp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">t0</span> <span class="o">==</span> <span class="n">window_size</span> <span class="ow">or</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="n">ttp</span><span class="p">:</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="mi">40</span>
+
+        <span class="k">return</span> <span class="n">t0</span></div>
+
+<div class="viewcode-block" id="Make_AIF.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Make_AIF</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">,</span>
+        <span class="p">]:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">)</span>
+                <span class="n">file_name_no_ext</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;aif_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">file_name_no_ext</span> <span class="o">+</span> <span class="s2">&quot;_aif.mat&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Make_AIF brick: No output directory found, &quot;</span>
+                    <span class="s2">&quot;initialization step cannot be performed...!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;aif_file&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Make_AIF.load_nii"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF.load_nii">[docs]</a>    <span class="k">def</span> <span class="nf">load_nii</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">matlab_like</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the header and the data of a nibabel image object</span>
+
+<span class="sd">        MATLAB and Python (in particular NumPy) treat the order of dimensions</span>
+<span class="sd">        and the origin of the coordinate system differently. MATLAB uses main</span>
+<span class="sd">        column order (also known as Fortran order). NumPy (and Python in</span>
+<span class="sd">        general) uses the order of the main rows (C order). For a 3D array</span>
+<span class="sd">        data(x, y, z) in MATLAB, the equivalent in NumPy is data[y, x, z].</span>
+<span class="sd">        MATLAB and NumPy also handle the origin of the coordinate system</span>
+<span class="sd">        differently:</span>
+<span class="sd">        MATLAB&#39;s coordinate system starts with the origin in the lower</span>
+<span class="sd">        left-hand corner (as in traditional matrix mathematics).</span>
+<span class="sd">        NumPy&#39;s coordinate system starts with the origin in the top left-hand</span>
+<span class="sd">        corner.</span>
+<span class="sd">        When taking matlab_like=True as argument, the numpy matrix is</span>
+<span class="sd">        rearranged to follow MATLAB conventions.</span>
+<span class="sd">        Using scaled=False generates a raw unscaled data matrix (as in MATLAB</span>
+<span class="sd">        with `header = loadnifti(fnii)` and `header.reco.data`).</span>
+
+<span class="sd">        :param file_path: the path to a NIfTI file</span>
+<span class="sd">        :param scaled: A boolean, if True the data is scaled</span>
+<span class="sd">        :param matlab_like: A Boolean, if True the data is rearranged to match</span>
+<span class="sd">                            the order of the dimensions and the origin of the</span>
+<span class="sd">                            coordinate system in Matlab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="k">if</span> <span class="n">scaled</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">scaled</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">dataobj</span><span class="o">.</span><span class="n">get_unscaled</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Make_AIF brick: scaled argument must be True or False&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">matlab_like</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+            <span class="c1"># TODO: Should transpose for ndim&gt;4 cases be implemented?</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Make_AIF.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_AIF.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Make_AIF</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="n">header</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_nii</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_file</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># TODO: Perhaps we should do here a test to find out whether it&#39;s a</span>
+        <span class="c1">#       4D or a 3D? using a try statement ?</span>
+        <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nslices</span><span class="p">,</span> <span class="n">ndynamics</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># TODO: Do we really need thres?</span>
+        <span class="n">thres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nslices</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">aux</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nslices</span><span class="p">):</span>
+            <span class="n">thres</span><span class="p">[</span><span class="n">aux</span><span class="p">]</span> <span class="o">=</span> <span class="n">threshold_otsu</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">aux</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">head_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># AIF computation</span>
+        <span class="c1">##################################################</span>
+        <span class="c1"># data length report</span>
+        <span class="n">wmaxr</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="c1"># ??</span>
+        <span class="n">nb_vox_cand</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="c1"># ??</span>
+        <span class="n">nb_vox</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="c1"># score of each selected voxel, the number of warnings, and the reasons</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_vox</span><span class="p">)]</span>
+        <span class="n">wmax</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">wmaxr</span> <span class="o">*</span> <span class="n">ndynamics</span><span class="p">)</span>
+        <span class="c1"># TODO: can we use head_mask directly instead of roi?</span>
+        <span class="n">roi</span> <span class="o">=</span> <span class="n">head_mask</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># remove voxels with inf and NaN values (not necessarily required)</span>
+        <span class="n">roi</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span>
+        <span class="p">)</span>
+        <span class="c1"># remove null voxels</span>
+        <span class="n">roi</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># remove noisy voxels</span>
+        <span class="n">data_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">roi</span><span class="p">])</span>
+        <span class="n">noisy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">data_mean</span>
+        <span class="n">roi</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">noisy</span>
+        <span class="c1"># calculation of peak heights</span>
+        <span class="n">base_line</span> <span class="o">=</span> <span class="n">min_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nslices</span><span class="p">))</span>
+        <span class="c1"># Replicate the roi array ndynamics times along the 4th dimension</span>
+        <span class="n">roi_replicated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">roi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">ndynamics</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># Apply the mask to data</span>
+        <span class="n">masked_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">roi_replicated</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ndynamics</span><span class="p">)</span>
+        <span class="c1"># Calculate the mean along the second axis</span>
+        <span class="c1"># (ignoring the first frame, so use frames 2-6)</span>
+        <span class="n">mean_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">masked_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Assign the mean values to base_line at the positions of roi</span>
+        <span class="n">base_line</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_values</span>
+        <span class="n">min_val</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">roi</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">delta_base_min</span> <span class="o">=</span> <span class="n">base_line</span> <span class="o">-</span> <span class="n">min_val</span>
+        <span class="c1"># calculation of peak widths</span>
+        <span class="n">half_width_peak</span> <span class="o">=</span> <span class="n">ndynamics</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nslices</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">roi</span><span class="p">)):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">min_val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta_base_min</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">condition</span><span class="p">):</span>
+                <span class="n">half_width_peak</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">condition</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+                    <span class="n">condition</span>
+                <span class="p">)</span>
+
+        <span class="n">half_width_peak</span><span class="p">[</span><span class="n">half_width_peak</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndynamics</span>
+        <span class="c1"># keep only non-saturated voxels</span>
+        <span class="n">saturated_voxel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nslices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">roi</span><span class="p">)):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">min_val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">min_val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">]))[</span>
+                    <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">saturated_voxel</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span><span class="n">t2</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">roi</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">saturated_voxel</span>
+        <span class="c1"># keep only voxels with a width less than a specified value</span>
+        <span class="n">roi</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">half_width_peak</span> <span class="o">&lt;</span> <span class="n">wmax</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">half_width_peak</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tmp_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ndynamics</span><span class="p">)</span>
+        <span class="c1"># sorting of voxels, the height is recalculated beforehand to remove</span>
+        <span class="c1"># voxels with excessive width</span>
+        <span class="n">delta_base_min</span><span class="p">[</span><span class="o">~</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tmp_delta_base_min</span> <span class="o">=</span> <span class="n">delta_base_min</span><span class="p">[</span><span class="n">roi</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">sorting</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">tmp_delta_base_min</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># score calculation</span>
+        <span class="n">idx_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_vox_cand</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_vox_cand</span><span class="p">):</span>
+            <span class="c1"># calculation of arrival time</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bol_ar_time</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:])</span>
+            <span class="n">initslop</span> <span class="o">=</span> <span class="n">delta_base_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">sorting</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">idx_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">sorting</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="p">)</span>
+            <span class="n">score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta_base_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">sorting</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">initslop</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">half_width_peak</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">sorting</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">t0</span>
+            <span class="p">)</span>
+
+        <span class="n">sorted_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">score</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">aif</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[:</span><span class="n">nb_vox</span><span class="p">]],</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">roi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nslices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_vox</span><span class="p">):</span>
+            <span class="n">roi</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># i, j, k correspond to the indexes in the brain (3D) for</span>
+        <span class="c1"># the best results</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">roi</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_vox</span><span class="p">):</span>
+            <span class="n">warn</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="n">i</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span>
+
+            <span class="c1"># Pre-bolus baseline test</span>
+            <span class="n">std_basepre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+            <span class="n">mean_basepre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">std_basepre</span> <span class="o">&gt;=</span> <span class="n">mean_basepre</span> <span class="o">/</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">warn</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">4</span> <span class="o">+</span> <span class="n">warn</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;The pre-bolus baseline of the voxel &quot;</span> <span class="s2">&quot;is too noisy&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Post-bolus baseline test</span>
+            <span class="n">std_basepost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="o">-</span><span class="mi">6</span><span class="p">:])</span>
+            <span class="n">mean_basepost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="o">-</span><span class="mi">6</span><span class="p">:])</span>
+
+            <span class="k">if</span> <span class="n">std_basepost</span> <span class="o">&gt;=</span> <span class="n">mean_basepost</span> <span class="o">/</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">warn</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">4</span> <span class="o">+</span> <span class="n">warn</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;The post-bolus baseline of the voxel &quot;</span> <span class="s2">&quot;is too noisy&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># t0 point test</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bol_ar_time</span><span class="p">(</span><span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="p">:])</span>
+
+            <span class="k">if</span> <span class="n">tmp_data</span><span class="p">[</span><span class="n">sorting</span><span class="p">[</span><span class="n">sorted_score</span><span class="p">[</span><span class="n">v</span><span class="p">]],</span> <span class="n">t0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">mean_basepre</span><span class="p">:</span>
+                <span class="n">warn</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">4</span> <span class="o">+</span> <span class="n">warn</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The voxel value at t0 is too high&quot;</span>
+
+            <span class="c1"># Pre-bolus baseline length test</span>
+            <span class="k">if</span> <span class="n">t0</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">warn</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">4</span> <span class="o">+</span> <span class="n">warn</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The voxel baseline is too short&quot;</span>
+
+            <span class="n">scores</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">warn</span>
+        <span class="c1">###################################################</span>
+        <span class="c1"># TODO: May be we don&#39;t need to save in matlab file format?</span>
+        <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aif_file</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;aif&quot;</span><span class="p">:</span> <span class="n">aif</span><span class="p">,</span> <span class="s2">&quot;scores&quot;</span><span class="p">:</span> <span class="n">scores</span><span class="p">})</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Make_AIF brick: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">aif_file</span><span class="si">}</span><span class="s2"> created!&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Make_CVR_reg_physio"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio">[docs]</a><span class="k">class</span> <span class="nc">Make_CVR_reg_physio</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generate the physiological regressor for CVR*</span>
 
@@ -1875,9 +2480,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Make_CVR_reg_physio.__init__">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1936,10 +2539,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Make_CVR_reg_physio.gaussfir">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gaussfir">[docs]</a>
-    <span class="k">def</span> <span class="nf">gaussfir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="n">nt</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">of</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.gaussfir"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gaussfir">[docs]</a>    <span class="k">def</span> <span class="nf">gaussfir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bt</span><span class="p">,</span> <span class="n">nt</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">of</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a Gaussian FIR filter</span>
 
 <span class="sd">        with a specified bandwidth-time product (bt),</span>
@@ -1960,10 +2560,7 @@
         <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">h</span></div>
 
-
-<div class="viewcode-block" id="Make_CVR_reg_physio.gfb_conv">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gfb_conv">[docs]</a>
-    <span class="k">def</span> <span class="nf">gfb_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.gfb_conv"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.gfb_conv">[docs]</a>    <span class="k">def</span> <span class="nf">gfb_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a subsection of the convolution, as specified by the</span>
 <span class="sd">        shape parameter.</span>
 
@@ -2009,10 +2606,7 @@
 
         <span class="k">return</span> <span class="n">c</span> <span class="k">if</span> <span class="n">iscolumn</span> <span class="k">else</span> <span class="n">c</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="Make_CVR_reg_physio.list_outputs">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2135,20 +2729,12 @@
                             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colonidxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                                 <span class="c1"># fmt: off</span>
                                 <span class="n">this_time_s</span> <span class="o">=</span> <span class="p">(</span>
-                                    <span class="mi">3600</span>
-                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                    <span class="mi">3600</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
                                         <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                                    <span class="p">)</span>
-                                    <span class="o">+</span> <span class="mi">60</span>
-                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
-                                        <span class="n">line</span><span class="p">[</span>
-                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
-                                        <span class="p">]</span>
-                                    <span class="p">)</span>
-                                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span>
-                                        <span class="n">line</span><span class="p">[</span>
-                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span>
-                                        <span class="p">]</span>
+                                    <span class="p">)</span> <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                                    <span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
                                     <span class="p">)</span>
                                 <span class="p">)</span>
                                 <span class="c1"># fmt: on</span>
@@ -2184,18 +2770,12 @@
                             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colonidxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                                 <span class="c1"># fmt: off</span>
                                 <span class="n">this_time_s</span> <span class="o">=</span> <span class="p">(</span>
-                                    <span class="mi">3600</span>
-                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                    <span class="mi">3600</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
                                         <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                                    <span class="p">)</span>
-                                    <span class="o">+</span> <span class="mi">60</span>
-                                    <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
+                                    <span class="p">)</span> <span class="o">+</span> <span class="mi">60</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span>
                                         <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-                                    <span class="p">)</span>
-                                    <span class="o">+</span> <span class="nb">float</span><span class="p">(</span>
-                                        <span class="n">line</span><span class="p">[</span>
-                                            <span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5</span>
-                                        <span class="p">]</span>
+                                    <span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span>
+                                        <span class="n">line</span><span class="p">[</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">colonidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span>
                                     <span class="p">)</span>
                                 <span class="p">)</span>
                                 <span class="c1"># fmt: on</span>
@@ -2965,10 +3545,7 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-
-<div class="viewcode-block" id="Make_CVR_reg_physio.spm_hrf">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.spm_hrf">[docs]</a>
-    <span class="k">def</span> <span class="nf">spm_hrf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rt</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">t</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.spm_hrf"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.spm_hrf">[docs]</a>    <span class="k">def</span> <span class="nf">spm_hrf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rt</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">t</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Hemodynamic response function.</span>
 
@@ -3029,17 +3606,12 @@
 
         <span class="k">return</span> <span class="n">hrf</span></div>
 
-
-<div class="viewcode-block" id="Make_CVR_reg_physio.run_process_mia">
-<a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Make_CVR_reg_physio.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_CVR_reg_physio.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># The regressor is created at initialisation time rather than at</span>
         <span class="c1"># runtime because some bricks that use this regressor need to consult</span>
         <span class="c1"># it at initialisation time (e.g. Level1Design)!</span>
-        <span class="k">return</span></div>
-</div>
-
+        <span class="k">return</span></div></div>
 </pre></div>
 
       </div>
@@ -3053,7 +3625,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

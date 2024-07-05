@@ -28,6 +28,9 @@ from .bold_spatial_preprocessing1 import (  # noqa: F401
 from .bold_spatial_preprocessing2 import (  # noqa: F401
     Bold_spatial_preprocessing2,
 )
+from .bold_spatial_preprocessing3 import (  # noqa: F401
+    Bold_spatial_preprocessing3,
+)
 from .dwi_fod_msmt_csd import Dwi_fod_msmt_csd  # noqa: F401
 from .dwi_preprocessing import Dwi_preprocessing  # noqa: F401
 from .dwi_tissue_boundaries import Dwi_tissue_boundaries  # noqa: F401

@@ -20,6 +20,7 @@ from .processes import (  # noqa: F401
     CarpetParcellation,
     ComputeDVARS,
     FramewiseDisplacement,
+    LateralizationIndexCurve,
     Mean_stdDev_calc,
     PlotSignalROI,
     Result_collector,
@@ -29,5 +30,6 @@ from .reporting import (  # noqa: F401
     ReportAnatMriqc,
     ReportCO2inhalCvr,
     ReportFuncMriqc,
+    ReportGE2REC,
     ReportGroupMriqc,
 )

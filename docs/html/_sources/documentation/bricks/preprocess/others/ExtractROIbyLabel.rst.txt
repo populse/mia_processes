@@ -25,14 +25,15 @@ Extract a specific ROI from a segmentation file using labels
 
       ex. '/home/username/data/raw_data/native_structures_sub-001.nii'
 
-- *labels* (a list of integer)
+**Optional inputs with default value parameters:**
+
+- *labels* (a list of integer, default is [1])
     List of the labels of the ROI to extract.
 
     ::
 
       ex. ['47', '48']
 
-**Optional inputs with default value parameters:**
 
 - *save_each_roi* (a boolean, optional, default value is False)
     Save a each regions as a NIfTI file.
