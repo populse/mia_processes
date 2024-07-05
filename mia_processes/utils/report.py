@@ -23,7 +23,7 @@ import platform
 import tempfile
 import time
 from datetime import datetime
-from math import floor, log10, modf, pi, sqrt
+from math import floor, log10, modf
 from sys import version
 
 # import matplotlib.collections as collections
@@ -82,10 +82,13 @@ class Report:
 
     IQMs_file --> mriqc individual report (with all IQMs)
     mriqc_group --> mriqc report group
+    CVR --> CVR report
+    GE2REC --> GE2REC report
 
     Methods:
       - get_iqms_data
       - co2_inhal_cvr_make_report
+      - ge2rec_make_report
       - mriqc_anat_make_report
       - mriqc_func_make_report
       - mriqc_group_make_report
@@ -1255,22 +1258,8 @@ class Report:
         sources_images_dir = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "sources_images"
         )
-        (
-            rmsdTra,
-            maxRmsdTra,
-            maxTra,
-            maxTraCheck,
-            minTra,
-            rmsdRot,
-            maxRmsdRot,
-            maxRot,
-            maxRotCheck,
-            minRot,
-        ) = np.zeros(10)
-
         try:
             data_rp = np.loadtxt(self.realignment_parameters)
-            data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
 
         except IOError:
             print(
@@ -1322,6 +1311,41 @@ class Report:
         im_qualCheckRot = None
         im_qualCheckReg = None
         im_qualCheckBoldTC = None
+
+        if data_rp is not None:
+            out_file_tra = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_translation.png",
+            )
+            out_file_rot = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_Rotation.png",
+            )
+            qc = plot_realignment_parameters(
+                self.realignment_parameters,
+                raw_func_vox_size_orig,
+                out_file_tra,
+                out_file_rot,
+            )
+            if qc == 0:
+                # 912px × 892px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "No-check-mark.png"),
+                    13.0 * mm,
+                    12.7 * mm,
+                )
+            elif qc == 1:
+                # 940px × 893px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "OK-check-mark.png"),
+                    13.0 * mm,
+                    12.4 * mm,
+                )
+            im_qualCheckTra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
+            im_qualCheckRot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
+
         # figsize in inches
         fig = plt.figure(figsize=(12, 5.6), facecolor="white")
         # fig.set_size_inches(254 / 25.4, 142 / 25.4)
@@ -1335,151 +1359,6 @@ class Report:
             hspace=None,
         )
         xLim = None
-
-        if data_rp is not None:
-            xLim = len(data_rp)
-
-            for i in range(3):
-
-                for n in data_rp[:, i]:
-                    rmsdTra = rmsdTra + n**2
-
-                rmsdTra = sqrt(rmsdTra / len(data_rp[:, i]))
-
-                if rmsdTra > maxRmsdTra:
-                    # maxRmsdTra: Maximum root-mean-square deviation for
-                    # x, y, z linear motion
-                    maxRmsdTra = rmsdTra
-
-                rmsdTra = 0
-
-                if max(data_rp[:, i]) > maxTra:
-                    # maxTra: Maximum x, y, z linear motion in
-                    # POSITIVE direction
-                    maxTra = max(data_rp[:, i])
-
-                if min(data_rp[:, i]) < minTra:
-                    # minTra: Maximum x, y, z linear motion in
-                    # NEGATIVE direction
-                    minTra = min(data_rp[:, i])
-
-            maxTraCheck = maxTra
-
-            if abs(minTra) > maxTra:
-                maxTraCheck = abs(minTra)
-
-            for i in range(3, 6):
-
-                for n in data_rp[:, i]:
-                    rmsdRot = rmsdRot + n**2
-
-                rmsdRot = sqrt(rmsdRot / len(data_rp[:, i]))
-
-                if rmsdRot > maxRmsdRot:
-                    # maxRmsdRot: Maximum root-mean-square deviation for
-                    # roll, pitch, yaw rotational motion
-                    maxRmsdRot = rmsdRot
-
-                rmsdRot = 0
-
-                if max(data_rp[:, i]) > maxRot:
-                    # maxRot: Maximum roll, pitch, yaw rotational motion in
-                    # POSITIVE direction
-                    maxRot = max(data_rp[:, i])
-
-                if min(data_rp[:, i]) < minRot:
-                    # minRot: Maximum roll, pitch, yaw rotational motion in
-                    # NEGATIVE direction
-                    minRot = min(data_rp[:, i])
-
-            maxRotCheck = maxRot
-
-            if abs(minRot) > maxRot:
-                maxRotCheck = abs(minRot)
-
-            if raw_func_vox_size_orig != "Undefined":
-                # Mean x,y,z voxel dimension calculation.
-                traLim = (
-                    (
-                        raw_func_vox_size_orig[0]
-                        + raw_func_vox_size_orig[1]
-                        + raw_func_vox_size_orig[2]
-                    )
-                    * 1
-                    / 3
-                )
-
-                # maxRot for quality fixed to 2deg
-                # maxTranslation for quality fixed to
-                # mean x,y,z voxel dim (traLim)
-                if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
-                    # 912px × 892px
-                    im_qualCheck = Image(
-                        os.path.join(sources_images_dir, "No-check-mark.png"),
-                        13.0 * mm,
-                        12.7 * mm,
-                    )
-
-                else:
-                    # 940px × 893px
-                    im_qualCheck = Image(
-                        os.path.join(sources_images_dir, "OK-check-mark.png"),
-                        13.0 * mm,
-                        12.4 * mm,
-                    )
-
-            ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
-            ax.set_xlabel("Dynamic scans", fontsize=14)
-            ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
-            ax.plot(data_rp[:, :3], label=("X", "Y", "Z"))
-            ax.legend(loc="best")
-            ax.set_xlim(0, xLim)
-            ax.set_ylim(minTra * 1.1, maxTra * 1.1)
-            ax.yaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.xaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.get_yaxis().set_tick_params(direction="out")
-            ax.get_xaxis().set_tick_params(direction="out")
-
-            out_file_tra = os.path.join(
-                tmpdir.name,
-                self.dict4runtime["norm_anat"]["PatientRef"]
-                + "_CVR_QualityControlMeasure_translation.png",
-            )
-            # High resolution: 2000px × 1118px.
-            fig.savefig(out_file_tra, format="png", dpi=200)
-            # im_qualCheckTra = Image(out_file_tra, 153.91 * mm, 86 * mm)
-            im_qualCheckTra = Image(out_file_tra, 7.187 * inch, 3.354 * inch)
-            ax.clear()
-            ax.set_title(
-                "Rotational head motion parameters", fontsize=20, y=1.03
-            )
-            ax.set_xlabel("Dynamic scans", fontsize=14)
-            ax.set_ylabel(
-                "Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14
-            )
-            ax.plot(data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
-            ax.legend(loc="best")
-            ax.set_xlim(0, xLim)
-            ax.set_ylim(minRot * 1.1, maxRot * 1.1)
-            ax.yaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            ax.xaxis.grid(
-                True, linestyle="-", which="major", color="grey", alpha=0.5
-            )
-            out_file_rot = os.path.join(
-                tmpdir.name,
-                self.dict4runtime["norm_anat"]["PatientRef"]
-                + "_CVR_QualityControlMeasure_Rotation.png",
-            )
-            # High resolution: 2000px × 1118px.
-            fig.savefig(out_file_rot, format="png", dpi=200)
-            im_qualCheckRot = Image(out_file_rot, 7.187 * inch, 3.354 * inch)
-
         if matDataReg is not None:
 
             if xLim is None:
@@ -1864,6 +1743,7 @@ class Report:
         #       exist. We can also add this data as input. In this case,
         #       the brick will wait until the files exist.
         #       This would be cleaner.
+        i = 0
         while not os.path.exists(res_anal_data):
 
             if time.time() - start_time > max_timeout:
