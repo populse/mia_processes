@@ -2174,12 +2174,13 @@ class Make_AIF(ProcessMIA):
         window_size = 8
         th = 2.0
         dim = len(data)
-        mean = std = np.zeros(dim - window_size)
+        mean = np.zeros(dim - window_size)
+        std = np.zeros(dim - window_size)
 
         for t in range(dim - window_size):
             # fmt: off
-            mean[t] = np.mean(data[t:t + window_size])
-            std[t] = np.std(data[t:t + window_size])
+            mean[t] = np.mean(data[t:t + window_size + 1])
+            std[t] = np.std(data[t:t + window_size + 1], ddof=1)
             # fmt: on
 
         tlog = data[window_size:] < (mean - th * std)
@@ -2390,11 +2391,11 @@ class Make_AIF(ProcessMIA):
         # tmp_data corresponds to data with the roi mask applied and
         # remodelled in the form of a matrix of n rows x ndynamics columns
         # (each column therefore has a dynamic, i.e. a brain).
-        tmp_data = tmp_data.reshape(-1, ndynamics)
+        tmp_data = tmp_data.reshape((-1, ndynamics), order="F")
         # sorting of voxels, the height is recalculated beforehand to remove
         # voxels with excessive width
         delta_base_min[~roi] = 0
-        tmp_delta_base_min = delta_base_min[roi].flatten()
+        tmp_delta_base_min = delta_base_min.reshape(-1, order="F")
         sorting = np.argsort(tmp_delta_base_min)[::-1]
         # score calculation
         idx_min = np.argmin(data, axis=3)
