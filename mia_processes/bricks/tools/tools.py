@@ -39,6 +39,7 @@ needed to run other higher-level bricks.
 
 # Other imports
 import csv
+import json
 import os
 import re
 import shutil
@@ -2168,7 +2169,7 @@ class Make_AIF(ProcessMIA):
     def bol_ar_time(self, data):
         """Compute bolus arrival time
 
-        :param data:
+        :param data: Value of voxels selected during dynamics
         :returns: the bolus arrival time
         """
         window_size = 8
@@ -2192,6 +2193,28 @@ class Make_AIF(ProcessMIA):
             t0 = 40
 
         return t0
+
+    def convert_to_native_types(self, data):
+        """Convert data to list of native Python types
+
+        Useful, for example, for serializing with json.
+
+        :param data: The data to be converted to a native Python type
+        """
+
+        if isinstance(data, np.ndarray):
+            return data.tolist()
+
+        if isinstance(data, list):
+            return [self.convert_to_native_types(item) for item in data]
+
+        if isinstance(data, np.int64):
+            return int(data)
+
+        if isinstance(data, np.float64):
+            return float(data)
+
+        return data
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -2220,7 +2243,7 @@ class Make_AIF(ProcessMIA):
                 _, file_name = os.path.split(self.func_file)
                 file_name_no_ext, _ = os.path.splitext(file_name)
                 self.outputs["aif_file"] = os.path.join(
-                    self.output_directory, file_name_no_ext + "_aif.mat"
+                    self.output_directory, file_name_no_ext + "_aif.json"
                 )
 
             else:
@@ -2404,40 +2427,56 @@ class Make_AIF(ProcessMIA):
         for i in range(nb_vox_cand):
             # calculation of arrival time
             t0 = self.bol_ar_time(tmp_data[sorting[i], :])
-            initslop = delta_base_min.flatten()[sorting[i]] / (
-                idx_min.flatten()[sorting[i]] - t0
+            initslop = delta_base_min.flatten(order="F")[sorting[i]] / (
+                idx_min.flatten(order="F")[sorting[i]] - t0
             )
-            score[i] = (delta_base_min.flatten()[sorting[i]] * initslop) / (
-                half_width_peak.flatten()[sorting[i]] * t0
-            )
+            # TODO: Do we need * (t0 + 1) because python is 0-based indexing ?
+            score[i] = (
+                delta_base_min.flatten(order="F")[sorting[i]] * initslop
+            ) / (half_width_peak.flatten(order="F")[sorting[i]] * t0)
 
         sorted_score = np.argsort(score)[::-1]
+        # first-pass curve averaged over the 5 best voxels determined using
+        # the score.
         aif = np.mean(tmp_data[sorting[sorted_score[:nb_vox]], :], axis=0)
-        roi = np.zeros((nrow, ncol, nslices), dtype=bool)
-
-        for i in range(nb_vox):
-            roi.flat[sorting[sorted_score[i]]] = True
+        # these lines are unnecessary:
+        # roi = np.zeros((nrow, ncol, nslices), dtype=bool)
+        #
+        # for i in range(nb_vox):
+        #     roi.flat[sorting[sorted_score[i]]] = True
 
         # i, j, k correspond to the indexes in the brain (3D) for
         # the best results
-        i, j, k = np.where(roi)
+        i, j, k = np.unravel_index(
+            sorting[sorted_score[:nb_vox]], (nrow, ncol, nslices), order="F"
+        )
 
         for v in range(nb_vox):
             warn = 0
+            # In scores, the first 4 columns are:
+            # score value / row index / column index / slice index.
             scores[v][0:4] = [score[sorted_score[v]], i[v], j[v], k[v]]
+            # Then, from the sixth to the ninth column, the results of 4
+            # tests are displayed.
 
-            # Pre-bolus baseline test
-            std_basepre = np.std(tmp_data[sorting[sorted_score[v]], 1:7])
-            mean_basepre = np.mean(tmp_data[sorting[sorted_score[v]], 1:7])
+            # 1/ Pre-bolus baseline test: indicates whether the baseline is
+            # too noisy
+            std_basepre = np.std(
+                tmp_data[sorting[sorted_score[v]], 1:6], ddof=1
+            )
+            mean_basepre = np.mean(tmp_data[sorting[sorted_score[v]], 1:6])
 
             if std_basepre >= mean_basepre / 10:
                 warn += 1
-                scores[v][4 + warn] = (
-                    "The pre-bolus baseline of the voxel " "is too noisy"
-                )
+                scores[v][
+                    4 + warn
+                ] = "The pre-bolus baseline of the voxel is too noisy"
 
-            # Post-bolus baseline test
-            std_basepost = np.std(tmp_data[sorting[sorted_score[v]], -6:])
+            # 2/ Post-bolus baseline test: indicates whether the baseline is
+            # too noisy
+            std_basepost = np.std(
+                tmp_data[sorting[sorted_score[v]], -6:], ddof=1
+            )
             mean_basepost = np.mean(tmp_data[sorting[sorted_score[v]], -6:])
 
             if std_basepost >= mean_basepost / 10:
@@ -2446,22 +2485,39 @@ class Make_AIF(ProcessMIA):
                     "The post-bolus baseline of the voxel " "is too noisy"
                 )
 
-            # t0 point test
+            # 3/ t0 point test: indicates whether the voxel value at the time
+            # of bolus arrival (t0) is greater than 11/10th of the baseline
+            # mean
             t0 = self.bol_ar_time(tmp_data[sorting[sorted_score[v]], :])
 
             if tmp_data[sorting[sorted_score[v]], t0] >= 1.1 * mean_basepre:
                 warn += 1
                 scores[v][4 + warn] = "The voxel value at t0 is too high"
 
-            # Pre-bolus baseline length test
+            # 4/ Pre-bolus baseline length test
             if t0 < 8:
                 warn += 1
                 scores[v][4 + warn] = "The voxel baseline is too short"
 
+            # Finally, the fifth column shows the number of warnings
             scores[v][4] = warn
+
+        # Saving results
         ###################################################
-        # TODO: May be we don't need to save in matlab file format?
-        io.savemat(self.aif_file, {"aif": aif, "scores": scores})
+        with open(self.aif_file, "w") as f:
+            json.dump(
+                {
+                    "aif": self.convert_to_native_types(aif),
+                    "scores": self.convert_to_native_types(scores),
+                },
+                f,
+            )
+
+        # To load the data back:
+        # with open('pathTofile.json', 'r') as f:
+        #    data = json.load(f)
+        # aif = np.array(data['aif']) # or just aif = data['aif']
+        # scores = data['scores']
         print(f"Make_AIF brick: {self.aif_file} created!")
 
 

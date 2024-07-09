@@ -52,6 +52,9 @@ class Perfdsc(Pipeline):
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "realign"
         ].process.register_to_mean = False
+        # We can do the same with:
+        # self.nodes["1_spatial_preprocessing"].process.nodes[
+        # "realign"].set_plug_value("register_to_mean", False)
         self.nodes["1_spatial_preprocessing"].process.nodes[
             "normalize12_1"
         ].process.write_voxel_sizes = [1.0, 1.0, 1.0]
@@ -87,6 +90,9 @@ class Perfdsc(Pipeline):
             "threshold_2": True,
             "resample1": True,
         }
+        self.add_process(
+            "make_aif", "mia_processes.bricks.tools.tools.Make_AIF"
+        )
 
         # links
         self.export_parameter(
@@ -112,16 +118,25 @@ class Perfdsc(Pipeline):
             "coregistered_source",
             is_optional=False,
         )
+        self.add_link(
+            "1_spatial_preprocessing.smoothed_func->" "make_aif.func_file"
+        )
         # Only done for normalize12_2 activation!
         self.export_parameter(
             "1_spatial_preprocessing", "normalized_anat", is_optional=False
         )
         self.export_parameter("2_spatial_mask", "mask_003", is_optional=False)
+        self.export_parameter("make_aif", "aif_file", is_optional=False)
 
         # parameters order
-
         self.reorder_traits(
-            ("mask_003", "anat_file", "func_files", "coregistered_source")
+            (
+                "mask_003",
+                "anat_file",
+                "func_files",
+                "coregistered_source",
+                "aif_file",
+            )
         )
 
         # nodes positions
@@ -130,6 +145,7 @@ class Perfdsc(Pipeline):
             "2_spatial_mask": (42.0, -76.0),
             "outputs": (337.00279291855725, -76.0),
             "inputs": (-548.5783216389599, -167.0),
+            "make_aif": (43.1492517677367, -270.66348836125746),
         }
 
         # nodes dimensions
@@ -138,6 +154,7 @@ class Perfdsc(Pipeline):
             "2_spatial_mask": (200.15625, 145.0),
             "outputs": (135.8125, 110.0),
             "inputs": (92.79751223929541, 110.0),
+            "make_aif": (117.0, 75.0),
         }
 
         self.do_autoexport_nodes_parameters = False
