@@ -72,7 +72,8 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import io, signal
 from scipy.interpolate import interp1d
 from scipy.special import gammaln
-from skimage.filters import threshold_otsu
+
+# from skimage.filters import threshold_otsu
 from traits.api import Either, Undefined
 
 # mia_processes imports
@@ -2144,7 +2145,7 @@ class Make_AIF(ProcessMIA):
         func_file_desc = "The DSC MRI scan (a NIfTI file)"
 
         # Outputs description
-        aif_file_desc = "The file containing the calculated AIF (a .mat file)"
+        aif_file_desc = "The file containing the calculated AIF (a .json file)"
 
         # Inputs traits
         self.add_trait(
@@ -2317,35 +2318,36 @@ class Make_AIF(ProcessMIA):
         #       4D or a 3D? using a try statement ?
         nrow, ncol, nslices, ndynamics = data.shape
         # TODO: Do we really need thres?
-        thres = np.zeros(nslices)
-
-        for aux in range(nslices):
-            thres[aux] = threshold_otsu(data[:, :, aux, 0])
+        # thres is currently being commented on
+        # thres = np.array(
+        #     [threshold_otsu(data[:, :, aux, 0]) for aux in range(nslices)]
+        # )
 
         head_mask = np.all(data, axis=3)
         # AIF computation
         ##################################################
-        # ratio of dynamic numbers to define maximum peak width
+        # ratio used to define the maximum allowable width of the dynamic
+        # peak in the AIF computation
         wmaxr = 0.5
-        # ??
+        # number of candidate voxels to be evaluated for computing the AIF
         nb_vox_cand = 50
-        # ??
+        # the number of best-scoring voxels to be used for computing the AIF
+        # after evaluating the initial set of candidate voxels.
         nb_vox = 5
         # score of each selected voxel, the number of warnings, and the reasons
         scores = [[None] * 9 for _ in range(nb_vox)]
         wmax = round(wmaxr * ndynamics)
-        # TODO: can we use head_mask directly instead of roi?
-        roi = head_mask.copy()
-        # remove voxels with inf and NaN values (not necessarily required)
-        roi &= ~np.any(np.isinf(data), axis=3) & ~np.any(
-            np.isnan(data), axis=3
+        # rename head_mask to roi, remove voxels with inf, NaN and null
+        # values (not necessarily required)
+        roi = (
+            head_mask
+            & ~np.any(np.isinf(data), axis=3)
+            & ~np.any(np.isnan(data), axis=3)
+            & np.all(data, axis=3)
         )
-        # remove null voxels
-        roi &= np.all(data, axis=3)
         # remove noisy voxels
         data_mean = np.mean(data[roi])
-        noisy = np.mean(data, axis=3) < data_mean
-        roi &= ~noisy
+        roi &= np.mean(data, axis=3) >= data_mean
         # calculation of peak heights - delta_base_min:
         # Replicate the roi array, ndynamics times along the 4th dimension
         roi_replicated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
@@ -2407,10 +2409,8 @@ class Make_AIF(ProcessMIA):
         # of the peak must be less than wmaxr*ndynamics range
         # and greater than 0
         roi &= (half_width_peak < wmax) & (half_width_peak > 0)
-        # TODO: Do we really need to copy data?
         tmp_data = data.copy()
-        roi_repeated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
-        tmp_data[~roi_repeated] = 0
+        tmp_data[~np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)] = 0
         # tmp_data corresponds to data with the roi mask applied and
         # remodelled in the form of a matrix of n rows x ndynamics columns
         # (each column therefore has a dynamic, i.e. a brain).
@@ -2421,14 +2421,13 @@ class Make_AIF(ProcessMIA):
         tmp_delta_base_min = delta_base_min.reshape(-1, order="F")
         sorting = np.argsort(tmp_delta_base_min)[::-1]
         # score calculation
-        idx_min = np.argmin(data, axis=3)
         score = np.zeros(nb_vox_cand)
 
         for i in range(nb_vox_cand):
             # calculation of arrival time
             t0 = self.bol_ar_time(tmp_data[sorting[i], :])
             initslop = delta_base_min.flatten(order="F")[sorting[i]] / (
-                idx_min.flatten(order="F")[sorting[i]] - t0
+                np.argmin(data, axis=3).flatten(order="F")[sorting[i]] - t0
             )
             # TODO: Do we need * (t0 + 1) because python is 0-based indexing ?
             score[i] = (
@@ -2439,12 +2438,6 @@ class Make_AIF(ProcessMIA):
         # first-pass curve averaged over the 5 best voxels determined using
         # the score.
         aif = np.mean(tmp_data[sorting[sorted_score[:nb_vox]], :], axis=0)
-        # these lines are unnecessary:
-        # roi = np.zeros((nrow, ncol, nslices), dtype=bool)
-        #
-        # for i in range(nb_vox):
-        #     roi.flat[sorting[sorted_score[i]]] = True
-
         # i, j, k correspond to the indexes in the brain (3D) for
         # the best results
         i, j, k = np.unravel_index(
@@ -2481,9 +2474,9 @@ class Make_AIF(ProcessMIA):
 
             if std_basepost >= mean_basepost / 10:
                 warn += 1
-                scores[v][4 + warn] = (
-                    "The post-bolus baseline of the voxel " "is too noisy"
-                )
+                scores[v][
+                    4 + warn
+                ] = "The post-bolus baseline of the voxel is too noisy"
 
             # 3/ t0 point test: indicates whether the voxel value at the time
             # of bolus arrival (t0) is greater than 11/10th of the baseline
