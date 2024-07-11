@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.tools &#8212; mia_processes 2.6.1-dev+a9697d86 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=406d4187"></script>
+    <title>mia_processes.utils.tools &#8212; mia_processes 2.6.1-dev+d3e43d68 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../_static/documentation_options.js?v=717c3d5b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+a9697d86 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+d3e43d68 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -86,20 +86,30 @@
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Undefined</span>
 
 
-<div class="viewcode-block" id="PageNumCanvas"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas">[docs]</a><span class="k">class</span> <span class="nc">PageNumCanvas</span><span class="p">(</span><span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="p">):</span>
+<div class="viewcode-block" id="PageNumCanvas">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas">[docs]</a>
+<span class="k">class</span> <span class="nc">PageNumCanvas</span><span class="p">(</span><span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;For add \&quot;page number of total\&quot; in each footer.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PageNumCanvas.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PageNumCanvas.__init__">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.&quot;&quot;&quot;</span>
         <span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pages</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="PageNumCanvas.showPage"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.showPage">[docs]</a>    <span class="k">def</span> <span class="nf">showPage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PageNumCanvas.showPage">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.showPage">[docs]</a>
+    <span class="k">def</span> <span class="nf">showPage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;On a page break, add information to the list.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_startPage</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="PageNumCanvas.save"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PageNumCanvas.save">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the page number to each page (page x of y).&quot;&quot;&quot;</span>
         <span class="n">page_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pages</span><span class="p">)</span>
 
@@ -110,20 +120,30 @@
 
         <span class="n">canvas</span><span class="o">.</span><span class="n">Canvas</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PageNumCanvas.draw_page_number"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.draw_page_number">[docs]</a>    <span class="k">def</span> <span class="nf">draw_page_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_count</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PageNumCanvas.draw_page_number">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.PageNumCanvas.draw_page_number">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_page_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_count</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the page number.&quot;&quot;&quot;</span>
         <span class="n">page</span> <span class="o">=</span> <span class="s2">&quot;Page </span><span class="si">%s</span><span class="s2"> of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pageNumber</span><span class="p">,</span> <span class="n">page_count</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawRightString</span><span class="p">(</span><span class="mi">195</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drawRightString</span><span class="p">(</span><span class="mi">195</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportLine"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine">[docs]</a><span class="k">class</span> <span class="nc">ReportLine</span><span class="p">(</span><span class="n">Flowable</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReportLine">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportLine</span><span class="p">(</span><span class="n">Flowable</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Line flowable --- draws a line in a flowable&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportLine.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportLine.__init__">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">Flowable</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span></div>
+
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Customise the string representation of the ReportLine object</span>
@@ -132,12 +152,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Line(w=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 
-<div class="viewcode-block" id="ReportLine.draw"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ReportLine.draw">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.draw">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw the line&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canv</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canv</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="checkFileExt"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.checkFileExt">[docs]</a><span class="k">def</span> <span class="nf">checkFileExt</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="n">ext_dic</span><span class="p">):</span>
+
+<div class="viewcode-block" id="checkFileExt">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.checkFileExt">[docs]</a>
+<span class="k">def</span> <span class="nf">checkFileExt</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="n">ext_dic</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check file extension</span>
 
 <span class="sd">    :param in_file: file name (a string)</span>
@@ -167,7 +193,10 @@
     <span class="k">return</span> <span class="n">valid_bool</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span></div>
 
 
-<div class="viewcode-block" id="del_dbFieldValue"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.del_dbFieldValue">[docs]</a><span class="k">def</span> <span class="nf">del_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">tags2del</span><span class="p">):</span>
+
+<div class="viewcode-block" id="del_dbFieldValue">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.del_dbFieldValue">[docs]</a>
+<span class="k">def</span> <span class="nf">del_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">tags2del</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete for a document, the value for a field in the db.</span>
 
 <span class="sd">    :param project: the project.</span>
@@ -201,7 +230,10 @@
             <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="dict4runtime_update"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.dict4runtime_update">[docs]</a><span class="k">def</span> <span class="nf">dict4runtime_update</span><span class="p">(</span><span class="n">dict4runtime</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">db_filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+
+<div class="viewcode-block" id="dict4runtime_update">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.dict4runtime_update">[docs]</a>
+<span class="k">def</span> <span class="nf">dict4runtime_update</span><span class="p">(</span><span class="n">dict4runtime</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">db_filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the dict4runtime dictionary object with tags values</span>
 
 <span class="sd">    :param dict4runtime: the dict used in mia_processes bricks to pass data</span>
@@ -230,7 +262,10 @@
             <span class="n">dict4runtime</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span></div>
 
 
-<div class="viewcode-block" id="get_dbFieldValue"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.get_dbFieldValue">[docs]</a><span class="k">def</span> <span class="nf">get_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_dbFieldValue">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.get_dbFieldValue">[docs]</a>
+<span class="k">def</span> <span class="nf">get_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return, for a document, the field value from the database.</span>
 
 <span class="sd">    :param project: the project.</span>
@@ -248,7 +283,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="mriqc_get_all_run"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_get_all_run">[docs]</a><span class="k">def</span> <span class="nf">mriqc_get_all_run</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
+
+<div class="viewcode-block" id="mriqc_get_all_run">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_get_all_run">[docs]</a>
+<span class="k">def</span> <span class="nf">mriqc_get_all_run</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get all raw files name with a mriqc run for one project and</span>
 <span class="sd">    for one modality.</span>
@@ -283,7 +321,10 @@
     <span class="k">return</span> <span class="n">files_name</span></div>
 
 
-<div class="viewcode-block" id="mriqc_group_iqms_tsv"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_group_iqms_tsv">[docs]</a><span class="k">def</span> <span class="nf">mriqc_group_iqms_tsv</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
+
+<div class="viewcode-block" id="mriqc_group_iqms_tsv">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_group_iqms_tsv">[docs]</a>
+<span class="k">def</span> <span class="nf">mriqc_group_iqms_tsv</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get all IQMs from mriqc json report for one project</span>
 <span class="sd">    and for one modality and put them together in one tsv file.</span>
@@ -346,7 +387,10 @@
     <span class="k">return</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">out_tsv</span></div>
 
 
-<div class="viewcode-block" id="plot_realignment_parameters"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_realignment_parameters">[docs]</a><span class="k">def</span> <span class="nf">plot_realignment_parameters</span><span class="p">(</span>
+
+<div class="viewcode-block" id="plot_realignment_parameters">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_realignment_parameters">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_realignment_parameters</span><span class="p">(</span>
     <span class="n">realignment_parameters</span><span class="p">,</span> <span class="n">vox_size</span><span class="p">,</span> <span class="n">out_file_tra</span><span class="p">,</span> <span class="n">out_file_rot</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -489,7 +533,10 @@
     <span class="k">return</span> <span class="n">qc</span></div>
 
 
-<div class="viewcode-block" id="plot_boxplot_points"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_boxplot_points">[docs]</a><span class="k">def</span> <span class="nf">plot_boxplot_points</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_boxplot_points">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_boxplot_points">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_boxplot_points</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot boxplot with points data and save the figure in a png image</span>
 
@@ -530,7 +577,10 @@
     <span class="k">return</span> <span class="n">out_file</span></div>
 
 
-<div class="viewcode-block" id="plot_qi2"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_qi2">[docs]</a><span class="k">def</span> <span class="nf">plot_qi2</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">ref_pdf</span><span class="p">,</span> <span class="n">fit_pdf</span><span class="p">,</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">cutoff_idx</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_qi2">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_qi2">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_qi2</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">ref_pdf</span><span class="p">,</span> <span class="n">fit_pdf</span><span class="p">,</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">cutoff_idx</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;bla bla&quot;&quot;&quot;</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
@@ -586,7 +636,10 @@
     <span class="k">return</span> <span class="n">out_file</span></div>
 
 
-<div class="viewcode-block" id="plot_segmentation"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_segmentation">[docs]</a><span class="k">def</span> <span class="nf">plot_segmentation</span><span class="p">(</span><span class="n">anat_file</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_segmentation">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_segmentation">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_segmentation</span><span class="p">(</span><span class="n">anat_file</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adapted from</span>
 <span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/viz/utils.py#L550&gt;</span>
@@ -641,7 +694,10 @@
     <span class="k">return</span> <span class="n">out_file</span></div>
 
 
-<div class="viewcode-block" id="set_dbFieldValue"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.set_dbFieldValue">[docs]</a><span class="k">def</span> <span class="nf">set_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">):</span>
+
+<div class="viewcode-block" id="set_dbFieldValue">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.set_dbFieldValue">[docs]</a>
+<span class="k">def</span> <span class="nf">set_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates for a document, the field and the corresponding value in the db.</span>
 
 <span class="sd">    :param project: the project.</span>
@@ -702,7 +758,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_slice_planes"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_slice_planes">[docs]</a><span class="k">def</span> <span class="nf">plot_slice_planes</span><span class="p">(</span>
+
+<div class="viewcode-block" id="plot_slice_planes">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_slice_planes">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_slice_planes</span><span class="p">(</span>
     <span class="n">data_1</span><span class="p">,</span>
     <span class="n">data_2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">plane</span><span class="o">=</span><span class="s2">&quot;ax&quot;</span><span class="p">,</span>
@@ -1110,7 +1169,10 @@
     <span class="k">return</span> <span class="n">out_file</span></div>
 
 
-<div class="viewcode-block" id="check_orientations"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.check_orientations">[docs]</a><span class="k">def</span> <span class="nf">check_orientations</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="check_orientations">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.check_orientations">[docs]</a>
+<span class="k">def</span> <span class="nf">check_orientations</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check the dimensions and orientations of the images.</span>
 
 <span class="sd">    images: images from nibabel</span>
@@ -1189,6 +1251,7 @@
                 <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">orient</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
     <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">message</span></div>
+
 </pre></div>
 
       </div>
@@ -1202,7 +1265,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
