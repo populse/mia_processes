@@ -24,7 +24,7 @@ For bloc design, the csv file should contains two columns by conditions: one wit
 The first row of the column with the onset should contains the name of the condition
 and the first row of the column with the duration should contain the name of the condition + " duration":
 
-.. image:: ../../images/getConditionsFromCSV_bloc_example.png
+.. image:: ../../images/getRegressorsFromCSV_example.png
   :width: 300
   :alt: csv example bloc design
 
@@ -40,7 +40,7 @@ and the first row of the column with the duration should contain the name of the
     ::
 
       ex. ['/home/username/MIA_projects/data/downloaded_data/sess01_bloc_onset.csv',
-           '/home/username/MIA_projects//data/downloaded_data/sess02_event_onset.csv']
+           '/home/username/MIA_projects/data/downloaded_data/sess02_event_onset.csv']
 
 - *design_type* (a list of string which are bloc or event-related):
     The type of design for each session (bloc design or event-related design).
