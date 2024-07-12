@@ -172,6 +172,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `Get_Conditions_From_csv <bricks/tools/Get_Conditions_From_csv.html>`_
     - `Get_Eprime_info_GE2REC <bricks/tools/Get_Eprime_info_GE2REC.html>`_
     - `Get_Patient_Name <bricks/tools/Get_Patient_Name.html>`_
+    - `Get_Regressors_From_csv <bricks/tools/Get_Regressors_From_csv.html>`_
     - `Import_Data <bricks/tools/Import_Data.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
