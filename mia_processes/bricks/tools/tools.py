@@ -9,6 +9,7 @@ needed to run other higher-level bricks.
     :Class:
         - Concat_to_list
         - Concat_to_list_of_list
+        - Deconv_from_aif
         - Delete_data
         - Files_To_List
         - Filter_Files_List
@@ -269,6 +270,219 @@ class Concat_to_list_of_list(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         return
+
+
+class Deconv_from_aif(ProcessMIA):
+    """
+    blabla
+
+    Please, see the complete documentation for the
+    `Deconv_from_aif in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Deconv_from_aif.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Deconv_from_aif, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []  # no need of third party software!
+
+        # Inputs description
+        func_file_desc = "The DSC MRI scan (a NIfTI file)"
+        aif_file_desc = (
+            "The file containing the calculated AIF (a " ".json file)"
+        )
+        mask_file_desc = (
+            "A mask at the resolution of func_file (a " "NIfTI file)"
+        )
+
+        # Outputs description
+        CBV_image_desc = (
+            "The volume of blood within a given volume of tissue "
+            "(mL/100g) parameter (a NIfTI file)"
+        )
+        CBF_image_desc = (
+            "The rate of blood flow per unit of tissue "
+            "(mL/100g/min) parameter (a NIfTI file))"
+        )
+        MTT_image_desc = (
+            "Mean Transit Time parameter is the average time "
+            "(s) it takes for blood to traverse through the "
+            "tissue (a NIfTI file)"
+        )
+        TTP_image_desc = (
+            "The Time to Peak parameter is the time interval "
+            "(s) between the arrival of the contrast agent at "
+            "a voxel and the point when the concentration of "
+            "the contrast agent reaches its maximum (a NIfTI "
+            "file)"
+        )
+        Tmax_image_desc = (
+            "The Time to Maximum parameter is the time (s) at "
+            "which the residue function reaches its maximum "
+            "value after the arrival of the contrast agent (a "
+            "NIfTI file)"
+        )
+        T0_image_desc = (
+            "The Bolus Arrival Time parameter is the time (s) at "
+            "which the contrast agent first arrives at a "
+            "particular voxel in the tissue (a NIfTI file)"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "func_file",
+            Either(
+                ImageFileSPM(),
+                Undefined,
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=func_file_desc,
+            ),
+        )
+        self.func_file = traits.Undefined
+
+        self.add_trait(
+            "aif_file",
+            Either(
+                File(),
+                Undefined,
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=aif_file_desc,
+            ),
+        )
+        self.aif_file = traits.Undefined
+
+        self.add_trait(
+            "mask_file",
+            Either(
+                ImageFileSPM(),
+                Undefined,
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=mask_file_desc,
+            ),
+        )
+        self.mask_file = traits.Undefined
+
+        # Outputs traits
+
+        # self.add_trait(
+        #     "CBV_image",
+        #     OutputMultiPath(
+        #         File(), output=True, optional=True, desc=CBV_image_desc
+        #     ),
+        # )
+        self.add_trait("CBV_image", File(output=True, desc=CBV_image_desc))
+        self.CBV_image = traits.Undefined
+
+        self.add_trait("CBF_image", File(output=True, desc=CBF_image_desc))
+        self.CBF_image = traits.Undefined
+
+        self.add_trait("MTT_image", File(output=True, desc=MTT_image_desc))
+        self.MTT_image = traits.Undefined
+
+        self.add_trait("TTP_image", File(output=True, desc=TTP_image_desc))
+        self.TTP_image = traits.Undefined
+
+        self.add_trait("Tmax_image", File(output=True, desc=Tmax_image_desc))
+        self.Tmax_image = traits.Undefined
+
+        self.add_trait("T0_image", File(output=True, desc=T0_image_desc))
+        self.T0_image = traits.Undefined
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Deconv_from_aif, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if (
+            self.func_file
+            and self.aif_file
+            and self.mask_file
+            and self.func_file
+            not in [
+                "<undefined>",
+                traits.Undefined,
+            ]
+            and self.aif_file
+            not in [
+                "<undefined>",
+                traits.Undefined,
+            ]
+            and self.mask_file
+            not in [
+                "<undefined>",
+                traits.Undefined,
+            ]
+        ):
+
+            if self.output_directory:
+                _, file_name = os.path.split(self.func_file)
+                file_name_no_ext, _ = os.path.splitext(file_name)
+                self.outputs["CBV_image"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_CBV_deconv.nii"
+                )
+                self.outputs["CBF_image"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_CBF_deconv.nii"
+                )
+                self.outputs["MTT_image"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_MTT_deconv.nii"
+                )
+                self.outputs["TTP_image"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_TTP_deconv.nii"
+                )
+                self.outputs["Tmax_image"] = os.path.join(
+                    self.output_directory,
+                    file_name_no_ext + "_Tmax_deconv.nii",
+                )
+                self.outputs["T0_image"] = os.path.join(
+                    self.output_directory, file_name_no_ext + "_T0_deconv.nii"
+                )
+
+            else:
+                print(
+                    "Deconv_from_aif brick: No output directory found, "
+                    "initialization step cannot be performed...!\n"
+                )
+                return self.make_initResult()
+
+            self.tags_inheritance(self.func_file, self.outputs["aif_file"])
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Deconv_from_aif, self).run_process_mia()
+        print("To do...")
 
 
 class Delete_data(ProcessMIA):
@@ -2063,7 +2277,7 @@ class Make_AIF(ProcessMIA):
 
         # Outputs traits
         self.add_trait("aif_file", File(output=True, desc=aif_file_desc))
-        self.cvr_reg = traits.Undefined
+        self.aif_file = traits.Undefined
 
         self.init_default_traits()
 

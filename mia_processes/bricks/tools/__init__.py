@@ -16,6 +16,7 @@ bricks (input data manipulations, etc.).
 from .tools import (  # noqa: F401
     Concat_to_list,
     Concat_to_list_of_list,
+    Deconv_from_aif,
     Delete_data,
     Files_To_List,
     Filter_Files_List,
