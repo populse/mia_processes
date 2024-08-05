@@ -37,7 +37,7 @@ Deconvolution of the tissue response curve with AIF
 
 **Inputs parameters:**
 
-*func_file*
+- *func_file*
     T2* functional Magnetic Resonance Imaging (fMRI) experiment recorded
     during gadolinium bolus. Ideally, the data will have been pre-processed
     (realignment, segmentation, etc.). An existing, uncompressed file
@@ -47,7 +47,7 @@ Deconvolution of the tissue response curve with AIF
 
       ex. '/home/username/data/raw_data/swrfunc.nii'
 
-*aif_file*
+- *aif_file*
     The AIF (a file in .json format) typically obtained previously with the
     Make_AIF brick.
 
@@ -55,7 +55,7 @@ Deconvolution of the tissue response curve with AIF
 
       ex. '/home/username/data/raw_data/swrfunc_aif.json'
 
-*mask_file*
+- *mask_file*
     The mask (at the resolution of `func_file`) used for the perfusion
     deconvolution (valid extensions: .nii).
 
