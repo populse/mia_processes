@@ -60,4 +60,4 @@ Compute the Arterial Input Function (AIF) from dynamic MRI perfusion data
 
     ::
 
-      ex. '/home/username/data/raw_data/swrfunc_aif.json'
+      ex. '/home/username/data/derived_data/swrfunc_aif.json'

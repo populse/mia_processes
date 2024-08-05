@@ -39,7 +39,7 @@ Standard regressor:
 
 **Inputs parameters:**
 
-*func_file*
+- *func_file*
     T2* functional Magnetic Resonance Imaging (fMRI) experiment recorded
     during the hypercapnic Challenge (only required to extract metadata from
     the functional image). An existing, uncompressed file
