@@ -41,7 +41,7 @@ Compute the Arterial Input Function (AIF) from dynamic MRI perfusion data
 
 **Inputs parameters:**
 
-*func_file*
+- *func_file*
     T2* functional Magnetic Resonance Imaging (fMRI) experiment recorded
     during gadolinium bolus. Ideally, the data will have been pre-processed
     (realignment, segmentation, etc.). An existing, uncompressed file
@@ -55,8 +55,27 @@ Compute the Arterial Input Function (AIF) from dynamic MRI perfusion data
 
 - *aif_file*
     The output data from the DSC-MRI AIF computation (a file with
-    .json format). It includes the computed Arterial Input Function (AIF)
-    and associated scoring details of selected voxels.
+    .json format). It includes the computed Arterial Input Function
+    (`aif` key) and associated scoring details of selected voxels
+    (`scores` key).
+
+    In `scores`, the elements are, in this order:
+
+      - Score value: The more intense and finer the peak, the higher the score.
+      - Row index: Row index of the selected voxel.
+      - Column index: Column index of the selected voxel.
+      - Slice index: slice index of the selected voxel.
+      - Number of warnings : The number of warnings when calculating AIF.
+      - Pre-bolus baseline test: Indicates whether the pre-bolus baseline is
+        too noisy. `None` value indicates no problem detected.
+      - Post-bolus baseline test: Indicates whether the post-bolus baseline
+        is too noisy. `None` value indicates no problem detected.
+      - t0 point test: Indicates whether the voxel value at the time of bolus
+        arrival (t0) is greater than 11/10th of the baseline mean. `None`
+        value indicates no problem detected.
+      - Pre-bolus baseline length test: Indicates whether the pre-bolus
+        baseline length is too short (< 8 dynamics). `None` value indicates
+        no problem detected.
 
     ::
 
