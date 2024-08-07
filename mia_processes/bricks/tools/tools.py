@@ -474,7 +474,10 @@ class Deconv_from_aif(ProcessMIA):
                 )
                 return self.make_initResult()
 
-            self.tags_inheritance(self.func_file, self.outputs["aif_file"])
+            if self.outputs:
+
+                for out_name in self.outputs.values():
+                    self.tags_inheritance(self.func_file, out_name)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
