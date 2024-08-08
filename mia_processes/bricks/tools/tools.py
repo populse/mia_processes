@@ -48,7 +48,6 @@ import tempfile
 import traceback
 from ast import literal_eval
 
-import nibabel as nib
 import numpy as np
 import pandas as pd
 
@@ -403,7 +402,64 @@ class Deconv_from_aif(ProcessMIA):
         self.add_trait("T0_image", File(output=True, desc=T0_image_desc))
         self.T0_image = traits.Undefined
 
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
         self.init_default_traits()
+
+    def bol_ar_time(self, vol_4d, mask):
+        """Compute Bolus Arrival Time (t0) and t0_mask.
+
+        Parameters:
+        vol_4d : 4D numpy array (H, W, Sli, Dyn)
+            Input voxel data.
+        mask : 3D numpy array (H, W, Sli)
+            Mask for the volume to be considered.
+
+        Returns:
+        t0 : 3D numpy array (H, W, Sli)
+            Bolus arrival time indices.
+        T0_mask : 4D numpy array (H, W, Sli, Dyn)
+            Mask for valid t0 values.
+        """
+
+        # to be continued
+        pass
+
+    def delta_r2star(self, vol_4d, te, mask):
+        """Compute DELTAR2*
+
+        DELTAR2* (ΔR2*) corresponds to a change in the transverse relaxation
+        rate (R2*), which is used in MRI to assess changes in the magnetic
+        properties of tissues, particularly related to the presence of
+        paramagnetic contrast agents like Gadolinium (Gd).
+
+        Parameters:
+        vol_4d : 4D numpy array (H, W, Sli, Dyn)
+            Input voxel data
+        te : float
+            Echo time
+        mask : 3D numpy array (H, W, Sli)
+            Mask for the volume to be considered
+
+        Returns:
+        t0 : 3D numpy array (H, W, Sli)
+            Bolus arrival time (index in vol_4d corresponding to the 4th
+            dimension)
+        c_vol_4d : 4D numpy array (H, W, Sli, Dyn)
+            Concentration in Gadolinium for each voxel over time
+        """
+        dyn_nb = vol_4d.shape[3]
+        t0, t0_mask = self.bol_ar_time(vol_4d, mask)
+        print(dyn_nb)
+        print(t0)
+        print(t0_mask)
+
+        # to be continued
+        pass
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -443,6 +499,44 @@ class Deconv_from_aif(ProcessMIA):
                 traits.Undefined,
             ]
         ):
+
+            rep_time = get_dbFieldValue(
+                self.project, self.func_file, "RepetitionTime"
+            )
+            echo_time = get_dbFieldValue(
+                self.project, self.func_file, "EchoTime"
+            )
+
+            if rep_time is None:
+                print(
+                    "Deconv_from_aif brick: Please, fill 'RepetitionTime' "
+                    "tag in the database for {} ...".format(self.func_file)
+                )
+                return self.make_initResult()
+
+            else:
+                # Amigo sets TR == 1.677 for pgad80 ... I don't know why this
+                # difference exists (drift since the first experiment
+                # where TR was equal to 1677s?). In any case, during
+                # reproducibility tests between Mia and Amigo we also impose
+                # this value ...
+                # TODO: To be changed at the end of the tests!
+                self.dict4runtime["rep_time"] = 1.677
+                # The repetition time is supposed to have the unit [ms].
+                # We convert it into seconds.
+                # self.dict4runtime["rep_time"] = rep_time[0] * 1e-3
+
+            if echo_time is None:
+                print(
+                    "Deconv_from_aif brick: Please, fill 'EchoTime' "
+                    "tag in the database for {} ...".format(self.func_file)
+                )
+                return self.make_initResult()
+
+            else:
+                # The echo time is supposed to have the unit [ms].
+                # We convert it into seconds.
+                self.dict4runtime["echo_time"] = echo_time[0] * 1e-3
 
             if self.output_directory:
                 _, file_name = os.path.split(self.func_file)
@@ -485,7 +579,34 @@ class Deconv_from_aif(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Deconv_from_aif, self).run_process_mia()
-        print("To do...")
+
+        # load aif
+        with open(self.aif_file, "r") as f:
+            aif = np.array(json.load(f)["aif"])
+
+        print(aif)
+
+        # load functional
+        header_func, data_func = self.load_nii(self.func_file, False, True)
+        #  flip functional data along the first dimension
+        data_func = np.flip(data_func, axis=0)
+        # load mask
+        header_mask, data_mask = self.load_nii(self.mask_file, False, False)
+        nb_row, nb_col, nb_sli, nb_dyn = data_func.shape
+        data_mask = np.transpose(data_mask, (1, 0, 2))
+        data_mask = data_mask.astype(bool)
+        # Deconvolution parameters
+        zero_pad_fact = 2  # Must be an integer
+        print(zero_pad_fact)
+        o_i_th = 0.1
+        print(o_i_th)
+        # Compute concentration and zero padding and T0
+        c_func, t0 = self.delta_r2star(
+            data_func, self.dict4runtime["echo_time"], data_mask
+        )
+
+        # to be continued
+        pass
 
 
 class Delete_data(ProcessMIA):
@@ -2376,57 +2497,6 @@ class Make_AIF(ProcessMIA):
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
-    def load_nii(self, file_path, scaled=True, matlab_like=False):
-        """Return the header and the data of a nibabel image object
-
-        MATLAB and Python (in particular NumPy) treat the order of dimensions
-        and the origin of the coordinate system differently. MATLAB uses main
-        column order (also known as Fortran order). NumPy (and Python in
-        general) uses the order of the main rows (C order). For a 3D array
-        data(x, y, z) in MATLAB, the equivalent in NumPy is data[y, x, z].
-        MATLAB and NumPy also handle the origin of the coordinate system
-        differently:
-        MATLAB's coordinate system starts with the origin in the lower
-        left-hand corner (as in traditional matrix mathematics).
-        NumPy's coordinate system starts with the origin in the top left-hand
-        corner.
-        When taking matlab_like=True as argument, the numpy matrix is
-        rearranged to follow MATLAB conventions.
-        Using scaled=False generates a raw unscaled data matrix (as in MATLAB
-        with `header = loadnifti(fnii)` and `header.reco.data`).
-
-        :param file_path: the path to a NIfTI file
-        :param scaled: A boolean, if True the data is scaled
-        :param matlab_like: A Boolean, if True the data is rearranged to match
-                            the order of the dimensions and the origin of the
-                            coordinate system in Matlab
-        """
-        img = nib.load(file_path)
-        header = img.header
-
-        if scaled is True:
-            data = img.get_fdata()
-
-        elif scaled is False:
-            data = img.dataobj.get_unscaled()
-
-        else:
-            print("Make_AIF brick: scaled argument must be True or False")
-
-        if matlab_like is True:
-
-            if data.ndim == 3:
-                data = np.transpose(data, (1, 0, 2))
-
-            if data.ndim == 4:
-                data = np.transpose(data, (1, 0, 2, 3))
-
-            # TODO: Should transpose for ndim>4 cases be implemented?
-
-            data = np.flip(data, axis=0)
-
-        return header, data
-
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Make_AIF, self).run_process_mia()
@@ -2623,11 +2693,6 @@ class Make_AIF(ProcessMIA):
                 f,
             )
 
-        # To load the data back:
-        # with open('pathTofile.json', 'r') as f:
-        #    data = json.load(f)
-        # aif = np.array(data['aif']) # or just aif = data['aif']
-        # scores = data['scores']
         print(f"Make_AIF brick: {self.aif_file} created!")
 
 
@@ -2801,7 +2866,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.init_default_traits()
 
     def gaussfir(self, bt, nt=3, of=2):
-        """Generate a Gaussian FIR filter
+        """Generate a Gaussian FIR filter.
 
         with a specified bandwidth-time product (bt),
         number of taps (nt), and oversampling factor (of)
