@@ -414,20 +414,65 @@ class Deconv_from_aif(ProcessMIA):
         """Compute Bolus Arrival Time (t0) and t0_mask.
 
         Parameters:
-        vol_4d : 4D numpy array (H, W, Sli, Dyn)
-            Input voxel data.
-        mask : 3D numpy array (H, W, Sli)
-            Mask for the volume to be considered.
+        vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+            brain data over time.
+        mask : 3D numpy array (nb_row, nb_col, nb_sli)
+            Mask for the brain to be considered.
 
         Returns:
-        t0 : 3D numpy array (H, W, Sli)
+        t0 : 3D numpy array (nb_row, nb_col, nb_sli)
             Bolus arrival time indices.
-        T0_mask : 4D numpy array (H, W, Sli, Dyn)
+        t0_mask : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
             Mask for valid t0 values.
         """
 
-        # to be continued
-        pass
+        # Number of time points (or dynamics). Acts as a sliding window that
+        # moves across the time dimension of the MRI data, allowing the
+        # algorithm to analyze local temporal behavior at each voxel
+        window_size = 8
+        # Threshold multiplier used to detect significant changes in the
+        # signal intensity of MRI data (controls the sensitivity of the bolus
+        # arrival detection):
+        th = 2.0
+        nb_row, nb_col, nb_sli, nb_dyn = vol_4d.shape
+        t0_mask = np.zeros_like(vol_4d, dtype=bool)
+        mean = np.zeros((nb_row, nb_col, nb_sli, nb_dyn - window_size))
+        stdev = np.zeros((nb_row, nb_col, nb_sli, nb_dyn - window_size))
+
+        # Calculate moving average and standard deviation over the window
+        # fmt: off
+        for t in range(nb_dyn - window_size):
+            mean[:, :, :, t] = np.mean(
+                vol_4d[:, :, :, t:t + window_size + 1], axis=3
+            )
+            stdev[:, :, :, t] = np.std(
+                vol_4d[:, :, :, t:t + window_size + 1], axis=3, ddof=1
+            )
+        # fmt: on
+
+        # Logical condition to determine the first significant drop in signal
+        ind_decrease = vol_4d[:, :, :, window_size:] < (mean - th * stdev)
+        # Find the index of the first occurrence of the condition being true
+        t0 = np.argmax(ind_decrease, axis=3) + window_size - 1
+        # Mask out invalid T0 values (outside the mask or too early)
+        t0[~mask | (t0 == window_size)] = 0
+        # Calculate Time To Peak (TTP)
+        ttp = np.argmin(vol_4d, axis=3)
+
+        # Process the mask
+        for row, col, sli in np.argwhere(mask):
+
+            if ttp[row, col, sli] > t0[row, col, sli] > window_size:
+                # fmt: off
+                t0_mask[row, col, sli, 1:t0[row, col, sli] - 1] = True
+                # fmt: on
+
+            else:
+                # fmt: off
+                t0_mask[row, col, sli, 1:window_size - 1] = True
+                # fmt: on
+
+        return t0, t0_mask
 
     def delta_r2star(self, vol_4d, te, mask):
         """Compute DELTAR2*
@@ -453,10 +498,8 @@ class Deconv_from_aif(ProcessMIA):
             Concentration in Gadolinium for each voxel over time
         """
         dyn_nb = vol_4d.shape[3]
-        t0, t0_mask = self.bol_ar_time(vol_4d, mask)
         print(dyn_nb)
-        print(t0)
-        print(t0_mask)
+        t0, t0_mask = self.bol_ar_time(vol_4d, mask)
 
         # to be continued
         pass
@@ -583,8 +626,7 @@ class Deconv_from_aif(ProcessMIA):
         # load aif
         with open(self.aif_file, "r") as f:
             aif = np.array(json.load(f)["aif"])
-
-        print(aif)
+            print(aif)
 
         # load functional
         header_func, data_func = self.load_nii(self.func_file, False, True)
