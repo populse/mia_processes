@@ -415,7 +415,7 @@ class Deconv_from_aif(ProcessMIA):
 
         Parameters:
         vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
-            brain data over time.
+            Brain data over time.
         mask : 3D numpy array (nb_row, nb_col, nb_sli)
             Mask for the brain to be considered.
 
@@ -483,26 +483,46 @@ class Deconv_from_aif(ProcessMIA):
         paramagnetic contrast agents like Gadolinium (Gd).
 
         Parameters:
-        vol_4d : 4D numpy array (H, W, Sli, Dyn)
-            Input voxel data
+        vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+            Brain data over time.
         te : float
-            Echo time
-        mask : 3D numpy array (H, W, Sli)
-            Mask for the volume to be considered
+            Echo time.
+        mask : 3D numpy array (nb_row, nb_col, nb_sli)
+            Mask for the volume to be considered.
 
         Returns:
-        t0 : 3D numpy array (H, W, Sli)
+        t0 : 3D numpy array (nb_row, nb_col, nb_sli)
             Bolus arrival time (index in vol_4d corresponding to the 4th
-            dimension)
-        c_vol_4d : 4D numpy array (H, W, Sli, Dyn)
-            Concentration in Gadolinium for each voxel over time
+            dimension).
+        c_vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+            Concentration in Gadolinium for each voxel over time.
         """
         dyn_nb = vol_4d.shape[3]
-        print(dyn_nb)
         t0, t0_mask = self.bol_ar_time(vol_4d, mask)
 
-        # to be continued
-        pass
+        # Compute baseline
+        with np.errstate(divide="ignore", invalid="ignore"):
+            baseline = np.sum(vol_4d * t0_mask, axis=3) / np.sum(
+                (vol_4d * t0_mask) != 0, axis=3
+            )
+            baseline[np.isnan(baseline)] = 0
+
+        baseline[~mask] = 0
+        # Replicate baseline across all dynamics
+        baseline = np.repeat(baseline[:, :, :, np.newaxis], dyn_nb, axis=3)
+        # Initialize c_vol_4d array
+        vol_4d = vol_4d.astype("float64")
+        c_vol_4d = np.zeros_like(vol_4d)
+        # Calculate concentration
+        mask_4D = np.repeat(mask[:, :, :, np.newaxis], dyn_nb, axis=3)
+        valid_voxels = mask_4D & (baseline != 0)
+        # Small epsilon value to prevent log(0)
+        eps = 1e-10
+        safe_ratio = np.clip(
+            vol_4d[valid_voxels] / (baseline[valid_voxels] + eps), eps, None
+        )
+        c_vol_4d[valid_voxels] = -(1 / te) * np.log(safe_ratio)
+        return c_vol_4d, t0
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -630,19 +650,19 @@ class Deconv_from_aif(ProcessMIA):
 
         # load functional
         header_func, data_func = self.load_nii(self.func_file, False, True)
-        #  flip functional data along the first dimension
+        # flip functional data along the first dimension
         data_func = np.flip(data_func, axis=0)
         # load mask
         header_mask, data_mask = self.load_nii(self.mask_file, False, False)
         nb_row, nb_col, nb_sli, nb_dyn = data_func.shape
         data_mask = np.transpose(data_mask, (1, 0, 2))
         data_mask = data_mask.astype(bool)
-        # Deconvolution parameters
+        # deconvolution parameters
         zero_pad_fact = 2  # Must be an integer
         print(zero_pad_fact)
         o_i_th = 0.1
         print(o_i_th)
-        # Compute concentration and zero padding and T0
+        # compute concentration, zero padding and T0
         c_func, t0 = self.delta_r2star(
             data_func, self.dict4runtime["echo_time"], data_mask
         )
