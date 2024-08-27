@@ -71,6 +71,7 @@ from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import io, signal
 from scipy.interpolate import interp1d
+from scipy.linalg import svd, toeplitz
 from scipy.special import gammaln
 
 # from skimage.filters import threshold_otsu
@@ -474,6 +475,38 @@ class Deconv_from_aif(ProcessMIA):
 
         return t0, t0_mask
 
+    def devonv_osvd(self, u, s, v, c_func_pad, nb_dyn, o_i_th, data_mask):
+        """Devonvolution using OSVD
+
+        OSVD stands for Oscillatory Singular Value Decomposition. In the
+        context of deconvolution, OSVD is used to filter out noise and reduce
+        artifacts by selectively truncating the singular values (which are
+        part of the SVD result) that contribute to oscillations or instability
+        in the inverse problem's solution.
+
+        residu_f = self.deconv_osvd(left_sing_vec,
+                             sing_val,
+                             right_sing_vec,
+                             c_func_pad,
+                             nb_dyn,
+                             o_i_th,
+                             data_mask)
+
+        Parameters:
+        u (ndarray): U matrix from SVD of c_aif_toeplitz matrix.
+        s (ndarray): Singular values from SVD of c_aif_toeplitz matrix.
+        v (ndarray): V matrix from SVD of c_aif_toeplitz matrix.
+        c_func_pad(ndarray): Zero-padded concentration voxels (4D array).
+        nb_dyn (int): Number of dynamics (without zero-padding).
+        o_i_th (float): Oscillation threshold.
+        data_mask (ndarray): Mask of the volume.
+
+        Returns:
+        residu_f (ndarray): Residu function from deconvolution.
+        """
+        # TODO
+        pass
+
     def delta_r2star(self, vol_4d, te, mask):
         """Compute DELTAR2*
 
@@ -646,7 +679,6 @@ class Deconv_from_aif(ProcessMIA):
         # load aif
         with open(self.aif_file, "r") as f:
             aif = np.array(json.load(f)["aif"])
-            print(aif)
 
         # load functional
         header_func, data_func = self.load_nii(self.func_file, False, True)
@@ -657,15 +689,51 @@ class Deconv_from_aif(ProcessMIA):
         nb_row, nb_col, nb_sli, nb_dyn = data_func.shape
         data_mask = np.transpose(data_mask, (1, 0, 2))
         data_mask = data_mask.astype(bool)
-        # deconvolution parameters
-        zero_pad_fact = 2  # Must be an integer
-        print(zero_pad_fact)
+        # deconvolution parameters:
+        # Zero Padding Factor, a factor by which the original data is extended
+        # with zeros (must be an integer)
+        zero_pad_fact = 2
+        # Oscillation Index Threshold, a threshold value that determines the
+        # level of acceptable oscillation during the deconvolution process
         o_i_th = 0.1
-        print(o_i_th)
         # compute concentration, zero padding and T0
         c_func, t0 = self.delta_r2star(
             data_func, self.dict4runtime["echo_time"], data_mask
         )
+        aif_4d = np.zeros((1, 1, 1, nb_dyn))
+        aif_4d[0, 0, 0, :] = aif
+        c_aif_4d, _ = self.delta_r2star(
+            aif_4d,
+            self.dict4runtime["echo_time"],
+            np.ones((1, 1, 1), dtype=bool),
+        )
+        c_aif = np.squeeze(c_aif_4d)
+        c_aif = np.concatenate(
+            (c_aif.flatten(), np.zeros(nb_dyn * (zero_pad_fact - 1)))
+        )
+        c_func_pad = np.concatenate(
+            (
+                c_func,
+                np.zeros(
+                    (nb_row, nb_col, nb_sli, nb_dyn * (zero_pad_fact - 1))
+                ),
+            ),
+            axis=3,
+        )
+        c_aif_toeplitz = toeplitz(
+            c_aif, np.concatenate(([c_aif[0]], c_aif[-1:0:-1]))
+        )
+        left_sing_vec, sing_val, right_sing_vec = svd(c_aif_toeplitz)
+        residu_f = self.deconv_osvd(
+            left_sing_vec,
+            sing_val,
+            right_sing_vec,
+            c_func_pad,
+            nb_dyn,
+            o_i_th,
+            data_mask,
+        )
+        print(residu_f)
 
         # to be continued
         pass
