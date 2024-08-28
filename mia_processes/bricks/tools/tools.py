@@ -475,22 +475,14 @@ class Deconv_from_aif(ProcessMIA):
 
         return t0, t0_mask
 
-    def devonv_osvd(self, u, s, v, c_func_pad, nb_dyn, o_i_th, data_mask):
-        """Devonvolution using OSVD
+    def deconv_osvd(self, u, s, v, c_func_pad, nb_dyn, oscil_th, data_mask):
+        """Deconvolution using OSVD.
 
         OSVD stands for Oscillatory Singular Value Decomposition. In the
         context of deconvolution, OSVD is used to filter out noise and reduce
         artifacts by selectively truncating the singular values (which are
-        part of the SVD result) that contribute to oscillations or instability
-        in the inverse problem's solution.
-
-        residu_f = self.deconv_osvd(left_sing_vec,
-                             sing_val,
-                             right_sing_vec,
-                             c_func_pad,
-                             nb_dyn,
-                             o_i_th,
-                             data_mask)
+        part of the Singular Value Decomposition result) that contribute to
+        oscillations or instability in the inverse problem's solution.
 
         Parameters:
         u (ndarray): U matrix from SVD of c_aif_toeplitz matrix.
@@ -498,17 +490,84 @@ class Deconv_from_aif(ProcessMIA):
         v (ndarray): V matrix from SVD of c_aif_toeplitz matrix.
         c_func_pad(ndarray): Zero-padded concentration voxels (4D array).
         nb_dyn (int): Number of dynamics (without zero-padding).
-        o_i_th (float): Oscillation threshold.
+        oscil_th (float): Oscillation threshold.
         data_mask (ndarray): Mask of the volume.
 
         Returns:
         residu_f (ndarray): Residu function from deconvolution.
         """
-        # TODO
-        pass
+        nb_1d, nb_2d, nb_3d, nb_4d = c_func_pad.shape
+        residu_f = np.zeros((nb_1d, nb_2d, nb_3d, nb_dyn))
+        # Get indices where the mask is true
+        indices_mask_true = np.transpose(np.nonzero(data_mask))
+        sorted_indices_mask = indices_mask_true[
+            np.lexsort(
+                (
+                    indices_mask_true[:, 0],
+                    indices_mask_true[:, 1],
+                    indices_mask_true[:, 2],
+                )
+            )
+        ]
+
+        for i_vox in sorted_indices_mask:
+            i, j, k = i_vox
+            c_vox_pad = c_func_pad[i, j, k, :]
+            th_prev = nb_4d
+            th = 0
+            oscil = np.inf
+            first = True
+
+            while (oscil > oscil_th or (abs(th_prev - th) > 1)) and th < nb_4d:
+                # Compute the inverse of s and filtering
+                s_inv = np.diag(
+                    np.hstack([1.0 / s[: nb_4d - th], np.zeros(th)])
+                )
+                # Inverse of c_aif_toeplitz
+                c_aif_toeplitz_inv = v @ s_inv @ u.T
+                # Calculate the residual
+                r = c_aif_toeplitz_inv @ c_vox_pad
+                r_oscil = r[:nb_dyn]
+                # fmt: off
+                sec_deriv = np.abs(
+                    r_oscil[2:nb_dyn]
+                    - 2 * r_oscil[1:nb_dyn - 1]
+                    + r_oscil[:nb_dyn - 2]
+                )
+                # fmt: on
+                sum_oscil = np.sum(sec_deriv)
+
+                if np.max(r_oscil) != 0:
+                    oscil = (1 / nb_dyn) * (1 / np.max(r_oscil)) * sum_oscil
+
+                else:
+                    oscil = np.inf
+
+                if not first:
+
+                    if oscil > oscil_th:
+                        th_next = th + round(abs(th - th_prev) / 2)
+
+                    else:
+                        th_next = th - round(abs(th - th_prev) / 2)
+                else:
+
+                    if oscil > oscil_th:
+                        th_next = th + round(abs(th - th_prev) / 2)
+
+                    else:
+                        th_next = th
+
+                th_prev = th
+                th = th_next
+                first = False
+
+            residu_f[i, j, k, :] = r[:nb_dyn]
+
+        return residu_f
 
     def delta_r2star(self, vol_4d, te, mask):
-        """Compute DELTAR2*
+        """Compute DELTAR2*.
 
         DELTAR2* (ΔR2*) corresponds to a change in the transverse relaxation
         rate (R2*), which is used in MRI to assess changes in the magnetic
@@ -538,7 +597,7 @@ class Deconv_from_aif(ProcessMIA):
             baseline = np.sum(vol_4d * t0_mask, axis=3) / np.sum(
                 (vol_4d * t0_mask) != 0, axis=3
             )
-            baseline[np.isnan(baseline)] = 0
+            # baseline[np.isnan(baseline)] = 0
 
         baseline[~mask] = 0
         # Replicate baseline across all dynamics
@@ -695,7 +754,7 @@ class Deconv_from_aif(ProcessMIA):
         zero_pad_fact = 2
         # Oscillation Index Threshold, a threshold value that determines the
         # level of acceptable oscillation during the deconvolution process
-        o_i_th = 0.1
+        oscil_th = 0.1
         # compute concentration, zero padding and T0
         c_func, t0 = self.delta_r2star(
             data_func, self.dict4runtime["echo_time"], data_mask
@@ -730,7 +789,7 @@ class Deconv_from_aif(ProcessMIA):
             right_sing_vec,
             c_func_pad,
             nb_dyn,
-            o_i_th,
+            oscil_th,
             data_mask,
         )
         print(residu_f)
