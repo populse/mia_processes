@@ -524,7 +524,7 @@ class Deconv_from_aif(ProcessMIA):
                     np.hstack([1.0 / s[: nb_4d - th], np.zeros(th)])
                 )
                 # Inverse of c_aif_toeplitz
-                c_aif_toeplitz_inv = v @ s_inv @ u.T
+                c_aif_toeplitz_inv = v.T @ s_inv @ u.T
                 # Calculate the residual
                 r = c_aif_toeplitz_inv @ c_vox_pad
                 r_oscil = r[:nb_dyn]
@@ -546,14 +546,21 @@ class Deconv_from_aif(ProcessMIA):
                 if not first:
 
                     if oscil > oscil_th:
-                        th_next = th + round(abs(th - th_prev) / 2)
+                        th_next = th + self.round_half_up(
+                            abs(th - th_prev) / 2
+                        )
 
                     else:
-                        th_next = th - round(abs(th - th_prev) / 2)
+                        th_next = th - self.round_half_up(
+                            abs(th - th_prev) / 2
+                        )
+
                 else:
 
                     if oscil > oscil_th:
-                        th_next = th + round(abs(th - th_prev) / 2)
+                        th_next = th + self.round_half_up(
+                            abs(th - th_prev) / 2
+                        )
 
                     else:
                         th_next = th
@@ -608,12 +615,18 @@ class Deconv_from_aif(ProcessMIA):
         # Calculate concentration
         mask_4D = np.repeat(mask[:, :, :, np.newaxis], dyn_nb, axis=3)
         valid_voxels = mask_4D & (baseline != 0)
-        # Small epsilon value to prevent log(0)
-        eps = 1e-10
-        safe_ratio = np.clip(
-            vol_4d[valid_voxels] / (baseline[valid_voxels] + eps), eps, None
-        )
-        c_vol_4d[valid_voxels] = -(1 / te) * np.log(safe_ratio)
+        # # Small epsilon value to prevent log(0)
+        # eps = 1e-10
+        # safe_ratio = np.clip(
+        #     vol_4d[valid_voxels] / (baseline[valid_voxels] + eps), eps, None
+        # )
+        # c_vol_4d[valid_voxels] = -(1 / te) * np.log(safe_ratio)
+
+        with np.errstate(divide="ignore"):
+            c_vol_4d[valid_voxels] = -(1 / te) * np.log(
+                vol_4d[valid_voxels] / baseline[valid_voxels]
+            )
+
         return c_vol_4d, t0
 
     def list_outputs(self, is_plugged=None):
@@ -731,6 +744,36 @@ class Deconv_from_aif(ProcessMIA):
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
+    def round_half_up(self, n):
+        """Rounds a number to the nearest integer using the "round half up"
+        rule.
+
+        Python's default rounding behavior, follows the "round half to even"
+        rule. For example:
+
+        - round_half_up(0.5) returns 1
+        - round_half_up(1.5) returns 2
+        - round(0.5) returns 0
+        - round(1.5) returns 2
+
+        Parameters:
+        -----------
+        n : float
+            The number to be rounded.
+
+        Returns:
+        --------
+        int
+            The rounded integer value.
+
+        """
+
+        if n - int(n) == 0.5:
+            return int(n) + 1
+
+        else:
+            return round(n)
+
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Deconv_from_aif, self).run_process_mia()
@@ -795,7 +838,6 @@ class Deconv_from_aif(ProcessMIA):
         print(residu_f)
 
         # to be continued
-        pass
 
 
 class Delete_data(ProcessMIA):
