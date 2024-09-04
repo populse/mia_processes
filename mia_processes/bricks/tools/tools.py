@@ -70,8 +70,10 @@ from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import io, signal
+from scipy.integrate import trapz
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, toeplitz
+from scipy.ndimage import convolve
 from scipy.special import gammaln
 
 # from skimage.filters import threshold_otsu
@@ -835,9 +837,80 @@ class Deconv_from_aif(ProcessMIA):
             oscil_th,
             data_mask,
         )
-        print(residu_f)
+        # Compute hemodynamic parameters
+        t0 = self.dict4runtime["rep_time"] * np.where(
+            (t0 != 0) & ~np.isnan(t0), t0 + 1, t0
+        )
+        # Cerebral Blood Volume: The total blood volume within a given volume
+        #                        of brain tissue, typically expressed in
+        #                        milliliters per 100 grams of brain tissue
+        #                        (mL/100g).
+        cbv = 100 * trapz(c_func, axis=3) / trapz(c_aif)
+        residu_f_max = np.max(residu_f, axis=3)
+        residu_f_max_ind = np.argmax(residu_f, axis=3)
+        residu_f_max_ind = np.where(
+            ~np.isnan(residu_f_max_ind), residu_f_max_ind + 1, residu_f_max_ind
+        )
+        residu_f_max_ind[~data_mask] = 0
+        t_max = residu_f_max_ind.astype(float)
+        t_max[data_mask] = (t_max[data_mask] - 0.5) * self.dict4runtime[
+            "rep_time"
+        ]
 
-        # to be continued
+        with np.errstate(divide="ignore", invalid="ignore"):
+            # Mean Transit Time: The average time it takes for blood to pass
+            #                    through a given volume of brain tissue,
+            #                    usually expressed in seconds.
+            mtt = (
+                self.dict4runtime["rep_time"]
+                * trapz(residu_f, axis=3)
+                / residu_f_max
+            )
+
+        mtt[np.isinf(mtt) | np.isnan(mtt)] = 0
+
+        # Cerebral Blood Flow: The rate at which blood is delivered to a given
+        #                      volume of brain tissue, usually expressed in
+        #                      milliliters per 100 grams of brain tissue per
+        #                      minute (mL/100g/min).
+        with np.errstate(divide="ignore", invalid="ignore"):
+            cbf = 60 * cbv / mtt
+
+        cbf[np.isinf(cbf) | np.isnan(cbf)] = 0
+        # Time To Peak: refers to the time it takes for a brain region's
+        #               signal to reach its highest intensity following
+        #               a stimulus or task.
+        ttp = np.argmax(c_func, axis=3) + 1
+        ttp[~data_mask] = 0
+        ttp = ttp * self.dict4runtime["rep_time"]
+        # Remove inf and NaN values from CBV
+        cbv[np.isinf(cbv) | np.isnan(cbv)] = 0
+        # Compute masks for problem voxels
+        cbv_mask = cbv <= 0
+        cbv[cbv_mask] = 0
+        mtt_mask = (mtt < self.dict4runtime["rep_time"] / 2) | (
+            mtt > self.dict4runtime["rep_time"] * nb_dyn
+        )
+        mtt[mtt_mask] = 0
+        cbf_mask = cbv_mask | mtt_mask
+        cbf[cbf_mask] = 0
+        # Selective smoothing of problem voxels (valid voxels are not
+        # modified)
+        cbv_smth = convolve(
+            cbv, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        )
+        cbv_smth[~data_mask] = 0
+        cbv_smth[~cbv_mask] = cbv[~cbv_mask]
+        mtt_smth = convolve(
+            mtt, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        )
+        mtt_smth[~data_mask] = 0
+        mtt_smth[~mtt_mask] = mtt[~mtt_mask]
+        cbf_smth = convolve(
+            cbf, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        )
+        cbf_smth[~data_mask] = 0
+        cbf_smth[~cbf_mask] = cbf[~cbf_mask]
 
 
 class Delete_data(ProcessMIA):
