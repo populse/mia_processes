@@ -1285,14 +1285,8 @@ class Report:
         #          data as an input to the brick?
         folder, file = os.path.split(self.norm_func)
         snorm_func = os.path.join(folder, "s" + file)
-        # TODO: We make the mask name from the self.norm_anat.
-        #       Should we simply add the data as an input to the brick?
-        folder, file = os.path.split(self.norm_anat)
-        file, ext = os.path.splitext(file)
-        grey_mat_mask = os.path.join(
-            folder, "mask_swc1" + file[1:] + "_003" + ext
-        )
 
+        grey_mat_mask = self.mask_003
         try:
             brain_img_snorm_func = nib.load(snorm_func)
             snorm_func_data = brain_img_snorm_func.get_fdata()
@@ -1736,7 +1730,7 @@ class Report:
             "BOLD_IL_mean_beta.xls",
         )
 
-        max_timeout = 60  # Max timeout in seconds
+        max_timeout = 250  # Max timeout in seconds
         start_time = time.time()
 
         # TODO: This is a 2-cts hack in case res_anal_data doesn't already
@@ -2344,7 +2338,7 @@ class Report:
                 "Functional MR-Data.” Journal of Neuroscience Methods "
                 "163, no. 1 (June 15, 2007): 128–36. "
                 "https://doi.org/10.1016/j.jneumeth.2007.01.026.<br/>"
-                "Veuillez noter que ce logiciel n'a pas de maquage "
+                "Veuillez noter que ce logiciel n'a pas de marquage "
                 "CE ou FDA. </i> </font>",
                 self.styles["Left"],
             )
