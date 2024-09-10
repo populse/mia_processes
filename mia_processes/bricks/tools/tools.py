@@ -48,6 +48,7 @@ import tempfile
 import traceback
 from ast import literal_eval
 
+import nibabel as nib
 import numpy as np
 import pandas as pd
 
@@ -73,7 +74,8 @@ from scipy import io, signal
 from scipy.integrate import trapz
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, toeplitz
-from scipy.ndimage import convolve
+
+# from scipy.ndimage import convolve
 from scipy.special import gammaln
 
 # from skimage.filters import threshold_otsu
@@ -305,6 +307,12 @@ class Deconv_from_aif(ProcessMIA):
         mask_file_desc = (
             "A mask at the resolution of func_file (a " "NIfTI file)"
         )
+        perf_normalisation_desc = (
+            "If perf_normalisation is not a number, no "
+            "CBV normalisation is performed. Otherwise,"
+            " perf_normalisation value will be used to "
+            "normalise CBV (and CBF) maps"
+        )
 
         # Outputs description
         CBV_image_desc = (
@@ -379,8 +387,17 @@ class Deconv_from_aif(ProcessMIA):
         )
         self.mask_file = traits.Undefined
 
-        # Outputs traits
+        self.add_trait(
+            "perf_normalisation",
+            traits.Any(
+                5,
+                output=False,
+                optional=False,
+                desc=perf_normalisation_desc,
+            ),
+        )
 
+        # Outputs traits
         # self.add_trait(
         #     "CBV_image",
         #     OutputMultiPath(
@@ -498,6 +515,26 @@ class Deconv_from_aif(ProcessMIA):
         Returns:
         residu_f (ndarray): Residu function from deconvolution.
         """
+
+        def sv_inv(x, y, z):
+            """
+            Function to create a diagonal matrix where the first (z - x)
+            entries of the diagonal are the inverse of the elements of `y`,
+            and the remaining `x` entries are zeros.
+
+            Parameters:
+            x (int): Number of trailing zeros to add to the diagonal.
+            y (array-like): Array containing the singular values.
+            z (int): The total number of singular values in `y`.
+
+            Returns:
+            np.ndarray: A diagonal matrix with inverted singular values
+                        followed by zeros.
+            """
+            return np.diag(np.hstack([1.0 / y[: z - x], np.zeros(x)]))
+
+        # TODO: Currently, this function takes around 718s for one data
+        #      and 200s for the same data in matlab.
         nb_1d, nb_2d, nb_3d, nb_4d = c_func_pad.shape
         residu_f = np.zeros((nb_1d, nb_2d, nb_3d, nb_dyn))
         # Get indices where the mask is true
@@ -511,6 +548,8 @@ class Deconv_from_aif(ProcessMIA):
                 )
             )
         ]
+        u_T = u.T
+        v_T = v.T
 
         for i_vox in sorted_indices_mask:
             i, j, k = i_vox
@@ -521,12 +560,8 @@ class Deconv_from_aif(ProcessMIA):
             first = True
 
             while (oscil > oscil_th or (abs(th_prev - th) > 1)) and th < nb_4d:
-                # Compute the inverse of s and filtering
-                s_inv = np.diag(
-                    np.hstack([1.0 / s[: nb_4d - th], np.zeros(th)])
-                )
-                # Inverse of c_aif_toeplitz
-                c_aif_toeplitz_inv = v.T @ s_inv @ u.T
+                s_inv = sv_inv(th, s, nb_4d)
+                c_aif_toeplitz_inv = v_T @ s_inv @ u_T
                 # Calculate the residual
                 r = c_aif_toeplitz_inv @ c_vox_pad
                 r_oscil = r[:nb_dyn]
@@ -828,6 +863,8 @@ class Deconv_from_aif(ProcessMIA):
             c_aif, np.concatenate(([c_aif[0]], c_aif[-1:0:-1]))
         )
         left_sing_vec, sing_val, right_sing_vec = svd(c_aif_toeplitz)
+        # import time
+        # start_time = time.time()
         residu_f = self.deconv_osvd(
             left_sing_vec,
             sing_val,
@@ -837,6 +874,9 @@ class Deconv_from_aif(ProcessMIA):
             oscil_th,
             data_mask,
         )
+        # end_time = time.time()
+        # elapsed_time = end_time - start_time
+        # print(f"deconv_osvd function: elapsed time: {elapsed_time} seconds")
         # Compute hemodynamic parameters
         t0 = self.dict4runtime["rep_time"] * np.where(
             (t0 != 0) & ~np.isnan(t0), t0 + 1, t0
@@ -895,22 +935,53 @@ class Deconv_from_aif(ProcessMIA):
         cbf_mask = cbv_mask | mtt_mask
         cbf[cbf_mask] = 0
         # Selective smoothing of problem voxels (valid voxels are not
-        # modified)
-        cbv_smth = convolve(
-            cbv, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
-        )
-        cbv_smth[~data_mask] = 0
-        cbv_smth[~cbv_mask] = cbv[~cbv_mask]
-        mtt_smth = convolve(
-            mtt, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
-        )
-        mtt_smth[~data_mask] = 0
-        mtt_smth[~mtt_mask] = mtt[~mtt_mask]
-        cbf_smth = convolve(
-            cbf, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
-        )
-        cbf_smth[~data_mask] = 0
-        cbf_smth[~cbf_mask] = cbf[~cbf_mask]
+        # modified). Uncomment to access!
+        # cbv_smth = convolve(
+        #     cbv, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        # )
+        # cbv_smth[~data_mask] = 0
+        # cbv_smth[~cbv_mask] = cbv[~cbv_mask]
+        # mtt_smth = convolve(
+        #     mtt, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        # )
+        # mtt_smth[~data_mask] = 0
+        # mtt_smth[~mtt_mask] = mtt[~mtt_mask]
+        # cbf_smth = convolve(
+        #     cbf, np.ones((3, 3, 3)) / 26, mode="constant", cval=0.0
+        # )
+        # cbf_smth[~data_mask] = 0
+        # cbf_smth[~cbf_mask] = cbf[~cbf_mask]
+
+        if isinstance(self.perf_normalisation, (int, float)):
+            masktmp = cbv != 0
+            fact = self.perf_normalisation / np.mean(cbv[masktmp])
+            cbv = cbv * fact
+            cbf = cbf * fact
+
+        # Write NIfTI images data to a file
+        header_3d = header_func.copy()
+        header_3d["dim"][0], header_3d["dim"][4:8] = 3, [0, 0, 0, 0]
+        # header_3d['pixdim'] = header_3d['pixdim'][:4]
+        header_3d["datatype"] = 16
+        header_3d["bitpix"] = 32
+        cbv = np.transpose(cbv, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(cbv, None, header=header_3d)
+        nib.save(nifti_img, self.CBV_image)
+        cbf = np.transpose(cbf, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(cbf, None, header=header_3d)
+        nib.save(nifti_img, self.CBF_image)
+        mtt = np.transpose(mtt, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(mtt, None, header=header_3d)
+        nib.save(nifti_img, self.MTT_image)
+        ttp = np.transpose(ttp, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(ttp, None, header=header_3d)
+        nib.save(nifti_img, self.TTP_image)
+        t_max = np.transpose(t_max, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(t_max, None, header=header_3d)
+        nib.save(nifti_img, self.Tmax_image)
+        t0 = np.transpose(t0, (1, 0, 2))
+        nifti_img = nib.Nifti1Image(t0, None, header=header_3d)
+        nib.save(nifti_img, self.T0_image)
 
 
 class Delete_data(ProcessMIA):
