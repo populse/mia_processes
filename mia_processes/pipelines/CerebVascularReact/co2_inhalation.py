@@ -197,6 +197,7 @@ class CO2_inhalation(Pipeline):
         )
         self.add_link("2_spatial_mask.mask_003->4_extract_roi_param.mask_003")
         self.add_link("2_spatial_mask.mask_003->3_boldStat.mask_003")
+        self.add_link("2_spatial_mask.mask_003->reportco2inhalcvr.mask_003")
         self.add_link(
             "3_boldStat.spmT_images->4_extract_roi_param.spmT_images"
         )

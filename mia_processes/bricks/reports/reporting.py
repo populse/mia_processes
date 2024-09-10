@@ -980,6 +980,10 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Maximum value in the data range covered by the color map"
         )
 
+        mask_003_desc = (
+            "The grey matter mask at the resolution of the smoothed_func."
+        )
+
         patient_info_desc = (
             "Optional dictionary with information about the patient "
             "(e.g. {"
@@ -1242,6 +1246,11 @@ class ReportCO2inhalCvr(ProcessMIA):
             ),
         )
         self.spmT_vmax = Undefined
+
+        self.add_trait(
+            "mask_003",
+            File(output=False, optional=False, desc=mask_003_desc),
+        )
 
         self.add_trait(
             "patient_info",
@@ -1571,6 +1580,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             spmT_cmap=self.spmT_cmap,
             spmT_vmin=self.spmT_vmin,
             spmT_vmax=self.spmT_vmax,
+            mask_003=self.mask_003,
             output_directory=self.output_directory,
         )
 
