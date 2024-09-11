@@ -301,17 +301,35 @@ class Deconv_from_aif(ProcessMIA):
 
         # Inputs description
         func_file_desc = "The DSC MRI scan (a NIfTI file)"
-        aif_file_desc = (
-            "The file containing the calculated AIF (a " ".json file)"
-        )
-        mask_file_desc = (
-            "A mask at the resolution of func_file (a " "NIfTI file)"
-        )
+        aif_file_desc = "The file containing the calculated AIF (a .json file)"
+        mask_file_desc = "A mask at the resolution of func_file (a NIfTI file)"
         perf_normalisation_desc = (
             "If perf_normalisation is not a number, no "
             "CBV normalisation is performed. Otherwise,"
             " perf_normalisation value will be used to "
             "normalise CBV (and CBF) maps"
+        )
+        zero_pad_fact_desc = (
+            "Zero Padding Factor (deconvolution parameter), a factor by "
+            "which the original data is extended with zeros (must be an "
+            "integer)"
+        )
+        oscil_th_desc = (
+            "Oscillation Index Threshold (deconvolution parameter), a "
+            "threshold value that determines the level of acceptable "
+            "oscillation during the deconvolution process (a float)"
+        )
+        bat_window_size_desc = (
+            "Number of time points (or dynamics) used to determine the bolus "
+            "arrival time (t0) in the MRI signal analysis. Acts as a sliding "
+            "window that moves in the time dimension of the MRI data, "
+            "allowing the algorithm to analyse the local temporal behaviour "
+            "at each voxel (an interger)."
+        )
+        bat_th_desc = (
+            "Threshold multiplier is used to detect significant changes in "
+            "the signal intensity of MRI data (controls the sensitivity of "
+            "the bolus arrival detection, a float). "
         )
 
         # Outputs description
@@ -390,12 +408,52 @@ class Deconv_from_aif(ProcessMIA):
         self.add_trait(
             "perf_normalisation",
             traits.Any(
-                5,
                 output=False,
                 optional=False,
                 desc=perf_normalisation_desc,
             ),
         )
+        self.perf_normalisation = 5
+
+        self.add_trait(
+            "zero_pad_fact",
+            traits.Int(
+                output=False,
+                optional=False,
+                desc=zero_pad_fact_desc,
+            ),
+        )
+        self.zero_pad_fact = 2
+
+        self.add_trait(
+            "oscil_th",
+            traits.Float(
+                output=False,
+                optional=False,
+                desc=oscil_th_desc,
+            ),
+        )
+        self.oscil_th = 0.1
+
+        self.add_trait(
+            "bat_window_size",
+            traits.Int(
+                output=False,
+                optional=False,
+                desc=bat_window_size_desc,
+            ),
+        )
+        self.bat_window_size = 8
+
+        self.add_trait(
+            "bat_th",
+            traits.Float(
+                output=False,
+                optional=False,
+                desc=bat_th_desc,
+            ),
+        )
+        self.bat_th = 2.0
 
         # Outputs traits
         # self.add_trait(
@@ -434,67 +492,95 @@ class Deconv_from_aif(ProcessMIA):
         """Compute Bolus Arrival Time (t0) and t0_mask.
 
         Parameters:
-        vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+        vol_4d: 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
             Brain data over time.
-        mask : 3D numpy array (nb_row, nb_col, nb_sli)
+        mask: 3D numpy array (nb_row, nb_col, nb_sli)
             Mask for the brain to be considered.
 
         Returns:
-        t0 : 3D numpy array (nb_row, nb_col, nb_sli)
+        t0: 3D numpy array (nb_row, nb_col, nb_sli)
             Bolus arrival time indices.
-        t0_mask : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+        t0_mask: 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
             Mask for valid t0 values.
         """
 
-        # Number of time points (or dynamics). Acts as a sliding window that
-        # moves across the time dimension of the MRI data, allowing the
-        # algorithm to analyze local temporal behavior at each voxel
-        window_size = 8
-        # Threshold multiplier used to detect significant changes in the
+        # Number of time points (or dynamics) used to determine the bolus
+        # arrival time (t0) in the MRI signal analysis. Acts as a sliding
+        # window that moves in the time dimension of the MRI data, allowing
+        # the algorithm to analyse the local temporal behaviour at each voxel.
+        # A large window provides smoother estimates of the signal, but can
+        # delay the detection of sudden changes, such as the arrival of the
+        # bolus. It increases stability, but can also ‘blur’ the sharp
+        # transition at bolus arrival. A smaller window size will be more
+        # sensitive to rapid changes, but may also pick up more noise or
+        # fluctuations in the signal. The default value is a a moderately
+        # sized window to smooth out short-term fluctuations while detecting
+        # significant changes in the MRI signal.
+        # value.
+        # window_size = 8
+        # Threshold multiplier is used to detect significant changes in the
         # signal intensity of MRI data (controls the sensitivity of the bolus
-        # arrival detection):
-        th = 2.0
+        # arrival detection). A high th value (e.g., th = 3.0) would make the
+        # algorithm less sensitive, meaning it will only consider larger,
+        # more pronounced signal drops as valid bolus arrival points. This
+        # reduces false positives but may miss subtle or gradual bolus
+        # arrivals. A low th value (e.g., th = 1.0) would make the algorithm
+        # more sensitive, catching even smaller signal drops. However, this
+        # may lead to false positives, where noise or natural fluctuations in
+        # the signal are incorrectly identified as bolus arrival. The default
+        # value ensures only signal drops larger than 2 standard deviations
+        # below the mean are considered significant, providing a balance
+        # between sensitivity and robustness against noise.
+        # th = 2.0
         nb_row, nb_col, nb_sli, nb_dyn = vol_4d.shape
         t0_mask = np.zeros_like(vol_4d, dtype=bool)
-        mean = np.zeros((nb_row, nb_col, nb_sli, nb_dyn - window_size))
-        stdev = np.zeros((nb_row, nb_col, nb_sli, nb_dyn - window_size))
+        mean = np.zeros(
+            (nb_row, nb_col, nb_sli, nb_dyn - self.bat_window_size)
+        )
+        stdev = np.zeros(
+            (nb_row, nb_col, nb_sli, nb_dyn - self.bat_window_size)
+        )
 
         # Calculate moving average and standard deviation over the window
         # fmt: off
-        for t in range(nb_dyn - window_size):
+        for t in range(nb_dyn - self.bat_window_size):
             mean[:, :, :, t] = np.mean(
-                vol_4d[:, :, :, t:t + window_size + 1], axis=3
+                vol_4d[:, :, :, t:t + self.bat_window_size + 1], axis=3
             )
             stdev[:, :, :, t] = np.std(
-                vol_4d[:, :, :, t:t + window_size + 1], axis=3, ddof=1
+                vol_4d[:, :, :, t:t + self.bat_window_size + 1], axis=3, ddof=1
             )
         # fmt: on
 
         # Logical condition to determine the first significant drop in signal
-        ind_decrease = vol_4d[:, :, :, window_size:] < (mean - th * stdev)
+        # fmt: off
+        ind_decrease = vol_4d[:, :, :, self.bat_window_size:] < (
+            mean - self.bat_th * stdev
+        )
+        # fmt: on
         # Find the index of the first occurrence of the condition being true
-        t0 = np.argmax(ind_decrease, axis=3) + window_size - 1
+        t0 = np.argmax(ind_decrease, axis=3) + self.bat_window_size - 1
         # Mask out invalid T0 values (outside the mask or too early)
-        t0[~mask | (t0 == window_size)] = 0
+        t0[~mask | (t0 == self.bat_window_size)] = 0
         # Calculate Time To Peak (TTP)
         ttp = np.argmin(vol_4d, axis=3)
 
         # Process the mask
         for row, col, sli in np.argwhere(mask):
 
-            if ttp[row, col, sli] > t0[row, col, sli] > window_size:
+            if ttp[row, col, sli] > t0[row, col, sli] > self.bat_window_size:
                 # fmt: off
                 t0_mask[row, col, sli, 1:t0[row, col, sli] - 1] = True
                 # fmt: on
 
             else:
                 # fmt: off
-                t0_mask[row, col, sli, 1:window_size - 1] = True
+                t0_mask[row, col, sli, 1:self.bat_window_size - 1] = True
                 # fmt: on
 
         return t0, t0_mask
 
-    def deconv_osvd(self, u, s, v, c_func_pad, nb_dyn, oscil_th, data_mask):
+    def deconv_osvd(self, u, s, v, c_func_pad, nb_dyn, data_mask):
         """Deconvolution using OSVD.
 
         OSVD stands for Oscillatory Singular Value Decomposition. In the
@@ -509,7 +595,6 @@ class Deconv_from_aif(ProcessMIA):
         v (ndarray): V matrix from SVD of c_aif_toeplitz matrix.
         c_func_pad(ndarray): Zero-padded concentration voxels (4D array).
         nb_dyn (int): Number of dynamics (without zero-padding).
-        oscil_th (float): Oscillation threshold.
         data_mask (ndarray): Mask of the volume.
 
         Returns:
@@ -559,7 +644,9 @@ class Deconv_from_aif(ProcessMIA):
             oscil = np.inf
             first = True
 
-            while (oscil > oscil_th or (abs(th_prev - th) > 1)) and th < nb_4d:
+            while (
+                oscil > self.oscil_th or (abs(th_prev - th) > 1)
+            ) and th < nb_4d:
                 s_inv = sv_inv(th, s, nb_4d)
                 c_aif_toeplitz_inv = v_T @ s_inv @ u_T
                 # Calculate the residual
@@ -582,7 +669,7 @@ class Deconv_from_aif(ProcessMIA):
 
                 if not first:
 
-                    if oscil > oscil_th:
+                    if oscil > self.oscil_th:
                         th_next = th + self.round_half_up(
                             abs(th - th_prev) / 2
                         )
@@ -594,7 +681,7 @@ class Deconv_from_aif(ProcessMIA):
 
                 else:
 
-                    if oscil > oscil_th:
+                    if oscil > self.oscil_th:
                         th_next = th + self.round_half_up(
                             abs(th - th_prev) / 2
                         )
@@ -830,11 +917,32 @@ class Deconv_from_aif(ProcessMIA):
         data_mask = data_mask.astype(bool)
         # deconvolution parameters:
         # Zero Padding Factor, a factor by which the original data is extended
-        # with zeros (must be an integer)
-        zero_pad_fact = 2
+        # with zeros (must be an integer). A high zero-padding factor
+        # increases the signal length, potentially improving the precision of
+        # the deconvolution but also increasing computational complexity. A
+        # low factor (like 1, or no zero-padding) may result in less accurate
+        #  outcomes, with lower frequency resolution and greater sensitivity
+        # to edge artifacts. The default zero_pad_fact is set to 2, meaning
+        # the signal length is doubled, which strikes a balance between
+        # precision and computational performance.
+        # zero_pad_fact = 2
         # Oscillation Index Threshold, a threshold value that determines the
-        # level of acceptable oscillation during the deconvolution process
-        oscil_th = 0.1
+        # level of acceptable oscillation during the deconvolution process.
+        # During the OSVD (Oscillatory Singular Value Decomposition)
+        # deconvolution, the algorithm calculates the second derivative of the
+        # deconvolved signal (which highlights oscillations). The oscil_th
+        # sets a threshold for how much oscillation is acceptable in the
+        # signal. If the level of oscillation exceeds this threshold,
+        # the algorithm continues adjusting the truncation of singular values
+        # to reduce the instability. A low oscil_th will result in stricter
+        # filtering, meaning that more singular values (associated with
+        # oscillations) will be truncated. This can reduce noise but may also
+        # lose some of the true signal. A high oscil_th allows more
+        # oscillation, retaining more singular values and potentially
+        # preserving more of the original signal. However, this increases the
+        # risk of noise or instability in the output. Don't change the default
+        # value if you don't know what you're doing.
+        # oscil_th = 0.1
         # compute concentration, zero padding and T0
         c_func, t0 = self.delta_r2star(
             data_func, self.dict4runtime["echo_time"], data_mask
@@ -848,13 +956,13 @@ class Deconv_from_aif(ProcessMIA):
         )
         c_aif = np.squeeze(c_aif_4d)
         c_aif = np.concatenate(
-            (c_aif.flatten(), np.zeros(nb_dyn * (zero_pad_fact - 1)))
+            (c_aif.flatten(), np.zeros(nb_dyn * (self.zero_pad_fact - 1)))
         )
         c_func_pad = np.concatenate(
             (
                 c_func,
                 np.zeros(
-                    (nb_row, nb_col, nb_sli, nb_dyn * (zero_pad_fact - 1))
+                    (nb_row, nb_col, nb_sli, nb_dyn * (self.zero_pad_fact - 1))
                 ),
             ),
             axis=3,
@@ -871,7 +979,6 @@ class Deconv_from_aif(ProcessMIA):
             right_sing_vec,
             c_func_pad,
             nb_dyn,
-            oscil_th,
             data_mask,
         )
         # end_time = time.time()
