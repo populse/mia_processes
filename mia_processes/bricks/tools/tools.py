@@ -278,7 +278,8 @@ class Concat_to_list_of_list(ProcessMIA):
 
 class Deconv_from_aif(ProcessMIA):
     """
-    blabla
+    *Deconvolution using Arterial Input Function (AIF) data and functional MRI
+    images*
 
     Please, see the complete documentation for the
     `Deconv_from_aif in the mia_processes website
@@ -304,9 +305,8 @@ class Deconv_from_aif(ProcessMIA):
         aif_file_desc = "The file containing the calculated AIF (a .json file)"
         mask_file_desc = "A mask at the resolution of func_file (a NIfTI file)"
         perf_normalisation_desc = (
-            "If perf_normalisation is not a number, no "
-            "CBV normalisation is performed. Otherwise,"
-            " perf_normalisation value will be used to "
+            "If perf_normalisation is not a number, no CBV normalisation is "
+            "performed. Otherwise, perf_normalisation value will be used to "
             "normalise CBV (and CBF) maps"
         )
         zero_pad_fact_desc = (
@@ -320,14 +320,14 @@ class Deconv_from_aif(ProcessMIA):
             "oscillation during the deconvolution process (a float)"
         )
         bat_window_size_desc = (
-            "Number of time points (or dynamics) used to determine the bolus "
-            "arrival time (t0) in the MRI signal analysis. Acts as a sliding "
+            "Number of time points (or dynamics) used to determine the Bolus "
+            "Arrival Time (t0) in the MRI signal analysis. Acts as a sliding "
             "window that moves in the time dimension of the MRI data, "
             "allowing the algorithm to analyse the local temporal behaviour "
-            "at each voxel (an interger)."
+            "at each voxel (an integer)."
         )
         bat_th_desc = (
-            "Threshold multiplier is used to detect significant changes in "
+            "Threshold multiplier used to detect significant changes in "
             "the signal intensity of MRI data (controls the sensitivity of "
             "the bolus arrival detection, a float). "
         )
@@ -415,6 +415,16 @@ class Deconv_from_aif(ProcessMIA):
         )
         self.perf_normalisation = 5
 
+        # Zero Padding Factor (deconvolution parameters), a factor by which
+        # the original data is extended with zeros (an integer). A high
+        # zero-padding factor increases the signal length, potentially
+        # improving the precision of the deconvolution but also increasing
+        # computational complexity. A low factor (like 1, or no zero-padding)
+        # may result in less accurate outcomes, with lower frequency
+        # resolution and greater sensitivity to edge artifacts. The default
+        # zero_pad_fact is set to 2, meaning the signal length is doubled,
+        # which strikes a balance between precision and computational
+        # performance.
         self.add_trait(
             "zero_pad_fact",
             traits.Int(
@@ -425,6 +435,22 @@ class Deconv_from_aif(ProcessMIA):
         )
         self.zero_pad_fact = 2
 
+        # Oscillation index threshold (deconvolution parameters), a threshold
+        # value that determines the level of acceptable oscillation during the
+        # deconvolution process. During the OSVD (Oscillatory Singular Value
+        # Decomposition) deconvolution, the algorithm calculates the second
+        # derivative of the deconvolved signal (which highlights oscillations).
+        # The oscil_th sets a threshold for how much oscillation is acceptable
+        # in the signal. If the level of oscillation exceeds this threshold,
+        # the algorithm continues adjusting the truncation of singular values
+        # to reduce the instability. A low oscil_th will result in stricter
+        # filtering, meaning that more singular values (associated with
+        # oscillations) will be truncated. This can reduce noise but may also
+        # lose some of the true signal. A high oscil_th allows more
+        # oscillation, retaining more singular values and potentially
+        # preserving more of the original signal. However, this increases the
+        # risk of noise or instability in the output. Don't change the default
+        # value if you don't know what you're doing.
         self.add_trait(
             "oscil_th",
             traits.Float(
@@ -435,6 +461,18 @@ class Deconv_from_aif(ProcessMIA):
         )
         self.oscil_th = 0.1
 
+        # Number of time points (or dynamics) used to determine the bolus
+        # arrival time (t0) in the MRI signal analysis. Acts as a sliding
+        # window that moves in the time dimension of the MRI data, allowing
+        # the algorithm to analyse the local temporal behaviour at each voxel.
+        # A large window provides smoother estimates of the signal, but can
+        # delay the detection of sudden changes, such as the arrival of the
+        # bolus. It increases stability, but can also ‘blur’ the sharp
+        # transition at bolus arrival. A smaller window size will be more
+        # sensitive to rapid changes, but may also pick up more noise or
+        # fluctuations in the signal. The default value is a moderately
+        # sized window to smooth out short-term fluctuations while detecting
+        # significant changes in the MRI signal value.
         self.add_trait(
             "bat_window_size",
             traits.Int(
@@ -445,6 +483,19 @@ class Deconv_from_aif(ProcessMIA):
         )
         self.bat_window_size = 8
 
+        # Threshold multiplier is used to detect significant changes in the
+        # signal intensity of MRI data (controls the sensitivity of the bolus
+        # arrival detection). A high th value (e.g., th = 3.0) would make the
+        # algorithm less sensitive, meaning it will only consider larger,
+        # more pronounced signal drops as valid bolus arrival points. This
+        # reduces false positives but may miss subtle or gradual bolus
+        # arrivals. A low th value (e.g., th = 1.0) would make the algorithm
+        # more sensitive, catching even smaller signal drops. However, this
+        # may lead to false positives, where noise or natural fluctuations in
+        # the signal are incorrectly identified as bolus arrival. The default
+        # value ensures only signal drops larger than 2 standard deviations
+        # below the mean are considered significant, providing a balance
+        # between sensitivity and robustness against noise.
         self.add_trait(
             "bat_th",
             traits.Float(
@@ -503,35 +554,6 @@ class Deconv_from_aif(ProcessMIA):
         t0_mask: 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
             Mask for valid t0 values.
         """
-
-        # Number of time points (or dynamics) used to determine the bolus
-        # arrival time (t0) in the MRI signal analysis. Acts as a sliding
-        # window that moves in the time dimension of the MRI data, allowing
-        # the algorithm to analyse the local temporal behaviour at each voxel.
-        # A large window provides smoother estimates of the signal, but can
-        # delay the detection of sudden changes, such as the arrival of the
-        # bolus. It increases stability, but can also ‘blur’ the sharp
-        # transition at bolus arrival. A smaller window size will be more
-        # sensitive to rapid changes, but may also pick up more noise or
-        # fluctuations in the signal. The default value is a a moderately
-        # sized window to smooth out short-term fluctuations while detecting
-        # significant changes in the MRI signal.
-        # value.
-        # window_size = 8
-        # Threshold multiplier is used to detect significant changes in the
-        # signal intensity of MRI data (controls the sensitivity of the bolus
-        # arrival detection). A high th value (e.g., th = 3.0) would make the
-        # algorithm less sensitive, meaning it will only consider larger,
-        # more pronounced signal drops as valid bolus arrival points. This
-        # reduces false positives but may miss subtle or gradual bolus
-        # arrivals. A low th value (e.g., th = 1.0) would make the algorithm
-        # more sensitive, catching even smaller signal drops. However, this
-        # may lead to false positives, where noise or natural fluctuations in
-        # the signal are incorrectly identified as bolus arrival. The default
-        # value ensures only signal drops larger than 2 standard deviations
-        # below the mean are considered significant, providing a balance
-        # between sensitivity and robustness against noise.
-        # th = 2.0
         nb_row, nb_col, nb_sli, nb_dyn = vol_4d.shape
         t0_mask = np.zeros_like(vol_4d, dtype=bool)
         mean = np.zeros(
@@ -915,34 +937,6 @@ class Deconv_from_aif(ProcessMIA):
         nb_row, nb_col, nb_sli, nb_dyn = data_func.shape
         data_mask = np.transpose(data_mask, (1, 0, 2))
         data_mask = data_mask.astype(bool)
-        # deconvolution parameters:
-        # Zero Padding Factor, a factor by which the original data is extended
-        # with zeros (must be an integer). A high zero-padding factor
-        # increases the signal length, potentially improving the precision of
-        # the deconvolution but also increasing computational complexity. A
-        # low factor (like 1, or no zero-padding) may result in less accurate
-        #  outcomes, with lower frequency resolution and greater sensitivity
-        # to edge artifacts. The default zero_pad_fact is set to 2, meaning
-        # the signal length is doubled, which strikes a balance between
-        # precision and computational performance.
-        # zero_pad_fact = 2
-        # Oscillation Index Threshold, a threshold value that determines the
-        # level of acceptable oscillation during the deconvolution process.
-        # During the OSVD (Oscillatory Singular Value Decomposition)
-        # deconvolution, the algorithm calculates the second derivative of the
-        # deconvolved signal (which highlights oscillations). The oscil_th
-        # sets a threshold for how much oscillation is acceptable in the
-        # signal. If the level of oscillation exceeds this threshold,
-        # the algorithm continues adjusting the truncation of singular values
-        # to reduce the instability. A low oscil_th will result in stricter
-        # filtering, meaning that more singular values (associated with
-        # oscillations) will be truncated. This can reduce noise but may also
-        # lose some of the true signal. A high oscil_th allows more
-        # oscillation, retaining more singular values and potentially
-        # preserving more of the original signal. However, this increases the
-        # risk of noise or instability in the output. Don't change the default
-        # value if you don't know what you're doing.
-        # oscil_th = 0.1
         # compute concentration, zero padding and T0
         c_func, t0 = self.delta_r2star(
             data_func, self.dict4runtime["echo_time"], data_mask
@@ -1582,7 +1576,7 @@ class Find_In_List(ProcessMIA):
 class Get_Conditions_From_csv(ProcessMIA):
     """
     *Get conditions information (conditions names, onsets and durations)
-    for Level1Design brick using csv files.*
+    for Level1Design brick using csv files*
 
     Please, see the complete documentation for
     the `Get_Conditions_From_csv brick
@@ -2180,7 +2174,7 @@ class Get_Patient_Name(ProcessMIA):
 class Get_Regressors_From_csv(ProcessMIA):
     """
     *Get regressors information (regressors names, values and session)
-    for Level1Design brick using csv files.*
+    for Level1Design brick using csv files*
 
     Please, see the complete documentation for
     the `Get_Regressors_From_csv brick
