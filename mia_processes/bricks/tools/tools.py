@@ -2857,6 +2857,30 @@ class Make_AIF(ProcessMIA):
 
         # Inputs description
         func_file_desc = "The DSC MRI scan (a NIfTI file)"
+        bat_window_size_desc = (
+            "Number of time points (or dynamics) used to determine the Bolus "
+            "Arrival Time (t0) in the MRI signal analysis. Acts as a sliding "
+            "window that moves in the time dimension of the MRI data, "
+            "allowing the algorithm to analyse the local temporal behaviour "
+            "at each voxel (an integer)."
+        )
+        bat_th_desc = (
+            "Threshold multiplier used to detect significant changes in "
+            "the signal intensity of MRI data (controls the sensitivity of "
+            "the bolus arrival detection, a float). "
+        )
+        wmaxr_desc = (
+            "Ratio used to define the maximum allowable width of the dynamic"
+            "peak in the AIF computation (a float)"
+        )
+        nb_vox_cand_desc = (
+            "Number of candidate voxels to be evaluated for computing the AIF "
+            "(an integer)"
+        )
+        nb_vox_best_scor_desc = (
+            "Number of best-scoring voxels to be used for computing the AIF "
+            "after evaluating the initial set of candidate voxels (an integer)"
+        )
 
         # Outputs description
         aif_file_desc = "The file containing the calculated AIF (a .json file)"
@@ -2875,6 +2899,81 @@ class Make_AIF(ProcessMIA):
         )
         self.func_file = traits.Undefined
 
+        # Number of time points (or dynamics) used to determine the bolus
+        # arrival time (t0) in the MRI signal analysis. Acts as a sliding
+        # window that moves in the time dimension of the MRI data, allowing
+        # the algorithm to analyse the local temporal behaviour at each voxel.
+        # A large window provides smoother estimates of the signal, but can
+        # delay the detection of sudden changes, such as the arrival of the
+        # bolus. It increases stability, but can also ‘blur’ the sharp
+        # transition at bolus arrival. A smaller window size will be more
+        # sensitive to rapid changes, but may also pick up more noise or
+        # fluctuations in the signal. The default value is a moderately
+        # sized window to smooth out short-term fluctuations while detecting
+        # significant changes in the MRI signal value.
+        self.add_trait(
+            "bat_window_size",
+            traits.Int(
+                output=False,
+                optional=False,
+                desc=bat_window_size_desc,
+            ),
+        )
+        self.bat_window_size = 8
+
+        # Threshold multiplier is used to detect significant changes in the
+        # signal intensity of MRI data (controls the sensitivity of the bolus
+        # arrival detection). A high th value (e.g., th = 3.0) would make the
+        # algorithm less sensitive, meaning it will only consider larger,
+        # more pronounced signal drops as valid bolus arrival points. This
+        # reduces false positives but may miss subtle or gradual bolus
+        # arrivals. A low th value (e.g., th = 1.0) would make the algorithm
+        # more sensitive, catching even smaller signal drops. However, this
+        # may lead to false positives, where noise or natural fluctuations in
+        # the signal are incorrectly identified as bolus arrival. The default
+        # value ensures only signal drops larger than 2 standard deviations
+        # below the mean are considered significant, providing a balance
+        # between sensitivity and robustness against noise.
+        self.add_trait(
+            "bat_th",
+            traits.Float(
+                output=False,
+                optional=False,
+                desc=bat_th_desc,
+            ),
+        )
+        self.bat_th = 2.0
+
+        self.add_trait(
+            "wmaxr",
+            traits.Float(
+                output=False,
+                optional=False,
+                desc=wmaxr_desc,
+            ),
+        )
+        self.wmaxr = 0.5
+
+        self.add_trait(
+            "nb_vox_cand",
+            traits.Int(
+                output=False,
+                optional=False,
+                desc=nb_vox_cand_desc,
+            ),
+        )
+        self.nb_vox_cand = 50
+
+        self.add_trait(
+            "nb_vox_best_scor",
+            traits.Int(
+                output=False,
+                optional=False,
+                desc=nb_vox_best_scor_desc,
+            ),
+        )
+        self.nb_vox_best_scor = 5
+
         # Outputs traits
         self.add_trait("aif_file", File(output=True, desc=aif_file_desc))
         self.aif_file = traits.Undefined
@@ -2887,24 +2986,23 @@ class Make_AIF(ProcessMIA):
         :param data: Value of voxels selected during dynamics
         :returns: the bolus arrival time
         """
-        window_size = 8
-        th = 2.0
         dim = len(data)
-        mean = np.zeros(dim - window_size)
-        std = np.zeros(dim - window_size)
+        mean = np.zeros(dim - self.bat_window_size)
+        std = np.zeros(dim - self.bat_window_size)
 
-        for t in range(dim - window_size):
+        for t in range(dim - self.bat_window_size):
             # fmt: off
-            mean[t] = np.mean(data[t:t + window_size + 1])
-            std[t] = np.std(data[t:t + window_size + 1], ddof=1)
+            mean[t] = np.mean(data[t:t + self.bat_window_size + 1])
+            std[t] = np.std(data[t:t + self.bat_window_size + 1], ddof=1)
             # fmt: on
-
-        tlog = data[window_size:] < (mean - th * std)
+        # fmt: off
+        tlog = data[self.bat_window_size:] < (mean - self.bat_th * std)
+        # fmt: on
         t0 = np.argmax(tlog)
-        t0 += window_size - 1
+        t0 += self.bat_window_size - 1
         ttp = np.argmin(data)
 
-        if t0 == window_size or t0 > ttp:
+        if t0 == self.bat_window_size or t0 > ttp:
             t0 = 40
 
         return t0
@@ -2985,21 +3083,10 @@ class Make_AIF(ProcessMIA):
         # thres = np.array(
         #     [threshold_otsu(data[:, :, aux, 0]) for aux in range(nslices)]
         # )
-
         head_mask = np.all(data, axis=3)
-        # AIF computation
-        ##################################################
-        # ratio used to define the maximum allowable width of the dynamic
-        # peak in the AIF computation
-        wmaxr = 0.5
-        # number of candidate voxels to be evaluated for computing the AIF
-        nb_vox_cand = 50
-        # the number of best-scoring voxels to be used for computing the AIF
-        # after evaluating the initial set of candidate voxels.
-        nb_vox = 5
         # score of each selected voxel, the number of warnings, and the reasons
-        scores = [[None] * 9 for _ in range(nb_vox)]
-        wmax = round(wmaxr * ndynamics)
+        scores = [[None] * 9 for _ in range(self.nb_vox_best_scor)]
+        wmax = round(self.wmaxr * ndynamics)
         # rename head_mask to roi, remove voxels with inf, NaN and null
         # values (not necessarily required)
         roi = (
@@ -3069,7 +3156,7 @@ class Make_AIF(ProcessMIA):
 
         roi &= ~saturated_voxel
         # keep only voxels with a width less than a specified value. The width
-        # of the peak must be less than wmaxr*ndynamics range
+        # of the peak must be less than self.wmaxr * ndynamics range
         # and greater than 0
         roi &= (half_width_peak < wmax) & (half_width_peak > 0)
         tmp_data = data.copy()
@@ -3084,9 +3171,9 @@ class Make_AIF(ProcessMIA):
         tmp_delta_base_min = delta_base_min.reshape(-1, order="F")
         sorting = np.argsort(tmp_delta_base_min)[::-1]
         # score calculation
-        score = np.zeros(nb_vox_cand)
+        score = np.zeros(self.nb_vox_cand)
 
-        for i in range(nb_vox_cand):
+        for i in range(self.nb_vox_cand):
             # calculation of arrival time
             t0 = self.bol_ar_time(tmp_data[sorting[i], :])
             initslop = delta_base_min.flatten(order="F")[sorting[i]] / (
@@ -3100,14 +3187,22 @@ class Make_AIF(ProcessMIA):
         sorted_score = np.argsort(score)[::-1]
         # first-pass curve averaged over the 5 best voxels determined using
         # the score.
-        aif = np.mean(tmp_data[sorting[sorted_score[:nb_vox]], :], axis=0)
+        # fmt: off
+        aif = np.mean(
+            tmp_data[sorting[sorted_score[:self.nb_vox_best_scor]], :], axis=0
+        )
+        # fmt: on
         # i, j, k correspond to the indexes in the brain (3D) for
         # the best results
+        # fmt: off
         i, j, k = np.unravel_index(
-            sorting[sorted_score[:nb_vox]], (nrow, ncol, nslices), order="F"
+            sorting[sorted_score[:self.nb_vox_best_scor]],
+            (nrow, ncol, nslices),
+            order="F",
         )
+        # fmt: on
 
-        for v in range(nb_vox):
+        for v in range(self.nb_vox_best_scor):
             warn = 0
             # In scores, the first 4 columns are:
             # score value / row index / column index / slice index.
@@ -3158,8 +3253,6 @@ class Make_AIF(ProcessMIA):
             # Finally, the fifth column shows the number of warnings
             scores[v][4] = warn
 
-        # Saving results
-        ###################################################
         with open(self.aif_file, "w") as f:
             json.dump(
                 {
