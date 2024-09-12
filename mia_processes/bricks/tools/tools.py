@@ -409,7 +409,7 @@ class Deconv_from_aif(ProcessMIA):
             "perf_normalisation",
             traits.Any(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=perf_normalisation_desc,
             ),
         )
@@ -429,7 +429,7 @@ class Deconv_from_aif(ProcessMIA):
             "zero_pad_fact",
             traits.Int(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=zero_pad_fact_desc,
             ),
         )
@@ -455,7 +455,7 @@ class Deconv_from_aif(ProcessMIA):
             "oscil_th",
             traits.Float(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=oscil_th_desc,
             ),
         )
@@ -477,7 +477,7 @@ class Deconv_from_aif(ProcessMIA):
             "bat_window_size",
             traits.Int(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=bat_window_size_desc,
             ),
         )
@@ -500,7 +500,7 @@ class Deconv_from_aif(ProcessMIA):
             "bat_th",
             traits.Float(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=bat_th_desc,
             ),
         )
@@ -2915,7 +2915,7 @@ class Make_AIF(ProcessMIA):
             "bat_window_size",
             traits.Int(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=bat_window_size_desc,
             ),
         )
@@ -2938,7 +2938,7 @@ class Make_AIF(ProcessMIA):
             "bat_th",
             traits.Float(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=bat_th_desc,
             ),
         )
@@ -2948,7 +2948,7 @@ class Make_AIF(ProcessMIA):
             "wmaxr",
             traits.Float(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=wmaxr_desc,
             ),
         )
@@ -2958,7 +2958,7 @@ class Make_AIF(ProcessMIA):
             "nb_vox_cand",
             traits.Int(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=nb_vox_cand_desc,
             ),
         )
@@ -2968,7 +2968,7 @@ class Make_AIF(ProcessMIA):
             "nb_vox_best_scor",
             traits.Int(
                 output=False,
-                optional=False,
+                optional=True,
                 desc=nb_vox_best_scor_desc,
             ),
         )
