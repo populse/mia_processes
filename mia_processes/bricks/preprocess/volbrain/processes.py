@@ -191,7 +191,7 @@ class AssemblyNetDocker(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -199,7 +199,9 @@ class AssemblyNetDocker(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -450,7 +452,7 @@ class GetLabels(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -458,7 +460,9 @@ class GetLabels(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -580,7 +584,7 @@ class LabelsCorrespondence(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -588,7 +592,9 @@ class LabelsCorrespondence(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

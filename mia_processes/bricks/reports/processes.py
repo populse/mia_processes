@@ -260,7 +260,7 @@ class AnatIQMs(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -269,6 +269,7 @@ class AnatIQMs(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -770,7 +771,7 @@ class BoldIQMs(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -779,6 +780,7 @@ class BoldIQMs(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1171,7 +1173,7 @@ class BoldIQMsPlot(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1182,6 +1184,7 @@ class BoldIQMsPlot(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1338,7 +1341,7 @@ class CarpetParcellation(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1349,6 +1352,7 @@ class CarpetParcellation(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1548,7 +1552,7 @@ class ComputeDVARS(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1559,6 +1563,7 @@ class ComputeDVARS(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1786,7 +1791,7 @@ class FramewiseDisplacement(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1797,6 +1802,7 @@ class FramewiseDisplacement(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1939,7 +1945,7 @@ class LateralizationIndexCurve(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1948,6 +1954,7 @@ class LateralizationIndexCurve(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2114,7 +2121,7 @@ class Mean_stdDev_calc(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2125,6 +2132,7 @@ class Mean_stdDev_calc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2449,7 +2457,7 @@ class PlotSignalROI(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2458,6 +2466,7 @@ class PlotSignalROI(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2779,7 +2788,7 @@ class Result_collector(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2790,6 +2799,7 @@ class Result_collector(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3258,7 +3268,7 @@ class Spikes(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -3269,6 +3279,7 @@ class Spikes(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

@@ -301,7 +301,7 @@ class ReportAnatMriqc(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -310,6 +310,7 @@ class ReportAnatMriqc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1281,7 +1282,7 @@ class ReportCO2inhalCvr(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1290,10 +1291,22 @@ class ReportCO2inhalCvr(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(ReportCO2inhalCvr, self).list_outputs()
+
+        if iteration is True:
+            self.patient_info = dict(
+                PatientRef=Undefined,
+                Pathology=Undefined,
+                Age=Undefined,
+                Sex=Undefined,
+                MR=Undefined,
+                Gas=Undefined,
+                GasAdmin=Undefined,
+            )
 
         file_position = (
             self.norm_anat.find(self.project.getName())
@@ -1828,7 +1841,7 @@ class ReportFuncMriqc(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1837,6 +1850,7 @@ class ReportFuncMriqc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2472,7 +2486,7 @@ class ReportGE2REC(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2481,6 +2495,7 @@ class ReportGE2REC(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2814,7 +2829,7 @@ class ReportGroupMriqc(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2823,6 +2838,7 @@ class ReportGroupMriqc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
 

@@ -328,7 +328,7 @@ class EstimateContrast(ProcessMIA):
 
         return contrasts
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -339,6 +339,7 @@ class EstimateContrast(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         super(EstimateContrast, self).list_outputs()
@@ -935,7 +936,7 @@ class EstimateModel(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.EstimateModel")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -946,6 +947,7 @@ class EstimateModel(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2008,7 +2010,7 @@ class Level1Design(ProcessMIA):
         beta_sess += 1
         return session_info, beta_sess, cond_nb
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2019,6 +2021,7 @@ class Level1Design(ProcessMIA):
         properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2616,7 +2619,7 @@ class MultipleRegressionDesign(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.MultipleRegressionDesign")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2627,6 +2630,7 @@ class MultipleRegressionDesign(ProcessMIA):
         properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3014,7 +3018,7 @@ class OneSampleTTestDesign(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.OneSampleTTestDesign")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -3025,6 +3029,7 @@ class OneSampleTTestDesign(ProcessMIA):
         properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3390,7 +3395,7 @@ class PairedTTestDesign(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.PairedTTestDesign")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -3401,6 +3406,7 @@ class PairedTTestDesign(ProcessMIA):
         properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3799,7 +3805,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.TwoSampleTTestDesign")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -3810,6 +3816,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

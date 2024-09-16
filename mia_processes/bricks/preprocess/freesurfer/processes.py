@@ -330,7 +330,7 @@ class Binarize(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.freesurfer.Binarize")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -341,6 +341,7 @@ class Binarize(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -501,7 +502,7 @@ class SynthStrip(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -512,6 +513,7 @@ class SynthStrip(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -917,7 +919,7 @@ class SynthStripMriqc(ProcessMIA):
             image, output_dtype=output_dtype, cval=cval
         )
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -928,6 +930,7 @@ class SynthStripMriqc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

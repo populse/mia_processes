@@ -69,7 +69,7 @@ class ComputeBrainVolume(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),

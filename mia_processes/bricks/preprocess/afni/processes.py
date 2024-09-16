@@ -194,7 +194,7 @@ class Automask(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Automask")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -205,6 +205,7 @@ class Automask(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -435,7 +436,7 @@ class Calc(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Calc")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -446,6 +447,7 @@ class Calc(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -601,7 +603,7 @@ class CalcDropTRs(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Calc")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -612,6 +614,7 @@ class CalcDropTRs(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -782,7 +785,7 @@ class Despike(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Despike")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -793,6 +796,7 @@ class Despike(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -941,7 +945,7 @@ separately*
 
         self.init_process("nipype.interfaces.afni.FWHMx")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -952,6 +956,7 @@ separately*
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1079,7 +1084,7 @@ voxel, over any given mask*
 
         self.init_process("nipype.interfaces.afni.GCOR")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1090,6 +1095,7 @@ voxel, over any given mask*
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1284,7 +1290,7 @@ separately*
 
         self.init_process("nipype.interfaces.afni.OutlierCount")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1295,6 +1301,7 @@ separately*
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1479,7 +1486,7 @@ class QualityIndex(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.QualityIndex")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1490,6 +1497,7 @@ class QualityIndex(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1609,7 +1617,7 @@ class RefitDeoblique(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Refit")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1620,6 +1628,7 @@ class RefitDeoblique(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1719,7 +1728,7 @@ class SkullStrip(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.SkullStrip")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1730,6 +1739,7 @@ class SkullStrip(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2021,7 +2031,7 @@ class TShift(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.TShift")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2032,6 +2042,7 @@ class TShift(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2197,7 +2208,7 @@ class TStatMean(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.TStat")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2208,6 +2219,7 @@ class TStatMean(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2448,7 +2460,7 @@ class Volreg(ProcessMIA):
 
         self.init_process("nipype.interfaces.afni.Volreg")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2459,6 +2471,7 @@ class Volreg(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

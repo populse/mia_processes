@@ -462,7 +462,7 @@ class Bet(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.BET")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -470,7 +470,9 @@ class Bet(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -772,7 +774,7 @@ class BetSurfacesExtraction(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.BET")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -780,7 +782,9 @@ class BetSurfacesExtraction(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -968,7 +972,7 @@ class ConvertXFM(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.ConvertXFM")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -976,7 +980,9 @@ class ConvertXFM(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1316,7 +1322,7 @@ class EpiReg(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.EpiReg")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1324,7 +1330,9 @@ class EpiReg(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1645,7 +1653,7 @@ class ExtractROI(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.ExtractROI")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1656,6 +1664,7 @@ class ExtractROI(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1840,7 +1849,7 @@ class FastSegment(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.FAST")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1851,6 +1860,7 @@ class FastSegment(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2578,7 +2588,7 @@ class Flirt(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.FLIRT")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2589,6 +2599,7 @@ class Flirt(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2867,7 +2878,7 @@ class Smooth(ProcessMIA):
 
         self.init_process("nipype.interfaces.fsl.Smooth")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -2878,6 +2889,7 @@ class Smooth(ProcessMIA):
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method

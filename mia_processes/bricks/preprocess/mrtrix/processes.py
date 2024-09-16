@@ -241,7 +241,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "nipype.interfaces.mrtrix3.ConstrainedSphericalDeconvolution"
         )
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -249,7 +249,9 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -435,7 +437,7 @@ class DWIBiasCorrect(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.mrtrix3.DWIBiasCorrect")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -443,7 +445,9 @@ class DWIBiasCorrect(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -550,7 +554,7 @@ class DWIBrainMask(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.BrainMask")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -558,7 +562,9 @@ class DWIBrainMask(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -660,7 +666,7 @@ class DWICat(ProcessMIA):
         # no nipype command for dwicat
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -668,7 +674,9 @@ class DWICat(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -820,7 +828,7 @@ class DWIDenoise(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.DWIDenoise")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -828,7 +836,9 @@ class DWIDenoise(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -978,7 +988,7 @@ class DWIExtract(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.DWIExtract")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -986,7 +996,9 @@ class DWIExtract(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1269,7 +1281,7 @@ class DWIPreproc(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.DWIPreproc")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1277,7 +1289,9 @@ class DWIPreproc(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -1622,7 +1636,7 @@ class EditingTrack(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1630,7 +1644,9 @@ class EditingTrack(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2007,7 +2023,7 @@ class FilteringTrack(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2015,7 +2031,9 @@ class FilteringTrack(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2259,7 +2277,7 @@ class FitTensor(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.FitTensor")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2267,7 +2285,9 @@ class FitTensor(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2455,7 +2475,7 @@ class Generate5ttfsl(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.Generate5tt")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2463,7 +2483,9 @@ class Generate5ttfsl(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2570,7 +2592,7 @@ class Generate5tt2gmwmi(ProcessMIA):
         # No nipype command for this process
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2578,7 +2600,9 @@ class Generate5tt2gmwmi(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2698,7 +2722,7 @@ class MRCat(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.MRCat")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2706,7 +2730,9 @@ class MRCat(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -2975,7 +3001,7 @@ class MRConvert(ProcessMIA):
 
         # self.init_process("nipype.interfaces.mrtrix3.MRConvert")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -2983,7 +3009,9 @@ class MRConvert(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3227,7 +3255,7 @@ class MRDeGibbs(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.MRDeGibbs")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -3235,7 +3263,9 @@ class MRDeGibbs(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3378,7 +3408,7 @@ class MRMath(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.MRMath")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -3386,7 +3416,9 @@ class MRMath(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3667,7 +3699,7 @@ class MRTransform(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.MRTransform")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -3675,7 +3707,9 @@ class MRTransform(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -3879,7 +3913,7 @@ class MTNormalise(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -3887,7 +3921,9 @@ class MTNormalise(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -4102,7 +4138,7 @@ class ResponseSDDhollander(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.ResponseSD")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -4110,7 +4146,9 @@ class ResponseSDDhollander(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -4332,7 +4370,7 @@ class SphericalHarmonicExtraction(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -4340,7 +4378,9 @@ class SphericalHarmonicExtraction(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -4654,7 +4694,7 @@ class TensorMetrics(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.TensorMetrics")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -4662,7 +4702,9 @@ class TensorMetrics(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -5330,7 +5372,7 @@ class Tractography(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.Tractography")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -5338,7 +5380,9 @@ class Tractography(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -5523,7 +5567,7 @@ class TransformFSLConvert(ProcessMIA):
 
         self.init_process("nipype.interfaces.mrtrix3.TransformFSLConvert")
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -5531,7 +5575,9 @@ class TransformFSLConvert(ProcessMIA):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
