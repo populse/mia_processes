@@ -3422,16 +3422,13 @@ class Make_CVR_reg_physio(ProcessMIA):
         # Inputs traits
         self.add_trait(
             "func_file",
-            Either(
-                ImageFileSPM(),
-                Undefined,
-                copyfile=False,
+            InputMultiPath(
+                Either(ImageFileSPM(exists=False), Undefined),
                 output=False,
                 optional=False,
                 desc=func_file_desc,
             ),
         )
-        self.func_file = traits.Undefined
 
         self.add_trait(
             "trigger_data",
@@ -3539,7 +3536,7 @@ class Make_CVR_reg_physio(ProcessMIA):
 
         if self.func_file not in ["<undefined>", traits.Undefined]:
             patient_name = get_dbFieldValue(
-                self.project, self.func_file, "PatientName"
+                self.project, self.func_file[0], "PatientName"
             )
 
         else:
@@ -3552,7 +3549,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         if patient_name is None:
             print(
                 "Make_CVR_reg_physio brick: Please, fill 'PatientName' "
-                "tag in the database for {} ...".format(self.func_file)
+                "tag in the database for {} ...".format(self.func_file[0])
             )
             return self.make_initResult()
 
@@ -3597,7 +3594,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             delay_for_etco2 = 4.8
             tr = (
                 get_dbFieldValue(
-                    self.project, self.func_file, "RepetitionTime"
+                    self.project, self.func_file[0], "RepetitionTime"
                 )[0]
                 / 1000
             )
@@ -3609,7 +3606,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             nb_dyn = (
                 get_dbFieldValue(
                     self.project,
-                    self.func_file,
+                    self.func_file[0],
                     "Dataset dimensions (Count, X,Y,Z,T...)",
                 )[4]
                 - end_dyn_sup
@@ -4452,7 +4449,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         #       preferable not to inherit from the functional but simply to
         #       add new tags.
         self.tags_inheritance(
-            self.func_file, fname_reg, own_tags=all_tags_to_add
+            self.func_file[0], fname_reg, own_tags=all_tags_to_add
         )
         self.outputs["cvr_reg"] = fname_reg
         # Return the requirement, outputs and inheritance_dict
