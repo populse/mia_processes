@@ -542,19 +542,19 @@ class Deconv_from_aif(ProcessMIA):
         self.init_default_traits()
 
     def bol_ar_time(self, vol_4d, mask):
-        """Compute Bolus Arrival Time (t0) and t0_mask.
+        """
+        Compute Bolus Arrival Time (t0) and t0_mask.
 
-        Parameters:
-        vol_4d: 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+        :param vol_4d: 4D numpy array of shape (nb_row, nb_col, nb_sli, nb_dyn)
             Brain data over time.
-        mask: 3D numpy array (nb_row, nb_col, nb_sli)
-            Mask for the brain to be considered.
+        :param mask: 3D numpy array of shape (nb_row, nb_col, nb_sli)
+            Mask for the brain regions to be considered.
 
-        Returns:
-        t0: 3D numpy array (nb_row, nb_col, nb_sli)
-            Bolus arrival time indices.
-        t0_mask: 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
-            Mask for valid t0 values.
+        :returns:
+            - **t0** (*3D numpy array of shape (nb_row, nb_col, nb_sli)*)
+                – Bolus arrival time indices.
+            - **t0_mask** (*4D numpy array of shape (nb_row, nb_col, nb_sli,
+                nb_dyn)*) – Mask for valid t0 values.
         """
         nb_row, nb_col, nb_sli, nb_dyn = vol_4d.shape
         t0_mask = np.zeros_like(vol_4d, dtype=bool)
@@ -605,45 +605,52 @@ class Deconv_from_aif(ProcessMIA):
         return t0, t0_mask
 
     def deconv_osvd(self, u, s, v, c_func_pad, nb_dyn, data_mask):
-        """Deconvolution using OSVD.
+        """
+        Deconvolution using OSVD (Oscillatory Singular Value Decomposition).
 
-        OSVD stands for Oscillatory Singular Value Decomposition. In the
-        context of deconvolution, OSVD is used to filter out noise and reduce
-        artifacts by selectively truncating the singular values (which are
-        part of the Singular Value Decomposition result) that contribute to
+        OSVD is used in deconvolution to filter out noise and reduce artifacts
+        by selectively truncating the singular values that contribute to
         oscillations or instability in the inverse problem's solution.
 
-        Parameters:
-        u (ndarray): U matrix from SVD of c_aif_toeplitz matrix.
-        s (ndarray): Singular values from SVD of c_aif_toeplitz matrix.
-        v (ndarray): V matrix from SVD of c_aif_toeplitz matrix.
-        c_func_pad(ndarray): Zero-padded concentration voxels (4D array).
-        nb_dyn (int): Number of dynamics (without zero-padding).
-        data_mask (ndarray): Mask of the volume.
+        :param u: ndarray
+            U matrix from SVD of the c_aif_toeplitz matrix.
+        :param s: ndarray
+            Singular values from SVD of the c_aif_toeplitz matrix.
+        :param v: ndarray
+            V matrix from SVD of the c_aif_toeplitz matrix.
+        :param c_func_pad: ndarray
+            Zero-padded concentration voxels (4D array).
+        :param nb_dyn: int
+            Number of dynamics (without zero-padding).
+        :param data_mask: ndarray
+            Mask of the volume.
 
-        Returns:
-        residu_f (ndarray): Residu function from deconvolution.
+        :returns:
+            - **residu_f** (*ndarray*) – Residu function from the
+                deconvolution process.
         """
 
         def sv_inv(x, y, z):
             """
-            Function to create a diagonal matrix where the first (z - x)
-            entries of the diagonal are the inverse of the elements of `y`,
-            and the remaining `x` entries are zeros.
+            Create a diagonal matrix where the first (z - x) entries of the
+            diagonal are the inverse of the elements of `y`, and the
+            remaining `x` entries are zeros.
 
-            Parameters:
-            x (int): Number of trailing zeros to add to the diagonal.
-            y (array-like): Array containing the singular values.
-            z (int): The total number of singular values in `y`.
+            :param x: int
+                Number of trailing zeros to add to the diagonal.
+            :param y: array-like
+                Array containing the singular values.
+            :param z: int
+                The total number of singular values in `y`.
 
-            Returns:
-            np.ndarray: A diagonal matrix with inverted singular values
-                        followed by zeros.
+            :returns:
+                - **np.ndarray** – A diagonal matrix with inverted singular
+                    values, followed by zeros.
             """
             return np.diag(np.hstack([1.0 / y[: z - x], np.zeros(x)]))
 
-        # TODO: Currently, this function takes around 718s for one data
-        #      and 200s for the same data in matlab.
+        # TODO: This function currently seems to take longer than with matlab.
+        #  Check exactly and, if necessary, look for an improvement in speed.
         nb_1d, nb_2d, nb_3d, nb_4d = c_func_pad.shape
         residu_f = np.zeros((nb_1d, nb_2d, nb_3d, nb_dyn))
         # Get indices where the mask is true
@@ -722,27 +729,28 @@ class Deconv_from_aif(ProcessMIA):
         return residu_f
 
     def delta_r2star(self, vol_4d, te, mask):
-        """Compute DELTAR2*.
+        """
+        Compute DELTAR2* (ΔR2*).
 
-        DELTAR2* (ΔR2*) corresponds to a change in the transverse relaxation
-        rate (R2*), which is used in MRI to assess changes in the magnetic
-        properties of tissues, particularly related to the presence of
-        paramagnetic contrast agents like Gadolinium (Gd).
+        ΔR2* corresponds to a change in the transverse relaxation rate (R2*),
+        used in MRI to assess changes in the magnetic properties of tissues,
+        particularly in the presence of paramagnetic contrast agents like
+        Gadolinium (Gd).
 
-        Parameters:
-        vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
+        :param vol_4d: 4D numpy array of shape (nb_row, nb_col, nb_sli, nb_dyn)
             Brain data over time.
-        te : float
+        :param te: float
             Echo time.
-        mask : 3D numpy array (nb_row, nb_col, nb_sli)
+        :param mask: 3D numpy array of shape (nb_row, nb_col, nb_sli)
             Mask for the volume to be considered.
 
-        Returns:
-        t0 : 3D numpy array (nb_row, nb_col, nb_sli)
-            Bolus arrival time (index in vol_4d corresponding to the 4th
-            dimension).
-        c_vol_4d : 4D numpy array (nb_row, nb_col, nb_sli, nb_dyn)
-            Concentration in Gadolinium for each voxel over time.
+        :returns:
+            - **t0** (*3D numpy array of shape (nb_row, nb_col, nb_sli)*)
+                – Bolus arrival time (index in vol_4d corresponding to the
+                4th dimension).
+            - **c_vol_4d** (*4D numpy array of shape (nb_row, nb_col, nb_sli,
+                nb_dyn)*) – Concentration of Gadolinium for each voxel over
+                time.
         """
         dyn_nb = vol_4d.shape[3]
         t0, t0_mask = self.bol_ar_time(vol_4d, mask)
@@ -752,7 +760,6 @@ class Deconv_from_aif(ProcessMIA):
             baseline = np.sum(vol_4d * t0_mask, axis=3) / np.sum(
                 (vol_4d * t0_mask) != 0, axis=3
             )
-            # baseline[np.isnan(baseline)] = 0
 
         baseline[~mask] = 0
         # Replicate baseline across all dynamics
@@ -763,12 +770,6 @@ class Deconv_from_aif(ProcessMIA):
         # Calculate concentration
         mask_4D = np.repeat(mask[:, :, :, np.newaxis], dyn_nb, axis=3)
         valid_voxels = mask_4D & (baseline != 0)
-        # # Small epsilon value to prevent log(0)
-        # eps = 1e-10
-        # safe_ratio = np.clip(
-        #     vol_4d[valid_voxels] / (baseline[valid_voxels] + eps), eps, None
-        # )
-        # c_vol_4d[valid_voxels] = -(1 / te) * np.log(safe_ratio)
 
         with np.errstate(divide="ignore"):
             c_vol_4d[valid_voxels] = -(1 / te) * np.log(
@@ -779,12 +780,14 @@ class Deconv_from_aif(ProcessMIA):
 
     def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
+
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. In order not to include an output in the database,
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
         :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -894,27 +897,23 @@ class Deconv_from_aif(ProcessMIA):
         return self.make_initResult()
 
     def round_half_up(self, n):
-        """Rounds a number to the nearest integer using the "round half up"
-        rule.
+        """
+        Rounds a number to the nearest integer using the "round half up" rule.
 
-        Python's default rounding behavior, follows the "round half to even"
-        rule. For example:
+        Python's default rounding behavior follows the "round half to even"
+        rule. This function instead rounds .5 up to the nearest integer.
 
-        - round_half_up(0.5) returns 1
-        - round_half_up(1.5) returns 2
-        - round(0.5) returns 0
-        - round(1.5) returns 2
+        Examples:
+            - `round_half_up(0.5)` returns 1
+            - `round_half_up(1.5)` returns 2
+            - `round(0.5)` returns 0
+            - `round(1.5)` returns 2
 
-        Parameters:
-        -----------
-        n : float
+        :param n: float
             The number to be rounded.
 
-        Returns:
-        --------
-        int
-            The rounded integer value.
-
+        :returns:
+            - **int** – The rounded integer value.
         """
 
         if n - int(n) == 0.5:
@@ -3046,12 +3045,14 @@ class Make_AIF(ProcessMIA):
 
     def list_outputs(self, is_plugged=None, iteration=False):
         """Dedicated to the initialisation step of the brick.
+
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. In order not to include an output in the database,
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
+
         :param is_plugged: the state, linked or not, of the plugs.
         :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3094,7 +3095,7 @@ class Make_AIF(ProcessMIA):
         # TODO: Perhaps we should do here a test to find out whether it's a
         #       4D or a 3D? using a try statement ?
         nrow, ncol, nslices, ndynamics = data.shape
-        # TODO: Do we really need thres?
+        # TODO: Do we really need thres? For now, let's comment
         # thres is currently being commented on
         # thres = np.array(
         #     [threshold_otsu(data[:, :, aux, 0]) for aux in range(nslices)]
