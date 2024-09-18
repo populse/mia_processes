@@ -1659,7 +1659,7 @@ class ExtractROIbyLabel(ProcessMIA):
         save_concate_roi_desc = (
             "Save a concatenation of regions as a NIfTI file (a boolean)"
         )
-        suffix_desc = "Suffix for outout file ( string)"
+        suffix_desc = "Suffix for output file (string)"
         # Outputs description
         # out_nibabel_desc = (
         #     "Extracted ROI (nibabel Nifti1Image format)"
@@ -1748,20 +1748,19 @@ class ExtractROIbyLabel(ProcessMIA):
                 out_files = []
                 if self.suffix:
                     labels = "_" + self.suffix
-                else:
-                    for label in self.labels:
-                        labels += "_" + str(label)
-                        if self.save_each_roi:
-                            out_files.append(
-                                os.path.join(
-                                    self.output_directory,
-                                    file_name
-                                    + "_"
-                                    + str(label)
-                                    + "."
-                                    + in_ext,
-                                )
+                for label in self.labels:
+                    labels += "_" + str(label)
+                    if self.save_each_roi:
+                        suffix = ""
+                        if self.suffix:
+                            suffix = self.suffix + "_"
+                        suffix += str(label)
+                        out_files.append(
+                            os.path.join(
+                                self.output_directory,
+                                file_name + "_" + suffix + "." + in_ext,
                             )
+                        )
 
                 if self.save_each_roi and out_files:
                     self.outputs["out_files"] = out_files
