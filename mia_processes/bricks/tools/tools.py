@@ -3433,13 +3433,25 @@ class Make_CVR_reg_physio(ProcessMIA):
 
         self.add_trait(
             "trigger_data",
-            File(output=False, optional=True, desc=trigger_data_desc),
+            Either(
+                File,
+                Undefined,
+                output=False,
+                optional=True,
+                desc=trigger_data_desc,
+            ),
         )
         self.trigger_data = traits.Undefined
 
         self.add_trait(
             "physio_data",
-            File(output=False, optional=True, desc=physio_data_desc),
+            Either(
+                File,
+                Undefined,
+                output=False,
+                optional=True,
+                desc=physio_data_desc,
+            ),
         )
         self.physio_data = traits.Undefined
 
