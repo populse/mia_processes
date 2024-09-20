@@ -2644,6 +2644,38 @@ class Input_Filter(ProcessMIA):
         )
         self.outputs["notInDb"] = ["output"]
 
+        # If pipmantab is an attribute of the Input_Filter instance, we are in
+        # a case of pipeline iteration and we therefore want to sort the input
+        # in the order of the iterated tag values.
+        if hasattr(self, "pipmantab"):
+            # fmt: off
+            tag_values_list = (
+                self.pipmantab.pipelineEditorTabs.get_current_editor()
+                .tag_values_list
+            )
+            iterated_tag = (
+                self.pipmantab.pipelineEditorTabs.get_current_editor()
+                .iterated_tag
+            )
+            # fmt: on
+
+            if tag_values_list and iterated_tag is not None:
+                tag_to_file = {}
+
+                for file in self.outputs["output"]:
+                    tag_value = self.project.session.get_value(
+                        COLLECTION_CURRENT, file, iterated_tag
+                    )
+
+                    if tag_value in tag_values_list:
+                        tag_to_file[tag_value] = file
+
+                self.outputs["output"] = [
+                    tag_to_file[tag]
+                    for tag in tag_values_list
+                    if tag in tag_to_file
+                ]
+
         # The output data are always an absolute path
         for idx, element in enumerate(self.outputs["output"]):
             full_path = os.path.abspath(
