@@ -981,6 +981,9 @@ class Deconv_from_aif(ProcessMIA):
         # elapsed_time = end_time - start_time
         # print(f"deconv_osvd function: elapsed time: {elapsed_time} seconds")
         # Compute hemodynamic parameters
+        # T0: The time (s) of arrival of the contrast agent in the tissue or
+        #     voxel being analyzed. It is the time when the concentration of
+        #     the contrast agent first begins to increase after the injection.
         t0 = self.dict4runtime["rep_time"] * np.where(
             (t0 != 0) & ~np.isnan(t0), t0 + 1, t0
         )
@@ -995,6 +998,11 @@ class Deconv_from_aif(ProcessMIA):
             ~np.isnan(residu_f_max_ind), residu_f_max_ind + 1, residu_f_max_ind
         )
         residu_f_max_ind[~data_mask] = 0
+        # Tmax: Time to the maximum of the residue function (or simply the
+        #       time to maximum of the contrast agent bolus in tissue). This
+        #       parameter measures the delay between the arrival of the
+        #       contrast agent in the arterial input function (AIF) and its
+        #       peak concentration in the tissue of interest (s)
         t_max = residu_f_max_ind.astype(float)
         t_max[data_mask] = (t_max[data_mask] - 0.5) * self.dict4runtime[
             "rep_time"

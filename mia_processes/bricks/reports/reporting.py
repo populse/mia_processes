@@ -11,6 +11,7 @@ generate automatic report at the end of a pipeline calculation.
         - ReportFuncMriqc
         - ReportGE2REC
         - ReportGroupMriqc
+        - ReportPerfDsc
 
 """
 
@@ -3056,3 +3057,873 @@ class ReportGroupMriqc(ProcessMIA):
         report.make_report()
 
         tpm_dir.cleanup()
+
+
+class ReportPerfDsc(ProcessMIA):
+    """
+    *Generates report for Perfusion study using DSC-MRI*
+
+    Please, see the complete documentation for the `ReportPerfDsc brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportPerfDsc.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ReportPerfDsc, self).__init__()
+
+        # Third party software required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        norm_anat_desc = (
+            "An existing, uncompressed normalised anatomical "
+            "image file (valid extensions: .nii)"
+        )
+
+        norm_anat_fig_rows_desc = (
+            "The number of lines for the normalised "
+            "anatomical slice planes plot"
+        )
+
+        norm_anat_fig_cols_desc = (
+            "The number of columns for the normalised "
+            "anatomical slice planes plot"
+        )
+
+        norm_anat_inf_slice_start_desc = (
+            "The first index displayed in "
+            "normalised anatomical slice planes "
+            "plot"
+        )
+
+        norm_anat_slices_gap_desc = (
+            "Gap between slices in normalised anatomical slice planes plot"
+        )
+
+        norm_anat_cmap_desc = (
+            "Colormap name used for the normalised anatomical plot "
+            "(a string, default: 'Greys_r')"
+        )
+
+        norm_anat_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        norm_anat_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        norm_func_desc = (
+            "An existing, uncompressed normalised functional image file "
+            "(valid extensions: .nii, .nii.gz)"
+        )
+
+        norm_func_fig_rows_desc = (
+            "The number of lines for the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_fig_cols_desc = (
+            "The number of columns for the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_inf_slice_start_desc = (
+            "The first index displayed in the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_slices_gap_desc = (
+            "Gap between slices in the normalised functional slice planes plot"
+        )
+
+        norm_func_cmap_desc = (
+            "Colormap name used for the normalised functional plot "
+            "(a string, default: 'Greys_r')"
+        )
+
+        norm_func_vmin_desc = (
+            "Minimum value in the data range covered by the color map ("
+        )
+
+        norm_func_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        realignment_parameters_desc = (
+            "Estimation of translation and rotation parameters when "
+            "realigning functional data (a pathlike object or a"
+            "string representing a file, or a list "
+            "of pathlike objects or strings "
+            "representing a file)"
+        )
+
+        CBV_image_desc = (
+            "Cerebral Blood Volume image map (valid extensions:.nii): The "
+            "volume of blood within a given volume of tissue (mL/100g)"
+        )
+
+        CBV_cmap_desc = (
+            "Colormap name used for the CBV image plot (a string, "
+            "default: 'rainbow')"
+        )
+
+        CBV_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        CBV_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        CBF_image_desc = (
+            "Cerebral Blood Flow image map (valid extensions:.nii): The rate "
+            "at which blood is delivered to a given volume of brain tissue, "
+            "usually expressed in milliliters per 100 grams of brain tissue "
+            "per minute (mL/100g/min)"
+        )
+
+        CBF_cmap_desc = (
+            "Colormap name used for the CBF image plot (a string, "
+            "default: 'rainbow')"
+        )
+
+        CBF_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        CBF_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        Tmax_image_desc = (
+            "Tmax image map (valid extensions:.nii): Time to the maximum of "
+            "the residue function. This parameter measures the delay between "
+            "the arrival of the contrast agent in the arterial input function "
+            "and its peak concentration in the tissue of interest (s)"
+        )
+
+        Tmax_cmap_desc = (
+            "Colormap name used for the Tmax image plot (a string, "
+            "default: 'rainbow')"
+        )
+
+        Tmax_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        Tmax_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        MTT_image_desc = (
+            "Mean Transit Time image map (valid extensions:.nii): The "
+            "average time it takes for blood to pass through a given volume "
+            "of brain tissue (s)"
+        )
+
+        MTT_cmap_desc = (
+            "Colormap name used for the MTT image plot (a string, "
+            "default: 'rainbow')"
+        )
+
+        MTT_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        MTT_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        patient_info_desc = (
+            "Optional dictionary with information about the patient "
+            "(e.g. {"
+            "'PatientName': 'sub-1', 'Pathology': 'ACMD', "
+            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+            "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
+        )
+
+        # Outputs description
+        report_desc = "The generated report (pdf)"
+
+        # Inputs traits
+        self.add_trait(
+            "norm_anat",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_anat_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_fig_rows",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_anat_fig_rows_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_fig_cols",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_anat_fig_cols_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_inf_slice_start",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_anat_inf_slice_start_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_slices_gap",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_anat_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_cmap",
+            traits.String(
+                "Greys_r",
+                output=False,
+                optional=True,
+                desc=norm_anat_cmap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_anat_vmin_desc,
+            ),
+        )
+        self.norm_anat_vmin = Undefined
+
+        self.add_trait(
+            "norm_anat_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_anat_vmax_desc,
+            ),
+        )
+        self.norm_anat_vmax = Undefined
+
+        # TODO: We use the normalized functional. It seems that it's the
+        #       normalized - smothed functional that's used in Amigo. We'll
+        #       have to check and decide what we'll use here finally?
+        self.add_trait(
+            "norm_func",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_fig_rows",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_func_fig_rows_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_fig_cols",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_func_fig_cols_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_inf_slice_start",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_func_inf_slice_start_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_slices_gap",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_func_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_cmap",
+            traits.String(
+                "Greys_r",
+                output=False,
+                optional=True,
+                desc=norm_func_cmap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_func_vmin_desc,
+            ),
+        )
+        self.norm_func_vmin = Undefined
+
+        self.add_trait(
+            "norm_func_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_func_vmax_desc,
+            ),
+        )
+        self.norm_func_vmax = Undefined
+
+        self.add_trait(
+            "realignment_parameters",
+            File(
+                output=False, optional=False, desc=realignment_parameters_desc
+            ),
+        )
+
+        self.add_trait(
+            "CBV_image",
+            File(output=False, optional=False, desc=CBV_image_desc),
+        )
+
+        self.add_trait(
+            "CBV_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=CBV_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "CBV_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=CBV_vmin_desc,
+            ),
+        )
+        self.CBV_vmin = Undefined
+
+        self.add_trait(
+            "CBV_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=CBV_vmax_desc,
+            ),
+        )
+        self.CBV_vmax = Undefined
+
+        self.add_trait(
+            "CBF_image",
+            File(output=False, optional=False, desc=CBF_image_desc),
+        )
+
+        self.add_trait(
+            "CBF_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=CBF_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "CBF_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=CBF_vmin_desc,
+            ),
+        )
+        self.CBF_vmin = Undefined
+
+        self.add_trait(
+            "CBF_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=CBF_vmax_desc,
+            ),
+        )
+        self.CBF_vmax = Undefined
+
+        self.add_trait(
+            "Tmax_image",
+            File(output=False, optional=False, desc=Tmax_image_desc),
+        )
+
+        self.add_trait(
+            "Tmax_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=Tmax_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "Tmax_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=Tmax_vmin_desc,
+            ),
+        )
+        self.Tmax_vmin = Undefined
+
+        self.add_trait(
+            "Tmax_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=Tmax_vmax_desc,
+            ),
+        )
+        self.Tmax_vmax = Undefined
+
+        self.add_trait(
+            "MTT_image",
+            File(output=False, optional=False, desc=MTT_image_desc),
+        )
+
+        self.add_trait(
+            "MTT_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=MTT_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "MTT_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=MTT_vmin_desc,
+            ),
+        )
+        self.MTT_vmin = Undefined
+
+        self.add_trait(
+            "MTT_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=MTT_vmax_desc,
+            ),
+        )
+        self.MTT_vmax = Undefined
+
+        self.add_trait(
+            "patient_info",
+            traits.Dict(output=False, optional=True, desc=patient_info_desc),
+        )
+        self.patient_info = dict(
+            PatientRef=Undefined,
+            Pathology=Undefined,
+            Age=Undefined,
+            Sex=Undefined,
+            MR=Undefined,
+            Gas=Undefined,
+            GasAdmin=Undefined,
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "report",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=report_desc
+            ),
+        )
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None, iteration=False):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ReportPerfDsc, self).list_outputs()
+
+        if iteration is True:
+            self.patient_info = dict(
+                PatientRef=Undefined,
+                Pathology=Undefined,
+                Age=Undefined,
+                Sex=Undefined,
+                MR=Undefined,
+                Gas=Undefined,
+                GasAdmin=Undefined,
+            )
+
+        file_position = (
+            self.norm_anat.find(self.project.getName())
+            + len(self.project.getName())
+            + 1
+        )
+        db_file_norm_anat = self.norm_anat[file_position:]
+        db_file_norm_func = self.norm_func[file_position:]
+        # TODO: Do we need to explicitly take the smoothed func as input,
+        #       or can we simply add the prefix 's' to the normalized func?
+        folder, fil = os.path.split(db_file_norm_func)
+        db_file_smooth_norm_func = os.path.join(folder, "s" + fil)
+
+        # As we do not have access to the database at the runtime (see #272),
+        # we prepare here the data that the run_process_mia method will need
+        # via dict4runtime parameter:
+        self.dict4runtime["norm_anat"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_anat"],
+            self.project.session,
+            db_file_norm_anat,
+            "AcquisitionDate",
+            "AcquisitionNumber",
+            "Affine regularization type",
+            "Age",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Grid spacings (X,Y,Z,T,...)",
+            "MaxNumOfSlices",
+            "Pathology",
+            "PatientName",
+            "PatientRef",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "Sex",
+            "ScanDuration",
+            "ScanResolution",
+            "Site",
+            "SliceGap",
+            "SliceThickness",
+            "Spectro",
+            "Start/end slice",
+            "StudyName",
+            "Voxel sizes",
+        )
+        self.dict4runtime["norm_func"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_func"],
+            self.project.session,
+            db_file_norm_func,
+            "AcquisitionNumber",
+            "Affine regularization type",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Gas",
+            "GasAdmin",
+            "Grid spacings (X,Y,Z,T,...)",
+            "MaxNumOfSlices",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "ScanDuration",
+            "ScanResolution",
+            "SliceGap",
+            "SliceThickness",
+            "Start/end slice",
+            "Voxel sizes",
+        )
+        self.dict4runtime["smooth_norm_func"] = {}
+        dict4runtime_update(
+            self.dict4runtime["smooth_norm_func"],
+            self.project.session,
+            db_file_smooth_norm_func,
+            "FWHM (X, Y, Z) for Smooth",
+        )
+        # FIXME: the data should be anonymized and we should use PatientRef
+        #        instead of PatientName !
+        if self.dict4runtime["norm_anat"]["PatientName"] == "Undefined":
+            print(
+                "\nReportPerfDscbrick:\nThe tags PatientName was not "
+                "found in the database for the {} file...\n The "
+                "initialization is aborted...".format(db_file_norm_anat)
+            )
+            return self.make_initResult()
+
+        if (
+            self.patient_info.get("PatientRef") is None
+            or self.patient_info["PatientRef"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["PatientRef"] == "Undefined":
+                self.dict4runtime["norm_anat"]["PatientRef"] = (
+                    self.dict4runtime["norm_anat"]["PatientName"]
+                )
+                self.patient_info["PatientRef"] = self.dict4runtime[
+                    "norm_anat"
+                ]["PatientName"]
+
+            else:
+                self.patient_info["PatientRef"] = self.dict4runtime[
+                    "norm_anat"
+                ]["PatientRef"]
+
+        else:
+            self.dict4runtime["norm_anat"]["PatientRef"] = (
+                self.patient_info.get("PatientRef")
+            )
+
+        if (
+            self.patient_info.get("Pathology") is None
+            or self.patient_info["Pathology"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Pathology"] != "Undefined":
+                self.patient_info["Pathology"] = self.dict4runtime[
+                    "norm_anat"
+                ]["Pathology"]
+
+        else:
+            self.dict4runtime["norm_anat"]["Pathology"] = (
+                self.patient_info.get("Pathology")
+            )
+
+        if (
+            self.patient_info.get("Age") is None
+            or self.patient_info["Age"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["norm_anat"][
+                    "Age"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Age"] = self.patient_info.get(
+                "Age"
+            )
+
+        if (
+            self.patient_info.get("Sex") is None
+            or self.patient_info["Sex"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Sex"] != "Undefined":
+                self.patient_info["Sex"] = self.dict4runtime["norm_anat"][
+                    "Sex"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Sex"] = self.patient_info.get(
+                "Sex"
+            )
+
+        if (
+            self.patient_info.get("MR") is None
+            or self.patient_info["MR"] == Undefined
+        ):
+            if self.dict4runtime["norm_anat"]["Spectro"] != "Undefined":
+                self.patient_info["MR"] = self.dict4runtime["norm_anat"][
+                    "Spectro"
+                ]
+
+        else:
+            self.dict4runtime["norm_anat"]["Spectro"] = self.patient_info.get(
+                "MR"
+            )
+
+        if (
+            self.patient_info.get("Gas") is None
+            or self.patient_info["Gas"] == Undefined
+        ):
+            if self.dict4runtime["norm_func"]["Gas"] != "Undefined":
+                self.patient_info["Gas"] == self.dict4runtime["norm_func"][
+                    "Gas"
+                ]
+
+        else:
+            self.dict4runtime["norm_func"]["Gas"] = self.patient_info.get(
+                "Gas"
+            )
+
+        if (
+            self.patient_info.get("GasAdmin") is None
+            or self.patient_info["GasAdmin"] == Undefined
+        ):
+            if self.dict4runtime["norm_func"]["GasAdmin"] != "Undefined":
+                self.patient_info["GasAdmin"] == self.dict4runtime[
+                    "norm_func"
+                ]["GasAdmin"]
+
+        else:
+            self.dict4runtime["norm_func"]["GasAdmin"] = self.patient_info.get(
+                "GasAdmin"
+            )
+
+        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
+        #        should be found to retrieve them automatically or to put them
+        #        in the input parameters of the brick:
+        # Site
+        if self.dict4runtime["norm_anat"]["Site"] in ("", "Undefined"):
+            self.dict4runtime["norm_anat"][
+                "Site"
+            ] = "Grenoble University Hospital - CLUNI"
+
+        # MriScanner
+        if self.dict4runtime["norm_anat"]["Spectro"] in ("", "Undefined"):
+            self.dict4runtime["norm_anat"][
+                "Spectro"
+            ] = "Philips Achieva 3.0T TX"
+
+        # Generate an output name
+        if (
+            (
+                self.norm_anat
+                and self.norm_anat not in ["<undefined>", traits.Undefined]
+            )
+            and (
+                self.norm_func
+                and self.norm_func not in ["<undefined>", traits.Undefined]
+            )
+            and (
+                self.CBV_image
+                and self.CBV_image not in ["<undefined>", traits.Undefined]
+            )
+            and (
+                self.CBF_image
+                and self.CBF_image not in ["<undefined>", traits.Undefined]
+            )
+            and (
+                self.Tmax_image
+                and self.Tmax_image not in ["<undefined>", traits.Undefined]
+            )
+            and (
+                self.MTT_image
+                and self.MTT_image not in ["<undefined>", traits.Undefined]
+            )
+        ):
+            self.outputs["report"] = os.path.join(
+                self.output_directory,
+                "{0}_Perf_DSC_Report_{1}.pdf".format(
+                    self.dict4runtime["norm_anat"]["PatientRef"],
+                    datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
+                ),
+            )
+
+        else:
+            return self.make_initResult()
+
+        self.tags_inheritance(
+            self.norm_anat,
+            self.outputs["report"],
+        )
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ReportPerfDsc, self).run_process_mia()
+
+        report = Report(
+            self.report,
+            self.dict4runtime,
+            Perf_DSC=True,
+            norm_anat=self.norm_anat,
+            norm_anat_fig_rows=self.norm_anat_fig_rows,
+            norm_anat_fig_cols=self.norm_anat_fig_cols,
+            norm_anat_inf_slice_start=self.norm_anat_inf_slice_start,
+            norm_anat_slices_gap=self.norm_anat_slices_gap,
+            norm_anat_cmap=self.norm_anat_cmap,
+            norm_anat_vmin=self.norm_anat_vmin,
+            norm_anat_vmax=self.norm_anat_vmax,
+            norm_func=self.norm_func,
+            norm_func_fig_rows=self.norm_func_fig_rows,
+            norm_func_fig_cols=self.norm_func_fig_cols,
+            norm_func_inf_slice_start=self.norm_func_inf_slice_start,
+            norm_func_slices_gap=self.norm_func_slices_gap,
+            norm_func_cmap=self.norm_func_cmap,
+            norm_func_vmin=self.norm_func_vmin,
+            norm_func_vmax=self.norm_func_vmax,
+            realignment_parameters=self.realignment_parameters,
+            CBF_image=self.CBF_image,
+            CBF_cmap=self.CBF_cmap,
+            CBF_vmin=self.CBF_vmin,
+            CBF_vmax=self.CBF_vmax,
+            CBV_image=self.CBV_image,
+            CBV_cmap=self.CBV_cmap,
+            CBV_vmin=self.CBV_vmin,
+            CBV_vmax=self.CBV_vmax,
+            Tmax_image=self.Tmax_image,
+            Tmax_cmap=self.Tmax_cmap,
+            Tmax_vmin=self.Tmax_vmin,
+            Tmax_vmax=self.Tmax_vmax,
+            MTT_image=self.MTT_image,
+            MTT_cmap=self.MTT_cmap,
+            MTT_vmin=self.MTT_vmin,
+            MTT_vmax=self.MTT_vmax,
+            output_directory=self.output_directory,
+        )
+
+        report.make_report()

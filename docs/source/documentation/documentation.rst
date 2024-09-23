@@ -146,6 +146,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
     - `ReportGE2REC <bricks/reports/ReportGE2REC.html>`_
     - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_
+    - `ReportPerfDsc <bricks/reports/ReportPerfDsc.html>`_
     - `Result_collector <bricks/reports/Result_collector.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
 
