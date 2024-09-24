@@ -32,4 +32,5 @@ from .reporting import (  # noqa: F401
     ReportFuncMriqc,
     ReportGE2REC,
     ReportGroupMriqc,
+    ReportPerfDsc,
 )

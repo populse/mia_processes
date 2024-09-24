@@ -3160,9 +3160,8 @@ class ReportPerfDsc(ProcessMIA):
 
         realignment_parameters_desc = (
             "Estimation of translation and rotation parameters when "
-            "realigning functional data (a pathlike object or a"
-            "string representing a file, or a list "
-            "of pathlike objects or strings "
+            "realigning functional data (a pathlike object or a string "
+            "representing a file, or a list of pathlike objects or strings "
             "representing a file)"
         )
 
@@ -3686,8 +3685,6 @@ class ReportPerfDsc(ProcessMIA):
             "EchoTime",
             "FlipAngle",
             "FOV",
-            "Gas",
-            "GasAdmin",
             "Grid spacings (X,Y,Z,T,...)",
             "MaxNumOfSlices",
             "ProtocolName",
@@ -3793,34 +3790,6 @@ class ReportPerfDsc(ProcessMIA):
         else:
             self.dict4runtime["norm_anat"]["Spectro"] = self.patient_info.get(
                 "MR"
-            )
-
-        if (
-            self.patient_info.get("Gas") is None
-            or self.patient_info["Gas"] == Undefined
-        ):
-            if self.dict4runtime["norm_func"]["Gas"] != "Undefined":
-                self.patient_info["Gas"] == self.dict4runtime["norm_func"][
-                    "Gas"
-                ]
-
-        else:
-            self.dict4runtime["norm_func"]["Gas"] = self.patient_info.get(
-                "Gas"
-            )
-
-        if (
-            self.patient_info.get("GasAdmin") is None
-            or self.patient_info["GasAdmin"] == Undefined
-        ):
-            if self.dict4runtime["norm_func"]["GasAdmin"] != "Undefined":
-                self.patient_info["GasAdmin"] == self.dict4runtime[
-                    "norm_func"
-                ]["GasAdmin"]
-
-        else:
-            self.dict4runtime["norm_func"]["GasAdmin"] = self.patient_info.get(
-                "GasAdmin"
             )
 
         # FIXME: Currently, Site and Spectro data are hard-coded. A solution

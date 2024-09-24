@@ -80,18 +80,21 @@ from mia_processes.utils import (
 class Report:
     """Create pdf report
 
-    IQMs_file --> mriqc individual report (with all IQMs)
-    mriqc_group --> mriqc report group
-    CVR --> CVR report
-    GE2REC --> GE2REC report
+    In the constructor, certain kwarg keys will specialise the report:
+      - CVR: CVR report
+      - GE2REC: GE2REC report
+      - IQMs_file: MRIQC individual report (with all IQMs)
+      - mriqc_group: MRIQC report group
+      - Perf_DSC: DSC perfusion report
 
     Methods:
-      - get_iqms_data
       - co2_inhal_cvr_make_report
       - ge2rec_make_report
+      - get_iqms_data
       - mriqc_anat_make_report
       - mriqc_func_make_report
       - mriqc_group_make_report
+      - perf_dsc_make_report
 
     """
 
@@ -111,7 +114,112 @@ class Report:
         for key in kwargs:
             setattr(self, key, kwargs[key])
 
-        if "IQMs_file" in kwargs:
+        if "CVR" in kwargs:
+            self.make_report = self.co2_inhal_cvr_make_report
+            # ref_exp = {
+            #     "norm_anat": self.norm_anat,
+            #     "norm_func": self.norm_func,
+            # }
+            self.title = (
+                "<font size=18><b>{0} report: </b>{1}"
+                "</font>".format(
+                    self.dict4runtime["norm_anat"]["PatientRef"],
+                    today_date.split(" ")[0],
+                )
+            )
+
+            self.header_title = (
+                "<font size=30><b>C</b></font>"
+                "<font size=11>erebro</font>"
+                "<font size=30><b>V</b></font>"
+                "<font size=11>ascular</font>"
+                "<font size=30><b> R</b></font>"
+                "<font size=11>eactivity<br/></font>"
+                "<font size=7>assessed using CO<sub>2</sub> inhalation "
+                "as a physiological challenge</font>"
+            )
+            infos = [
+                self.dict4runtime["norm_anat"][i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "PatientRef",
+                    "Sex",
+                    "Age",
+                    "Pathology",
+                )
+            ]
+            infos.insert(4, today_date)
+            # infos.insert(5, ref_exp)
+            # Hard-coded, we know the ref data used for IL in the
+            # CVR CO2 pipeline:
+            infos.insert(10, "CVR_temoins_IL")
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "CALCULATION DATE",
+                # "NAME OF THE INPUT DATA",
+                "PATIENT REFERENCE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "PATHOLOGY",
+                "REFERENCE GROUP",
+                "SOFTWARES",
+            ]
+
+        elif "GE2REC" in kwargs:
+            self.make_report = self.ge2rec_make_report
+            ref_exp = {
+                "norm_anat": self.norm_anat,
+                "norm_func_gene": self.norm_func_gene,
+                "norm_func_reco": self.norm_func_reco,
+                "norm_func_recall": self.norm_func_recall,
+            }
+            self.title = (
+                "<font size=18><b>{0} report: </b>{1}"
+                "</font>".format(
+                    self.dict4runtime["norm_anat"]["PatientName"],
+                    today_date.split(" ")[0],
+                )
+            )
+
+            self.header_title = (
+                "<font size=30><b>GE2REC - Langage et " "mémoire</b></font>"
+            )
+            infos = [
+                self.dict4runtime["norm_anat"][i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "Sex",
+                    "Age",
+                    "Pathology",
+                    "LateralizationPathology",
+                    "DominantHand",
+                )
+            ]
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "PATHOLOGY",
+                "LATERALIZATION PATHOLOGY",
+                "DOMINANT HAND",
+                "SOFTWARES",
+            ]
+
+        elif "IQMs_file" in kwargs:
             with open(self.IQMs_file) as f:
                 self.iqms_data = json.load(f)
 
@@ -183,12 +291,8 @@ class Report:
                 "SOFTWARES",
             ]
 
-        elif "CVR" in kwargs:
-            self.make_report = self.co2_inhal_cvr_make_report
-            # ref_exp = {
-            #     "norm_anat": self.norm_anat,
-            #     "norm_func": self.norm_func,
-            # }
+        elif "Perf_DSC" in kwargs:
+            self.make_report = self.perf_dsc_make_report
             self.title = (
                 "<font size=18><b>{0} report: </b>{1}"
                 "</font>".format(
@@ -198,14 +302,18 @@ class Report:
             )
 
             self.header_title = (
-                "<font size=30><b>C</b></font>"
-                "<font size=11>erebro</font>"
-                "<font size=30><b>V</b></font>"
-                "<font size=11>ascular</font>"
+                "<font size=30><b>D</b></font>"
+                "<font size=11>ynamic</font>"
+                "<font size=30><b> S</b></font>"
+                "<font size=11>usceptibility</font>"
+                "<font size=30><b> C</b></font>"
+                "<font size=11>contrast<br/><br/><br/></font>"
+                "<font size=30><b>M</b></font>"
+                "<font size=11>agnetic</font>"
                 "<font size=30><b> R</b></font>"
-                "<font size=11>eactivity<br/></font>"
-                "<font size=7>assessed using CO<sub>2</sub> inhalation "
-                "as a physiological challenge</font>"
+                "<font size=11>esonance</font>"
+                "<font size=30><b> P</b></font>"
+                "<font size=11>erfusion</font>"
             )
             infos = [
                 self.dict4runtime["norm_anat"][i]
@@ -221,70 +329,18 @@ class Report:
                 )
             ]
             infos.insert(4, today_date)
-            # infos.insert(5, ref_exp)
-            # Hard-coded, we know the ref data used for IL in the
-            # CVR CO2 pipeline:
-            infos.insert(10, "CVR_temoins_IL")
 
             headers = [
                 "SITE",
                 "MRI SCANNER",
                 "STUDY NAME",
                 "EXAMINATION DATE",
-                "CVR CALCULATION DATE",
+                "CALCULATION DATE",
                 # "NAME OF THE INPUT DATA",
                 "PATIENT REFERENCE",
                 "PATIENT SEX",
                 "PATIENT AGE",
                 "PATHOLOGY",
-                "REFERENCE GROUP",
-                "SOFTWARES",
-            ]
-
-        elif "GE2REC" in kwargs:
-            self.make_report = self.ge2rec_make_report
-            ref_exp = {
-                "norm_anat": self.norm_anat,
-                "norm_func_gene": self.norm_func_gene,
-                "norm_func_reco": self.norm_func_reco,
-                "norm_func_recall": self.norm_func_recall,
-            }
-            self.title = (
-                "<font size=18><b>{0} report: </b>{1}"
-                "</font>".format(
-                    self.dict4runtime["norm_anat"]["PatientName"],
-                    today_date.split(" ")[0],
-                )
-            )
-
-            self.header_title = (
-                "<font size=30><b>GE2REC - Langage et " "mémoire</b></font>"
-            )
-            infos = [
-                self.dict4runtime["norm_anat"][i]
-                for i in (
-                    "Site",
-                    "Spectro",
-                    "StudyName",
-                    "AcquisitionDate",
-                    "Sex",
-                    "Age",
-                    "Pathology",
-                    "LateralizationPathology",
-                    "DominantHand",
-                )
-            ]
-
-            headers = [
-                "SITE",
-                "MRI SCANNER",
-                "STUDY NAME",
-                "EXAMINATION DATE",
-                "PATIENT SEX",
-                "PATIENT AGE",
-                "PATHOLOGY",
-                "LATERALIZATION PATHOLOGY",
-                "DOMINANT HAND",
                 "SOFTWARES",
             ]
 
@@ -498,74 +554,6 @@ class Report:
 
         # Canvas creation
         self.report = []
-
-    def get_iqms_data(self, param):
-        """Get iqms data"""
-
-        if self.iqms_data.get(param) is None:
-            if self.dict4runtime["extra_info"][param][2] is None:
-                return Paragraph(
-                    "<font size = 11> <b> "
-                    + self.dict4runtime["extra_info"][param][0]
-                    + " </b> </font>: Not determined",
-                    self.styles["Bullet2"],
-                )
-            else:
-                return Paragraph(
-                    "<font size = 9><sup>"
-                    + self.dict4runtime["extra_info"][param][2]
-                    + "</sup></font><font size = 11><b>"
-                    + self.dict4runtime["extra_info"][param][0]
-                    + "</b></font>: Not determined",
-                    self.styles["Bullet2"],
-                )
-
-        else:
-            if self.dict4runtime["extra_info"][param][2] is None:
-                return Paragraph(
-                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
-                        self.dict4runtime["extra_info"][param][0],
-                        (
-                            str(
-                                round(
-                                    self.iqms_data.get(param),
-                                    self.dict4runtime["extra_info"][param][1],
-                                )
-                            )
-                            if isinstance(
-                                self.dict4runtime["extra_info"][param][1], int
-                            )
-                            else self.dict4runtime["extra_info"][param][
-                                1
-                            ].format(self.iqms_data[param])
-                        ),
-                    ),
-                    self.styles["Bullet2"],
-                )
-
-            else:
-                return Paragraph(
-                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
-                    "{1}</b></font>: {2}".format(
-                        self.dict4runtime["extra_info"][param][2],
-                        self.dict4runtime["extra_info"][param][0],
-                        (
-                            str(
-                                round(
-                                    self.iqms_data.get(param),
-                                    self.dict4runtime["extra_info"][param][1],
-                                )
-                            )
-                            if isinstance(
-                                self.dict4runtime["extra_info"][param][1], int
-                            )
-                            else self.dict4runtime["extra_info"][param][
-                                1
-                            ].format(self.iqms_data[param])
-                        ),
-                    ),
-                    self.styles["Bullet2"],
-                )
 
     def co2_inhal_cvr_make_report(self):
         """Make CVR under CO2 challenge report"""
@@ -3549,6 +3537,74 @@ class Report:
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 
+    def get_iqms_data(self, param):
+        """Get iqms data"""
+
+        if self.iqms_data.get(param) is None:
+            if self.dict4runtime["extra_info"][param][2] is None:
+                return Paragraph(
+                    "<font size = 11> <b> "
+                    + self.dict4runtime["extra_info"][param][0]
+                    + " </b> </font>: Not determined",
+                    self.styles["Bullet2"],
+                )
+            else:
+                return Paragraph(
+                    "<font size = 9><sup>"
+                    + self.dict4runtime["extra_info"][param][2]
+                    + "</sup></font><font size = 11><b>"
+                    + self.dict4runtime["extra_info"][param][0]
+                    + "</b></font>: Not determined",
+                    self.styles["Bullet2"],
+                )
+
+        else:
+            if self.dict4runtime["extra_info"][param][2] is None:
+                return Paragraph(
+                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
+                        self.dict4runtime["extra_info"][param][0],
+                        (
+                            str(
+                                round(
+                                    self.iqms_data.get(param),
+                                    self.dict4runtime["extra_info"][param][1],
+                                )
+                            )
+                            if isinstance(
+                                self.dict4runtime["extra_info"][param][1], int
+                            )
+                            else self.dict4runtime["extra_info"][param][
+                                1
+                            ].format(self.iqms_data[param])
+                        ),
+                    ),
+                    self.styles["Bullet2"],
+                )
+
+            else:
+                return Paragraph(
+                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
+                    "{1}</b></font>: {2}".format(
+                        self.dict4runtime["extra_info"][param][2],
+                        self.dict4runtime["extra_info"][param][0],
+                        (
+                            str(
+                                round(
+                                    self.iqms_data.get(param),
+                                    self.dict4runtime["extra_info"][param][1],
+                                )
+                            )
+                            if isinstance(
+                                self.dict4runtime["extra_info"][param][1], int
+                            )
+                            else self.dict4runtime["extra_info"][param][
+                                1
+                            ].format(self.iqms_data[param])
+                        ),
+                    ),
+                    self.styles["Bullet2"],
+                )
+
     def mriqc_anat_make_report(
         self,
     ):
@@ -5389,6 +5445,32 @@ class Report:
             self.report.append(table)
             self.report.append(PageBreak())
 
+        self.report.append(PageBreak())
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+
+    def perf_dsc_make_report(self):
+        """Make DSC MR perfusion report"""
+
+        # page 1 - cover ##################################################
+        ###################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 18 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
         self.report.append(PageBreak())
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
