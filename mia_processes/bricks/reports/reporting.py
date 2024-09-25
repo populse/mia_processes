@@ -3634,6 +3634,7 @@ class ReportPerfDsc(ProcessMIA):
         )
         db_file_norm_anat = self.norm_anat[file_position:]
         db_file_norm_func = self.norm_func[file_position:]
+        db_file_CBV_image = self.CBV_image[file_position:]
         # TODO: Do we need to explicitly take the smoothed func as input,
         #       or can we simply add the prefix 's' to the normalized func?
         folder, fil = os.path.split(db_file_norm_func)
@@ -3704,11 +3705,18 @@ class ReportPerfDsc(ProcessMIA):
             db_file_smooth_norm_func,
             "FWHM (X, Y, Z) for Smooth",
         )
+        self.dict4runtime["CBV_image"] = {}
+        dict4runtime_update(
+            self.dict4runtime["CBV_image"],
+            self.project.session,
+            db_file_CBV_image,
+            "Perf Normalisation Factor",
+        )
         # FIXME: the data should be anonymized and we should use PatientRef
         #        instead of PatientName !
         if self.dict4runtime["norm_anat"]["PatientName"] == "Undefined":
             print(
-                "\nReportPerfDscbrick:\nThe tags PatientName was not "
+                "\nReportPerfDsc brick:\nThe PatientName tags was not "
                 "found in the database for the {} file...\n The "
                 "initialization is aborted...".format(db_file_norm_anat)
             )

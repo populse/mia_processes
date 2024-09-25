@@ -889,9 +889,42 @@ class Deconv_from_aif(ProcessMIA):
                 return self.make_initResult()
 
             if self.outputs:
+                all_tags_to_add = []
+                # Add the normalisation factor, in database
+                tag_to_add = dict()
+                tag_to_add["name"] = "Perf Normalisation Factor"
 
-                for out_name in self.outputs.values():
-                    self.tags_inheritance(self.func_file, out_name)
+                if isinstance(self.perf_normalisation, (int, float)):
+                    norm_type = "float"
+
+                else:
+                    norm_type = "string"
+                    self.perf_normalisation = "no_normalisation"
+
+                tag_to_add["field_type"] = norm_type
+                tag_to_add["description"] = (
+                    "The normalization factor used for CBF and CBV"
+                )
+                tag_to_add["visibility"] = True
+                tag_to_add["origin"] = "user"
+                tag_to_add["unit"] = ""
+                tag_to_add["default_value"] = None
+                tag_to_add["value"] = self.perf_normalisation
+                all_tags_to_add.append(tag_to_add)
+
+                for out_k in self.outputs:
+
+                    if out_k in ("CBV_image", "CBF_image"):
+                        self.tags_inheritance(
+                            self.func_file,
+                            self.outputs[out_k],
+                            own_tags=all_tags_to_add,
+                        )
+
+                    else:
+                        self.tags_inheritance(
+                            self.func_file, self.outputs[out_k]
+                        )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

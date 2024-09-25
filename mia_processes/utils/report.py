@@ -5473,4 +5473,633 @@ class Report:
         )
         self.report.append(PageBreak())
 
+        # page 2 - Anatomical MRI - Acq & Post-pro parameters############
+        #################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b> Anatomical MRI <br/></b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=15 ><b>Acquisition parameters:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        acq_num = self.dict4runtime["norm_anat"]["AcquisitionNumber"]
+
+        if isinstance(acq_num, list):
+            acq_num = acq_num[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Protocol name / Acquisition nbr: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
+                f"{acq_num}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Acquisition mode</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Sequence name: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['SequenceName']}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Raw geometry parameters</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        d_dim = self.dict4runtime["norm_anat"][
+            "Dataset dimensions (Count, X,Y,Z,T...)"
+        ]
+
+        if isinstance(d_dim, list):
+            d_dim = d_dim[1:]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Dataset dimension:</b> "
+                f"</font> {d_dim}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_anat"]["FOV"]
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        if isinstance(fov, list):
+            fov = " / ".join(map(str, fov))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11><b> FOV (ap / fh / rl) [mm]:</b></font> "
+                f"{fov}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        num_sli = self.dict4runtime["norm_anat"]["MaxNumOfSlices"]
+
+        if isinstance(num_sli, list):
+            num_sli = num_sli[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Number of slices:</b> "
+                f"</font> {num_sli}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
+        sl_gap = self.dict4runtime["norm_anat"]["SliceGap"]
+
+        if isinstance(sl_thick, list):
+            sl_thick = sl_thick[0]
+
+        if isinstance(sl_gap, list):
+            sl_gap = sl_gap[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {sl_gap}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_res = self.dict4runtime["norm_anat"]["ScanResolution"]
+
+        if isinstance(scan_res, list):
+            scan_res = " / ".join(map(str, scan_res))
+
+        self.report.append(
+            Paragraph(
+                "<font size=11><b> Scan resolution  (x / y):</b></font> "
+                f"{scan_res}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_anat"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        if isinstance(vox_size, list):
+            vox_size = " / ".join(map(str, vox_size))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
+                f"</b> </font> {vox_size}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Other parameters" "</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_anat"]["RepetitionTime"]
+        te = self.dict4runtime["norm_anat"]["EchoTime"]
+        flipang = self.dict4runtime["norm_anat"]["FlipAngle"]
+
+        if isinstance(flipang, list):
+            flipang = round(flipang[0], 1)
+
+        if isinstance(te, list):
+            te = round(te[0], 1)
+
+        if isinstance(tr, list):
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        if len(d_dim) == 3:
+            dyn_nb = 1
+
+        elif len(d_dim) == 4:
+            dyn_nb = d_dim[-1]
+
+        else:
+            # TODO: What do we do for 5D. Here if d_dim == "Undefined" or if
+            #       d_dim > 4, then dyn_nb = "Undefined"
+            dyn_nb = "Undefined"
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Number of dynamics:</b> "
+                f"</font> {dyn_nb}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_dur = self.dict4runtime["norm_anat"]["ScanDuration"]
+
+        if isinstance(scan_dur, list):
+            scan_dur = scan_dur[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Acquisition duration [s]:</b> "
+                f"</font> {scan_dur}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=15 > <b> Post-processing:<br /> </b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Spatial processing</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the normalization in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b> Spatial normalization:</b> </font> Y",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        brain_templ = self.dict4runtime["norm_anat"][
+            "Affine regularization type"
+        ]
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Brain template:"
+                f"</b> </font> {brain_templ}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        f_vox_size = self.dict4runtime["norm_anat"]["Voxel sizes"]
+
+        if all(isinstance(elt, (int, float)) for elt in f_vox_size):
+            f_vox_size = [round(elt, 1) for elt in f_vox_size]
+
+        if isinstance(f_vox_size, list):
+            f_vox_size = " / ".join(map(str, f_vox_size))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Final voxel size "
+                f"(x / y / z) [mm]:</b> "
+                f"</font> {f_vox_size}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the segmentation in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b> Segmentation:</b>"
+                " </font> Grey matter, white matter, "
+                "cerebrospinal fluid, bone, soft tissues",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(PageBreak())
+
+        # page 3 - Anatomical MRI - slice planes mosaic display ###########
+        ###################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=15 > <b>MNI normalized axial anatomical "
+                "images:</b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 4 - fmri-cvr MRI Acq & Post-pro parameters##############
+        ###############################################################
+        self.report.append(
+            Paragraph(
+                "<font size=18 ><b>Dynamic Susceptibility Contrast "
+                "Perfusion MRI<br/></b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=15 ><b>Acquisition parameters:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        acq_num = self.dict4runtime["norm_func"]["AcquisitionNumber"]
+
+        if isinstance(acq_num, list):
+            acq_num = acq_num[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Protocol name / Acquisition nbr: "
+                f"</b> </font> "
+                f"{self.dict4runtime['norm_func']['ProtocolName']} / "
+                f"{acq_num}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Acquisition mode</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Sequence name: </b> </font> "
+                f"{self.dict4runtime['norm_func']['SequenceName']}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Raw geometry parameters</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        d_dim = self.dict4runtime["norm_func"][
+            "Dataset dimensions (Count, X,Y,Z,T...)"
+        ]
+
+        if isinstance(d_dim, list):
+            d_dim = d_dim[1:]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Dataset dimension:</b> "
+                f"</font> {d_dim}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func"]["FOV"]
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        if isinstance(fov, list):
+            fov = " / ".join(map(str, fov))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11><b> FOV (ap / fh / rl) [mm]:</b></font> "
+                f"{fov}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        num_sli = self.dict4runtime["norm_func"]["MaxNumOfSlices"]
+
+        if isinstance(num_sli, list):
+            num_sli = num_sli[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Number of slices:</b> "
+                f"</font> {num_sli}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func"]["SliceThickness"]
+        sl_gap = self.dict4runtime["norm_func"]["SliceGap"]
+
+        if isinstance(sl_thick, list):
+            sl_thick = sl_thick[0]
+
+        if isinstance(sl_gap, list):
+            sl_gap = sl_gap[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {sl_gap}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_res = self.dict4runtime["norm_func"]["ScanResolution"]
+
+        if isinstance(scan_res, list):
+            scan_res = " / ".join(map(str, scan_res))
+
+        self.report.append(
+            Paragraph(
+                "<font size=11><b> Scan resolution  (x / y):</b></font> "
+                f"{scan_res}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        raw_func_vox_size_orig = self.dict4runtime["norm_func"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+        if all(
+            isinstance(elt, (int, float)) for elt in raw_func_vox_size_orig
+        ):
+            raw_func_vox_size = [
+                round(elt, 1) for elt in raw_func_vox_size_orig
+            ]
+
+        if isinstance(raw_func_vox_size, list):
+            raw_func_vox_size = " / ".join(map(str, raw_func_vox_size))
+
+        else:
+            raw_func_vox_size = "Undefined"
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:</b> "
+                f"</font> {raw_func_vox_size} ",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Other parameters" "</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func"]["FlipAngle"]
+
+        if isinstance(flipang, list):
+            flipang = round(flipang[0], 1)
+
+        if isinstance(te, list):
+            te = round(te[0], 1)
+
+        if isinstance(tr, list):
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        if len(d_dim) == 3:
+            dyn_nb = 1
+
+        elif len(d_dim) == 4:
+            dyn_nb = d_dim[-1]
+
+        else:
+            # TODO: What do we do for 5D. Here if d_dim == "Undefined" or if
+            #       d_dim > 4, then dyn_nb = "Undefined"
+            dyn_nb = "Undefined"
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Number of dynamics:</b> "
+                f"</font> {dyn_nb}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        scan_dur = self.dict4runtime["norm_func"]["ScanDuration"]
+
+        if isinstance(scan_dur, list):
+            scan_dur = scan_dur[0]
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Acquisition duration [s]:</b> "
+                f"</font> {scan_dur}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=15 > <b> Post-processing:<br /> </b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Spatial processing</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the normalization in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b> Spatial normalization:</b> </font> Y",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        brain_templ = self.dict4runtime["norm_func"][
+            "Affine regularization type"
+        ]
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Brain template:"
+                f"</b> </font> {brain_templ}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        f_vox_size = self.dict4runtime["norm_func"]["Voxel sizes"]
+
+        if all(isinstance(elt, (int, float)) for elt in f_vox_size):
+            f_vox_size = [round(elt, 1) for elt in f_vox_size]
+
+        if isinstance(f_vox_size, list):
+            f_vox_size = " / ".join(map(str, f_vox_size))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> Voxel size after normalization "
+                f"(x / z / y) [mm]:</b> "
+                f"</font> {f_vox_size}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fwhm = self.dict4runtime["smooth_norm_func"][
+            "FWHM (X, Y, Z) for Smooth"
+        ]
+
+        if all(isinstance(elt, (int, float)) for elt in fwhm):
+            fwhm = [round(elt, 1) for elt in fwhm]
+
+        if isinstance(fwhm, list):
+            fwhm = " / ".join(map(str, fwhm))
+
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b>Spatial smoothing "
+                f"(fwhm) [mm]:</b> </font> {fwhm}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b>Analysis</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: Technique is currently hard-coded, we only use AIF
+        #      deconvolution.
+        self.report.append(
+            Paragraph(
+                "<font size=11> <b> Technique:</b> </font> "
+                "deconvolution of the AIF",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        pnf = self.dict4runtime["CBV_image"]["Perf Normalisation Factor"]
+        self.report.append(
+            Paragraph(
+                f"<font size=11> <b> CBV normalization [mL/100g]:</b> </font> "
+                f"{pnf}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(PageBreak())
+
         self.page.build(self.report, canvasmaker=PageNumCanvas)
+        tmpdir.cleanup()
