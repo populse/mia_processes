@@ -60,7 +60,7 @@ class Bet(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Bet, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -634,7 +634,7 @@ class BetSurfacesExtraction(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(BetSurfacesExtraction, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -885,7 +885,7 @@ class ConvertXFM(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ConvertXFM, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -998,7 +998,7 @@ class ConvertXFM(ProcessMIA):
                 print(
                     "Initisalisation failed.."
                     "fix_scale_skew, concat_xfm, invert_xfm parameters are "
-                    "mutually esclusive"
+                    "mutually exclusive"
                 )
                 return
             if (self.fix_scale_skew or self.concat_xfm) and (
@@ -1084,7 +1084,7 @@ class EpiReg(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(EpiReg, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -1497,7 +1497,7 @@ class ExtractROI(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ExtractROI, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -1743,7 +1743,7 @@ class FastSegment(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(FastSegment, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -1979,7 +1979,7 @@ class Flirt(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Flirt, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description
@@ -2784,7 +2784,7 @@ class Smooth(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Smooth, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
 
         # Mandatory inputs description

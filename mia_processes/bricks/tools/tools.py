@@ -299,7 +299,7 @@ class Deconv_from_aif(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Deconv_from_aif, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -1148,7 +1148,7 @@ class Delete_data(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Delete_data, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -1292,7 +1292,7 @@ class Files_To_List(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Files_To_List, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -1404,7 +1404,7 @@ class Filter_Files_List(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Filter_Files_List, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -1649,7 +1649,7 @@ class Get_Conditions_From_csv(ProcessMIA):
         )
         design_type_desc = (
             "Type of design for each session (List of string among "
-            "bloc or event-related)."
+            "block or event-related)."
         )
 
         # Outputs description
@@ -1671,7 +1671,7 @@ class Get_Conditions_From_csv(ProcessMIA):
         self.add_trait(
             "design_type",
             traits.List(
-                traits.Enum("bloc", "event-related"),
+                traits.Enum("block", "event-related"),
                 output=False,
                 optional=True,
                 desc=design_type_desc,
@@ -1761,7 +1761,7 @@ class Get_Conditions_From_csv(ProcessMIA):
             # Get infos into csv
             df = pd.read_csv(csv_file)
             col_names = list(df.columns)
-            if design == "bloc":
+            if design == "block":
                 cond_names = []
                 for col_name in col_names:
                     if "duration" not in col_name:
@@ -1784,7 +1784,7 @@ class Get_Conditions_From_csv(ProcessMIA):
                 if design == "event-related":
                     cond_onsets.append(df.loc[:, name].tolist())
                     cond_durations.append([0])
-                elif design == "bloc":
+                elif design == "block":
                     cond_onsets.append(df.loc[:, name].tolist())
                     cond_durations.append(
                         df.loc[:, name + " duration"].tolist()
@@ -1846,7 +1846,7 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
         csv_encodage_reco_desc = "CSV file with Encoding performance "
         csv_correct_response_desc = "CSV file with correct responses"
         sess_regress_level1design_desc = (
-            "Informations for sess_regress (level1design brick)"
+            "Information for sess_regress (level1design brick)"
         )
 
         # Input traits
@@ -1948,7 +1948,7 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
                 # df_recall = pd.read_excel(self.eprime_file,
                 # sheet_name="RAPPEL")
 
-                # # Get onset time in second for generation task (bloc design)
+                # # Get onset time in second for generation task (block design)
                 # zero = df_gene["SON.OnsetTime"].dropna().to_list()[0]
                 # onset_gene_eprime = (
                 #     df_gene[df_gene["CONDITION"] == "task"]["SON.OnsetTime"]
@@ -1957,7 +1957,7 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
                 # )
                 # onset_gene = []
                 # for i, time in enumerate(onset_gene_eprime):
-                #     # block design, take only the first onset of the bloc
+                #     # block design, take only the first onset of the block
                 #     if i in [0, 8, 16, 24, 32]:
                 #         onset_gene.append((time - zero) / 1000)
                 # onset_ctrl_eprime = (
@@ -2018,16 +2018,16 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
 
                 # Get encodage regressor from reco
                 # Create a dataframe with only the OLD condition
-                # And get encodage, if good anwser = 2 and if not encodage = 1
+                # And get encodage, if good answer = 2 and if not encodage = 1
                 df_old = df_reco[df_reco["CONDITION"] == "OLD"]
                 info_responses = df_old[
-                    ["IMAGE", "REPONSE", "image.RESP"]
+                    ["IMAGE", "RESPONSE", "image.RESP"]
                 ].to_dict("records")
                 encodage_old = []
                 good_response_old = 0
                 bad_response_old = 0
                 for i, info in enumerate(info_responses):
-                    if info["image.RESP"] == info["REPONSE"]:
+                    if info["image.RESP"] == info["RESPONSE"]:
                         encodage_old.append(2)
                         good_response_old += 1
                     else:
@@ -2085,12 +2085,12 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
                 # Get correct response / error for NEW condition
                 df_new = df_reco[df_reco["CONDITION"] == "NEW"]
                 info_responses = df_new[
-                    ["IMAGE", "REPONSE", "image.RESP"]
+                    ["IMAGE", "RESPONSE", "image.RESP"]
                 ].to_dict("records")
                 good_response_new = 0
                 bad_response_new = 0
                 for i, info in enumerate(info_responses):
-                    if info["image.RESP"] == info["REPONSE"]:
+                    if info["image.RESP"] == info["RESPONSE"]:
                         good_response_new += 1
                     else:
                         # bad response or no response
@@ -2250,7 +2250,7 @@ class Get_Regressors_From_csv(ProcessMIA):
         )
 
         # Outputs description
-        sess_regress_level1design_desc = "Informations for sess_regress"
+        sess_regress_level1design_desc = "Information for sess_regress"
 
         # Input traits
         self.add_trait(
@@ -2598,7 +2598,7 @@ class Input_Filter(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Input_Filter, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -2753,7 +2753,7 @@ class List_Duplicate(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(List_Duplicate, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -2833,7 +2833,7 @@ class List_To_File(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(List_To_File, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -2939,7 +2939,7 @@ class Make_AIF(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Make_AIF, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -3375,7 +3375,7 @@ class Make_A_List(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Make_A_List, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -3476,7 +3476,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Make_CVR_reg_physio, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
 
         # Inputs description
@@ -3907,7 +3907,7 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                             # Fix typos in magdata-provided field names
                             paramnames = [
-                                name.replace("Satus", "Status")
+                                name.replace("Status", "Status")
                                 for name in paramnames
                             ]
                             n_params = len(paramnames)

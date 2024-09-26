@@ -53,7 +53,7 @@ class AssemblyNetDocker(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(AssemblyNetDocker, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         # TODO: add requirement (docker needed)
 
         # Mandatory inputs description
@@ -207,7 +207,7 @@ class AssemblyNetDocker(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(AssemblyNetDocker, self).list_outputs()
 
-        # Check docker availibility
+        # Check docker availability
         # This is a patch pending modification of the requirements check
         # at initialisation time. Currently, initialisation will fail,
         # but the user will not be informed why
@@ -418,7 +418,7 @@ class GetLabels(ProcessMIA):
         """
         # Initialisation of the objects needed for the launch of the brick
         super(GetLabels, self).__init__()
-        # Optional inputs decription
+        # Optional inputs description
         tissues_desc = "Get labels for tissues (a boolean)"
         structures_desc = "Get labels for structures (a boolean)"
         lobes_desc = "Get labels for lobes (a boolean)"
@@ -485,7 +485,7 @@ class GetLabels(ProcessMIA):
         self.outputs["names"] = []
 
         if self.outputs:
-            self.outputs["notInDb"] = ["lables", "names"]
+            self.outputs["notInDb"] = ["labels", "names"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -535,7 +535,7 @@ class LabelsCorrespondence(ProcessMIA):
             "List of labels or names  for which the corresponding "
             "name / label is wanted (a list of int)"
         )
-        # Optional inputs decription
+        # Optional inputs description
         tissues_desc = "Get labels for tissues (a boolean)"
         structures_desc = "Get labels for structures (a boolean)"
         lobes_desc = "Get labels for lobes (a boolean)"

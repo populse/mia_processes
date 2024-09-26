@@ -63,7 +63,7 @@ class Denoise(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Denoise, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype"]
 
         # Mandatory inputs description
@@ -261,7 +261,7 @@ class ComputeDKI(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ComputeDKI, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         # self.requirement = ["nipype"]
 
         # Mandatory inputs description

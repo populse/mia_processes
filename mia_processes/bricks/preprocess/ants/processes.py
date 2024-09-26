@@ -71,7 +71,7 @@ class AffineInitializer(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(AffineInitializer, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
 
         # Mandatory inputs description
@@ -268,7 +268,7 @@ class ApplyTransforms(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ApplyTransforms, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
 
         # Mandatory inputs description
@@ -553,7 +553,7 @@ class N4BiasFieldCorrection(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(N4BiasFieldCorrection, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
 
         # Mandatory inputs description
@@ -633,7 +633,7 @@ class N4BiasFieldCorrection(ProcessMIA):
             "in_file", File(output=False, optional=False, desc=in_file_desc)
         )
 
-        # Optional inputs whith default value traits
+        # Optional inputs with default value traits
         self.add_trait(
             "copy_header",
             Bool(True, output=False, optional=True, desc=copy_header_desc),
@@ -928,7 +928,7 @@ class Registration(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Registration, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
 
         # Mandatory inputs description
@@ -942,7 +942,7 @@ class Registration(ProcessMIA):
             "of the fixed image (a pathlike object"
             "or string representing an existing file)."
         )
-        # Optional inputs  whith default value description
+        # Optional inputs with default value description
         collapse_output_transforms_desc = (
             "Collapse output transforms (a boolean). Default is True"
         )
@@ -994,7 +994,7 @@ class Registration(ProcessMIA):
             "(a string)."
         )
         radius_bins_item_trait_desc = (
-            "Radius bins item (an interger). Default is 5"
+            "Radius bins item (an integer). Default is 5"
         )
         sigma_units_desc = (
             "Units for smoothing sigmas (mm or vox). "
@@ -1814,7 +1814,7 @@ class Registration(ProcessMIA):
         self.process.winsorize_lower_quantile = self.winsorize_lower_quantile
         self.process.winsorize_upper_quantile = self.winsorize_upper_quantile
 
-        # Ouput flags
+        # Output flags
         if self.output_inverse_warped_image:
             self.process.output_inverse_warped_image = (
                 self.inverse_warped_image

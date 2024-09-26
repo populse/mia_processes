@@ -3,9 +3,9 @@
 
 The purpose of this module is to add bricks that wrap MATLAB
 scripts using Nipype.
-Thoses bricks requires an exclusive Matlab license.
+Those bricks requires an exclusive Matlab license.
 
-The matlab script should be added in the folder "matlab_wrap/sripts"
+The matlab script should be added in the folder "matlab_wrap/scripts"
 """
 
 import os
@@ -45,7 +45,7 @@ class ComputeBrainVolume(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ComputeBrainVolume, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "matlab"]
         # Matlab standalone is not working to launch Matlab script
         # TODO: add a way to check that matlab with
@@ -121,7 +121,7 @@ class ComputeBrainVolume(ProcessMIA):
                 os.environ["MATLABCMD"] = matlab_path
         tmp_dir = tempfile.TemporaryDirectory()
 
-        # Specif pre-processing for this script
+        # Specify pre-processing for this script
         valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
         image_mat = os.path.join(tmp_dir.name, file_name + ".mat")
         data = nb.load(self.in_file).get_fdata()
@@ -156,8 +156,8 @@ class ComputeBrainVolume(ProcessMIA):
 
         # Get outputs using result.runtime.stdout
         expr_reg = r"total\s*=\s*(\d+)"
-        correspondance = re.search(expr_reg, result.runtime.stdout)
-        self.volume = int(correspondance.group(1))
+        correspondence = re.search(expr_reg, result.runtime.stdout)
+        self.volume = int(correspondence.group(1))
 
         # Clean tmp directory
         tmp_dir.cleanup()

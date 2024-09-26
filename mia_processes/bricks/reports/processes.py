@@ -160,7 +160,7 @@ class AnatIQMs(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(AnatIQMs, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -667,7 +667,7 @@ class BoldIQMs(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(BoldIQMs, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1093,7 +1093,7 @@ class BoldIQMsPlot(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(BoldIQMsPlot, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1293,7 +1293,7 @@ class CarpetParcellation(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(CarpetParcellation, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1458,7 +1458,7 @@ class ComputeDVARS(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ComputeDVARS, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1722,7 +1722,7 @@ class FramewiseDisplacement(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(FramewiseDisplacement, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1905,7 +1905,7 @@ class LateralizationIndexCurve(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(LateralizationIndexCurve, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2374,7 +2374,7 @@ class PlotSignalROI(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(PlotSignalROI, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2397,7 +2397,7 @@ class PlotSignalROI(ProcessMIA):
             "Extracted signal for each ROI in a csv file "
             "(a pathlike object or string representing a file)"
         )
-        suffix_desc = "Suffix for outout file ( string)"
+        suffix_desc = "Suffix for output file ( string)"
 
         # Outputs description
         out_png_desc = (
@@ -3203,7 +3203,7 @@ class Spikes(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Spikes, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -3386,7 +3386,7 @@ def art_qi1(airmask, artmask):
     r"""
     Detect artifacts in the image using the method described in [Mortamet2009].
 
-    Caculates :math:`\text{QI}_1`, as the proportion of voxels with intensity
+    Calculates :math:`\text{QI}_1`, as the proportion of voxels with intensity
     corrupted by artifacts normalized by the number of voxels in the
     background:
 
@@ -3795,7 +3795,7 @@ def lateralization_index_iter_curves(
         if nvoxl < min_nb_voxel or nvoxr < min_nb_voxel:
             print(
                 f"WARNING, number of voxel for threshold {thr} "
-                "is below the required minium, abort iteration"
+                "is below the required minimum, abort iteration"
             )
             break
         # Check if there is at least one cluster > min_cluster_size
@@ -3818,7 +3818,7 @@ def lateralization_index_iter_curves(
         if cluster_left == 0 or cluster_right == 0:
             print(
                 f"WARNING, cluster size for threshold {thr} "
-                "is below the required minium, abort iteration"
+                "is below the required minimum, abort iteration"
             )
             break
 

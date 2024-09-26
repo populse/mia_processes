@@ -80,7 +80,7 @@ class EstimateContrast(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(EstimateContrast, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -110,7 +110,7 @@ class EstimateContrast(ProcessMIA):
             "Mutually exclusive group_contrast parameter."
         )
         group_contrast_desc = (
-            "Higher level contrast. Mutually exclusive use_derivs prameter."
+            "Higher level contrast. Mutually exclusive use_derivs parameter."
         )
 
         # Outputs description
@@ -612,7 +612,7 @@ class EstimateModel(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(EstimateModel, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1297,7 +1297,7 @@ class Level1Design(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Level1Design, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1351,7 +1351,7 @@ class Level1Design(ProcessMIA):
         )
         sess_cond_pmod_values_desc = (
             "The values used for the parametric "
-            "modulation, one for each occurence of "
+            "modulation, one for each occurrence of "
             "the event (a list of items which are a "
             "list of items which are a list of items "
             "which are a list of items which are a "
@@ -1825,7 +1825,7 @@ class Level1Design(ProcessMIA):
                 "sess_cond_durations parameter does not correspond to "
                 "the number of values in the sess_cond_onsets "
                 "parameter, for the session '{0}' and the "
-                "condition '{1}'! Pease, check your "
+                "condition '{1}'! Please, check your "
                 "settings ...".format(idx_session, cond["name"])
             )
             msg.setStandardButtons(QMessageBox.Close)
@@ -1902,7 +1902,7 @@ class Level1Design(ProcessMIA):
     def _get_session_info(self, idx_session):
         """Generate the session_info parameter for each session.
 
-        The 'session_info' dictonary is equivalent to the 'sess'
+        The 'session_info' dictionary is equivalent to the 'sess'
         structure array spm parameter, for each session. It therefore includes
         the 'scans', 'cond', 'multi', 'regress', 'multi_reg' and 'hpf' keys,
         like for the 'sess' parameter of spm.
@@ -2349,7 +2349,7 @@ class MultipleRegressionDesign(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MultipleRegressionDesign, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -2358,7 +2358,7 @@ class MultipleRegressionDesign(ProcessMIA):
             "string representing an existing file)"
         )
         out_dir_name_desc = "Name of the output directory"
-        include_intercept_desc = "Include intercept in design. (a bolean)"
+        include_intercept_desc = "Include intercept in design. (a boolean)"
         user_covariates_vectors_desc = (
             "Covariates vector (a list of list of float)"
         )
@@ -2660,7 +2660,7 @@ class MultipleRegressionDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # Check in_files lenght
+        # Check in_files length
         if len(self.in_files) < 2:
             print(
                 "MultipleRegressionDesign brick: Initialization failed...\n"
@@ -2799,7 +2799,7 @@ class OneSampleTTestDesign(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(OneSampleTTestDesign, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -3059,7 +3059,7 @@ class OneSampleTTestDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # Check in_files lenght
+        # Check in_files length
         if len(self.in_files) < 2:
             print(
                 "OneSampleTTestDesign brick: Initialization failed... "
@@ -3171,7 +3171,7 @@ class PairedTTestDesign(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(PairedTTestDesign, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -3422,7 +3422,7 @@ class PairedTTestDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # If threshold_masking set to Absoulte or Relative
+        # If threshold_masking set to Absolute or Relative
         # threshold_mask_value should be specified
         if (
             self.threshold_masking == "Relative"
@@ -3435,7 +3435,7 @@ class PairedTTestDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # Check in_files lenght
+        # Check in_files length
         if len(self.paired_files[0]) < 2:
             print(
                 "PairedTTestDesign brick: Initialization failed... "
@@ -3547,7 +3547,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TwoSampleTTestDesign, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -3561,7 +3561,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         )
         out_dir_name_desc = "Name of the output directory"
         independence_desc = (
-            "Independence of the measurments between levels (a boolean)"
+            "Independence of the measurements between levels (a boolean)"
         )
         unequal_variance_desc = (
             "Are the variaces equal or unequal between groups ? (a boolean)"
@@ -3833,7 +3833,7 @@ class TwoSampleTTestDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # If threshold_masking set to Absoulte or Relative
+        # If threshold_masking set to Absolute or Relative
         # threshold_mask_value should be specified
         if (
             self.threshold_masking == "Relative"
@@ -3846,7 +3846,7 @@ class TwoSampleTTestDesign(ProcessMIA):
             )
             return self.make_initResult()
 
-        # Check in_files lenght
+        # Check in_files length
         if (len(self.group1_files) < 2) or (len(self.group2_files) < 2):
             print(
                 "TwoSampleTTestDesign brick: Initialization failed... "

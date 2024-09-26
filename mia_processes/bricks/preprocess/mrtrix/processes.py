@@ -87,7 +87,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ConstrainedSphericalDeconvolution, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -108,7 +108,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "GM response text file."
             "(a pathlike object or string representing an existing file)"
         )
-        algorithm_desc = "FOD alogorithm (csd or msmt_csd)"
+        algorithm_desc = "FOD algorithm (csd or msmt_csd)"
         in_directions_desc = (
             "Specify the directions over which to apply the non-negativity "
             "constraint (by default, the built-in 300 direction set is used)."
@@ -158,7 +158,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "wm_txt", File(output=False, optional=False, desc=wm_txt_desc)
         )
 
-        # Optionnal inouts traits
+        # Optional inputs traits
         self.add_trait(
             "gm_txt", File(output=False, optional=True, desc=gm_txt_desc)
         )
@@ -217,7 +217,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             ),
         )
 
-        # Ouputs traits
+        # Outputs traits
         self.add_trait(
             "csf_odf", File(output=True, optional=True, desc=csf_odf_desc)
         )
@@ -347,7 +347,7 @@ class DWIBiasCorrect(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWIBiasCorrect, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         # FIXME : ants and fsl in the requirement even if we use only
         # one of them
         self.requirement = ["nipype", "mrtrix", "ants", "fsl"]
@@ -357,7 +357,7 @@ class DWIBiasCorrect(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         use_fsl_desc = (
             "Use FSL FAST to estimate the inhomogeneity field. (a boolean)"
         )
@@ -527,7 +527,7 @@ class DWIBrainMask(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWIBrainMask, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -619,7 +619,7 @@ class DWICat(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWICat, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["mrtrix"]
 
         # Mandatory inputs description
@@ -748,7 +748,7 @@ class DWIDenoise(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWIDenoise, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -756,7 +756,7 @@ class DWIDenoise(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         extend_desc = (
             "Set the window size of the denoising filter. "
             " (a tuple of the form: (an integer, an integer, an integer), "
@@ -908,7 +908,7 @@ class DWIExtract(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWIExtract, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -1070,7 +1070,7 @@ class DWIPreproc(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(DWIPreproc, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix", "fsl"]
 
         # Mandatory inputs description
@@ -1086,7 +1086,7 @@ class DWIPreproc(ProcessMIA):
             "for phase-encoding information can be found in the image "
             "header(s). (none or pair or all or header) "
         )
-        # Optionnal inputs description
+        # Optional inputs description
         align_seepi_desc = (
             "Achieve alignment between the SE-EPI images used for "
             "inhomogeneity field estimation, and the DWIs (a boolean)"
@@ -1158,7 +1158,7 @@ class DWIPreproc(ProcessMIA):
             ),
         )
 
-        # Optionnal inputs traits
+        # Optional inputs traits
         self.add_trait(
             "se_epi_corr",
             File(output=False, optional=True, desc=se_epi_corr_desc),
@@ -1377,7 +1377,7 @@ class EditingTrack(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(EditingTrack, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["mrtrix"]
 
         # Mandatory inputs description
@@ -1749,7 +1749,7 @@ class FilteringTrack(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(FilteringTrack, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["mrtrix"]
 
         # Mandatory inputs description
@@ -2145,7 +2145,7 @@ class FitTensor(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(FitTensor, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Nipype FitTransform process is not up to date for some option
@@ -2156,7 +2156,7 @@ class FitTensor(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs traits
+        # Optional inputs traits
         in_mask_desc = (
             "Only perform computation within the specified binary brain "
             "mask image (a pathlike object or string representing an "
@@ -2198,7 +2198,7 @@ class FitTensor(ProcessMIA):
             "in_file", File(output=False, optional=False, desc=in_file_desc)
         )
 
-        # Optionnal inputs traits
+        # Optional inputs traits
         self.add_trait(
             "in_mask", File(output=False, optional=True, desc=in_mask_desc)
         )
@@ -2387,7 +2387,7 @@ class Generate5ttfsl(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Generate5ttfsl, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix", "fsl"]
 
         # Mandatory inputs description
@@ -2395,7 +2395,7 @@ class Generate5ttfsl(ProcessMIA):
             "Input T1 image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         in_mask_desc = (
             "Manually provide a brain mask, rather than deriving one in the "
             "script (a pathlike object string representing an existing file)"
@@ -2554,7 +2554,7 @@ class Generate5tt2gmwmi(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Generate5tt2gmwmi, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -2562,7 +2562,7 @@ class Generate5tt2gmwmi(ProcessMIA):
             "The input 5TT segmented anatomical image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         in_mask_desc = (
             "Filter an input mask image according to those voxels that lie "
             "upon the grey matter - white matter boundary (a pathlike object"
@@ -2657,7 +2657,7 @@ class MRCat(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MRCat, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -2804,7 +2804,7 @@ class MRConvert(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MRConvert, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -2834,8 +2834,8 @@ class MRConvert(ProcessMIA):
         )
         suffix_desc = "Output file suffix (a string, not mandatory)"
         # FIXME: json import / export --> in mia it is not the same json as
-        #        used in BIDS, see if it is usefull/ possible to add
-        #        thoses option
+        #        used in BIDS, see if it is useful/ possible to add
+        #        those option
 
         # Optional base inputs description
         bval_scale_desc = (
@@ -3018,7 +3018,7 @@ class MRConvert(ProcessMIA):
         super(MRConvert, self).list_outputs()
 
         if self.grad_file and self.in_bvec:
-            print("\nIf grad_file used, do not provied bvec or bval")
+            print("\nIf grad_file used, do not provide bvec or bval")
             return self.make_initResult()
 
         # Outputs definition and tags inheritance (optional)
@@ -3167,7 +3167,7 @@ class MRDeGibbs(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MRDeGibbs, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -3175,7 +3175,7 @@ class MRDeGibbs(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         axes_desc = (
             "Indicate the plane in which the data was acquire. "
             "(a list of items which are an integer, "
@@ -3324,7 +3324,7 @@ class MRMath(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MRMath, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -3479,7 +3479,7 @@ class MRTransform(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MRTransform, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Nipype MRTransform process is not up to date for some option
@@ -3490,7 +3490,7 @@ class MRTransform(ProcessMIA):
             "Input images to be transformed (a "
             "pathlike object or string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         linear_transform_desc = (
             "Specify a linear transform to apply "
             "(a pathlike object or string representing an existing file) "
@@ -3807,7 +3807,7 @@ class MTNormalise(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(MTNormalise, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["mrtrix"]
         # process nit in nipype
 
@@ -3821,7 +3821,7 @@ class MTNormalise(ProcessMIA):
             "normalisation (a pathlike object or "
             "string representing a file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         order_number_desc = (
             "The maximum order of the polynomial basis used to fit the "
             "normalisation field in the log-domain. "
@@ -3842,7 +3842,7 @@ class MTNormalise(ProcessMIA):
 
         # Outputs description
         out_files_desc = (
-            "Nomalised outputs images (a list of items which are a pathlike "
+            "Normalised outputs images (a list of items which are a pathlike "
             "object or string representing a file)"
         )
 
@@ -3997,7 +3997,7 @@ class ResponseSDDhollander(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ResponseSDDhollander, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -4005,7 +4005,7 @@ class ResponseSDDhollander(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         erode_desc = (
             "Number of erosion passes to apply to initial (whole brain) mask. "
             "Set to 0 to not erode the brain mask. (an intefer, default is 3)"
@@ -4239,7 +4239,7 @@ class SphericalHarmonicExtraction(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(SphericalHarmonicExtraction, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["mrtrix"]
 
         # Mandatory inputs description
@@ -4453,7 +4453,7 @@ class TensorMetrics(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TensorMetrics, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -4461,7 +4461,7 @@ class TensorMetrics(ProcessMIA):
             "Input DTI image (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         component_desc = (
             "Specify the desired eigenvalue/eigenvector(s) "
             "(a list of items which are any value)"
@@ -4850,7 +4850,7 @@ class Tractography(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Tractography, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
@@ -4858,7 +4858,7 @@ class Tractography(ProcessMIA):
             "Input file to be processed (a pathlike object"
             "string representing an existing file)"
         )
-        # Optionnal inputs description
+        # Optional inputs description
         algorithm_desc = (
             "Tractography algorithm to be used (iFOD2, FACT, iFOD1, "
             "Nulldist, SD_Stream, Tensor_Det or Tensor_Prob)"
@@ -5519,7 +5519,7 @@ class TransformFSLConvert(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TransformFSLConvert, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description

@@ -169,7 +169,7 @@ class Report:
                 "PATIENT AGE",
                 "PATHOLOGY",
                 "REFERENCE GROUP",
-                "SOFTWARES",
+                "SOFTWARE",
             ]
 
         elif "GE2REC" in kwargs:
@@ -189,7 +189,7 @@ class Report:
             )
 
             self.header_title = (
-                "<font size=30><b>GE2REC - Langage et " "mémoire</b></font>"
+                "<font size=30><b>GE2REC - Language et " "mémoire</b></font>"
             )
             infos = [
                 self.dict4runtime["norm_anat"][i]
@@ -216,7 +216,7 @@ class Report:
                 "PATHOLOGY",
                 "LATERALIZATION PATHOLOGY",
                 "DOMINANT HAND",
-                "SOFTWARES",
+                "SOFTWARE",
             ]
 
         elif "IQMs_file" in kwargs:
@@ -244,7 +244,7 @@ class Report:
                 "<font size=30><b>MRIQ</b></font>"
                 "<font size=11>uality</font>"
                 "<font size=30><b>C</b></font>"
-                "<font size=11>ontrol</font>"
+                "<font size=11>control</font>"
             )
             infos = [
                 self.dict4runtime[i]
@@ -271,7 +271,7 @@ class Report:
                 "PATIENT REFERENCE",
                 "PATIENT SEX",
                 "PATIENT AGE",
-                "SOFTWARES",
+                "SOFTWARE",
             ]
 
         elif "mriqc_group" in kwargs:
@@ -283,12 +283,12 @@ class Report:
                 "<font size=30><b>MRIQ</b></font>"
                 "<font size=11>uality</font>"
                 "<font size=30><b>C</b></font>"
-                "<font size=11>ontrol</font>"
+                "<font size=11>control</font>"
             )
             infos = [today_date]
             headers = [
                 "MRIQC GROUPS CALCULATION DATE",
-                "SOFTWARES",
+                "SOFTWARE",
             ]
 
         elif "Perf_DSC" in kwargs:
@@ -341,7 +341,7 @@ class Report:
                 "PATIENT SEX",
                 "PATIENT AGE",
                 "PATHOLOGY",
-                "SOFTWARES",
+                "SOFTWARE",
             ]
 
         infos.extend(
@@ -514,24 +514,24 @@ class Report:
             "responsibilities. Consequently, Populse team is"
             " not responsible for any direct or indirect "
             "damages resulting from the use of data, "
-            "informations, or results stemming from the Mia "
+            "information, or results stemming from the Mia "
             "software. The user recognizes to use these "
-            "informations under his sole and exclusive "
+            "information under his sole and exclusive "
             "responsibility.<br/> <br/> <b>DECHARGE DE "
             "RESPONSABILITE</b><br/>Le logiciel Mia, "
-            "provenant du projet Populse, est exécuté dans "
-            "un environnement de recherche sur des données "
+            "provenant du project Populse, est exécuté dans "
+            "un environment de recherche sur des données "
             "anonymisées. Les conclusions obtenues grâce au "
             "logiciel Mia sont une aide au diagnostic et au "
             "pronostic. Elles ne se substituent pas à la "
             "prise en charge médicale des médecins et "
             "demeurent sous leurs responsabilités. Par "
             "conséquent, l'équipe Populse ne peut être tenu "
-            "responsable de dommage direct ou indirect "
+            "responsible de dommage direct ou indirect "
             "résultant de l'utilisation des données, des "
-            "informations ou des résultats issus du logiciel"
+            "information ou des résultats issues du logiciel"
             "Mia. L'utilisateur reconnaît utiliser ces "
-            "informations sous sa seule et entière "
+            "information sous sa seule et entière "
             "responsabilité.</i> </font>"
         )
 
@@ -2111,7 +2111,7 @@ class Report:
                 (255, 0, 0),  # red
                 (255, 165, 0),  # moccasin
                 (0, 255, 0),  # lime (green)
-                (255, 0, 255),  # magenta (fuschia)
+                (255, 0, 255),  # magenta (fuchsia)
             ],
             # cmap_2=[
             #     (0, 255, 255),  # cyan (aqua)
@@ -2123,7 +2123,7 @@ class Report:
             #     # (255, 228, 181),  # moccasin
             #     (255, 140, 0),  # orange
             #     (0, 255, 0),  # lime (green)
-            #     (255, 0, 255),  # magenta (fuschia)
+            #     (255, 0, 255),  # magenta (fuchsia)
             # ],
             vmin_2=None,
             vmax_2=None,
@@ -2227,7 +2227,7 @@ class Report:
         #################################################################
         self.report.append(
             Paragraph(
-                "<font size=18 ><b>Production langage</b> - "
+                "<font size=18 ><b>Production language</b> - "
                 "Carte Statistique<br/></font>",
                 self.styles["Left"],
             )
@@ -2292,7 +2292,7 @@ class Report:
         #################################################################
         self.report.append(
             Paragraph(
-                "<font size=18 ><b>Production langage</b> - "
+                "<font size=18 ><b>Production language</b> - "
                 "Evaluation quantitative<br/></font>",
                 self.styles["Left"],
             )
@@ -2301,9 +2301,9 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=10 > Représentation de la latéralisation de la "
-                "production du langage pour la région frontale et la région "
+                "production du language pour la région frontale et la région "
                 "temporal. <br/> Les courbes noires montrent l'évolution de "
-                "l'index de latéralité en fonction du seuil statistique. "
+                "l'index de latéralité en function du seuil statistique. "
                 "<br/> <b>N.B: </b> <i>Plus le seuil est élevé moins il "
                 "existe de faux positifs. Il est fortement conseillé de "
                 "prendre en compte un seuil supérieur à 3. </i> </font>",
@@ -2416,7 +2416,7 @@ class Report:
                 m1 = Paragraph(
                     "<font size=10 >"
                     "<b>Performances comportementales </b> "
-                    "(mesurées pendant la tâche de reconnaisance "
+                    "(mesurées pendant la tâche de reconnaissance "
                     "des mots entendus à la tâche précédente à partir d'image)"
                     "</font>",
                     self.styles["Left"],
@@ -2449,7 +2449,7 @@ class Report:
             Paragraph(
                 "<font size=10 >"
                 " <b>Activation cérébrales pour la tâche de mémoire</b>"
-                " (reconnaisance des mots entendus à la tâche précédente "
+                " (reconnaissance des mots entendus à la tâche précédente "
                 "à partir d'image):</font>",
                 self.styles["Left"],
             )
@@ -2512,7 +2512,7 @@ class Report:
             Paragraph(
                 "<font size=10 >"
                 "<b>Activation cérébrales pour la tâche de rappel libre</b>"
-                "(reconnaisance des mots entendus lors de la première tâche "
+                "(reconnaissance des mots entendus lors de la première tâche "
                 "à partir du son et générartion de la même phrase):"
                 "</font>",
                 self.styles["Left"],
@@ -2567,7 +2567,7 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=18 ><b>Protocole GE2REC </b> - "
-                "Informations <br/></font>",
+                "Information <br/></font>",
                 self.styles["Left"],
             )
         )
@@ -2587,8 +2587,8 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=12 > Ce protocole permet de cartographier "
-                "l’interaction des fonctions du langage et de la mémoire "
-                "(LMN language memory network) au niveau individuel."
+                "l’interaction des functions du language et de la mémoire "
+                "(LMN language memory network) au niveau individual."
                 "Il fournit une évaluation exhaustive en incluant "
                 "des modalités verbales, visuelles et divers processus "
                 "langagiers et mémoriels. </font>",
@@ -2601,7 +2601,7 @@ class Report:
                 "<font size=12 > <b> Première tâche – Stimuli et tâche "
                 "de génération de phrases avec encodage implicite "
                 "(GE)</b><br/>"
-                "Il s'agit d'une séquence en bloc de génération de "
+                "Il s'agit d'une séquence en block de génération de "
                 "phrases avec encodage implicite (durée de 7,3 minutes)."
                 "Les sujets écoutent des mots à travers un casque et doivent "
                 "générer des phrases de manière implicite. Lors des périodes "
@@ -2623,7 +2623,7 @@ class Report:
                 "Des images sont présentées aux sujets selon un mode "
                 "pseudo-aléatoire de 2,5 secondes. "
                 "Ils doivent alors indiquer s’ils reconnaissent les images "
-                "des objets dont les noms ont été diffusés lors de "
+                "des objects dont les noms ont été diffusés lors de "
                 "la première tâche GE. Dans le cadre clinique,"
                 "le choix proposé est binaire. "
                 "Soit le sujet indique qu’il reconnaît l’image (OLD), "
@@ -2638,7 +2638,7 @@ class Report:
             Paragraph(
                 "<font size=12 > <b> Troisième tâche – Rappel (RA)"
                 "</b><br/>"
-                "La troisième tâche est un paradigme en bloc en modalité "
+                "La troisième tâche est un paradigme en block en modalité "
                 "auditive (durée de 4,17 minutes). Les participants "
                 "entendent les mots de la tâche GE et doivent se souvenir "
                 "de manière explicite des phrases précédemment "
@@ -3030,7 +3030,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Mouvements </b> </font>",
+            "<font size=14 > <b> Movements </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
@@ -3273,7 +3273,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Mouvements </b> </font>",
+            "<font size=14 > <b> Movements </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
@@ -3517,7 +3517,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Mouvements " " </b> </font>",
+            "<font size=14 > <b> Movements " " </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
@@ -4231,7 +4231,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # Nineth page - slice planes display - Segmentation #####
+        # Ninth page - slice planes display - Segmentation #####
         #######################################################################
         self.report.append(
             Paragraph(

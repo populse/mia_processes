@@ -699,7 +699,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -711,7 +711,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -723,7 +723,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -734,7 +734,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -2094,7 +2094,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -2106,7 +2106,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -2118,7 +2118,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -2129,7 +2129,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "Forman SD et al., <i>Improved assessment of "
                 "significant activation in functional magnetic "
                 "resonance imaging(fMRI): use of a cluster - size "
-                "threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. "
+                "threshold</i>, Magn.Reason.Med. 33(5), 636–647, 1995. "
                 "Lower values are better, higher values indicate a "
                 "blurrier image.",
             ],
@@ -2168,7 +2168,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "#",
                 "Krüger et al., <i>Physiological noise in "
                 "oxygenation-sensitive magnetic resonance imaging</i>, "
-                "Magn. Reson. Med. 46(4):631-637, 2001. Higher values are"
+                "Magn. Reason. Med. 46(4):631-637, 2001. Higher values are"
                 "better.",
             ],
             "gcor": [

@@ -69,7 +69,7 @@ class Binarize(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Binarize, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["freesurfer", "nipype"]
 
         # Mandatory inputs description
@@ -357,7 +357,7 @@ class Binarize(ProcessMIA):
             print(
                 '\nInitialisation failed. "match" parameter can not be used '
                 'with "min" and/or "max" parameters'
-                ' Please, define only "min"/"max" paremeters or "match"'
+                ' Please, define only "min"/"max" parameters or "match"'
                 "parameters (set the other as Undefined) ...!"
             )
             return
@@ -401,12 +401,12 @@ class Binarize(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Binarize, self).run_process_mia()
 
-        # madatory inputs / outputs
+        # mandatory inputs / outputs
         self.process.in_file = self.in_file
         self.process.binary_file = self.out_file
         self.process.out_type = EXT[self.output_type]
 
-        # optionnal inputs
+        # optional inputs
         self.process.min = self.min
         self.process.max = self.max
         self.process.rmin = self.rmin
@@ -449,7 +449,7 @@ class SynthStrip(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(SynthStrip, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["freesurfer", "nipype"]
 
         # Mandatory inputs description
@@ -799,7 +799,7 @@ class SynthStripMriqc(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(SynthStripMriqc, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["freesurfer"]
 
         # Mandatory inputs description

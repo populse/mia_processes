@@ -109,7 +109,7 @@ class ApplyBiasCorrection(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ApplyBiasCorrection, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -225,7 +225,7 @@ class ArtifactMask(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ArtifactMask, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -505,7 +505,7 @@ class Binarize(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Binarize, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -631,7 +631,7 @@ class Binarize(ProcessMIA):
                             "\nBinarize brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwrited ...".format(file_name1)
+                            "\n{0} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -804,7 +804,7 @@ class ConformImage(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ConformImage, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1242,7 +1242,7 @@ class Enhance(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Enhance, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1368,7 +1368,7 @@ class Enhance(ProcessMIA):
                             "\nEnhance brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwrited ...".format(file_name1)
+                            "\n{0} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -1543,7 +1543,7 @@ class EstimateSNR(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(EstimateSNR, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1653,7 +1653,7 @@ class ExtractROIbyLabel(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ExtractROIbyLabel, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1865,7 +1865,7 @@ class ExtractSignalROI(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(ExtractSignalROI, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1880,7 +1880,7 @@ class ExtractSignalROI(ProcessMIA):
         labels_desc = (
             "The label list of the ROI to extract the signal (a list of int)"
         )
-        suffix_desc = "Suffix for outout file ( string)"
+        suffix_desc = "Suffix for output file ( string)"
 
         # Outputs description
         # roi_nibabel_desc = (
@@ -2011,7 +2011,7 @@ class GradientThreshold(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(GradientThreshold, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2272,7 +2272,7 @@ class Harmonize(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Harmonize, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2384,7 +2384,7 @@ class Harmonize(ProcessMIA):
                         "\nHarmonize brick warning: the out_file output "
                         "parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -2507,7 +2507,7 @@ class IntensityClip(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(IntensityClip, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2691,7 +2691,7 @@ class Mask(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Mask, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -2798,7 +2798,7 @@ class Mask(ProcessMIA):
                         "\nMask brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten...".format(fileName)
                     )
 
                 else:
@@ -2913,7 +2913,7 @@ class NonSteadyStateDetector(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(NonSteadyStateDetector, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -3010,7 +3010,7 @@ class Resample1(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Resample1, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -3678,7 +3678,7 @@ class RotationMask(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(RotationMask, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -3781,7 +3781,7 @@ class RotationMask(ProcessMIA):
                         "\nRotationMask brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -3923,7 +3923,7 @@ class Sanitize(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Sanitize, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -4041,7 +4041,7 @@ class Sanitize(ProcessMIA):
                         "\nSanitize brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -4284,7 +4284,7 @@ class TSNR(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TSNR, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -4417,7 +4417,7 @@ class TSNR(ProcessMIA):
                         "\nTSNR brick warning: the out_tsnr_file output "
                         "parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -4478,7 +4478,7 @@ class TSNR(ProcessMIA):
                         "\nTSNR brick warning: the out_stddev_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
                 else:
                     print(
@@ -4612,7 +4612,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TemplateFromTemplateFlow, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -4761,7 +4761,7 @@ class Threshold(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Threshold, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -4945,7 +4945,7 @@ class Threshold(ProcessMIA):
                             "\nThreshold brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwrited ...".format(file_name1)
+                            "\n{0} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -5104,7 +5104,7 @@ def is_outlier(points, thresh=3.5):
     :param float thresh: the modified z-score to use as a threshold.
         Observations with a modified z-score (based on the median absolute
         deviation) greater than this value will be classified as outliers.
-    :return: A bolean mask, of size numobservations-length array.
+    :return: A boolean mask, of size numobservations-length array.
 
     .. note::
         Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and

@@ -81,7 +81,7 @@ class Automask(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Automask, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Mandatory inputs description
@@ -299,7 +299,7 @@ class Calc(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Calc, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -537,7 +537,7 @@ class CalcDropTRs(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(CalcDropTRs, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -727,7 +727,7 @@ class Despike(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Despike, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -876,7 +876,7 @@ separately*
         # Initialisation of the objects needed for the launch of the brick
         super(FWHMx, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1031,7 +1031,7 @@ voxel, over any given mask*
         # Initialisation of the objects needed for the launch of the brick
         super(GCOR, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1170,7 +1170,7 @@ separately*
         # Initialisation of the objects needed for the launch of the brick
         super(OutlierCount, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1315,7 +1315,7 @@ separately*
                 print(
                     "Initisalisation failed.."
                     "Automask and mask_file parameters are "
-                    "mutually esclusive"
+                    "mutually exclusive"
                 )
                 return
 
@@ -1392,7 +1392,7 @@ class QualityIndex(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(QualityIndex, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1508,7 +1508,7 @@ class QualityIndex(ProcessMIA):
         ):
             print(
                 "Initisalisation failed.."
-                "Automask and mask_file parameters are mutually esclusive"
+                "Automask and mask_file parameters are mutually exclusive"
             )
             return
 
@@ -1585,7 +1585,7 @@ class RefitDeoblique(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(RefitDeoblique, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1676,7 +1676,7 @@ class SkullStrip(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(SkullStrip, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -1813,7 +1813,7 @@ class TShift(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TShift, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Mandatory inputs description
@@ -2051,7 +2051,7 @@ class TShift(ProcessMIA):
         if self.slice_timing and self.tpattern != Undefined:
             print(
                 "\nInitialisation failed. "
-                'Please, define only "slice_timing" paremeters or '
+                'Please, define only "slice_timing" parameters or '
                 '"tpattern" parameters (set the other as Undefined) ...!'
             )
             return
@@ -2059,7 +2059,7 @@ class TShift(ProcessMIA):
         if self.tslice != Undefined and self.tzero != Undefined:
             print(
                 "\nInitialisation failed. "
-                'Please, define only "tslice" paremeters or '
+                'Please, define only "tslice" parameters or '
                 '"tzero" parameters (set the other as Undefined) ...!'
             )
             return
@@ -2156,7 +2156,7 @@ class TStatMean(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(TStatMean, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Inputs description
@@ -2295,7 +2295,7 @@ class Volreg(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Volreg, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
 
         # Mandatory inputs description

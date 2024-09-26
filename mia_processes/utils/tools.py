@@ -247,7 +247,7 @@ def mriqc_get_all_run(modality, project, output_directory):
                 json_database_filename, project
             ).in_file
         except Exception:
-            # if we removed all mriqc data execpt json and pdf
+            # if we removed all mriqc data except json and pdf
             file_name = json_database_filename
         files_name.append(file_name)
     return files_name
@@ -260,7 +260,7 @@ def mriqc_group_iqms_tsv(modality, output_directory):
 
     :param modality:  modality (a string, 'bold' or 'anat')
     :param output_directory: output directory where all json files are stored
-                             (a sting that representing a path)
+                             (a string that representing a path)
     :returns:
         - dataframe: all IQMs in a panda dataframe
         - out_tsv: out tsv file (a string that representing a file)

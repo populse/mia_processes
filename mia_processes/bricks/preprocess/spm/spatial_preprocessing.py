@@ -90,7 +90,7 @@ class Coregister(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Coregister, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -537,7 +537,7 @@ class GM_WM_Normalize(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(GM_WM_Normalize, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -939,7 +939,7 @@ class NewSegment(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(NewSegment, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1417,7 +1417,7 @@ class Normalize12(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Normalize12, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1997,7 +1997,7 @@ class Realign(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Realign, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -2514,7 +2514,7 @@ class SliceTiming(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(SliceTiming, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -2547,7 +2547,7 @@ class SliceTiming(ProcessMIA):
         )
         desc_slice_order = (
             "Order of how were recorded the slices during the "
-            "volumes aquisition (a list of items which are "
+            "volumes acquisition (a list of items which are "
             "an integer or a float or a _Undefined or None. "
             "Can be automatically calculated according to the "
             'acquisition" parameter)'
@@ -2781,7 +2781,7 @@ class SliceTiming(ProcessMIA):
                     msg.exec()
                     result = False
 
-        # FIXME: in SPM, TA can be egal to 0 (If slice_order and
+        # FIXME: in SPM, TA can be equal to 0 (If slice_order and
         #        ref_slice are entered in milliseconds, TA will not be used
         #        and can be set to 0). Here we consider that slice_order and
         #        ref_slice parameters are only indices !
@@ -2956,8 +2956,8 @@ class SliceTiming(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_files and self.in_files != [Undefined]:
             self.process.in_files = self.in_files
-            # Definition of the necessary inputs for the spm fonction
-            # acquired from the databse
+            # Definition of the necessary inputs for the spm function
+            # acquired from the database
             res = self._get_database_value()
 
             if not res:
@@ -3060,7 +3060,7 @@ class Smooth(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Smooth, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
