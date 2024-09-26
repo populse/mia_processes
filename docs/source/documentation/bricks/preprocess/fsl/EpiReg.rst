@@ -14,14 +14,14 @@ Register EPI images to structural images
 ----------------------------------------
 
 Run epi_reg script (FSL) to register EPI images to structural images.
-To use this method, it should be possible to segmente the structural image
+To use this method, it should be possible to segment the structural image
 in order to get a good white matter boundary and the EPI should contain some
 intensity contrast between white matter and grey matter.
 
 It is also possible to add fiedmaps to perform simultaneous registration and
 EPI distortion-correction.
 To use this option you should provided fmap, fmapmag and fmapmagbrain
-parameters and informatio about EPI (see echospacing and pedir parameters).
+parameters and information about EPI (see echospacing and pedir parameters).
 
 --------------------------------------------------------------
 
@@ -237,7 +237,7 @@ parameters and informatio about EPI (see echospacing and pedir parameters).
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL epi_reg <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT/UserGuide#epi_reg>`_
 

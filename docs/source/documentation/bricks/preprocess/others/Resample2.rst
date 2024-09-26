@@ -62,6 +62,6 @@ Sets images to the resolution of a reference image using using nilearn.image.res
 
 -------------
 
-Usefull links:
+Useful links:
 
  `nilearn.image.resample_to_img() <https://nilearn.github.io/dev/modules/generated/nilearn.image.resample_to_img.html>`_

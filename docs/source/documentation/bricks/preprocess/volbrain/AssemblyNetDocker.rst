@@ -146,7 +146,7 @@ Based on a large ensemble of convolution neural networks, AssemblyNet segment a 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `volBrain Assemblynet <https://github.com/volBrain/AssemblyNet>`_
 

@@ -89,5 +89,5 @@ SPM-based first level GLM analysis used in the CVR evaluation
 
 -------------
 
-.. [#label] Usefull links:
+.. [#label] Useful links:
 	    `SPM12 fMRI model specification <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=63>`_

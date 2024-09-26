@@ -99,7 +99,7 @@ The output is a 1D time series with the index for each sub-brick.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dTqual <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTqual.html>`_
 

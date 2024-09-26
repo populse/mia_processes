@@ -64,7 +64,7 @@ The output dataset will always be stored in floats.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dDespike <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dDespike.html>`_
 

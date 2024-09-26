@@ -52,7 +52,7 @@ Perform conversion between FSL’s transformation matrix format to mrtrix3’s
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix transformconvert <https://mrtrix.readthedocs.io/en/latest/reference/commands/transformconvert.html>`_
 

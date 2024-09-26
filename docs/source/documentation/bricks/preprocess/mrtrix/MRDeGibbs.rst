@@ -80,7 +80,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix mrdegibbs <https://mrtrix.readthedocs.io/en/latest/reference/commands/mrdegibbs.html>`_
 

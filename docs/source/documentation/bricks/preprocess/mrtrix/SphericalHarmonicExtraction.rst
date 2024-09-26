@@ -105,6 +105,6 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix sh2peaks <https://mrtrix.readthedocs.io/en/latest/reference/commands/sh2peaks.html>`_

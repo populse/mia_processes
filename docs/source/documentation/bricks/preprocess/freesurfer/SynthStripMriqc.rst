@@ -82,7 +82,7 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc v22.06 - cli <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py>`_
 

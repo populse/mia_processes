@@ -99,7 +99,7 @@ to the patch centered on the pixel of interest, and the average only applies to 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Dipy Denoise - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.dipy.preprocess.html#denoise>`_
 

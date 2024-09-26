@@ -57,6 +57,6 @@ Compute head mask from skull stripped structural image using `Denoise` from Dipy
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_

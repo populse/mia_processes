@@ -195,6 +195,6 @@ Computes the deformation that best aligns the model (atlas) with an image, then 
 
 .. [#label] Syntax: mia_processes/nipype Normalize12 <=> SPM12 Normalise.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 Normalise <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=51>`_,
 	    `nipype Normalize12 <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize12>`_

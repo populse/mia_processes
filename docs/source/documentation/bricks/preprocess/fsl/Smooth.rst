@@ -50,7 +50,7 @@ Smooth brick
 
 **Optional inputs parameters:**
 
-- *sigma* (a float, optionnal)
+- *sigma* (a float, optional)
     Specify the standard deviation of the filter in mm (not voxels). Mutually exclusive with fwhm.
 
     ::
@@ -68,6 +68,6 @@ Smooth brick
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.utils.html#smooth>`_

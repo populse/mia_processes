@@ -9,7 +9,7 @@
 Mia_processes's documentation
 =============================
 
-To use certain mia_processes bricks (atomic processes), `third-party softwares used in these bricks must be installed <https://populse.github.io/populse_mia/html/installation/3rd-party_installations.html>`_.
+To use certain mia_processes bricks (atomic processes), `third-party software used in these bricks must be installed <https://populse.github.io/populse_mia/html/installation/3rd-party_installations.html>`_.
 
 - **bricks**
 

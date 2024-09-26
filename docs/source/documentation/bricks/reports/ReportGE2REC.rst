@@ -10,7 +10,7 @@
 ReportGE2REC brick
 ==================
 
-Generates the report for GE2REC pipeline (langage and memory)
+Generates the report for GE2REC pipeline (language and memory)
 --------------------------------------------------------------
 
 

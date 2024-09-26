@@ -153,7 +153,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix dwi2fod <https://mrtrix.readthedocs.io/en/latest/reference/commands/dwi2fod.html>`_
 

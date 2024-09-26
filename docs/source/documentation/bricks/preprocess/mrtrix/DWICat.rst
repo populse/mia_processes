@@ -63,6 +63,6 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix dwicat <https://mrtrix.readthedocs.io/en/latest/reference/commands/dwicat.html>`_

@@ -38,6 +38,6 @@ Adapted from  `Nipype Confounds <https://github.com/nipy/nipype/blob/f662acfce8d
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Confunds NonSteadyStateDetector nipype <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974>`_

@@ -72,6 +72,6 @@ Smooth brick
 
 .. [#label] Syntax: mia_processes/nipype Smooth <=> SPM12 Smooth.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 Smooth <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57>`_,
 	    `nipype Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#smooth>`_

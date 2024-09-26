@@ -82,7 +82,7 @@ Modify transformation matrix using convert_xfm (FSL)
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL convert_xfm <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT/UserGuide#convert_xfm>`_
 

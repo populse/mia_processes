@@ -100,7 +100,7 @@ Using AFNI 3dToutcount, computes outliers for all sub-bricks (3D volumes for eac
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dToutcount <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dToutcount.html>`_
 

@@ -37,7 +37,7 @@ This brick can be used for second-level analysis. Level one design should be fir
 **Optional inputs parameters with a default value:**
 
 - *out_dir_name* (a string, optional, default value is "spm_stat_2ndLevel"):
-    Name of the directoty where the SPM.mat file containing the specified design matrix will be written.
+    Name of the directory where the SPM.mat file containing the specified design matrix will be written.
     This directory will be created in the derived_data folder of the project.
 
     ::
@@ -62,7 +62,7 @@ This brick can be used for second-level analysis. Level one design should be fir
     Images are thresholded at a given value and only voxels at which all images exceed the threshold are included:
 
         | - None: No threshold masking
-        | - Absolute: threshold masking done using an absoulte threshold value, threshold_mask_value parameter should be filled
+        | - Absolute: threshold masking done using an absolute threshold value, threshold_mask_value parameter should be filled
         | - Relative: threshold masking done using a proportion of the global value, threshold_mask_value parameter should be filled
 
     ::
@@ -79,7 +79,7 @@ This brick can be used for second-level analysis. Level one design should be fir
 - *global_calc* <=> Global Calculation * [#label]_ (one of Omit, Mean, User, optional, default value is Omit):
     This option is for PET or VBM data (not second level fMRI). There are three methods for estimating global effects:
 
-        | - Omit: assumming no other options requiring the global value chosen
+        | - Omit: assuming no other options requiring the global value chosen
         | - User: enter your own vector of global values using the global_calc_values parameter
         | - Mean: SPM standard mean voxel value (within per image fullmean/8 mask)
 
@@ -106,10 +106,10 @@ This brick can be used for second-level analysis. Level one design should be fir
 
 - *covariates_names* <=> Covariate.Name* [#label]_ (a list of string, optional):
     Names of the covariates.
-    The covariate option allows to specified covariates or nuissance variables.
+    The covariate option allows to specified covariates or nuisance variables.
     The aims is to examine whether there are any correlations between this additionl data and brain activation.
 
-    covariates_vectors, covariates_interactions and covariates_centerings should be aslo filled.
+    covariates_vectors, covariates_interactions and covariates_centerings should be also filled.
 
     ::
 
@@ -119,14 +119,14 @@ This brick can be used for second-level analysis. Level one design should be fir
     Vectors of the covariates values.
     For each covariate, the values should be entered "per subject" (i.e all for subject 1, then all for subject 2,...).
 
-    covariates_names, covariates_interactions and covariates_centerings should be aslo filled.
+    covariates_names, covariates_interactions and covariates_centerings should be also filled.
 
     ::
 
         ex. [[0.0, 1.0, 2.0]]
 
 
-- *covariates_interactions* <=> Covariate.Intercations* [#label]_ (a list of int among 1, 2, 3, 4 optional):
+- *covariates_interactions* <=> Covariate.Interactions* [#label]_ (a list of int among 1, 2, 3, 4 optional):
     For each covariate you have defined, there is an opportunity to create an additional regressor that
     is the interaction between the covariate and a chosen experimental facto:
 
@@ -135,7 +135,7 @@ This brick can be used for second-level analysis. Level one design should be fir
         | - 3: With Factor 2
         | - 4: With Factor 3
 
-    covariates_vectors, covariates_names and covariates_centerings should be aslo filled.
+    covariates_vectors, covariates_names and covariates_centerings should be also filled.
 
     ::
 
@@ -153,7 +153,7 @@ This brick can be used for second-level analysis. Level one design should be fir
         | - 7: As implied by ANCOVA
         | - 8: GM
 
-    covariates_vectors, covariates_interactions and covariates_names should be aslo filled.
+    covariates_vectors, covariates_interactions and covariates_names should be also filled.
 
     ::
 
@@ -179,8 +179,8 @@ This brick can be used for second-level analysis. Level one design should be fir
 
         ex. '/home/username/data/derived_data/mask.nii'
 
-- *global_calc_values* <=> Global Calculaion.Global values* [#label]_ (a list of float, optional)
-    Vector of global values used for global caculation (to be filled only if "User" choose for global_calc parameter )
+- *global_calc_values* <=> Global Calculation.Global values* [#label]_ (a list of float, optional)
+    Vector of global values used for global calculation (to be filled only if "User" choose for global_calc parameter )
 
     ::
 
@@ -200,7 +200,7 @@ This brick can be used for second-level analysis. Level one design should be fir
 
 .. [#label] Syntax: mia_processes/nipype OneSampleTTestDesign brick <=> SPM12 fMRI factorial design.
 
-Usefull links:
+Useful links:
 
 `SPM12 fMRI Factorial Design <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=81>`_,
 `nipype TwoSampleTTestDesign <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#twosamplettestdesign>`_

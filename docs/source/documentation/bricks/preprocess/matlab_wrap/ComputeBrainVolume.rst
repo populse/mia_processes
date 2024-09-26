@@ -40,6 +40,6 @@ It shows how to wrap a MATLAB script in a mia processes brick using nipype (and 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Nipype Matlab <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.matlab.html>`_

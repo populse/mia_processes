@@ -24,7 +24,7 @@ Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/
 |      (default values for template : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'T1w',
 |       default values for template mask : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'mask', desc ='brain')
 |   - `Mask <../../bricks/preprocess/others/Mask.html>`_
-|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_
+|   - `Affine Initializer <../../bricks/preprocess/ants/AffineInitializer.html>`_
 |   - `Registration <../../bricks/preprocess/ants/Registration.html>`_
 |       (default values:
 |       convergence_threshold= [1e-07, 1e-08],
@@ -88,6 +88,6 @@ Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mric spatial norm pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.spatial_normalization>`_

@@ -180,6 +180,6 @@ To define a new F-contrast:
 
 -------------
 
-Usefull links:
+Useful links:
 
 `nipype EstimateContrast <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_

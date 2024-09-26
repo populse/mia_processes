@@ -39,7 +39,7 @@ In this case, bvec and bval file should be specified.*
 - *rpe_option* (none, pair, all or header, default value is none, optional)
     | Specify acquisition phase-encoding design:
     |   - rpe_none: if no reversed phase-encoding image available
-    |   - rpe_all: if DWIs data have been acquired with opposing phase-encoding. The in_file parametre should be filled with the two acquisition protocols concatenated into a single DWI series.
+    |   - rpe_all: if DWIs data have been acquired with opposing phase-encoding. The in_file parameter should be filled with the two acquisition protocols concatenated into a single DWI series.
     |   - rpe_pair: if a set of image (typically b=0 volumes with opposing phase-direction) has been acquired for inhomogeneity field estimation only. In this case, se_epi_corr parameter should be filled.
 
     ::
@@ -59,7 +59,7 @@ In this case, bvec and bval file should be specified.*
       ex. '/home/username/data/raw_data/DWI_b0_inverse_phase.mif
 
 - *pe_dir* (ap, pa, lr, rl, default value is ap, optional)
-    | Phase encoding direction of the input serie using an axis designator:
+    | Phase encoding direction of the input series using an axis designator:
     |   - ap : Anterior to posterior
     |   - pa: Posterior to anterior
     |   - lr: Left to right
@@ -150,7 +150,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix dwipreproc <https://mrtrix.readthedocs.io/en/latest/reference/commands/dwifslpreproc.html#dwifslpreproc>`_
 

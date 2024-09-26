@@ -71,6 +71,6 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriq HMC pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.hmc>`_

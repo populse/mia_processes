@@ -42,7 +42,7 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
 - *dwi_bvec* (a string representing an existing file)
     Bvec file (valid extensions: [.bvec]).
-    If no file is supplied, the file with the same name as "in_dwi" but wil ".bvec" extension will be automatically used.
+    If no file is supplied, the file with the same name as "in_dwi" but with ".bvec" extension will automatically be used.
 
     ::
 
@@ -50,7 +50,7 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
 - *dwi_bval* (a string representing an existing file)
     Bval file (valid extensions: [.bval]).
-    If no file is supplied, the file with the same name as "in_dwi" but wil ".bval" extension will be automatically used.
+    If no file is supplied, the file with the same name as "in_dwi" but with ".bval" extension will automatically be used.
 
     ::
 
@@ -131,7 +131,7 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Dipy Reconstruction of the diffusion signal with the kurtosis tensor model <https://docs.dipy.org/stable/examples_built/reconstruction/reconst_dki.html#sphx-glr-examples-built-reconstruction-reconst-dki-py>`_
 

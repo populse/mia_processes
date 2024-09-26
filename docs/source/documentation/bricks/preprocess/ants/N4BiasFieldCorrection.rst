@@ -32,7 +32,7 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 **Optional inputs parameters with a default value:**
 
-- *copy_header* (a boolean, optionnal, default value is True)
+- *copy_header* (a boolean, optional, default value is True)
     Copy headers of the original image into the output (corrected) file.
 
     ::
@@ -53,14 +53,14 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
         ex. 'n4c_'
 
-- *rescale_intensities* (a boolean, optionnal, default value is True)
+- *rescale_intensities* (a boolean, optional, default value is True)
     Rescales to the [min,max] range of theoriginal image intensities within the user-specified mask.
 
     ::
 
       ex. True
 
-- *save_bias* (a boolean, optionnal, default value is True)
+- *save_bias* (a boolean, optional, default value is True)
     Save the estimated bias in a file .
 
     ::
@@ -162,7 +162,7 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 -------------
 
-Usefull links:
+Useful links:
 
 `ANTS N4BiasFieldCorrection - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#n4biasfieldcorrection>`_
 

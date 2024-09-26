@@ -16,7 +16,7 @@ Get AssemblyNet labels names or get labels from names
 In each segmentation file obtain (tissues, lobes...) with AssemblyNet, each ROI is defined by a label (an integer).
 This brick is used to obtain the correspondence between the label and the label name, depending on the type of the segmentation file.
 
-Add a list of lables or a list if label names.
+Add a list of labels or a list if label names.
 Choose between "tissues", "lobes", "structures", "macrostructures" and obtain the corresponding labels or label names.
 
 --------------------------------------
@@ -80,7 +80,7 @@ Choose between "tissues", "lobes", "structures", "macrostructures" and obtain th
 
 -------------
 
-Usefull links:
+Useful links:
 
 `volBrain Assemblynet <https://github.com/volBrain/AssemblyNet>`_
 

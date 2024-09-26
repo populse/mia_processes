@@ -52,7 +52,7 @@ Using AFNI 3dSkullStrip, from T1-weighted MRI images, extract the brain from sur
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dSkullStrip <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dSkullStrip.html>`_
 

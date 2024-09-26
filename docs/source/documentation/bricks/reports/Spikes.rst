@@ -77,7 +77,7 @@ and `Spikes class <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882b
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc spikes <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_
 

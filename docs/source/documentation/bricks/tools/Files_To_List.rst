@@ -38,8 +38,8 @@
 Files_To_List brick
 ===================
 
-From 3 file names, generating a list containing all theses file names
----------------------------------------------------------------------
+From 3 file names, generate a list containing all these file names
+------------------------------------------------------------------
 
 - `file1` is mandatory, while `file2` and `file3` are optional. If one
   (or both) of the latter two entries is (are) undefined, it will not be

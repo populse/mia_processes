@@ -15,7 +15,7 @@ Create a brain-only mask of the image using AFNI 3dAutomask
 
 AFNI 3dClipLevel algorithm is used to find clipping level and after an erosion/dilation step, only the largest connected component of the supra-threshold voxels are kept.
 
-Be carreful this program by itself does NOT do 'skull-stripping'.
+Be careful this program by itself does NOT do 'skull-stripping'.
 
 --------------------------------------
 
@@ -96,7 +96,7 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dAutomask <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dAutomask.html>`_
 
