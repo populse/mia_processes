@@ -3907,7 +3907,7 @@ class Make_CVR_reg_physio(ProcessMIA):
 
                             # Fix typos in magdata-provided field names
                             paramnames = [
-                                name.replace("Status", "Status")
+                                name.replace("Satus", "Status")
                                 for name in paramnames
                             ]
                             n_params = len(paramnames)

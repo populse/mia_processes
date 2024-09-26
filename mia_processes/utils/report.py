@@ -189,7 +189,7 @@ class Report:
             )
 
             self.header_title = (
-                "<font size=30><b>GE2REC - Language et " "mémoire</b></font>"
+                "<font size=30><b>GE2REC - Langage et mémoire</b></font>"
             )
             infos = [
                 self.dict4runtime["norm_anat"][i]
@@ -244,7 +244,7 @@ class Report:
                 "<font size=30><b>MRIQ</b></font>"
                 "<font size=11>uality</font>"
                 "<font size=30><b>C</b></font>"
-                "<font size=11>control</font>"
+                "<font size=11>ontrol</font>"
             )
             infos = [
                 self.dict4runtime[i]
@@ -283,7 +283,7 @@ class Report:
                 "<font size=30><b>MRIQ</b></font>"
                 "<font size=11>uality</font>"
                 "<font size=30><b>C</b></font>"
-                "<font size=11>control</font>"
+                "<font size=11>ontrol</font>"
             )
             infos = [today_date]
             headers = [
@@ -519,19 +519,19 @@ class Report:
             "information under his sole and exclusive "
             "responsibility.<br/> <br/> <b>DECHARGE DE "
             "RESPONSABILITE</b><br/>Le logiciel Mia, "
-            "provenant du project Populse, est exécuté dans "
-            "un environment de recherche sur des données "
+            "provenant du projet Populse, est exécuté dans "
+            "un environnement de recherche sur des données "
             "anonymisées. Les conclusions obtenues grâce au "
             "logiciel Mia sont une aide au diagnostic et au "
             "pronostic. Elles ne se substituent pas à la "
             "prise en charge médicale des médecins et "
             "demeurent sous leurs responsabilités. Par "
             "conséquent, l'équipe Populse ne peut être tenu "
-            "responsible de dommage direct ou indirect "
+            "responsable de dommage direct ou indirect "
             "résultant de l'utilisation des données, des "
-            "information ou des résultats issues du logiciel"
+            "informations ou des résultats issues du logiciel"
             "Mia. L'utilisateur reconnaît utiliser ces "
-            "information sous sa seule et entière "
+            "informations sous sa seule et entière "
             "responsabilité.</i> </font>"
         )
 
@@ -2227,7 +2227,7 @@ class Report:
         #################################################################
         self.report.append(
             Paragraph(
-                "<font size=18 ><b>Production language</b> - "
+                "<font size=18 ><b>Production langage</b> - "
                 "Carte Statistique<br/></font>",
                 self.styles["Left"],
             )
@@ -2292,7 +2292,7 @@ class Report:
         #################################################################
         self.report.append(
             Paragraph(
-                "<font size=18 ><b>Production language</b> - "
+                "<font size=18 ><b>Production langage</b> - "
                 "Evaluation quantitative<br/></font>",
                 self.styles["Left"],
             )
@@ -2301,9 +2301,9 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=10 > Représentation de la latéralisation de la "
-                "production du language pour la région frontale et la région "
+                "production du langage pour la région frontale et la région "
                 "temporal. <br/> Les courbes noires montrent l'évolution de "
-                "l'index de latéralité en function du seuil statistique. "
+                "l'index de latéralité en fonction du seuil statistique. "
                 "<br/> <b>N.B: </b> <i>Plus le seuil est élevé moins il "
                 "existe de faux positifs. Il est fortement conseillé de "
                 "prendre en compte un seuil supérieur à 3. </i> </font>",
@@ -2567,7 +2567,7 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=18 ><b>Protocole GE2REC </b> - "
-                "Information <br/></font>",
+                "Informations <br/></font>",
                 self.styles["Left"],
             )
         )
@@ -2587,8 +2587,8 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=12 > Ce protocole permet de cartographier "
-                "l’interaction des functions du language et de la mémoire "
-                "(LMN language memory network) au niveau individual."
+                "l’interaction des fonctions du langage et de la mémoire "
+                "(LMN language memory network) au niveau individuel."
                 "Il fournit une évaluation exhaustive en incluant "
                 "des modalités verbales, visuelles et divers processus "
                 "langagiers et mémoriels. </font>",
@@ -2601,7 +2601,7 @@ class Report:
                 "<font size=12 > <b> Première tâche – Stimuli et tâche "
                 "de génération de phrases avec encodage implicite "
                 "(GE)</b><br/>"
-                "Il s'agit d'une séquence en block de génération de "
+                "Il s'agit d'une séquence en bloc de génération de "
                 "phrases avec encodage implicite (durée de 7,3 minutes)."
                 "Les sujets écoutent des mots à travers un casque et doivent "
                 "générer des phrases de manière implicite. Lors des périodes "
@@ -2623,7 +2623,7 @@ class Report:
                 "Des images sont présentées aux sujets selon un mode "
                 "pseudo-aléatoire de 2,5 secondes. "
                 "Ils doivent alors indiquer s’ils reconnaissent les images "
-                "des objects dont les noms ont été diffusés lors de "
+                "des objets dont les noms ont été diffusés lors de "
                 "la première tâche GE. Dans le cadre clinique,"
                 "le choix proposé est binaire. "
                 "Soit le sujet indique qu’il reconnaît l’image (OLD), "
@@ -2638,7 +2638,7 @@ class Report:
             Paragraph(
                 "<font size=12 > <b> Troisième tâche – Rappel (RA)"
                 "</b><br/>"
-                "La troisième tâche est un paradigme en block en modalité "
+                "La troisième tâche est un paradigme en bloc en modalité "
                 "auditive (durée de 4,17 minutes). Les participants "
                 "entendent les mots de la tâche GE et doivent se souvenir "
                 "de manière explicite des phrases précédemment "
@@ -3030,7 +3030,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Movements </b> </font>",
+            "<font size=14 > <b> Mouvements </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
@@ -3273,7 +3273,7 @@ class Report:
         im_tra = Image(out_file_tra, 6.468 * inch, 3.018 * inch)
         im_rot = Image(out_file_rot, 6.468 * inch, 3.018 * inch)
         message = Paragraph(
-            "<font size=14 > <b> Movements </b> </font>",
+            "<font size=14 > <b> Mouvements </b> </font>",
             self.styles["Left"],
         )
         im_check.hAlign = "CENTER"
