@@ -1,4 +1,8 @@
-# mia_processes
+<p align="center" >
+	<img src="https://github.com/populse/mia_processes/blob/master/mia_processes/sources_images/Logo_mia_processes.jpg" alt="mia_processes logo" height="300" width="300">
+    <br />
+    <span style="font-size: 8px;">This image was generated with ChatGPT from a text description.</span>
+</p>
 
 <!-- [![](https://codecov.io/github/populse/mia_processes/coverage.svg?branch=master)](https://codecov.io/github/populse/mia_processes) -->
 [![](https://img.shields.io/badge/license-CeCILL-blue.svg)](https://github.com/populse/mia_processes/blob/master/LICENSE)
