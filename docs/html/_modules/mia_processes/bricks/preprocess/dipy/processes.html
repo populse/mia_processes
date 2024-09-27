@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.dipy.processes &#8212; mia_processes 2.6.1-dev+de1cb8a6 documentation</title>
+    <title>mia_processes.bricks.preprocess.dipy.processes &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=eac47572"></script>
+    <script src="../../../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.6.1-dev+de1cb8a6 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.dipy.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -97,7 +97,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Denoise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -209,7 +209,7 @@
 
 <div class="viewcode-block" id="Denoise.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.dipy.html#mia_processes.bricks.preprocess.dipy.processes.Denoise.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -220,6 +220,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -306,7 +307,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ComputeDKI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="c1"># self.requirement = [&quot;nipype&quot;]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -399,7 +400,7 @@
 
 <div class="viewcode-block" id="ComputeDKI.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.dipy.html#mia_processes.bricks.preprocess.dipy.processes.ComputeDKI.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -410,6 +411,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>

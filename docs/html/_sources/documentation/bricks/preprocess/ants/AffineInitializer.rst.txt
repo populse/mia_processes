@@ -84,7 +84,7 @@ Initialize an affine transform using ANTs AffineInitizer
 
 -------------
 
-Usefull links:
+Useful links:
 
 `ANTS AffineInitializer - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#affineinitializer>`_
 

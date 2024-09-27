@@ -150,6 +150,6 @@ Generates the report for functional data in mriqc pipeline
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_

@@ -23,7 +23,7 @@ memory functions (LMN language memory network) at an individual level.
 
 This protocol consists of three interdependent tasks:
 
-- The first task is a block sequence of sentence generation with implicit encoding (GE). Subjects heard words through headphones and have to generate sentences in internal language. During the control periods, a pseudoword is broadcast to the subjects  and they have to listen the pseudoword and not to talk covertly. The run also includ rest period (with a fixation cross displayed).
+- The first task is a block sequence of sentence generation with implicit encoding (GE). Subjects heard words through headphones and have to generate sentences in internal language. During the control periods, a pseudoword is broadcast to the subjects  and they have to listen the pseudoword and not to talk covertly. The run also include rest period (with a fixation cross displayed).
 
 - The second task is a recognition event paradigm (RECO). Images are presented to the subjects in a pseudo-random modeand they have to indicate whether they recognise the images of the objects whose names had been broadcast during the first GE task. The choice was binary. Either the subject indicates that they recognised the image (OLD), or that it was a new item (NEW). The run also included 40 control images showing the button that needed to be pressed in order to control for the motor activations during button pressing.
 
@@ -35,7 +35,7 @@ GE and RA runs are analysed as a block design while RECO run is analysed as an e
 Lateralization indexes are computed using an iterative approach on the GE run.
 
 Based on the responses during the RECO run, we calculated behavioral performances during this task.
-The encoding performance during GE run was indirectly determined via thoses responses and
+The encoding performance during GE run was indirectly determined via those responses and
 the GE run is analysed using the encoding performance as a regressor.
 
 A report is generated at the end of the analysis with the main statistical results obtained.
@@ -53,7 +53,7 @@ A report is generated at the end of the analysis with the main statistical resul
 
 | The GE2REC pipeline combines the following pipelines and processes:
 |   - `Preprocessing <../preprocess/Bold_spatial_preprocessing3.html>`_
-|   - `Get E-Prime informations <../../bricks/tools/Get_Eprime_info_GE2REC.html>`_
+|   - `Get E-Prime information <../../bricks/tools/Get_Eprime_info_GE2REC.html>`_
 |   - `Level1Design <../../bricks/stats/spm/Level1Design.html>`_
 |   - `EstimateModel <../../bricks/stats/spm/EstimateModel.html>`_
 |   - `EstimateContrast <../../bricks/stats/spm/EstimateContrast.html>`_

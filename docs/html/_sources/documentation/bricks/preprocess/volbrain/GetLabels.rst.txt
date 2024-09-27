@@ -68,7 +68,7 @@ Choose between "tissues", "lobes", "structures", "macrostructures" and obtain th
 
 -------------
 
-Usefull links:
+Useful links:
 
 `volBrain Assemblynet <https://github.com/volBrain/AssemblyNet>`_
 

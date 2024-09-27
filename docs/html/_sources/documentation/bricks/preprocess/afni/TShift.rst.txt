@@ -158,7 +158,7 @@ If neither of this two parameters are defined, the process return the input file
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dTshift <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTshift.html>`_
 

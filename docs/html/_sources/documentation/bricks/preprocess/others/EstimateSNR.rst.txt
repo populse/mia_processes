@@ -44,6 +44,6 @@ Adapted from `MRIQC <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 -------------
 
-Usefull links:
+Useful links:
 
 `_estimate_snr function <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970>`_

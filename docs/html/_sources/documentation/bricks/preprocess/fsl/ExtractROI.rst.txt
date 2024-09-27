@@ -53,7 +53,7 @@ So to extract voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 1
 **Optional inputs**
 
 - *t_min* (an integer, optional)
-    t mininum index.
+    t minimum index.
 
     ::
 
@@ -67,7 +67,7 @@ So to extract voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 1
       ex. 1
 
 - *x_min* (an integer, optional)
-    x mininum index.
+    x minimum index.
 
     ::
 
@@ -81,7 +81,7 @@ So to extract voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 1
       ex. 1
 
 - *y_min* (an integer, optional)
-    y mininum index.
+    y minimum index.
 
     ::
 
@@ -95,7 +95,7 @@ So to extract voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 1
       ex. 1
 
 - *z_min* (an integer, optional)
-    z mininum index.
+    z minimum index.
 
     ::
 
@@ -119,7 +119,7 @@ So to extract voxels 10 to 12 inclusive you would specify 10 and 3 (not 10 and 1
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL fslroi <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils>`_
 

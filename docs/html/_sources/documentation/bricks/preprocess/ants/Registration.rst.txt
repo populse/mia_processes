@@ -19,7 +19,7 @@ and transformation operations. The cost function is defined using one or more â€
 Both linear and non-linear transformations can be used. Usually, registration is done in multiple stages.
 For example first an Affine, then a Rigid, and ultimately a non-linear (Syn)-transformation (see 'transform' and 'transform_parameters' parameter).
 
-It is possible to initilize the registration by using one or more transforms from moving_image to fixed_image with the
+It is possible to initialize the registration by using one or more transforms from moving_image to fixed_image with the
 'initial_moving_transform' parameter.
 For example, when you already have a warpfield that corrects for geometrical distortions in an EPI (functional) image, that you want to apply before an Affine registration to a structural image.
 You could put this transform into 'intial_moving_transform'.
@@ -355,7 +355,7 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 
 -------------
 
-Usefull links:
+Useful links:
 
 `ANTs Registration - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#registration>`_
 

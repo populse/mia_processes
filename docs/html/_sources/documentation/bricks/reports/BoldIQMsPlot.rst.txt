@@ -87,7 +87,7 @@ Used `Niworkflow FMRIplot <https://github.com/nipreps/niworkflows/blob/83bb10ee2
       ex. '/home/username/data/derived_data/spikes_reg_func_valid.out'
 
 - *tr* (a float, optional)
-    Repetion time. Default value is Undefined, the TR in the database will be used.
+    Repetition time. Default value is Undefined, the TR in the database will be used.
 
     ::
 
@@ -105,6 +105,6 @@ Used `Niworkflow FMRIplot <https://github.com/nipreps/niworkflows/blob/83bb10ee2
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Niworkflow FMRIplot <https://github.com/nipreps/niworkflows/blob/83bb10ee21d89546b1c5b05f2c7e4ae29ad1bece/niworkflows/viz/plots.py#L38>`_

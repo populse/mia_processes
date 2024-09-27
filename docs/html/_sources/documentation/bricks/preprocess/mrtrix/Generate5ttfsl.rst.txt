@@ -45,7 +45,7 @@ The generated 5TT image is suitable for use in Anatomically-Constrained Tractogr
 
       ex. False
 
-- *premasked* (a boolean, default value is Fasle, optional)
+- *premasked* (a boolean, default value is False, optional)
     Indicate that brain masking has already been applied to the input image
 
     ::
@@ -81,7 +81,7 @@ The generated 5TT image is suitable for use in Anatomically-Constrained Tractogr
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix 5ttgen <https://mrtrix.readthedocs.io/en/latest/reference/commands/5ttgen.html>`_
 

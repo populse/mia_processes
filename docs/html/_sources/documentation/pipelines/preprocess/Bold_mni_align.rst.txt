@@ -22,7 +22,7 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 | Bold_mni_align combines the following pipelines and processes:
 |   - `Bias field correction <../../bricks/preprocess/ants/N4BiasFieldCorrection.html>`_ (using ANTs N4BiasFieldCorrection)
 |       (default: dimension = 3)
-|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_
+|   - `Affine Initializer <../../bricks/preprocess/ants/AffineInitializer.html>`_
 |   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
 |      (default values for template : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'boldref',  desc ='fMRIPrep'
 |       default values for template mask : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'mask', desc ='brain'
@@ -220,6 +220,6 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriq EPI mni align pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.epi_mni_align>`_

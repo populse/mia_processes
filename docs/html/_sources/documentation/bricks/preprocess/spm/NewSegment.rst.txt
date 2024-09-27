@@ -260,7 +260,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 	        - This interface currently supports single channel input only.
 	        - The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12, are not used in this brick.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 Segment <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=45>`_,
 	    `nipype NewSegment <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#newsegment>`_
 ..

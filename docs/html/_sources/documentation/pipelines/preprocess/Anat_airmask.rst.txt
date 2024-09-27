@@ -94,6 +94,6 @@ Compute rotation mask, air mask, artifact mask and hat mask for structural data 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_

@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mia_processes.bricks.reports package &#8212; mia_processes 2.6.1-dev+44616516 documentation</title>
+    <title>mia_processes.bricks.reports package &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=f4b1ae50"></script>
+    <script src="_static/documentation_options.js?v=598035f7"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.6.1-dev+44616516 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -164,7 +164,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.AnatIQMs.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -172,7 +172,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -215,7 +218,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMs.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -223,7 +226,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -265,7 +271,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMsPlot.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMsPlot.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMsPlot.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMsPlot.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMsPlot.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -275,7 +281,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -322,7 +331,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -332,7 +341,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -375,7 +387,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -385,7 +397,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -432,7 +447,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -442,7 +457,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -490,7 +508,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.LateralizationIndexCurve.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#LateralizationIndexCurve.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.LateralizationIndexCurve.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#LateralizationIndexCurve.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.LateralizationIndexCurve.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -498,7 +516,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -552,7 +573,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -562,7 +583,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -604,7 +628,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.PlotSignalROI.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#PlotSignalROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.PlotSignalROI.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#PlotSignalROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.PlotSignalROI.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -612,7 +636,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -677,7 +704,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Result_collector.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -687,7 +714,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -732,7 +762,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Spikes.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -742,7 +772,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -762,7 +795,7 @@ self.make_initResult() object.</p>
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.art_qi1">
 <span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">art_qi1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">airmask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artmask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#art_qi1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.art_qi1" title="Link to this definition">¶</a></dt>
 <dd><p>Detect artifacts in the image using the method described in [Mortamet2009].</p>
-<p>Caculates <span class="math notranslate nohighlight">\(\text{QI}_1\)</span>, as the proportion of voxels with intensity
+<p>Calculates <span class="math notranslate nohighlight">\(\text{QI}_1\)</span>, as the proportion of voxels with intensity
 corrupted by artifacts normalized by the number of voxels in the
 background:</p>
 <div class="math notranslate nohighlight">
@@ -1151,6 +1184,7 @@ generate automatic report at the end of a pipeline calculation.</p>
 <li><p>ReportFuncMriqc</p></li>
 <li><p>ReportGE2REC</p></li>
 <li><p>ReportGroupMriqc</p></li>
+<li><p>ReportPerfDsc</p></li>
 </ul>
 </dd>
 </dl>
@@ -1182,7 +1216,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1190,7 +1224,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1232,7 +1269,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportCO2inhalCvr.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportCO2inhalCvr.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1240,7 +1277,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1282,7 +1322,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1290,7 +1330,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1332,7 +1375,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportGE2REC.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportGE2REC.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportGE2REC.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportGE2REC.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportGE2REC.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1340,7 +1383,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1382,7 +1428,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportGroupMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportGroupMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1390,7 +1436,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1401,6 +1450,59 @@ self.make_initResult() object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">
 <span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportGroupMriqc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia" title="Link to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportPerfDsc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.reporting.</span></span><span class="sig-name descname"><span class="pre">ReportPerfDsc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportPerfDsc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportPerfDsc" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
+<p><em>Generates report for Perfusion study using DSC-MRI</em></p>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportPerfDsc.html">ReportPerfDsc brick
+in the mia_processes website</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘ReportPerfDsc.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;ReportPerfDsc&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;ReportPerfDsc&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportPerfDsc.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportPerfDsc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportPerfDsc.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportPerfDsc.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportPerfDsc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportPerfDsc.list_outputs" title="Link to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportPerfDsc.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportPerfDsc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportPerfDsc.run_process_mia" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 

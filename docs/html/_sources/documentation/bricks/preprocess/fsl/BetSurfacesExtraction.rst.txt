@@ -124,7 +124,7 @@ The mask and mesh files (.vtk) are generated.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL BET <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide>`_
 

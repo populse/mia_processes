@@ -183,7 +183,7 @@ Align together scans of different modalities
 
 .. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_,
 	    `nipype Coregister <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#coregister>`_
 ..

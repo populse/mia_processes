@@ -43,7 +43,7 @@ Extract a specific ROI from a segmentation file using labels
       ex. True
 
 - *save_concate_roi* (a boolean, optional, default value is False)
-    Save a concatenation of all the ROI extrated as a NIfTI file.
+    Save a concatenation of all the ROI extracted as a NIfTI file.
 
     ::
 

@@ -65,7 +65,7 @@ Resamples an image to the resolution of a reference image using nilearn.image.re
 **Outputs parameters:**
 
 - *out_files*
-    The resulting image after resampling ( list of pathlike object or string reprsenting a file or a list of items which are a pathlike object or string representing a file ; extensions: [.nii, .nii.gz]).
+    The resulting image after resampling ( list of pathlike object or string representing a file or a list of items which are a pathlike object or string representing a file ; extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -73,6 +73,6 @@ Resamples an image to the resolution of a reference image using nilearn.image.re
 
 -------------
 
-Usefull links:
+Useful links:
 
  `nilearn.image.resample_to_img() <https://nilearn.github.io/dev/modules/generated/nilearn.image.resample_to_img.html>`_

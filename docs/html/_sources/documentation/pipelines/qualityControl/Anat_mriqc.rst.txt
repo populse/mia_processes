@@ -70,6 +70,6 @@ Further discussion is available
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc 22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_

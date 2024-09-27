@@ -63,7 +63,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
       ex. True
 
-- *variance_tol* (a float, optionnal, default value is 0.0000001000)
+- *variance_tol* (a float, optional, default value is 0.0000001000)
     Maximum variance to consider "close to" zero for the purposes of removal.
 
     ::
@@ -82,7 +82,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 -------------
 
-Usefull links:
+Useful links:
 
 `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`_
 

@@ -13,7 +13,7 @@ Harmonize brick
 Harmonize input image using a white matter mask
 -----------------------------------------------
 
-As decribed in the method to compute the arfifact mask described in the paper of `Mortamet and colleagues <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_
+As described in the method to compute the arfifact mask described in the paper of `Mortamet and colleagues <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
 Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
@@ -30,7 +30,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *wm_mask* (a string representing an existing file)
-    Whithe matter mask file (valid extensions: [.nii, .nii.gz]).
+    White matter mask file (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -72,6 +72,6 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Harmonize mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L405>`_

@@ -15,9 +15,9 @@ Diffusion tensor estimation
 
 Convert diffusion-weighted images to tensor images.
 
-| By defaul, the diffusion tensor (and optionally the kurtosis) is fitted to the log-signal in two steps:
+| By default, the diffusion tensor (and optionally the kurtosis) is fitted to the log-signal in two steps:
 |   - first fit is done using weighted least-squares (WLS) with weights based on the empirical signal intensities (or using ordinary least-squares (OLS) is "ols_option" is used)
-|   - second fit is done using iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (numbr of iteration could be choose with the "number_of_iteration" option).
+|   - second fit is done using iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (number of iteration could be choose with the "number_of_iteration" option).
 
 
 (mrtrix dwi2tensor command)
@@ -125,7 +125,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix dwi2tensor <https://mrtrix.readthedocs.io/en/latest/reference/commands/dwi2tensor.html>`_
 

@@ -75,7 +75,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix dwibiascorrect <https://mrtrix.readthedocs.io/en/latest/reference/commands/dwibiascorrect.html>`_
 

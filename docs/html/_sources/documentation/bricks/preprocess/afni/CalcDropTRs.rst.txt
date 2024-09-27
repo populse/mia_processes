@@ -71,7 +71,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dcalc <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dcalc.html>`_
 

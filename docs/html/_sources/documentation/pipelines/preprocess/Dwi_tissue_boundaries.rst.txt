@@ -34,8 +34,8 @@ However it seems to not work perfectly for some data. Please check the outputs d
 |   - `Generate a 5TT image  <../../bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
 |   - `Coregistration using FLIRT <../../bricks/preprocess/fsl/Flirt.html>`_
         (default values: dof = 6, interp=nearestneighbour)
-|   - `Convert FSL's transfomation to mrtrix format  <../../bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
-|   - `Apply spatial transfomation <../../bricks/preprocess/mrtrix/MRTransform.html>`_
+|   - `Convert FSL's transformation to mrtrix format  <../../bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
+|   - `Apply spatial transformation <../../bricks/preprocess/mrtrix/MRTransform.html>`_
         (default values: inverse = True)
 |   - `Preparing a mask of streamline seeding <../../bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
 

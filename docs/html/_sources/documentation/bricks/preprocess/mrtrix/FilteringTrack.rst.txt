@@ -169,6 +169,6 @@ Filter a whole-brain fibre-tracking data set such that the streamline densities 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix tcksift <https://mrtrix.readthedocs.io/en/latest/reference/commands/tcksift.html>`_

@@ -50,6 +50,6 @@ Generate a mask image appropriate for seeding streamlines on the grey matter-whi
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix 5tt2gmwmi <https://mrtrix.readthedocs.io/en/latest/reference/commands/5tt2gmwmi.html>`_

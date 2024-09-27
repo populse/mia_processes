@@ -166,7 +166,7 @@ However it seems to not work perfectly for some data.
 
 -------------
 
-Usefull links:
+Useful links:
 `MRTrix <https://mrtrix.readthedocs.io/en/latest/>`_
 `Tutorial B.A.T.M.A.N.: Basic and Advanced Tractography with MRtrix for All Neurophiles <https://osf.io/fkyht/>`_
 `Tutorial Andy's brain book <https://andysbrainbook.readthedocs.io/en/latest/MRtrix/MRtrix_Introduction.html>`_

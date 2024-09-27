@@ -61,6 +61,6 @@ Get templates tissues probability map and register them in subject space
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc v22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L408>`_

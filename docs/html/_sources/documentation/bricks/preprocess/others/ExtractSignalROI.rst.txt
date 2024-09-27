@@ -52,6 +52,6 @@ Extract signals from ROI using a segmentation file with label
 
 -------------
 
-Usefull links:
+Useful links:
 
 `nilearn NiftiLabelsMasker <https://nilearn.github.io/stable/modules/generated/nilearn.maskers.NiftiLabelsMasker.html>`_

@@ -337,7 +337,7 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix tckgen <https://mrtrix.readthedocs.io/en/latest/reference/commands/tckgen.html>`_
 

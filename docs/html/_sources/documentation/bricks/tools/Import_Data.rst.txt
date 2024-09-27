@@ -46,7 +46,7 @@ Import reference data into the current pipeline
 - The `rois_list` parameter is used to filter the data to be imported from a library defined by `lib_dir`.
   If `roi_list` is a list, each element of it will be a filename filter applied to select reference data.
   If `roi_list` is a list of lists, the filters will result from concatenating the elements of each internal
-  list with the underscore caracter (e.g. [["foo", "1"], ["faa", "2"]] gives two filters, "foo_1" and "faa_2".
+  list with the underscore character (e.g. [["foo", "1"], ["faa", "2"]] gives two filters, "foo_1" and "faa_2".
 
 - If `lib_dir` is not set, the default library used will be the miaresources/ROIs/ directory.
 

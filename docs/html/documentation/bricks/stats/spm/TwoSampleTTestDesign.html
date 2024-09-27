@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TwoSampleTTestDesign brick &#8212; mia_processes 2.6.1-dev+44616516 documentation</title>
+    <title>TwoSampleTTestDesign brick &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=f4b1ae50"></script>
+    <script src="../../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+44616516 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>TwoSampleTTestDesign brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -66,7 +66,7 @@
 <p><strong>Optional inputs parameters with a default value:</strong></p>
 <ul>
 <li><dl>
-<dt><em>out_dir_name</em> (a string, optional, default value is “spm_stat_2ndLevel”):</dt><dd><p>Name of the directoty where the SPM.mat file containing the specified design matrix will be written.
+<dt><em>out_dir_name</em> (a string, optional, default value is “spm_stat_2ndLevel”):</dt><dd><p>Name of the directory where the SPM.mat file containing the specified design matrix will be written.
 This directory will be created in the derived_data folder of the project.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;spm_stat_2ndLevel&#39;</span>
 </pre></div>
@@ -95,7 +95,7 @@ This directory will be created in the derived_data folder of the project.</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">- None: No threshold masking</div>
-<div class="line">- Absolute: threshold masking done using an absoulte threshold value, threshold_mask_value parameter should be filled</div>
+<div class="line">- Absolute: threshold masking done using an absolute threshold value, threshold_mask_value parameter should be filled</div>
 <div class="line">- Relative: threshold masking done using a proportion of the global value, threshold_mask_value parameter should be filled</div>
 </div>
 </div></blockquote>
@@ -117,7 +117,7 @@ This directory will be created in the derived_data folder of the project.</p>
 <dt><em>global_calc</em> &lt;=&gt; Global Calculation * <a class="footnote-reference brackets" href="#label" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (one of Omit, Mean, User, optional, default value is Omit):</dt><dd><p>This option is for PET or VBM data (not second level fMRI). There are three methods for estimating global effects:</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line">- Omit: assumming no other options requiring the global value chosen</div>
+<div class="line">- Omit: assuming no other options requiring the global value chosen</div>
 <div class="line">- User: enter your own vector of global values using the global_calc_values parameter</div>
 <div class="line">- Mean: SPM standard mean voxel value (within per image fullmean/8 mask)</div>
 </div>
@@ -154,9 +154,9 @@ Do not perform grand mean scaling.</p>
 <ul>
 <li><dl>
 <dt><em>covariates_names</em> &lt;=&gt; Covariate.Name* <a class="footnote-reference brackets" href="#label" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of string, optional):</dt><dd><p>Names of the covariates.
-The covariate option allows to specified covariates or nuissance variables.
+The covariate option allows to specified covariates or nuisance variables.
 The aims is to examine whether there are any correlations between this additionl data and brain activation.</p>
-<p>covariates_vectors, covariates_interactions and covariates_centerings should be aslo filled.</p>
+<p>covariates_vectors, covariates_interactions and covariates_centerings should be also filled.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Reaction time&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -166,7 +166,7 @@ The aims is to examine whether there are any correlations between this additionl
 <li><dl>
 <dt><em>covariates_vectors</em> &lt;=&gt; Covariate.Vector* <a class="footnote-reference brackets" href="#label" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of list of float, optional):</dt><dd><p>Vectors of the covariates values.
 For each covariate, the values should be entered “per subject” (i.e all for subject 1, then all for subject 2,…).</p>
-<p>covariates_names, covariates_interactions and covariates_centerings should be aslo filled.</p>
+<p>covariates_names, covariates_interactions and covariates_centerings should be also filled.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]]</span>
 </pre></div>
 </div>
@@ -174,7 +174,7 @@ For each covariate, the values should be entered “per subject” (i.e all for 
 </dl>
 </li>
 <li><dl>
-<dt><em>covariates_interactions</em> &lt;=&gt; Covariate.Intercations* <a class="footnote-reference brackets" href="#label" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of int among 1, 2, 3, 4 optional):</dt><dd><p>For each covariate you have defined, there is an opportunity to create an additional regressor that
+<dt><em>covariates_interactions</em> &lt;=&gt; Covariate.Interactions* <a class="footnote-reference brackets" href="#label" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of int among 1, 2, 3, 4 optional):</dt><dd><p>For each covariate you have defined, there is an opportunity to create an additional regressor that
 is the interaction between the covariate and a chosen experimental facto:</p>
 <blockquote>
 <div><div class="line-block">
@@ -184,7 +184,7 @@ is the interaction between the covariate and a chosen experimental facto:</p>
 <div class="line">- 4: With Factor 3</div>
 </div>
 </div></blockquote>
-<p>covariates_vectors, covariates_names and covariates_centerings should be aslo filled.</p>
+<p>covariates_vectors, covariates_names and covariates_centerings should be also filled.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -205,7 +205,7 @@ is the interaction between the covariate and a chosen experimental facto:</p>
 <div class="line">- 8: GM</div>
 </div>
 </div></blockquote>
-<p>covariates_vectors, covariates_interactions and covariates_names should be aslo filled.</p>
+<p>covariates_vectors, covariates_interactions and covariates_names should be also filled.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -234,7 +234,7 @@ All voxels with value NaN (for image data-types with a representation of NaN), o
 </dl>
 </li>
 <li><dl>
-<dt><em>global_calc_values</em> &lt;=&gt; Global Calculaion.Global values* <a class="footnote-reference brackets" href="#label" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of float, optional)</dt><dd><p>Vector of global values used for global caculation (to be filled only if “User” choose for global_calc parameter )</p>
+<dt><em>global_calc_values</em> &lt;=&gt; Global Calculation.Global values* <a class="footnote-reference brackets" href="#label" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (a list of float, optional)</dt><dd><p>Vector of global values used for global calculation (to be filled only if “User” choose for global_calc parameter )</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -262,7 +262,7 @@ Note that the input smp_mat_file will be overwritten.</p>
 <p>Syntax: mia_processes/nipype OneSampleTTestDesign brick &lt;=&gt; SPM12 fMRI factorial design.</p>
 </aside>
 </aside>
-<p>Usefull links:</p>
+<p>Useful links:</p>
 <p><a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=81">SPM12 fMRI Factorial Design</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#twosamplettestdesign">nipype TwoSampleTTestDesign</a></p>
 </section>

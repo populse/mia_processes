@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.6.1-dev+de1cb8a6 documentation</title>
+    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=eac47572"></script>
+    <script src="../../../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.6.1-dev+de1cb8a6 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.mrtrix.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -121,7 +121,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConstrainedSphericalDeconvolution</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -142,7 +142,7 @@
             <span class="s2">&quot;GM response text file.&quot;</span>
             <span class="s2">&quot;(a pathlike object or string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="n">algorithm_desc</span> <span class="o">=</span> <span class="s2">&quot;FOD alogorithm (csd or msmt_csd)&quot;</span>
+        <span class="n">algorithm_desc</span> <span class="o">=</span> <span class="s2">&quot;FOD algorithm (csd or msmt_csd)&quot;</span>
         <span class="n">in_directions_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Specify the directions over which to apply the non-negativity &quot;</span>
             <span class="s2">&quot;constraint (by default, the built-in 300 direction set is used).&quot;</span>
@@ -192,7 +192,7 @@
             <span class="s2">&quot;wm_txt&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">wm_txt_desc</span><span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="c1"># Optionnal inouts traits</span>
+        <span class="c1"># Optional inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;gm_txt&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">gm_txt_desc</span><span class="p">)</span>
         <span class="p">)</span>
@@ -251,7 +251,7 @@
             <span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="c1"># Ouputs traits</span>
+        <span class="c1"># Outputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;csf_odf&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">csf_odf_desc</span><span class="p">)</span>
         <span class="p">)</span>
@@ -278,7 +278,7 @@
 
 <div class="viewcode-block" id="ConstrainedSphericalDeconvolution.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ConstrainedSphericalDeconvolution.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -286,7 +286,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -391,7 +393,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIBiasCorrect</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="c1"># FIXME : ants and fsl in the requirement even if we use only</span>
         <span class="c1"># one of them</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">,</span> <span class="s2">&quot;ants&quot;</span><span class="p">,</span> <span class="s2">&quot;fsl&quot;</span><span class="p">]</span>
@@ -401,7 +403,7 @@
             <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">use_fsl_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Use FSL FAST to estimate the inhomogeneity field. (a boolean)&quot;</span>
         <span class="p">)</span>
@@ -484,7 +486,7 @@
 
 <div class="viewcode-block" id="DWIBiasCorrect.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -492,7 +494,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -581,7 +585,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIBrainMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -611,7 +615,7 @@
 
 <div class="viewcode-block" id="DWIBrainMask.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -619,7 +623,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -683,7 +689,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWICat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -733,7 +739,7 @@
 
 <div class="viewcode-block" id="DWICat.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWICat.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -741,7 +747,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -822,7 +830,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIDenoise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -830,7 +838,7 @@
             <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">extend_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Set the window size of the denoising filter. &quot;</span>
             <span class="s2">&quot; (a tuple of the form: (an integer, an integer, an integer), &quot;</span>
@@ -905,7 +913,7 @@
 
 <div class="viewcode-block" id="DWIDenoise.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -913,7 +921,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -992,7 +1002,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIExtract</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -1075,7 +1085,7 @@
 
 <div class="viewcode-block" id="DWIExtract.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1083,7 +1093,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1164,7 +1176,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DWIPreproc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">,</span> <span class="s2">&quot;fsl&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -1180,7 +1192,7 @@
             <span class="s2">&quot;for phase-encoding information can be found in the image &quot;</span>
             <span class="s2">&quot;header(s). (none or pair or all or header) &quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">align_seepi_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Achieve alignment between the SE-EPI images used for &quot;</span>
             <span class="s2">&quot;inhomogeneity field estimation, and the DWIs (a boolean)&quot;</span>
@@ -1252,7 +1264,7 @@
             <span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="c1"># Optionnal inputs traits</span>
+        <span class="c1"># Optional inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;se_epi_corr&quot;</span><span class="p">,</span>
             <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">se_epi_corr_desc</span><span class="p">),</span>
@@ -1378,7 +1390,7 @@
 
 <div class="viewcode-block" id="DWIPreproc.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1386,7 +1398,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1481,7 +1495,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EditingTrack</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -1743,7 +1757,7 @@
 
 <div class="viewcode-block" id="EditingTrack.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1751,7 +1765,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1863,7 +1879,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FilteringTrack</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -2140,7 +2156,7 @@
 
 <div class="viewcode-block" id="FilteringTrack.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2148,7 +2164,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2269,7 +2287,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FitTensor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Nipype FitTransform process is not up to date for some option</span>
@@ -2280,7 +2298,7 @@
             <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs traits</span>
+        <span class="c1"># Optional inputs traits</span>
         <span class="n">in_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Only perform computation within the specified binary brain &quot;</span>
             <span class="s2">&quot;mask image (a pathlike object or string representing an &quot;</span>
@@ -2322,7 +2340,7 @@
             <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="c1"># Optionnal inputs traits</span>
+        <span class="c1"># Optional inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_mask_desc</span><span class="p">)</span>
         <span class="p">)</span>
@@ -2404,7 +2422,7 @@
 
 <div class="viewcode-block" id="FitTensor.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.FitTensor.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2412,7 +2430,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2521,7 +2541,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Generate5ttfsl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">,</span> <span class="s2">&quot;fsl&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -2529,7 +2549,7 @@
             <span class="s2">&quot;Input T1 image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">in_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Manually provide a brain mask, rather than deriving one in the &quot;</span>
             <span class="s2">&quot;script (a pathlike object string representing an existing file)&quot;</span>
@@ -2612,7 +2632,7 @@
 
 <div class="viewcode-block" id="Generate5ttfsl.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5ttfsl.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2620,7 +2640,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2698,7 +2720,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Generate5tt2gmwmi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -2706,7 +2728,7 @@
             <span class="s2">&quot;The input 5TT segmented anatomical image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">in_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Filter an input mask image according to those voxels that lie &quot;</span>
             <span class="s2">&quot;upon the grey matter - white matter boundary (a pathlike object&quot;</span>
@@ -2739,7 +2761,7 @@
 
 <div class="viewcode-block" id="Generate5tt2gmwmi.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Generate5tt2gmwmi.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2747,7 +2769,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2811,7 +2835,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRCat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -2879,7 +2903,7 @@
 
 <div class="viewcode-block" id="MRCat.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRCat.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2887,7 +2911,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2968,7 +2994,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRConvert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -2998,8 +3024,8 @@
         <span class="p">)</span>
         <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Output file suffix (a string, not mandatory)&quot;</span>
         <span class="c1"># FIXME: json import / export --&gt; in mia it is not the same json as</span>
-        <span class="c1">#        used in BIDS, see if it is usefull/ possible to add</span>
-        <span class="c1">#        thoses option</span>
+        <span class="c1">#        used in BIDS, see if it is useful/ possible to add</span>
+        <span class="c1">#        those option</span>
 
         <span class="c1"># Optional base inputs description</span>
         <span class="n">bval_scale_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -3168,7 +3194,7 @@
 
 <div class="viewcode-block" id="MRConvert.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRConvert.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3176,14 +3202,16 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRConvert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_file</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_bvec</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If grad_file used, do not provied bvec or bval&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If grad_file used, do not provide bvec or bval&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
@@ -3341,7 +3369,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRDeGibbs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -3349,7 +3377,7 @@
             <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">axes_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Indicate the plane in which the data was acquire. &quot;</span>
             <span class="s2">&quot;(a list of items which are an integer, &quot;</span>
@@ -3432,7 +3460,7 @@
 
 <div class="viewcode-block" id="MRDeGibbs.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3440,7 +3468,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3508,7 +3538,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRMath</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -3595,7 +3625,7 @@
 
 <div class="viewcode-block" id="MRMath.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3603,7 +3633,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3673,7 +3705,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MRTransform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Nipype MRTransform process is not up to date for some option</span>
@@ -3684,7 +3716,7 @@
             <span class="s2">&quot;Input images to be transformed (a &quot;</span>
             <span class="s2">&quot;pathlike object or string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">linear_transform_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Specify a linear transform to apply &quot;</span>
             <span class="s2">&quot;(a pathlike object or string representing an existing file) &quot;</span>
@@ -3896,7 +3928,7 @@
 
 <div class="viewcode-block" id="MRTransform.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRTransform.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3904,7 +3936,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4011,7 +4045,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MTNormalise</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
         <span class="c1"># process nit in nipype</span>
 
@@ -4025,7 +4059,7 @@
             <span class="s2">&quot;normalisation (a pathlike object or &quot;</span>
             <span class="s2">&quot;string representing a file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">order_number_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The maximum order of the polynomial basis used to fit the &quot;</span>
             <span class="s2">&quot;normalisation field in the log-domain. &quot;</span>
@@ -4046,7 +4080,7 @@
 
         <span class="c1"># Outputs description</span>
         <span class="n">out_files_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Nomalised outputs images (a list of items which are a pathlike &quot;</span>
+            <span class="s2">&quot;Normalised outputs images (a list of items which are a pathlike &quot;</span>
             <span class="s2">&quot;object or string representing a file)&quot;</span>
         <span class="p">)</span>
 
@@ -4120,7 +4154,7 @@
 
 <div class="viewcode-block" id="MTNormalise.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4128,7 +4162,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4211,7 +4247,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResponseSDDhollander</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -4219,7 +4255,7 @@
             <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">erode_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Number of erosion passes to apply to initial (whole brain) mask. &quot;</span>
             <span class="s2">&quot;Set to 0 to not erode the brain mask. (an intefer, default is 3)&quot;</span>
@@ -4355,7 +4391,7 @@
 
 <div class="viewcode-block" id="ResponseSDDhollander.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDDhollander.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4363,7 +4399,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4463,7 +4501,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SphericalHarmonicExtraction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -4597,7 +4635,7 @@
 
 <div class="viewcode-block" id="SphericalHarmonicExtraction.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.SphericalHarmonicExtraction.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4605,7 +4643,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4687,7 +4727,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TensorMetrics</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -4695,7 +4735,7 @@
             <span class="s2">&quot;Input DTI image (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">component_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Specify the desired eigenvalue/eigenvector(s) &quot;</span>
             <span class="s2">&quot;(a list of items which are any value)&quot;</span>
@@ -4931,7 +4971,7 @@
 
 <div class="viewcode-block" id="TensorMetrics.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TensorMetrics.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4939,7 +4979,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -5094,7 +5136,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Tractography</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -5102,7 +5144,7 @@
             <span class="s2">&quot;Input file to be processed (a pathlike object&quot;</span>
             <span class="s2">&quot;string representing an existing file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># Optionnal inputs description</span>
+        <span class="c1"># Optional inputs description</span>
         <span class="n">algorithm_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Tractography algorithm to be used (iFOD2, FACT, iFOD1, &quot;</span>
             <span class="s2">&quot;Nulldist, SD_Stream, Tensor_Det or Tensor_Prob)&quot;</span>
@@ -5619,7 +5661,7 @@
 
 <div class="viewcode-block" id="Tractography.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.Tractography.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -5627,7 +5669,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -5773,7 +5817,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TransformFSLConvert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
@@ -5824,7 +5868,7 @@
 
 <div class="viewcode-block" id="TransformFSLConvert.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.TransformFSLConvert.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -5832,7 +5876,9 @@
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
 <span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
+
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>

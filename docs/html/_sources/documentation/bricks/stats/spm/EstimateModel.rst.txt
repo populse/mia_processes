@@ -135,7 +135,7 @@ Bayesian methods are not currently implemented in this brick. If you need to use
         ex. '/home/username/data/derived_data/ResMS.nii'
 
 - *residual_images* (a list of items which are a pathlike object or string representing a file, optional):
-    The individual error "Res_000k" images where k indexes the kth dynamic (fourth dimensional points of the fuctional).
+    The individual error "Res_000k" images where k indexes the kth dynamic (fourth dimensional points of the functional).
     These images are generated only if write_residuals is True.
 
     ::
@@ -199,7 +199,7 @@ Bayesian methods are not currently implemented in this brick. If you need to use
 
 -------------
 
-Usefull links:
+Useful links:
 
 `SPM12 fMRI model estimation <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73>`_,
 `nipype EstimateModel <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_

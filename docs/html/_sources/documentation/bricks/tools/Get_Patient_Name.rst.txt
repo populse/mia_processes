@@ -10,7 +10,7 @@
 Get_Patient_Name brick
 =======================
 
-Get patient name from a file. "PatientName" tag should be filled for this file in tha database.
+Get patient name from a file. "PatientName" tag should be filled for this file in the database.
 
 -----------------------------------------------
 

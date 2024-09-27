@@ -70,7 +70,7 @@ Example of curve obtained:
 
 -------------
 
-Usefull links:
+Useful links:
 
 - `SPM LI-toolbox <https://www.fil.ion.ucl.ac.uk/spm/ext/#LI>`_
 - `[Wilke2007] <https://doi.org/10.1016/j.jneumeth.2007.01.026>`_

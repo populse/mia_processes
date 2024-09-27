@@ -24,7 +24,7 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 |       (default for first correction: dimension = 3, rescale_intensities = True,
 |       default for second correction: dimension = 3, n_iterations = [50] * 4)
 |   - `Skull Stripping <../../bricks/preprocess/afni/SkullStrip.html>`_  (using Freesurfer Synthstrip)
-|   - `Intesity Clip <../../bricks/preprocess/others/IntensityClip.html>`_
+|   - `Intensity Clip <../../bricks/preprocess/others/IntensityClip.html>`_
 |   - `Mask <../../bricks/preprocess/others/Mask.html>`_
 
 .. image:: ../../images/Anat_skullstrip_synthstrip_pipeline.png
@@ -73,7 +73,7 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 
 -------------
 
-Usefull links:
+Useful links:
 
 `SynthStrip <https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/>`_
 

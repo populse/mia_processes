@@ -72,13 +72,13 @@ In this case, bvec and bval file should be specified.*
 **Outputs parameters:**
 
 - *out_file* (a list of items which are pathlike object or string representing a file)
-    Nomalised outputs images
+    Normalised outputs images
     ::
 
       ex. ['/home/username/data/derived_data/DWI_wmfod_norm.mif', '/home/username/data/derived_data/DWI_gmfod_norm.mif', '/home/username/data/derived_data/DWI_csffod_norm.mif']
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix mtnormalise <https://mrtrix.readthedocs.io/en/latest/reference/commands/mtnormalise.html>`_

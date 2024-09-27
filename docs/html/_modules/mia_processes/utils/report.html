@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.6.1-dev+d3e43d68 documentation</title>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=717c3d5b"></script>
+    <script src="../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+d3e43d68 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -112,18 +112,21 @@
 <span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pdf report</span>
 
-<span class="sd">    IQMs_file --&gt; mriqc individual report (with all IQMs)</span>
-<span class="sd">    mriqc_group --&gt; mriqc report group</span>
-<span class="sd">    CVR --&gt; CVR report</span>
-<span class="sd">    GE2REC --&gt; GE2REC report</span>
+<span class="sd">    In the constructor, certain kwarg keys will specialise the report:</span>
+<span class="sd">      - CVR: CVR report</span>
+<span class="sd">      - GE2REC: GE2REC report</span>
+<span class="sd">      - IQMs_file: MRIQC individual report (with all IQMs)</span>
+<span class="sd">      - mriqc_group: MRIQC report group</span>
+<span class="sd">      - Perf_DSC: DSC perfusion report</span>
 
 <span class="sd">    Methods:</span>
-<span class="sd">      - get_iqms_data</span>
 <span class="sd">      - co2_inhal_cvr_make_report</span>
 <span class="sd">      - ge2rec_make_report</span>
+<span class="sd">      - get_iqms_data</span>
 <span class="sd">      - mriqc_anat_make_report</span>
 <span class="sd">      - mriqc_func_make_report</span>
 <span class="sd">      - mriqc_group_make_report</span>
+<span class="sd">      - perf_dsc_make_report</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -145,7 +148,112 @@
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s2">&quot;IQMs_file&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CVR&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">co2_inhal_cvr_make_report</span>
+            <span class="c1"># ref_exp = {</span>
+            <span class="c1">#     &quot;norm_anat&quot;: self.norm_anat,</span>
+            <span class="c1">#     &quot;norm_func&quot;: self.norm_func,</span>
+            <span class="c1"># }</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=18&gt;&lt;b&gt;</span><span class="si">{0}</span><span class="s2"> report: &lt;/b&gt;</span><span class="si">{1}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
+                    <span class="n">today_date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">header_title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;C&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;erebro&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;V&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;ascular&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; R&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;eactivity&lt;br/&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=7&gt;assessed using CO&lt;sub&gt;2&lt;/sub&gt; inhalation &quot;</span>
+                <span class="s2">&quot;as a physiological challenge&lt;/font&gt;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PatientRef&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">today_date</span><span class="p">)</span>
+            <span class="c1"># infos.insert(5, ref_exp)</span>
+            <span class="c1"># Hard-coded, we know the ref data used for IL in the</span>
+            <span class="c1"># CVR CO2 pipeline:</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;CVR_temoins_IL&quot;</span><span class="p">)</span>
+
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;CALCULATION DATE&quot;</span><span class="p">,</span>
+                <span class="c1"># &quot;NAME OF THE INPUT DATA&quot;,</span>
+                <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATHOLOGY&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;REFERENCE GROUP&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARE&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+        <span class="k">elif</span> <span class="s2">&quot;GE2REC&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ge2rec_make_report</span>
+            <span class="n">ref_exp</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;norm_anat&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+                <span class="s2">&quot;norm_func_gene&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_gene</span><span class="p">,</span>
+                <span class="s2">&quot;norm_func_reco&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_reco</span><span class="p">,</span>
+                <span class="s2">&quot;norm_func_recall&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_recall</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=18&gt;&lt;b&gt;</span><span class="si">{0}</span><span class="s2"> report: &lt;/b&gt;</span><span class="si">{1}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">],</span>
+                    <span class="n">today_date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">header_title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;GE2REC - Langage et mémoire&lt;/b&gt;&lt;/font&gt;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;LateralizationPathology&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DominantHand&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATHOLOGY&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;LATERALIZATION PATHOLOGY&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;DOMINANT HAND&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARE&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+        <span class="k">elif</span> <span class="s2">&quot;IQMs_file&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">IQMs_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
@@ -197,7 +305,7 @@
                 <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARE&quot;</span><span class="p">,</span>
             <span class="p">]</span>
 
         <span class="k">elif</span> <span class="s2">&quot;mriqc_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -214,15 +322,11 @@
             <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span><span class="n">today_date</span><span class="p">]</span>
             <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s2">&quot;MRIQC GROUPS CALCULATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARE&quot;</span><span class="p">,</span>
             <span class="p">]</span>
 
-        <span class="k">elif</span> <span class="s2">&quot;CVR&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">co2_inhal_cvr_make_report</span>
-            <span class="c1"># ref_exp = {</span>
-            <span class="c1">#     &quot;norm_anat&quot;: self.norm_anat,</span>
-            <span class="c1">#     &quot;norm_func&quot;: self.norm_func,</span>
-            <span class="c1"># }</span>
+        <span class="k">elif</span> <span class="s2">&quot;Perf_DSC&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_dsc_make_report</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;&lt;font size=18&gt;&lt;b&gt;</span><span class="si">{0}</span><span class="s2"> report: &lt;/b&gt;</span><span class="si">{1}</span><span class="s2">&quot;</span>
                 <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -232,14 +336,18 @@
             <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">header_title</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;C&lt;/b&gt;&lt;/font&gt;&quot;</span>
-                <span class="s2">&quot;&lt;font size=11&gt;erebro&lt;/font&gt;&quot;</span>
-                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;V&lt;/b&gt;&lt;/font&gt;&quot;</span>
-                <span class="s2">&quot;&lt;font size=11&gt;ascular&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;D&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;ynamic&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; S&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;usceptibility&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; C&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;contrast&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;M&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;agnetic&lt;/font&gt;&quot;</span>
                 <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; R&lt;/b&gt;&lt;/font&gt;&quot;</span>
-                <span class="s2">&quot;&lt;font size=11&gt;eactivity&lt;br/&gt;&lt;/font&gt;&quot;</span>
-                <span class="s2">&quot;&lt;font size=7&gt;assessed using CO&lt;sub&gt;2&lt;/sub&gt; inhalation &quot;</span>
-                <span class="s2">&quot;as a physiological challenge&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;esonance&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; P&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;erfusion&lt;/font&gt;&quot;</span>
             <span class="p">)</span>
             <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
@@ -255,71 +363,19 @@
                 <span class="p">)</span>
             <span class="p">]</span>
             <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">today_date</span><span class="p">)</span>
-            <span class="c1"># infos.insert(5, ref_exp)</span>
-            <span class="c1"># Hard-coded, we know the ref data used for IL in the</span>
-            <span class="c1"># CVR CO2 pipeline:</span>
-            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;CVR_temoins_IL&quot;</span><span class="p">)</span>
 
             <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;CVR CALCULATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;CALCULATION DATE&quot;</span><span class="p">,</span>
                 <span class="c1"># &quot;NAME OF THE INPUT DATA&quot;,</span>
                 <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;PATHOLOGY&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;REFERENCE GROUP&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-
-        <span class="k">elif</span> <span class="s2">&quot;GE2REC&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ge2rec_make_report</span>
-            <span class="n">ref_exp</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;norm_anat&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
-                <span class="s2">&quot;norm_func_gene&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_gene</span><span class="p">,</span>
-                <span class="s2">&quot;norm_func_reco&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_reco</span><span class="p">,</span>
-                <span class="s2">&quot;norm_func_recall&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_recall</span><span class="p">,</span>
-            <span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;&lt;font size=18&gt;&lt;b&gt;</span><span class="si">{0}</span><span class="s2"> report: &lt;/b&gt;</span><span class="si">{1}</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">],</span>
-                    <span class="n">today_date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">header_title</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;GE2REC - Langage et &quot;</span> <span class="s2">&quot;mémoire&lt;/b&gt;&lt;/font&gt;&quot;</span>
-            <span class="p">)</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
-                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;LateralizationPathology&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;DominantHand&quot;</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">]</span>
-
-            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATHOLOGY&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;LATERALIZATION PATHOLOGY&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;DOMINANT HAND&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARE&quot;</span><span class="p">,</span>
             <span class="p">]</span>
 
         <span class="n">infos</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
@@ -492,9 +548,9 @@
             <span class="s2">&quot;responsibilities. Consequently, Populse team is&quot;</span>
             <span class="s2">&quot; not responsible for any direct or indirect &quot;</span>
             <span class="s2">&quot;damages resulting from the use of data, &quot;</span>
-            <span class="s2">&quot;informations, or results stemming from the Mia &quot;</span>
+            <span class="s2">&quot;information, or results stemming from the Mia &quot;</span>
             <span class="s2">&quot;software. The user recognizes to use these &quot;</span>
-            <span class="s2">&quot;informations under his sole and exclusive &quot;</span>
+            <span class="s2">&quot;information under his sole and exclusive &quot;</span>
             <span class="s2">&quot;responsibility.&lt;br/&gt; &lt;br/&gt; &lt;b&gt;DECHARGE DE &quot;</span>
             <span class="s2">&quot;RESPONSABILITE&lt;/b&gt;&lt;br/&gt;Le logiciel Mia, &quot;</span>
             <span class="s2">&quot;provenant du projet Populse, est exécuté dans &quot;</span>
@@ -507,7 +563,7 @@
             <span class="s2">&quot;conséquent, l&#39;équipe Populse ne peut être tenu &quot;</span>
             <span class="s2">&quot;responsable de dommage direct ou indirect &quot;</span>
             <span class="s2">&quot;résultant de l&#39;utilisation des données, des &quot;</span>
-            <span class="s2">&quot;informations ou des résultats issus du logiciel&quot;</span>
+            <span class="s2">&quot;informations ou des résultats issues du logiciel&quot;</span>
             <span class="s2">&quot;Mia. L&#39;utilisateur reconnaît utiliser ces &quot;</span>
             <span class="s2">&quot;informations sous sa seule et entière &quot;</span>
             <span class="s2">&quot;responsabilité.&lt;/i&gt; &lt;/font&gt;&quot;</span>
@@ -532,77 +588,6 @@
 
         <span class="c1"># Canvas creation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="p">[]</span></div>
-
-
-<div class="viewcode-block" id="Report.get_iqms_data">
-<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt; &quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt;</span><span class="si">{0}</span><span class="s2">&lt;/b&gt; &lt;/font&gt;: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="p">(</span>
-                            <span class="nb">str</span><span class="p">(</span>
-                                <span class="nb">round</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                                <span class="p">)</span>
-                            <span class="p">)</span>
-                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
-                            <span class="p">)</span>
-                            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span>
-                                <span class="mi">1</span>
-                            <span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">])</span>
-                        <span class="p">),</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;</span><span class="si">{0}</span><span class="s2">&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
-                    <span class="s2">&quot;</span><span class="si">{1}</span><span class="s2">&lt;/b&gt;&lt;/font&gt;: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="p">(</span>
-                            <span class="nb">str</span><span class="p">(</span>
-                                <span class="nb">round</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                                <span class="p">)</span>
-                            <span class="p">)</span>
-                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
-                            <span class="p">)</span>
-                            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span>
-                                <span class="mi">1</span>
-                            <span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">])</span>
-                        <span class="p">),</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Report.co2_inhal_cvr_make_report">
@@ -1325,14 +1310,8 @@
         <span class="c1">#          data as an input to the brick?</span>
         <span class="n">folder</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">)</span>
         <span class="n">snorm_func</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">file</span><span class="p">)</span>
-        <span class="c1"># TODO: We make the mask name from the self.norm_anat.</span>
-        <span class="c1">#       Should we simply add the data as an input to the brick?</span>
-        <span class="n">folder</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">)</span>
-        <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        <span class="n">grey_mat_mask</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;mask_swc1&quot;</span> <span class="o">+</span> <span class="n">file</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot;_003&quot;</span> <span class="o">+</span> <span class="n">ext</span>
-        <span class="p">)</span>
 
+        <span class="n">grey_mat_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_003</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">brain_img_snorm_func</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">snorm_func</span><span class="p">)</span>
             <span class="n">snorm_func_data</span> <span class="o">=</span> <span class="n">brain_img_snorm_func</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
@@ -1776,7 +1755,7 @@
             <span class="s2">&quot;BOLD_IL_mean_beta.xls&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">max_timeout</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># Max timeout in seconds</span>
+        <span class="n">max_timeout</span> <span class="o">=</span> <span class="mi">250</span>  <span class="c1"># Max timeout in seconds</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
         <span class="c1"># TODO: This is a 2-cts hack in case res_anal_data doesn&#39;t already</span>
@@ -2169,7 +2148,7 @@
                 <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># red</span>
                 <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># moccasin</span>
                 <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># lime (green)</span>
-                <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>  <span class="c1"># magenta (fuschia)</span>
+                <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>  <span class="c1"># magenta (fuchsia)</span>
             <span class="p">],</span>
             <span class="c1"># cmap_2=[</span>
             <span class="c1">#     (0, 255, 255),  # cyan (aqua)</span>
@@ -2181,7 +2160,7 @@
             <span class="c1">#     # (255, 228, 181),  # moccasin</span>
             <span class="c1">#     (255, 140, 0),  # orange</span>
             <span class="c1">#     (0, 255, 0),  # lime (green)</span>
-            <span class="c1">#     (255, 0, 255),  # magenta (fuschia)</span>
+            <span class="c1">#     (255, 0, 255),  # magenta (fuchsia)</span>
             <span class="c1"># ],</span>
             <span class="n">vmin_2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">vmax_2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2387,7 +2366,7 @@
                 <span class="s2">&quot;Functional MR-Data.” Journal of Neuroscience Methods &quot;</span>
                 <span class="s2">&quot;163, no. 1 (June 15, 2007): 128–36. &quot;</span>
                 <span class="s2">&quot;https://doi.org/10.1016/j.jneumeth.2007.01.026.&lt;br/&gt;&quot;</span>
-                <span class="s2">&quot;Veuillez noter que ce logiciel n&#39;a pas de maquage &quot;</span>
+                <span class="s2">&quot;Veuillez noter que ce logiciel n&#39;a pas de marquage &quot;</span>
                 <span class="s2">&quot;CE ou FDA. &lt;/i&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
             <span class="p">)</span>
@@ -2477,7 +2456,7 @@
                 <span class="n">m1</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
                     <span class="s2">&quot;&lt;font size=10 &gt;&quot;</span>
                     <span class="s2">&quot;&lt;b&gt;Performances comportementales &lt;/b&gt; &quot;</span>
-                    <span class="s2">&quot;(mesurées pendant la tâche de reconnaisance &quot;</span>
+                    <span class="s2">&quot;(mesurées pendant la tâche de reconnaissance &quot;</span>
                     <span class="s2">&quot;des mots entendus à la tâche précédente à partir d&#39;image)&quot;</span>
                     <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
@@ -2510,7 +2489,7 @@
             <span class="n">Paragraph</span><span class="p">(</span>
                 <span class="s2">&quot;&lt;font size=10 &gt;&quot;</span>
                 <span class="s2">&quot; &lt;b&gt;Activation cérébrales pour la tâche de mémoire&lt;/b&gt;&quot;</span>
-                <span class="s2">&quot; (reconnaisance des mots entendus à la tâche précédente &quot;</span>
+                <span class="s2">&quot; (reconnaissance des mots entendus à la tâche précédente &quot;</span>
                 <span class="s2">&quot;à partir d&#39;image):&lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
             <span class="p">)</span>
@@ -2573,7 +2552,7 @@
             <span class="n">Paragraph</span><span class="p">(</span>
                 <span class="s2">&quot;&lt;font size=10 &gt;&quot;</span>
                 <span class="s2">&quot;&lt;b&gt;Activation cérébrales pour la tâche de rappel libre&lt;/b&gt;&quot;</span>
-                <span class="s2">&quot;(reconnaisance des mots entendus lors de la première tâche &quot;</span>
+                <span class="s2">&quot;(reconnaissance des mots entendus lors de la première tâche &quot;</span>
                 <span class="s2">&quot;à partir du son et générartion de la même phrase):&quot;</span>
                 <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
@@ -3578,7 +3557,7 @@
         <span class="n">im_tra</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">out_file_tra</span><span class="p">,</span> <span class="mf">6.468</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="mf">3.018</span> <span class="o">*</span> <span class="n">inch</span><span class="p">)</span>
         <span class="n">im_rot</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">out_file_rot</span><span class="p">,</span> <span class="mf">6.468</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="mf">3.018</span> <span class="o">*</span> <span class="n">inch</span><span class="p">)</span>
         <span class="n">message</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;font size=14 &gt; &lt;b&gt; Mouvements &quot;</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;font size=14 &gt; &lt;b&gt; Movements &quot;</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">im_check</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
@@ -3597,6 +3576,77 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Report.get_iqms_data">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt; &quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt;</span><span class="si">{0}</span><span class="s2">&lt;/b&gt; &lt;/font&gt;: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="p">(</span>
+                            <span class="nb">str</span><span class="p">(</span>
+                                <span class="nb">round</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
+                            <span class="p">)</span>
+                            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span>
+                                <span class="mi">1</span>
+                            <span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">])</span>
+                        <span class="p">),</span>
+                    <span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;</span><span class="si">{0}</span><span class="s2">&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
+                    <span class="s2">&quot;</span><span class="si">{1}</span><span class="s2">&lt;/b&gt;&lt;/font&gt;: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="p">(</span>
+                            <span class="nb">str</span><span class="p">(</span>
+                                <span class="nb">round</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
+                            <span class="p">)</span>
+                            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span>
+                                <span class="mi">1</span>
+                            <span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">])</span>
+                        <span class="p">),</span>
+                    <span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+                <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Report.mriqc_anat_make_report">
@@ -4227,7 +4277,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># Nineth page - slice planes display - Segmentation #####</span>
+        <span class="c1"># Ninth page - slice planes display - Segmentation #####</span>
         <span class="c1">#######################################################################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
@@ -5450,6 +5500,664 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Report.perf_dsc_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.perf_dsc_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">perf_dsc_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make DSC MR perfusion report&quot;&quot;&quot;</span>
+
+        <span class="c1"># page 1 - cover ##################################################</span>
+        <span class="c1">###################################################################</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_cov</span><span class="p">)</span>
+        <span class="c1"># width, height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header_title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">18</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cover_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textDisclaimer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Justify&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 2 - Anatomical MRI - Acq &amp; Post-pro parameters############</span>
+        <span class="c1">#################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=18 &gt;&lt;b&gt; Anatomical MRI &lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=15 &gt;&lt;b&gt;Acquisition parameters:&lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">acq_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">acq_num</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">acq_num</span> <span class="o">=</span> <span class="n">acq_num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Protocol name / Acquisition nbr: &lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;norm_anat&#39;</span><span class="p">][</span><span class="s1">&#39;ProtocolName&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">acq_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Acquisition mode&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Sequence name: &lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;norm_anat&#39;</span><span class="p">][</span><span class="s1">&#39;SequenceName&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Raw geometry parameters&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">d_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d_dim</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">d_dim</span> <span class="o">=</span> <span class="n">d_dim</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Dataset dimension:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">d_dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;FOV&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fov</span><span class="p">):</span>
+            <span class="n">fov</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fov</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">fov</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fov</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt;&lt;b&gt; FOV (ap / fh / rl) [mm]:&lt;/b&gt;&lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">num_sli</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_sli</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">num_sli</span> <span class="o">=</span> <span class="n">num_sli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Number of slices:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">num_sli</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">sl_thick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;SliceThickness&quot;</span><span class="p">]</span>
+        <span class="n">sl_gap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;SliceGap&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sl_thick</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">sl_thick</span> <span class="o">=</span> <span class="n">sl_thick</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sl_gap</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">sl_gap</span> <span class="o">=</span> <span class="n">sl_gap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Slice thickness &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;/ Slice gap [mm]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">sl_thick</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">sl_gap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">scan_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;ScanResolution&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scan_res</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">scan_res</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">scan_res</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt;&lt;b&gt; Scan resolution  (x / y):&lt;/b&gt;&lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scan_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">vox_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">vox_size</span><span class="p">):</span>
+            <span class="n">vox_size</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">vox_size</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vox_size</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">vox_size</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">vox_size</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Voxel size (x / y / z) [mm]:&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">vox_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Other parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;RepetitionTime&quot;</span><span class="p">]</span>
+        <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;EchoTime&quot;</span><span class="p">]</span>
+        <span class="n">flipang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;FlipAngle&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flipang</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">flipang</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">flipang</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">te</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">te</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; TR [ms] / TE [ms] / flip angle&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; [deg]:&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">tr</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">te</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">flipang</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="n">d_dim</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: What do we do for 5D. Here if d_dim == &quot;Undefined&quot; or if</span>
+            <span class="c1">#       d_dim &gt; 4, then dyn_nb = &quot;Undefined&quot;</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Number of dynamics:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">dyn_nb</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">scan_dur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;ScanDuration&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scan_dur</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">scan_dur</span> <span class="o">=</span> <span class="n">scan_dur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Acquisition duration [s]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">scan_dur</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=15 &gt; &lt;b&gt; Post-processing:&lt;br /&gt; &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Spatial processing&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Hard-coded, we know the state of the normalization in the</span>
+        <span class="c1"># CVR CO2 pipeline:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Spatial normalization:&lt;/b&gt; &lt;/font&gt; Y&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">brain_templ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Brain template:&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">brain_templ</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">f_vox_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Voxel sizes&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">f_vox_size</span><span class="p">):</span>
+            <span class="n">f_vox_size</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">f_vox_size</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f_vox_size</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">f_vox_size</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">f_vox_size</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Final voxel size &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(x / y / z) [mm]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">f_vox_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Hard-coded, we know the state of the segmentation in the</span>
+        <span class="c1"># CVR CO2 pipeline:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Segmentation:&lt;/b&gt;&quot;</span>
+                <span class="s2">&quot; &lt;/font&gt; Grey matter, white matter, &quot;</span>
+                <span class="s2">&quot;cerebrospinal fluid, bone, soft tissues&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 3 - Anatomical MRI - slice planes mosaic display ###########</span>
+        <span class="c1">###################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=15 &gt; &lt;b&gt;MNI normalized axial anatomical &quot;</span>
+                <span class="s2">&quot;images:&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size=9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">plot_slice_planes</span><span class="p">(</span>
+            <span class="n">data_1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+            <span class="n">fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_rows</span><span class="p">,</span>
+            <span class="n">fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
+            <span class="n">slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slice_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap_1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_cmap</span><span class="p">,</span>
+            <span class="n">vmin_1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmin</span><span class="p">,</span>
+            <span class="n">vmax_1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmax</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># remainder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 4 - fmri-cvr MRI Acq &amp; Post-pro parameters##############</span>
+        <span class="c1">###############################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=18 &gt;&lt;b&gt;Dynamic Susceptibility Contrast &quot;</span>
+                <span class="s2">&quot;Perfusion MRI&lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=15 &gt;&lt;b&gt;Acquisition parameters:&lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">acq_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">acq_num</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">acq_num</span> <span class="o">=</span> <span class="n">acq_num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Protocol name / Acquisition nbr: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/b&gt; &lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;norm_func&#39;</span><span class="p">][</span><span class="s1">&#39;ProtocolName&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">acq_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Acquisition mode&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Sequence name: &lt;/b&gt; &lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;norm_func&#39;</span><span class="p">][</span><span class="s1">&#39;SequenceName&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Raw geometry parameters&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">d_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d_dim</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">d_dim</span> <span class="o">=</span> <span class="n">d_dim</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Dataset dimension:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">d_dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;FOV&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fov</span><span class="p">):</span>
+            <span class="n">fov</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fov</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">fov</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fov</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt;&lt;b&gt; FOV (ap / fh / rl) [mm]:&lt;/b&gt;&lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fov</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">num_sli</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_sli</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">num_sli</span> <span class="o">=</span> <span class="n">num_sli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Number of slices:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">num_sli</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">sl_thick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;SliceThickness&quot;</span><span class="p">]</span>
+        <span class="n">sl_gap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;SliceGap&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sl_thick</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">sl_thick</span> <span class="o">=</span> <span class="n">sl_thick</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sl_gap</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">sl_gap</span> <span class="o">=</span> <span class="n">sl_gap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Slice thickness &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;/ Slice gap [mm]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">sl_thick</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">sl_gap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">scan_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;ScanResolution&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scan_res</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">scan_res</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">scan_res</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt;&lt;b&gt; Scan resolution  (x / y):&lt;/b&gt;&lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scan_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">raw_func_vox_size_orig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">raw_func_vox_size_orig</span>
+        <span class="p">):</span>
+            <span class="n">raw_func_vox_size</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">raw_func_vox_size_orig</span>
+            <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_func_vox_size</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">raw_func_vox_size</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">raw_func_vox_size</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">raw_func_vox_size</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Voxel size (x / y / z) [mm]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">raw_func_vox_size</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Other parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;RepetitionTime&quot;</span><span class="p">]</span>
+        <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;EchoTime&quot;</span><span class="p">]</span>
+        <span class="n">flipang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;FlipAngle&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flipang</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">flipang</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">flipang</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">te</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">te</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; TR [ms] / TE [ms] / Image flip angle&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; [deg]:&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">tr</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">te</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">flipang</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="n">d_dim</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: What do we do for 5D. Here if d_dim == &quot;Undefined&quot; or if</span>
+            <span class="c1">#       d_dim &gt; 4, then dyn_nb = &quot;Undefined&quot;</span>
+            <span class="n">dyn_nb</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Number of dynamics:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">dyn_nb</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">scan_dur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;ScanDuration&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scan_dur</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">scan_dur</span> <span class="o">=</span> <span class="n">scan_dur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Acquisition duration [s]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">scan_dur</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=15 &gt; &lt;b&gt; Post-processing:&lt;br /&gt; &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Spatial processing&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Hard-coded, we know the state of the normalization in the</span>
+        <span class="c1"># CVR CO2 pipeline:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Spatial normalization:&lt;/b&gt; &lt;/font&gt; Y&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">brain_templ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Brain template:&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">brain_templ</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">f_vox_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;Voxel sizes&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">f_vox_size</span><span class="p">):</span>
+            <span class="n">f_vox_size</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">f_vox_size</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f_vox_size</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">f_vox_size</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">f_vox_size</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Voxel size after normalization &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(x / z / y) [mm]:&lt;/b&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;/font&gt; </span><span class="si">{</span><span class="n">f_vox_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;smooth_norm_func&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;FWHM (X, Y, Z) for Smooth&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fwhm</span><span class="p">):</span>
+            <span class="n">fwhm</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">fwhm</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fwhm</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">fwhm</span> <span class="o">=</span> <span class="s2">&quot; / &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fwhm</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Spatial smoothing &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(fwhm) [mm]:&lt;/b&gt; &lt;/font&gt; </span><span class="si">{</span><span class="n">fwhm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt;Analysis&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># TODO: Technique is currently hard-coded, we only use AIF</span>
+        <span class="c1">#      deconvolution.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Technique:&lt;/b&gt; &lt;/font&gt; &quot;</span>
+                <span class="s2">&quot;deconvolution of the AIF&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">pnf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;CBV_image&quot;</span><span class="p">][</span><span class="s2">&quot;Perf Normalisation Factor&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; CBV normalization [mL/100g]:&lt;/b&gt; &lt;/font&gt; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pnf</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
+        <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 </div>
 
 </pre></div>

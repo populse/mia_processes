@@ -36,7 +36,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
       ex. '/home/username/data/derived_data/T1w_outskin_mask.nii'
 
 - *nasion_post_mask* (a string representing an existing file)
-    Template mask registred in the in-file space (valid extensions: [.nii, .nii.gz]).
+    Template mask registered in the in-file space (valid extensions: [.nii, .nii.gz]).
 
 
     ::
@@ -87,6 +87,6 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Artifactmask mriqc - nipype <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L301>`_

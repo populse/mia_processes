@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.6.1-dev+d3e43d68 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=717c3d5b"></script>
+    <script src="../../../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.6.1-dev+d3e43d68 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -143,7 +143,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ApplyBiasCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -171,7 +171,7 @@
 
 <div class="viewcode-block" id="ApplyBiasCorrection.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -180,6 +180,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -270,7 +271,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ArtifactMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -344,7 +345,7 @@
 
 <div class="viewcode-block" id="ArtifactMask.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -353,6 +354,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -561,7 +563,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -620,7 +622,7 @@
 
 <div class="viewcode-block" id="Binarize.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -629,6 +631,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -689,7 +692,7 @@
                             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Binarize brick warning: the out_files output &quot;</span>
                             <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                             <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
                         <span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
@@ -871,7 +874,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConformImage</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -908,7 +911,7 @@
 
 <div class="viewcode-block" id="ConformImage.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -917,6 +920,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1180,7 +1184,7 @@
 
 <div class="viewcode-block" id="ConvROI.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1191,6 +1195,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1331,7 +1336,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Enhance</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -1383,7 +1388,7 @@
 
 <div class="viewcode-block" id="Enhance.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1392,6 +1397,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1459,7 +1465,7 @@
                             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enhance brick warning: the out_files output &quot;</span>
                             <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                             <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
                         <span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
@@ -1643,7 +1649,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -1676,7 +1682,7 @@
 
 <div class="viewcode-block" id="EstimateSNR.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1685,6 +1691,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1764,7 +1771,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ExtractROIbyLabel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -1777,7 +1784,7 @@
         <span class="n">save_concate_roi_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Save a concatenation of regions as a NIfTI file (a boolean)&quot;</span>
         <span class="p">)</span>
-        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix for outout file ( string)&quot;</span>
+        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix for output file (string)&quot;</span>
         <span class="c1"># Outputs description</span>
         <span class="c1"># out_nibabel_desc = (</span>
         <span class="c1">#     &quot;Extracted ROI (nibabel Nifti1Image format)&quot;</span>
@@ -1841,7 +1848,7 @@
 
 <div class="viewcode-block" id="ExtractROIbyLabel.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ExtractROIbyLabel.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1850,6 +1857,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1869,20 +1877,19 @@
                 <span class="n">out_files</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
                     <span class="n">labels</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
-                        <span class="n">labels</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_each_roi</span><span class="p">:</span>
-                            <span class="n">out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                    <span class="n">file_name</span>
-                                    <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
-                                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-                                    <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
-                                    <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+                    <span class="n">labels</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_each_roi</span><span class="p">:</span>
+                        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+                            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                        <span class="n">suffix</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                        <span class="n">out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                                <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">suffix</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
                             <span class="p">)</span>
+                        <span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_each_roi</span> <span class="ow">and</span> <span class="n">out_files</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_files</span>
@@ -1988,7 +1995,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ExtractSignalROI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -2003,7 +2010,7 @@
         <span class="n">labels_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The label list of the ROI to extract the signal (a list of int)&quot;</span>
         <span class="p">)</span>
-        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix for outout file ( string)&quot;</span>
+        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix for output file ( string)&quot;</span>
 
         <span class="c1"># Outputs description</span>
         <span class="c1"># roi_nibabel_desc = (</span>
@@ -2047,7 +2054,7 @@
 
 <div class="viewcode-block" id="ExtractSignalROI.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ExtractSignalROI.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2056,6 +2063,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2145,7 +2153,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GradientThreshold</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -2188,7 +2196,7 @@
 
 <div class="viewcode-block" id="GradientThreshold.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2197,6 +2205,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2417,7 +2426,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Harmonize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -2467,7 +2476,7 @@
 
 <div class="viewcode-block" id="Harmonize.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2476,6 +2485,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2531,7 +2541,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Harmonize brick warning: the out_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_file input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -2663,7 +2673,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IntensityClip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -2743,7 +2753,7 @@
 
 <div class="viewcode-block" id="IntensityClip.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2752,6 +2762,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2858,7 +2869,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -2903,7 +2914,7 @@
 
 <div class="viewcode-block" id="Mask.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2912,6 +2923,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2967,7 +2979,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mask brick warning: the out_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -3091,7 +3103,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NonSteadyStateDetector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -3116,7 +3128,7 @@
 
 <div class="viewcode-block" id="NonSteadyStateDetector.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3125,6 +3137,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3199,7 +3212,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Resample1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -3291,7 +3304,7 @@
 
 <div class="viewcode-block" id="Resample1.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3300,6 +3313,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3746,7 +3760,7 @@
 
 <div class="viewcode-block" id="Resample2.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3757,6 +3771,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3889,7 +3904,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RotationMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -3928,7 +3943,7 @@
 
 <div class="viewcode-block" id="RotationMask.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3937,6 +3952,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -3994,7 +4010,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">RotationMask brick warning: the out_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -4145,7 +4161,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Sanitize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -4201,7 +4217,7 @@
 
 <div class="viewcode-block" id="Sanitize.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -4210,6 +4226,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4265,7 +4282,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick warning: the out_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -4517,7 +4534,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -4586,7 +4603,7 @@
 
 <div class="viewcode-block" id="TSNR.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -4595,6 +4612,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -4652,7 +4670,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_tsnr_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_file input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -4713,7 +4731,7 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_stddev_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
@@ -4856,7 +4874,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TemplateFromTemplateFlow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -4917,7 +4935,7 @@
 
 <div class="viewcode-block" id="TemplateFromTemplateFlow.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -4926,6 +4944,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -5016,7 +5035,7 @@
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Threshold</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
@@ -5119,7 +5138,7 @@
 
 <div class="viewcode-block" id="Threshold.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -5128,6 +5147,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -5202,7 +5222,7 @@
                             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold brick warning: the out_files output &quot;</span>
                             <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                             <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
                         <span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
@@ -5371,7 +5391,7 @@
 <span class="sd">    :param float thresh: the modified z-score to use as a threshold.</span>
 <span class="sd">        Observations with a modified z-score (based on the median absolute</span>
 <span class="sd">        deviation) greater than this value will be classified as outliers.</span>
-<span class="sd">    :return: A bolean mask, of size numobservations-length array.</span>
+<span class="sd">    :return: A boolean mask, of size numobservations-length array.</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        Boris Iglewicz and David Hoaglin (1993), &quot;Volume 16: How to Detect and</span>

@@ -52,7 +52,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
       ex. FSL
 
-- *radius* (a float, optionnal, default value is 50.0)
+- *radius* (a float, optional, default value is 50.0)
     Radius in mm to calculate angular FDs.
 
     ::
@@ -71,7 +71,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 -------------
 
-Usefull links:
+Useful links:
 
 `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_
 

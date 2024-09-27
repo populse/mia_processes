@@ -47,7 +47,7 @@ Output file name is the same as input file name.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3drefit <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3drefit.html>`_
 

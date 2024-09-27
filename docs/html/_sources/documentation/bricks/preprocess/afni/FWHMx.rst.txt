@@ -77,7 +77,7 @@ This brick computes FWHMs for all sub-bricks (3D volumes for each TR) in the inp
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI FWHMx <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html>`_
 

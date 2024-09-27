@@ -120,6 +120,6 @@ Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e88
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc Anat qc  <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/qc/anatomical.py>`_

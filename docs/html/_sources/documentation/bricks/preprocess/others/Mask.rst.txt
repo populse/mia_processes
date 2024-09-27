@@ -65,6 +65,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Mask niworflow <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/norm.py#L474>`_

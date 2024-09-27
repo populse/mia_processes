@@ -185,7 +185,7 @@ fMRI model specification for GLM analysis.
         ex. [None, [None, ['pmod1', 'pmod2']]]
 
 - *sess_cond_pmod_values <=> sess.cond.pmod.param* [#label]_
-    The values used for the parametric modulation, one for each occurence of the event (a list of items which are a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_pmod_values`` can be defined as:
+    The values used for the parametric modulation, one for each occurrence of the event (a list of items which are a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_pmod_values`` can be defined as:
 
     .. code-block:: python
 
@@ -305,7 +305,7 @@ fMRI model specification for GLM analysis.
         ex. [None, [1, 0]]
 
 - *sess_multi <=> sess.multi* [#label]_
-    A \*.mat file containing details of the multiple experimental conditions for each session (a list of items which are a filename). This \*.mat file must include the following cell arrays (each 1 x n): names, onsets and durations. This option can be used to load in one go all the information that can also be given with the ``sess_cond_names``, ``sess_cond_onsets`` and ``sess_cond_durations``. The time, parametric and orthogonalise effects can also be included (please see spm documentation for more informations). In a general way ``sess_multi`` can be defined as:
+    A \*.mat file containing details of the multiple experimental conditions for each session (a list of items which are a filename). This \*.mat file must include the following cell arrays (each 1 x n): names, onsets and durations. This option can be used to load in one go all the information that can also be given with the ``sess_cond_names``, ``sess_cond_onsets`` and ``sess_cond_durations``. The time, parametric and orthogonalise effects can also be included (please see spm documentation for more information). In a general way ``sess_multi`` can be defined as:
 
     .. code-block:: python
 
@@ -352,7 +352,7 @@ fMRI model specification for GLM analysis.
 	    ]
 
 - *sess_multi_reg <=> sess.multi_reg* [#label]_
-    The \*.mat/\*.txt file(s) containing details of multiple regressors (a list of items which are a filename). This option can be used to load in one go all the information that can also be given with the ``sess_regress`` parameter (please see spm documentation for more informations). In a general way ``sess_multi_reg`` can be defined as:
+    The \*.mat/\*.txt file(s) containing details of multiple regressors (a list of items which are a filename). This option can be used to load in one go all the information that can also be given with the ``sess_regress`` parameter (please see spm documentation for more information). In a general way ``sess_multi_reg`` can be defined as:
 
     .. code-block:: python
 
@@ -449,7 +449,7 @@ fMRI model specification for GLM analysis.
 
 .. [#label] Syntax: mia_processes/nipype Level1Design brick <=> SPM12 fMRI model specification.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 fMRI model specification <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=63>`_,
 	    `nipype Level1Design <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#level1design>`_
 ..

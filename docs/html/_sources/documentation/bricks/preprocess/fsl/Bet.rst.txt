@@ -289,7 +289,7 @@ By default, only the brain extraction is done, but there are severals options to
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL BET <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide>`_
 

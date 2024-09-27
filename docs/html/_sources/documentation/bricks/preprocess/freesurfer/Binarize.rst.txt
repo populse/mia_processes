@@ -196,7 +196,7 @@ By default all the option are set to Undefined.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `Freesurfer Binarize <https://surfer.nmr.mgh.harvard.edu/fswiki/mri_binarize>`_
 

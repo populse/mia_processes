@@ -229,7 +229,7 @@ Realigns a time-series of images acquired from the same subject
 
 .. [#label] Syntax: mia_processes/nipype Realign <=> SPM12 Realign.
 
-	    Usefull links:
+	    Useful links:
 	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=25>`_,
 	    `nipype Realign <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#realign>`_
 ..

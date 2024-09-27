@@ -72,6 +72,6 @@ ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion i
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc 22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_

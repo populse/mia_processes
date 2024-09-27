@@ -75,7 +75,7 @@ Compute no-reference IQMs (image quality metrics) from functional (BOLD)
 
 **Optional inputs parameters**
 
-- *dummy_TRS* (an interger, optional)
+- *dummy_TRS* (an integer, optional)
     Volume to discard
 
     ::
@@ -241,6 +241,6 @@ Compute no-reference IQMs (image quality metrics) from functional (BOLD)
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mriqc 22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_

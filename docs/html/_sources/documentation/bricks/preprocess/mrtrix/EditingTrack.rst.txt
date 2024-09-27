@@ -160,6 +160,6 @@ Perform various editing operations on track files
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix tckedit <https://mrtrix.readthedocs.io/en/latest/reference/commands/tckedit.html>`_

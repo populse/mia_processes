@@ -96,7 +96,7 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL FAST <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FAST>`_
 

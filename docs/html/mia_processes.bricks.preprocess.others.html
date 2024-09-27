@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.6.1-dev+44616516 documentation</title>
+    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=f4b1ae50"></script>
+    <script src="_static/documentation_options.js?v=598035f7"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.6.1-dev+44616516 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -104,7 +104,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -112,7 +112,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -156,7 +159,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -164,7 +167,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -208,7 +214,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -216,7 +222,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -260,7 +269,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -268,7 +277,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -320,7 +332,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -330,7 +342,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -374,7 +389,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -382,7 +397,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -426,7 +444,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -434,7 +452,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -476,7 +497,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ExtractROIbyLabel.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ExtractROIbyLabel.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ExtractROIbyLabel.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ExtractROIbyLabel.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ExtractROIbyLabel.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -484,7 +505,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -526,7 +550,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ExtractSignalROI.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ExtractSignalROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ExtractSignalROI.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ExtractSignalROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ExtractSignalROI.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -534,7 +558,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -578,7 +605,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -586,7 +613,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -630,7 +660,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -638,7 +668,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -680,7 +713,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -688,7 +721,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -732,7 +768,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Mask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -740,7 +776,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -784,7 +823,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -792,7 +831,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -837,7 +879,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -845,7 +887,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -895,7 +940,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -905,7 +950,10 @@ self.outputs dictionary. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -949,7 +997,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -957,7 +1005,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1001,7 +1052,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1009,7 +1060,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1053,7 +1107,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1061,7 +1115,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1103,7 +1160,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1111,7 +1168,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1153,7 +1213,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1161,7 +1221,10 @@ if defined here. To work properly this method must return
 self.make_initResult() object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p></li>
+<li><p><strong>iteration</strong> – the state, iterative or not, of the process.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
@@ -1199,7 +1262,7 @@ deviation) greater than this value will be classified as outliers.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A bolean mask, of size numobservations-length array.</p>
+<dd class="field-even"><p>A boolean mask, of size numobservations-length array.</p>
 </dd>
 </dl>
 <div class="admonition note">

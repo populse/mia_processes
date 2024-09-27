@@ -55,7 +55,7 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dTstat <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTstat.html>`_
 

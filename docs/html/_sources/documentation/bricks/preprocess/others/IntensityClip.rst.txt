@@ -78,6 +78,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 -------------
 
-Usefull links:
+Useful links:
 
 `IntensityClip niworflow <https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48217655298a82f3069/niworkflows/interfaces/nibabel.py#L460>`_

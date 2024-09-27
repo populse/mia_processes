@@ -396,7 +396,7 @@ Note that the reference image determines the Field of View (FOV) and voxel size 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `FSL FLIRT <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT>`_
 

@@ -98,7 +98,7 @@ Using ANTs ApplyTransforms, transforms an input image according to a reference i
 
 - *invert_transform_flags* (a list of boolean, optional)
     Invert transform flags.
-    For example if transforms parameter is equal to ['ants_Warp.nii.gz', 'trans.mat'] and invert_transform_flags is [False, True], the follinw trnasform will be applied:
+    For example if transforms parameter is equal to ['ants_Warp.nii.gz', 'trans.mat'] and invert_transform_flags is [False, True], the following transform will be applied:
     `--transform ants_Warp.nii.gz --transform [ trans.mat, 1 ]`
     Default is Undefined (ie parameter not used).
 
@@ -117,7 +117,7 @@ Using ANTs ApplyTransforms, transforms an input image according to a reference i
 
 -------------
 
-Usefull links:
+Useful links:
 
 `ANTS ApplyTransforms - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#applytransforms>`_
 

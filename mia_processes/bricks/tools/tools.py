@@ -554,7 +554,7 @@ class Deconv_from_aif(ProcessMIA):
             - **t0** (*3D numpy array of shape (nb_row, nb_col, nb_sli)*)
                 – Bolus arrival time indices.
             - **t0_mask** (*4D numpy array of shape (nb_row, nb_col, nb_sli,
-                nb_dyn)*) – Mask for valid t0 values.
+              nb_dyn)*) – Mask for valid t0 values.
         """
         nb_row, nb_col, nb_sli, nb_dyn = vol_4d.shape
         t0_mask = np.zeros_like(vol_4d, dtype=bool)
@@ -749,8 +749,7 @@ class Deconv_from_aif(ProcessMIA):
                 – Bolus arrival time (index in vol_4d corresponding to the
                 4th dimension).
             - **c_vol_4d** (*4D numpy array of shape (nb_row, nb_col, nb_sli,
-                nb_dyn)*) – Concentration of Gadolinium for each voxel over
-                time.
+              nb_dyn)*) – Concentration of Gadolinium for each voxel over time.
         """
         dyn_nb = vol_4d.shape[3]
         t0, t0_mask = self.bol_ar_time(vol_4d, mask)

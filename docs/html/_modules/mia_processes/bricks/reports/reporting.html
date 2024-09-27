@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+d3e43d68 documentation</title>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=717c3d5b"></script>
+    <script src="../../../../_static/documentation_options.js?v=598035f7"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+d3e43d68 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -41,6 +41,7 @@
 <span class="sd">        - ReportFuncMriqc</span>
 <span class="sd">        - ReportGE2REC</span>
 <span class="sd">        - ReportGroupMriqc</span>
+<span class="sd">        - ReportPerfDsc</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -338,7 +339,7 @@
 
 <div class="viewcode-block" id="ReportAnatMriqc.list_outputs">
 <a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -347,6 +348,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -1026,6 +1028,10 @@
             <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">mask_003_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The grey matter mask at the resolution of the smoothed_func.&quot;</span>
+        <span class="p">)</span>
+
         <span class="n">patient_info_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Optional dictionary with information about the patient &quot;</span>
             <span class="s2">&quot;(e.g. {&quot;</span>
@@ -1290,6 +1296,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mask_003&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mask_003_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">patient_info_desc</span><span class="p">),</span>
         <span class="p">)</span>
@@ -1321,7 +1332,7 @@
 
 <div class="viewcode-block" id="ReportCO2inhalCvr.list_outputs">
 <a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportCO2inhalCvr.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1330,10 +1341,22 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportCO2inhalCvr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">PatientRef</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Pathology</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Age</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Sex</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">MR</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Gas</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">GasAdmin</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
@@ -1623,6 +1646,7 @@
             <span class="n">spmT_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_cmap</span><span class="p">,</span>
             <span class="n">spmT_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmin</span><span class="p">,</span>
             <span class="n">spmT_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spmT_vmax</span><span class="p">,</span>
+            <span class="n">mask_003</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_003</span><span class="p">,</span>
             <span class="n">output_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1879,7 +1903,7 @@
 
 <div class="viewcode-block" id="ReportFuncMriqc.list_outputs">
 <a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1888,6 +1912,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2535,7 +2560,7 @@
 
 <div class="viewcode-block" id="ReportGE2REC.list_outputs">
 <a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGE2REC.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2544,6 +2569,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -2889,7 +2915,7 @@
 
 <div class="viewcode-block" id="ReportGroupMriqc.list_outputs">
 <a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2898,6 +2924,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -3118,6 +3145,865 @@
         <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span>
 
         <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ReportPerfDsc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportPerfDsc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportPerfDsc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Generates report for Perfusion study using DSC-MRI*</span>
+
+<span class="sd">    Please, see the complete documentation for the `ReportPerfDsc brick</span>
+<span class="sd">    in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportPerfDsc.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportPerfDsc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportPerfDsc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportPerfDsc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party software required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">norm_anat_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;An existing, uncompressed normalised anatomical &quot;</span>
+            <span class="s2">&quot;image file (valid extensions: .nii)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The number of lines for the normalised &quot;</span>
+            <span class="s2">&quot;anatomical slice planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The number of columns for the normalised &quot;</span>
+            <span class="s2">&quot;anatomical slice planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The first index displayed in &quot;</span>
+            <span class="s2">&quot;normalised anatomical slice planes &quot;</span>
+            <span class="s2">&quot;plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Gap between slices in normalised anatomical slice planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the normalised anatomical plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;Greys_r&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_anat_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;An existing, uncompressed normalised functional image file &quot;</span>
+            <span class="s2">&quot;(valid extensions: .nii, .nii.gz)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The number of lines for the normalised functional slice &quot;</span>
+            <span class="s2">&quot;planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The number of columns for the normalised functional slice &quot;</span>
+            <span class="s2">&quot;planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The first index displayed in the normalised functional slice &quot;</span>
+            <span class="s2">&quot;planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Gap between slices in the normalised functional slice planes plot&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the normalised functional plot &quot;</span>
+            <span class="s2">&quot;(a string, default: &#39;Greys_r&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map (&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">norm_func_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">realignment_parameters_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Estimation of translation and rotation parameters when &quot;</span>
+            <span class="s2">&quot;realigning functional data (a pathlike object or a string &quot;</span>
+            <span class="s2">&quot;representing a file, or a list of pathlike objects or strings &quot;</span>
+            <span class="s2">&quot;representing a file)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBV_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Cerebral Blood Volume image map (valid extensions:.nii): The &quot;</span>
+            <span class="s2">&quot;volume of blood within a given volume of tissue (mL/100g)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBV_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the CBV image plot (a string, &quot;</span>
+            <span class="s2">&quot;default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBV_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBV_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBF_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Cerebral Blood Flow image map (valid extensions:.nii): The rate &quot;</span>
+            <span class="s2">&quot;at which blood is delivered to a given volume of brain tissue, &quot;</span>
+            <span class="s2">&quot;usually expressed in milliliters per 100 grams of brain tissue &quot;</span>
+            <span class="s2">&quot;per minute (mL/100g/min)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBF_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the CBF image plot (a string, &quot;</span>
+            <span class="s2">&quot;default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBF_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">CBF_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">Tmax_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Tmax image map (valid extensions:.nii): Time to the maximum of &quot;</span>
+            <span class="s2">&quot;the residue function. This parameter measures the delay between &quot;</span>
+            <span class="s2">&quot;the arrival of the contrast agent in the arterial input function &quot;</span>
+            <span class="s2">&quot;and its peak concentration in the tissue of interest (s)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">Tmax_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the Tmax image plot (a string, &quot;</span>
+            <span class="s2">&quot;default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">Tmax_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">Tmax_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">MTT_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mean Transit Time image map (valid extensions:.nii): The &quot;</span>
+            <span class="s2">&quot;average time it takes for blood to pass through a given volume &quot;</span>
+            <span class="s2">&quot;of brain tissue (s)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">MTT_cmap_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Colormap name used for the MTT image plot (a string, &quot;</span>
+            <span class="s2">&quot;default: &#39;rainbow&#39;)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">MTT_vmin_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Minimum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">MTT_vmax_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum value in the data range covered by the color map&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">patient_info_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Optional dictionary with information about the patient &quot;</span>
+            <span class="s2">&quot;(e.g. {&quot;</span>
+            <span class="s2">&quot;&#39;PatientName&#39;: &#39;sub-1&#39;, &#39;Pathology&#39;: &#39;ACMD&#39;, &quot;</span>
+            <span class="s2">&quot;&#39;Age&#39;: 64, &#39;Sex&#39;: &#39;M&#39;, &#39;MR&#39;: &#39;3T&#39;, &quot;</span>
+            <span class="s2">&quot;&#39;Gas&#39;: &#39;BACTAL&#39;, &#39;GasAdmin&#39;: &#39;MASK&#39;}&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">report_desc</span> <span class="o">=</span> <span class="s2">&quot;The generated report (pdf)&quot;</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_fig_rows&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
+                <span class="mi">5</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_fig_rows_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_fig_cols&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
+                <span class="mi">5</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_fig_cols_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_inf_slice_start&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_inf_slice_start_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_slices_gap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_slices_gap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_cmap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_anat_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="c1"># TODO: We use the normalized functional. It seems that it&#39;s the</span>
+        <span class="c1">#       normalized - smothed functional that&#39;s used in Amigo. We&#39;ll</span>
+        <span class="c1">#       have to check and decide what we&#39;ll use here finally?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_fig_rows&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
+                <span class="mi">5</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_fig_rows_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_fig_cols&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
+                <span class="mi">5</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_fig_cols_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_inf_slice_start&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_inf_slice_start_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_slices_gap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_slices_gap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_cmap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;norm_func_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">realignment_parameters_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBV_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">CBV_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBV_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">CBV_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBV_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">CBV_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CBV_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBV_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">CBV_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CBV_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBF_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">CBF_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBF_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">CBF_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBF_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">CBF_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CBF_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;CBF_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">CBF_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CBF_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;Tmax_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">Tmax_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;Tmax_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">Tmax_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;Tmax_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">Tmax_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Tmax_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;Tmax_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">Tmax_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Tmax_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;MTT_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">MTT_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;MTT_cmap&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;rainbow&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">MTT_cmap_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;MTT_vmin&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">MTT_vmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MTT_vmin</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;MTT_vmax&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">MTT_vmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MTT_vmax</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">patient_info_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">PatientRef</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">Pathology</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">Age</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">Sex</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">MR</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">Gas</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="n">GasAdmin</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;report&quot;</span><span class="p">,</span>
+            <span class="n">OutputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">report_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ReportPerfDsc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportPerfDsc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportPerfDsc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">PatientRef</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Pathology</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Age</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Sex</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">MR</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Gas</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">GasAdmin</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+            <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+            <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">db_file_norm_anat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">db_file_norm_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">db_file_CBV_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CBV_image</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="c1"># TODO: Do we need to explicitly take the smoothed func as input,</span>
+        <span class="c1">#       or can we simply add the prefix &#39;s&#39; to the normalized func?</span>
+        <span class="n">folder</span><span class="p">,</span> <span class="n">fil</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">db_file_norm_func</span><span class="p">)</span>
+        <span class="n">db_file_smooth_norm_func</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">fil</span><span class="p">)</span>
+
+        <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
+        <span class="c1"># we prepare here the data that the run_process_mia method will need</span>
+        <span class="c1"># via dict4runtime parameter:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_norm_anat</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PatientRef&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;smooth_norm_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;smooth_norm_func&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_smooth_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;FWHM (X, Y, Z) for Smooth&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;CBV_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;CBV_image&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_CBV_image</span><span class="p">,</span>
+            <span class="s2">&quot;Perf Normalisation Factor&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># FIXME: the data should be anonymized and we should use PatientRef</span>
+        <span class="c1">#        instead of PatientName !</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ReportPerfDsc brick:</span><span class="se">\n</span><span class="s2">The PatientName tags was not &quot;</span>
+                <span class="s2">&quot;found in the database for the </span><span class="si">{}</span><span class="s2"> file...</span><span class="se">\n</span><span class="s2"> The &quot;</span>
+                <span class="s2">&quot;initialization is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">db_file_norm_anat</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Age&quot;</span>
+                <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Age&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Sex&quot;</span>
+                <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Sex&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Spectro&quot;</span>
+                <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;MR&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
+        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
+        <span class="c1">#        in the input parameters of the brick:</span>
+        <span class="c1"># Site</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Site&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+
+        <span class="c1"># MriScanner</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Spectro&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+
+        <span class="c1"># Generate an output name</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">CBV_image</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">CBV_image</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">CBF_image</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">CBF_image</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Tmax_image</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tmax_image</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">MTT_image</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">MTT_image</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_Perf_DSC_Report_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ReportPerfDsc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportPerfDsc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportPerfDsc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span>
+            <span class="n">Perf_DSC</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">norm_anat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+            <span class="n">norm_anat_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_rows</span><span class="p">,</span>
+            <span class="n">norm_anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
+            <span class="n">norm_anat_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_inf_slice_start</span><span class="p">,</span>
+            <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_anat_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_cmap</span><span class="p">,</span>
+            <span class="n">norm_anat_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmin</span><span class="p">,</span>
+            <span class="n">norm_anat_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_vmax</span><span class="p">,</span>
+            <span class="n">norm_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
+            <span class="n">norm_func_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
+            <span class="n">norm_func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
+            <span class="n">norm_func_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_func_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_cmap</span><span class="p">,</span>
+            <span class="n">norm_func_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmin</span><span class="p">,</span>
+            <span class="n">norm_func_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_vmax</span><span class="p">,</span>
+            <span class="n">realignment_parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">realignment_parameters</span><span class="p">,</span>
+            <span class="n">CBF_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBF_image</span><span class="p">,</span>
+            <span class="n">CBF_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBF_cmap</span><span class="p">,</span>
+            <span class="n">CBF_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBF_vmin</span><span class="p">,</span>
+            <span class="n">CBF_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBF_vmax</span><span class="p">,</span>
+            <span class="n">CBV_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBV_image</span><span class="p">,</span>
+            <span class="n">CBV_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBV_cmap</span><span class="p">,</span>
+            <span class="n">CBV_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBV_vmin</span><span class="p">,</span>
+            <span class="n">CBV_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CBV_vmax</span><span class="p">,</span>
+            <span class="n">Tmax_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmax_image</span><span class="p">,</span>
+            <span class="n">Tmax_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmax_cmap</span><span class="p">,</span>
+            <span class="n">Tmax_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmax_vmin</span><span class="p">,</span>
+            <span class="n">Tmax_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmax_vmax</span><span class="p">,</span>
+            <span class="n">MTT_image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MTT_image</span><span class="p">,</span>
+            <span class="n">MTT_cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MTT_cmap</span><span class="p">,</span>
+            <span class="n">MTT_vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MTT_vmin</span><span class="p">,</span>
+            <span class="n">MTT_vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MTT_vmax</span><span class="p">,</span>
+            <span class="n">output_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
 </div>
 
 </pre></div>

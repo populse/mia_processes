@@ -110,7 +110,7 @@ In this case, bvec and bval file should be specified.*
 
 - *in_bvec* (a pathlike object or a string representing an existing file, optional)
     Provide Bvecs file in FSL format. If data converted into MIF format, bvec will be added in the output.
-    If no file is supplied and if the file with the same name as "in_dwi" but wil ".bvec" extension exists, it will be automatically used.
+    If no file is supplied and if the file with the same name as "in_dwi" but with ".bvec" extension exists, it will be automatically used.
 
     ::
 
@@ -118,7 +118,7 @@ In this case, bvec and bval file should be specified.*
 
 - *in_bval* (a pathlike object or a string representing an existing file, optional)
     Provide Bvals file in FSL format. If data converted into MIF format, bavl will be added in the output.
-    If no file is supplied and if the file with the same name as "in_dwi" but wil ".bval" extension exists, it will be automatically used.
+    If no file is supplied and if the file with the same name as "in_dwi" but with ".bval" extension exists, it will be automatically used.
 
     ::
 
@@ -150,6 +150,6 @@ In this case, bvec and bval file should be specified.*
 
 -------------
 
-Usefull links:
+Useful links:
 
 `mrtrix mrconvert <https://mrtrix.readthedocs.io/en/latest/reference/commands/mrconvert.html>`_

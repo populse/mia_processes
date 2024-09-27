@@ -68,7 +68,7 @@ Using AFNI GCOR, computes the average correlation between every voxel and every 
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI GCOR <https://afni.nimh.nih.gov/pub/dist/doc/program_help/@compute_gcor.html>`_
 

@@ -38,7 +38,7 @@ The csv file should contains one column by regressor to add and the first row sh
 **Outputs parameters:**
 
 - *sess_regress_level1design*  (a list of items which are a list of items which are a dictionary with keys which are ‘name’ or ‘val’ and with values which are a string or a list of float):
-   Additional columns to include in the design matrix (sess_regress paremeter of the Level1Design brick)
+   Additional columns to include in the design matrix (sess_regress parameter of the Level1Design brick)
 
     ::
 

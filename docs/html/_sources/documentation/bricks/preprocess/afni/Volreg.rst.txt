@@ -140,7 +140,7 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 
 -------------
 
-Usefull links:
+Useful links:
 
 `AFNI 3dvolreg <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dvolreg.html>`_
 

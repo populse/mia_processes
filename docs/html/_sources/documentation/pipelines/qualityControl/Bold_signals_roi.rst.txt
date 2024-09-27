@@ -56,7 +56,7 @@ This pipeline allows to get plots of the BOLD average signal in severals ROI (de
 - *labels_structures* (a list of integer, default value is [47, 48])
     List of structures labels for which the average signals will be extracted.
 
-    The defaul value is [47, 48], this correponds to le left and the right hippocampus.
+    The default value is [47, 48], this corresponds to le left and the right hippocampus.
 
     ::
 
@@ -97,7 +97,7 @@ This pipeline allows to get plots of the BOLD average signal in severals ROI (de
 
 -------------
 
-Usefull links:
+Useful links:
 
 `volBrain Assemblynet <https://github.com/volBrain/AssemblyNet>`_
 
