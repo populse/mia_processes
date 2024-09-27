@@ -1,7 +1,7 @@
 <p align="center" >
-	<img src="https://github.com/populse/mia_processes/blob/master/mia_processes/sources_images/Logo_mia_processes.jpg" alt="mia_processes logo" height="300" width="300">
+	<img src="https://github.com/populse/mia_processes/blob/master/mia_processes/sources_images/Logo_mia_processes_1024x1024.jpg" alt="mia_processes logo" height="300" width="300">
     <br />
-    <span style="font-size: 8px;">This image was generated with ChatGPT from a text description.</span>
+    <sub style="font-size: 8px;">This image was generated with ChatGPT from a text description.</sub>
 </p>
 
 <!-- [![](https://codecov.io/github/populse/mia_processes/coverage.svg?branch=master)](https://codecov.io/github/populse/mia_processes) -->
