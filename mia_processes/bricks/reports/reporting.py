@@ -3242,6 +3242,8 @@ class ReportPerfDsc(ProcessMIA):
             "Maximum value in the data range covered by the color map"
         )
 
+        aif_file_desc = "The file containing the AIF data (a .json file)"
+
         patient_info_desc = (
             "Optional dictionary with information about the patient "
             "(e.g. {"
@@ -3573,6 +3575,19 @@ class ReportPerfDsc(ProcessMIA):
         self.MTT_vmax = Undefined
 
         self.add_trait(
+            "aif_file",
+            traits.Either(
+                File(),
+                Undefined,
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=aif_file_desc,
+            ),
+        )
+        self.aif_file = traits.Undefined
+
+        self.add_trait(
             "patient_info",
             traits.Dict(output=False, optional=True, desc=patient_info_desc),
         )
@@ -3900,6 +3915,7 @@ class ReportPerfDsc(ProcessMIA):
             MTT_cmap=self.MTT_cmap,
             MTT_vmin=self.MTT_vmin,
             MTT_vmax=self.MTT_vmax,
+            aif_file=self.aif_file,
             output_directory=self.output_directory,
         )
 

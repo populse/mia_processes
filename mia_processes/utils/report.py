@@ -893,8 +893,8 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 4 - fmri-cvr MRI Acq & Post-pro parameters##############
-        ###############################################################
+        # page 4 - fmri-cvr MRI Acq & Post-pro parameters ##############
+        ################################################################
         self.report.append(
             Paragraph(
                 "<font size=18 ><b> fMRI under a vasoactive stimulus "
@@ -1241,8 +1241,8 @@ class Report:
         )
         self.report.append(PageBreak())
 
-        # page 5 - fmri-cvr MRI quality check: movements & EtCO2 regressor ####
-        #######################################################################
+        # page 5 - fmri-cvr MRI quality check: movements & EtCO2 regressor #
+        ####################################################################
         sources_images_dir = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "sources_images"
         )
@@ -1311,14 +1311,14 @@ class Report:
                 out_file_tra,
                 out_file_rot,
             )
-            if qc == 0:
+            if qc is False:
                 # 912px × 892px
                 im_qualCheck = Image(
                     os.path.join(sources_images_dir, "No-check-mark.png"),
                     13.0 * mm,
                     12.7 * mm,
                 )
-            elif qc == 1:
+            elif qc is True:
                 # 940px × 893px
                 im_qualCheck = Image(
                     os.path.join(sources_images_dir, "OK-check-mark.png"),
@@ -2401,8 +2401,8 @@ class Report:
 
                 self.report.append(PageBreak())
 
-        # page 5 - Recognition task############
-        #################################################################
+        # page 5 - Recognition task #
+        #############################
         self.report.append(
             Paragraph(
                 "<font size=18 ><b>Mémoire reconnaissance</b> "
@@ -3012,14 +3012,14 @@ class Report:
             out_file_rot,
         )
 
-        if qc == 0:
+        if qc is False:
             # 912px × 892px
             im_check = Image(
                 os.path.join(sources_images_dir, "No-check-mark.png"),
                 13.0 * mm,
                 12.7 * mm,
             )
-        elif qc == 1:
+        elif qc is True:
             # 940px × 893px
             im_check = Image(
                 os.path.join(sources_images_dir, "OK-check-mark.png"),
@@ -3255,14 +3255,14 @@ class Report:
             out_file_rot,
         )
 
-        if qc == 0:
+        if qc is False:
             # 912px × 892px
             im_check = Image(
                 os.path.join(sources_images_dir, "No-check-mark.png"),
                 13.0 * mm,
                 12.7 * mm,
             )
-        elif qc == 1:
+        elif qc is True:
             # 940px × 893px
             im_check = Image(
                 os.path.join(sources_images_dir, "OK-check-mark.png"),
@@ -3499,14 +3499,14 @@ class Report:
             out_file_rot,
         )
 
-        if qc == 0:
+        if qc is False:
             # 912px × 892px
             im_check = Image(
                 os.path.join(sources_images_dir, "No-check-mark.png"),
                 13.0 * mm,
                 12.7 * mm,
             )
-        elif qc == 1:
+        elif qc is True:
             # 940px × 893px
             im_check = Image(
                 os.path.join(sources_images_dir, "OK-check-mark.png"),
@@ -6100,6 +6100,280 @@ class Report:
             )
         )
         self.report.append(PageBreak())
+
+        # page 5 - fmri-perf MRI quality check: movements & EtCO2 regressor #
+        ####################################################################
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+
+        try:
+            data_rp = np.loadtxt(self.realignment_parameters)
+
+        except (IOError, OSError):
+            print(
+                "\n==> The "
+                + self.realignment_parameters
+                + " file cannot be opened! <==\n"
+            )
+            data_rp = None
+
+        except UnicodeDecodeError:
+            print(
+                "\n==> The "
+                + self.realignment_parameters
+                + " file is not valid! <==\n"
+            )
+            data_rp = None
+
+        im_qualCheck = None
+        im_qualCheckTra = None
+        im_qualCheckRot = None
+
+        if data_rp is not None:
+            out_file_tra = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_Perf_QualityControlMeasure_translation.png",
+            )
+            out_file_rot = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_Perf_QualityControlMeasure_Rotation.png",
+            )
+
+            if plot_realignment_parameters(
+                data_rp,
+                raw_func_vox_size_orig,
+                out_file_tra,
+                out_file_rot,
+                figsize=(13, 8),
+            ) is False:
+                # 912px × 892px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "No-check-mark.png"),
+                    13.0 * mm,
+                    12.7 * mm,
+                )
+            else:
+                # 940px × 893px
+                im_qualCheck = Image(
+                    os.path.join(sources_images_dir, "OK-check-mark.png"),
+                    13.0 * mm,
+                    12.4 * mm,
+                )
+            im_qualCheckTra = Image(out_file_tra, 7.2 * inch, 4.4 * inch)
+            im_qualCheckRot = Image(out_file_rot, 7.2 * inch, 4.4 * inch)
+
+        qualCheckMess = Paragraph(
+            "<font size=14 > <b> fMRI quality "
+            "check: movements </b> </font>",
+            self.styles["Left"],
+        )
+
+        if im_qualCheck is None:
+            im_qualCheck = Paragraph(
+                "<font size=8 > Automatic evaluation not available </font>",
+                self.styles["Center"],
+            )
+
+        im_qualCheck.hAlign = "CENTER"
+        title = [[qualCheckMess, im_qualCheck]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+
+        if im_qualCheckTra is None:
+            im_qualCheckTra = Paragraph(
+                "<font size=14 > Linear head motion parameters not "
+                "available </font>",
+                self.styles["Center"],
+            )
+            self.report.append(Spacer(0 * mm, 45 * mm))
+
+        im_qualCheckTra.hAlign = "CENTER"
+        self.report.append(im_qualCheckTra)
+
+        if im_qualCheckRot is None:
+            im_qualCheckRot = Paragraph(
+                "<font size=14 > Rotational head motion parameters "
+                "not available </font>",
+                self.styles["Center"],
+            )
+            self.report.append(Spacer(0 * mm, 55 * mm))
+
+        im_qualCheckRot.hAlign = "CENTER"
+        self.report.append(im_qualCheckRot)
+        self.report.append(PageBreak())
+
+        # page 6 - fmri-per MRI quality check: AIF #
+        ############################################
+        qc = True
+        qc_row = [[] for _ in range(5)]
+
+        try:
+
+            with open(self.aif_file, 'r') as file:
+                aif_dic = json.load(file)
+
+            out_file_aif = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_Perf_QualityControlMeasure_aif.png",
+            )
+            aif_data = aif_dic["aif"]
+            aif_scores = aif_dic["scores"]
+
+            for i, row in enumerate(aif_scores):
+
+                if row[4] != 0:
+                    qc = False
+                    qc_row[i].extend(j for j in row[5:] if j)
+
+            # figsize in inches
+            fig = plt.figure(figsize=(13, 8), facecolor="white")
+            ax = fig.add_subplot(111)
+            fig.subplots_adjust(
+                left=None,
+                bottom=None,
+                right=None,
+                top=None,
+                wspace=None,
+                hspace=None,
+            )
+            ax.set_title("Arterial Input Function diagram", fontsize=20, y=1.03)
+            ax.set_xlabel("Dynamic scans", fontsize=14)
+            ax.set_ylabel("Signal intensity (A. U.)", fontsize=14)
+            xLim = len(aif_data) + 1
+            # Create x-values starting from 1
+            x_values = np.arange(1, len(aif_data) + 1)
+            # Plot using x_values for the x-axis
+            ax.plot(x_values, aif_data)
+            ax.legend(loc="best")
+            ax.set_xlim(0, xLim)
+            ax.yaxis.grid(True, linestyle="-", which="major", color="grey",
+                        alpha=0.5)
+            ax.xaxis.grid(True, linestyle="-", which="major", color="grey",
+                        alpha=0.5)
+            ax.get_yaxis().set_tick_params(direction="out")
+            ax.get_xaxis().set_tick_params(direction="out")
+            # High resolution: 2000px × 1118px.
+            fig.savefig(out_file_aif, format="png", dpi=200)
+            im_qualCheckAIF = Image(out_file_aif, 7.2 * inch, 4.4 * inch)
+
+        except Exception:
+            print(
+                "\n==> The "
+                + self.aif_file
+                + " file cannot be opened! <==\n"
+            )
+            qc = None
+            im_qualCheckAIF = Paragraph(
+                "<font size=14 > Arterial Input Function parameters "
+                "not available </font>",
+                self.styles["Center"],
+            )
+
+        im_qualCheckAIF.hAlign = "CENTER"
+
+        if qc is False:
+            im_qualCheck = Image(
+                os.path.join(sources_images_dir, "No-check-mark.png"),
+                13.0 * mm,
+                12.7 * mm,
+            )
+
+        elif qc is True:
+            # 940px × 893px
+            im_qualCheck = Image(
+                os.path.join(sources_images_dir, "OK-check-mark.png"),
+                13.0 * mm,
+                12.4 * mm,
+            )
+
+        elif qc is None:
+            im_qualCheck = Paragraph(
+                "<font size=8 > Automatic evaluation not available </font>",
+                self.styles["Center"],
+            )
+
+        qualCheckMess = Paragraph(
+            "<font size=14 > <b> fMRI quality "
+            "check: AIF </b> </font>",
+            self.styles["Left"],
+        )
+
+        im_qualCheck.hAlign = "CENTER"
+        title = [[qualCheckMess, im_qualCheck]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(im_qualCheckAIF)
+
+        if qc is not None:
+            self.report.append(Spacer(0 * mm, 20 * mm))
+            self.report.append(
+                Paragraph(
+                    "<font size=11> <b> Calculated "
+                    "<font size=9>*</font>"
+                    "scores, "
+                    "<font size=9>*</font>"
+                    "positions (row, "
+                    "column, slice) and any "
+                    "<font size=9>*</font>"
+                    "warnings observed "
+                    "during the assessment of the Arterial Input "
+                    "Function:</b> </font>",
+                    self.styles["Left"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 5 * mm))
+
+            for i, row in enumerate(aif_scores):
+                self.report.append(Spacer(0 * mm, 2 * mm))
+                line = (f"<font size=11> {i + 1}- Score: {row[0]:.0f};"
+                        f" voxel: ({row[1]}, {row[2]}, {row[3]})")
+
+                if qc_row[i] != []:
+
+                    if len(qc_row[i]) == 1:
+                        line += f"<br/>warning:"
+                        line += f"<br/>{qc_row[i][0]}"
+
+                    else:
+                        line += "<br/>warnings:<br/>"
+                        line += "<br/>".join(f"{warning}" for warning in qc_row[i])
+
+                line += "</font>"
+                self.report.append(Paragraph(line, self.styles["Bullet1"],))
+
+            #TODO: we need to optimise the following if loop to handle more
+            #      complex situations
+            if qc_row == [[], [], [], [], []]:
+                self.report.append(Spacer(0 * mm, 65 * mm))
+
+            else:
+                self.report.append(Spacer(0 * mm, 25 * mm))
+
+            # Footnote
+            line = ReportLine(500)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 1.5 * mm))
+            self.report.append(
+                Paragraph(
+                    "<font size = 7>*For more information see "
+                    "https://populse.github.io/mia_processes/html/documentation/"
+                    "bricks/tools/Make_AIF.html</font>",
+                    self.styles["Left"],
+                )
+            )
+        self.report.append(PageBreak())
+
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

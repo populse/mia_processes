@@ -317,19 +317,33 @@ def mriqc_group_iqms_tsv(modality, output_directory):
 
 
 def plot_realignment_parameters(
-    realignment_parameters, vox_size, out_file_tra, out_file_rot
+        realignment_parameters,
+        vox_size,
+        out_file_tra,
+        out_file_rot,
+        figsize=(12, 5.6),
 ):
     """
-    Plot SPM realignment parameters
+    Plot SPM realignment parameters.
+
     :param realignment_parameters: realignment parameters file
-    (a string representing an existing file)
+    (a string representing an existing file) or realignment parameters
+    (a numpy.ndarray object with shape[1] == 6)
     :param vox_size: voxel size of the data (a list of 3 float or integer)
     :param out_file_tra: out path for the translation figure
     (a string representing a path file)
     :param out_file_rot: out path for the rotation figure
     (a string representing a path file)
+    :param figsize: width, height in inches (float, float)
+
+    :returns:
+        - qc: result of the quality check (a boolean). True: OK
 
     """
+    # TODO: it seems that this function is not sufficiently protected against
+    #       exceptions being thrown
+
+    qc = False
     (
         rmsdTra,
         maxRmsdTra,
@@ -343,10 +357,24 @@ def plot_realignment_parameters(
         minRot,
     ) = np.zeros(10)
 
-    data_rp = np.loadtxt(realignment_parameters)
-    data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
+    if os.path.exists(realignment_parameters):
+        data_rp = np.loadtxt(realignment_parameters)
 
-    xLim = len(data_rp)
+    elif (isinstance(realignment_parameters, np.ndarray) and
+          realignment_parameters.size > 0 and
+          realignment_parameters.shape[1] == 6):
+        data_rp = realignment_parameters
+
+    else:
+        # TODO: perhaps we should protect the next steps if
+        #  realignment_parameters is neither an existing file
+        #  nor a numpy array?
+        pass
+
+    data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
+    xLim = len(data_rp) + 1
+    # Create x-values starting from 1
+    x_values = np.arange(1, len(data_rp) + 1)
 
     for i in range(3):
         for n in data_rp[:, i]:
@@ -411,13 +439,11 @@ def plot_realignment_parameters(
         # maxRot for quality fixed to 2deg
         # maxTra(nslation) for quality fixed to
         # mean x,y,z voxel dim (traLim)
-        if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
-            qc = 0
-        else:
-            qc = 1
+        if (maxTraCheck < traLim) and (maxRotCheck < 2):
+            qc = True
 
     # Plot translation
-    fig = plt.figure(figsize=(12, 5.6), facecolor="white")
+    fig = plt.figure(figsize=figsize, facecolor="white")
     ax = fig.add_subplot(111)
     fig.subplots_adjust(
         left=None,
@@ -430,7 +456,8 @@ def plot_realignment_parameters(
     ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
     ax.set_xlabel("Dynamic scans", fontsize=14)
     ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
-    ax.plot(data_rp[:, :3], label=("X", "Y", "Z"))
+    # Plot using x_values for the x-axis
+    ax.plot(x_values, data_rp[:, :3], label=("X", "Y", "Z"))
     ax.legend(loc="best")
     ax.set_xlim(0, xLim)
     ax.set_ylim(minTra * 1.1, maxTra * 1.1)
@@ -438,16 +465,14 @@ def plot_realignment_parameters(
     ax.xaxis.grid(True, linestyle="-", which="major", color="grey", alpha=0.5)
     ax.get_yaxis().set_tick_params(direction="out")
     ax.get_xaxis().set_tick_params(direction="out")
-
     # High resolution: 2000px × 1118px.
     fig.savefig(out_file_tra, format="png", dpi=200)
-
     # Plot rotation
     ax.clear()
     ax.set_title("Rotational head motion parameters", fontsize=20, y=1.03)
     ax.set_xlabel("Dynamic scans", fontsize=14)
     ax.set_ylabel("Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14)
-    ax.plot(data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
+    ax.plot(x_values, data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
     ax.legend(loc="best")
     ax.set_xlim(0, xLim)
     ax.set_ylim(minRot * 1.1, maxRot * 1.1)
@@ -457,7 +482,6 @@ def plot_realignment_parameters(
     fig.savefig(out_file_rot, format="png", dpi=200)
 
     return qc
-
 
 def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
     """
