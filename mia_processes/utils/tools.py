@@ -317,11 +317,11 @@ def mriqc_group_iqms_tsv(modality, output_directory):
 
 
 def plot_realignment_parameters(
-        realignment_parameters,
-        vox_size,
-        out_file_tra,
-        out_file_rot,
-        figsize=(12, 5.6),
+    realignment_parameters,
+    vox_size,
+    out_file_tra,
+    out_file_rot,
+    figsize=(12, 5.6),
 ):
     """
     Plot SPM realignment parameters.
@@ -360,9 +360,11 @@ def plot_realignment_parameters(
     if os.path.exists(realignment_parameters):
         data_rp = np.loadtxt(realignment_parameters)
 
-    elif (isinstance(realignment_parameters, np.ndarray) and
-          realignment_parameters.size > 0 and
-          realignment_parameters.shape[1] == 6):
+    elif (
+        isinstance(realignment_parameters, np.ndarray)
+        and realignment_parameters.size > 0
+        and realignment_parameters.shape[1] == 6
+    ):
         data_rp = realignment_parameters
 
     else:
@@ -482,6 +484,7 @@ def plot_realignment_parameters(
     fig.savefig(out_file_rot, format="png", dpi=200)
 
     return qc
+
 
 def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
     """

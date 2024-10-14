@@ -6142,13 +6142,16 @@ class Report:
                 + "_Perf_QualityControlMeasure_Rotation.png",
             )
 
-            if plot_realignment_parameters(
-                data_rp,
-                raw_func_vox_size_orig,
-                out_file_tra,
-                out_file_rot,
-                figsize=(13, 8),
-            ) is False:
+            if (
+                plot_realignment_parameters(
+                    data_rp,
+                    raw_func_vox_size_orig,
+                    out_file_tra,
+                    out_file_rot,
+                    figsize=(13, 8),
+                )
+                is False
+            ):
                 # 912px × 892px
                 im_qualCheck = Image(
                     os.path.join(sources_images_dir, "No-check-mark.png"),
@@ -6215,7 +6218,7 @@ class Report:
 
         try:
 
-            with open(self.aif_file, 'r') as file:
+            with open(self.aif_file, "r") as file:
                 aif_dic = json.load(file)
 
             out_file_aif = os.path.join(
@@ -6243,7 +6246,9 @@ class Report:
                 wspace=None,
                 hspace=None,
             )
-            ax.set_title("Arterial Input Function diagram", fontsize=20, y=1.03)
+            ax.set_title(
+                "Arterial Input Function diagram", fontsize=20, y=1.03
+            )
             ax.set_xlabel("Dynamic scans", fontsize=14)
             ax.set_ylabel("Signal intensity (A. U.)", fontsize=14)
             xLim = len(aif_data) + 1
@@ -6253,10 +6258,12 @@ class Report:
             ax.plot(x_values, aif_data)
             ax.legend(loc="best")
             ax.set_xlim(0, xLim)
-            ax.yaxis.grid(True, linestyle="-", which="major", color="grey",
-                        alpha=0.5)
-            ax.xaxis.grid(True, linestyle="-", which="major", color="grey",
-                        alpha=0.5)
+            ax.yaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.xaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
             ax.get_yaxis().set_tick_params(direction="out")
             ax.get_xaxis().set_tick_params(direction="out")
             # High resolution: 2000px × 1118px.
@@ -6265,9 +6272,7 @@ class Report:
 
         except Exception:
             print(
-                "\n==> The "
-                + self.aif_file
-                + " file cannot be opened! <==\n"
+                "\n==> The " + self.aif_file + " file cannot be opened! <==\n"
             )
             qc = None
             im_qualCheckAIF = Paragraph(
@@ -6300,8 +6305,7 @@ class Report:
             )
 
         qualCheckMess = Paragraph(
-            "<font size=14 > <b> fMRI quality "
-            "check: AIF </b> </font>",
+            "<font size=14 > <b> fMRI quality " "check: AIF </b> </font>",
             self.styles["Left"],
         )
 
@@ -6335,23 +6339,32 @@ class Report:
 
             for i, row in enumerate(aif_scores):
                 self.report.append(Spacer(0 * mm, 2 * mm))
-                line = (f"<font size=11> {i + 1}- Score: {row[0]:.0f};"
-                        f" voxel: ({row[1]}, {row[2]}, {row[3]})")
+                line = (
+                    f"<font size=11> {i + 1}- Score: {row[0]:.0f};"
+                    f" voxel: ({row[1]}, {row[2]}, {row[3]})"
+                )
 
                 if qc_row[i] != []:
 
                     if len(qc_row[i]) == 1:
-                        line += f"<br/>warning:"
+                        line += "<br/>warning:"
                         line += f"<br/>{qc_row[i][0]}"
 
                     else:
                         line += "<br/>warnings:<br/>"
-                        line += "<br/>".join(f"{warning}" for warning in qc_row[i])
+                        line += "<br/>".join(
+                            f"{warning}" for warning in qc_row[i]
+                        )
 
                 line += "</font>"
-                self.report.append(Paragraph(line, self.styles["Bullet1"],))
+                self.report.append(
+                    Paragraph(
+                        line,
+                        self.styles["Bullet1"],
+                    )
+                )
 
-            #TODO: we need to optimise the following if loop to handle more
+            # TODO: we need to optimise the following if loop to handle more
             #      complex situations
             if qc_row == [[], [], [], [], []]:
                 self.report.append(Spacer(0 * mm, 65 * mm))
@@ -6367,13 +6380,12 @@ class Report:
             self.report.append(
                 Paragraph(
                     "<font size = 7>*For more information see "
-                    "https://populse.github.io/mia_processes/html/documentation/"
-                    "bricks/tools/Make_AIF.html</font>",
+                    "https://populse.github.io/mia_processes/html"
+                    "/documentation/bricks/tools/Make_AIF.html</font>",
                     self.styles["Left"],
                 )
             )
         self.report.append(PageBreak())
-
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
