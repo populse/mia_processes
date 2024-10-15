@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Get_Conditions_From_csv brick &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
+    <title>Get_Conditions_From_csv brick &#8212; mia_processes 2.6.1-dev+1863241e documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=598035f7"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../_static/documentation_options.js?v=cf693d5b"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+1863241e documentation</span></a></h1>
         <h2 class="heading"><span>Get_Conditions_From_csv brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -43,11 +43,13 @@
 <p>Get conditions information (conditions names, onsets and durations) for <a class="reference external" href="../../bricks/stats/spm/Level1Design.html">Level1Design</a> brick using csv files.
 One csv file should be used by session.</p>
 <p>For event-related design, the csv file should contains one column by conditions with the onsets and the first row should contains the name of the condition:</p>
-<a class="reference internal image-reference" href="../../../_images/getConditionsFromCSV_event_example.png"><img alt="csv example event-related design" src="../../../_images/getConditionsFromCSV_event_example.png" style="width: 300px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/getConditionsFromCSV_event_example.png"><img alt="csv example event-related design" src="../../../_images/getConditionsFromCSV_event_example.png" style="width: 300px;" />
+</a>
 <p>For block design, the csv file should contains two columns by conditions: one with the onset and one with the duration.
 The first row of the column with the onset should contains the name of the condition
 and the first row of the column with the duration should contain the name of the condition + “ duration”:</p>
-<a class="reference internal image-reference" href="../../../_images/getRegressorsFromCSV_example.png"><img alt="csv example block design" src="../../../_images/getRegressorsFromCSV_example.png" style="width: 300px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/getConditionsFromCSV_bloc_example.png"><img alt="csv example block design" src="../../../_images/getConditionsFromCSV_bloc_example.png" style="width: 300px;" />
+</a>
 <hr class="docutils" />
 <p><strong>Inputs parameters:</strong></p>
 <ul>
@@ -133,7 +135,7 @@ The order should be the same as for the csv_files parameter.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

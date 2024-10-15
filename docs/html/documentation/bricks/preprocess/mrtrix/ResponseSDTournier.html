@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ResponseSTrournie brick &#8212; mia_processes 2.6.1-dev+1863241e documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../../_static/documentation_options.js?v=cf693d5b"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.6.1-dev+1863241e documentation</span></a></h1>
+        <h2 class="heading"><span>ResponseSTrournie brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="responsestrournie-brick">
+<h1>ResponseSTrournie brick<a class="headerlink" href="#responsestrournie-brick" title="Link to this heading">¶</a></h1>
+<section id="estimate-response-function-for-spherical-deconvolution-using-the-tournier-algorithm">
+<h2>Estimate response function for spherical deconvolution using the Tournier algorithm<a class="headerlink" href="#estimate-response-function-for-spherical-deconvolution-using-the-tournier-algorithm" title="Link to this heading">¶</a></h2>
+<p>Use the Tournier iterative algorithm for single-fibre voxel selection and response function estimation</p>
+<p>(mrtrix dwi2response tournier command)</p>
+<p><em>Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.</em></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a pathlike object or a string representing an existing file)</dt><dd><p>Input DWI image (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>get_final_voxels</em> (a boolean, default value is False, optional)</dt><dd><p>Get an image showing the final voxel selection(s).
+The output image shows which voxels from the image were used to construct the basus functions for each tisuue type.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>number</em> (an integer, optional)</dt><dd><p>Number of single-fibre voxels to use when calculating response function</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="mf">.6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>iter_voxels</em> (an integer, optional)</dt><dd><p>Number of single-fibre voxels to select when preparing for the next iteration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="mf">.6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dilate</em> (an integer, optional)</dt><dd><p>Number of mask dilation steps to apply when deriving voxel mask to test in the next iteration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="mf">.6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>max_iters</em> (an integer, optional)</dt><dd><p>Maximum number of iterations (set to 0 to force convergence)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="mf">.6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_mask</em> (a string representing an existing file, optional)</dt><dd><p>Provide initial mask image (valid extensions: [.mif, .nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_brainmask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>max_sh</em> ( an integer, optional)</dt><dd><p>Maximum harmonic degree of response function (a single value for single-shell response)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="mf">.6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>wm_file</em> (a pathlike object or string representing a file)</dt><dd><p>Output WM response text file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_response_wm.txt&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>voxels_image</em> (a pathlike object or string representing a file)</dt><dd><p>Image showing the final voxel selection</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_response_voxels.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Useful links:</p>
+<p><a class="reference external" href="https://mrtrix.readthedocs.io/en/dev/reference/commands/dwi2response.html#dwi2response-tournier">mrtrix dwi2response tournier</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.mrtrix3.preprocess.html#responsesd">mrtrix dwi2response - nipype</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

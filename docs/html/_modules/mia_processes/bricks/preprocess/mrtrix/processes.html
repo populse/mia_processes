@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
+    <title>mia_processes.bricks.preprocess.mrtrix.processes &#8212; mia_processes 2.6.1-dev+32ff25d8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=598035f7"></script>
-    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../../../_static/documentation_options.js?v=87f9c06e"></script>
+    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+32ff25d8 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.mrtrix.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -53,10 +53,12 @@
 <span class="sd">        - MRCat</span>
 <span class="sd">        - MRConvert</span>
 <span class="sd">        - MRDeGibbs</span>
+<span class="sd">        - MRGridRegrid</span>
 <span class="sd">        - MRMath</span>
 <span class="sd">        - MRTransform</span>
 <span class="sd">        - MTNormalise</span>
 <span class="sd">        - ResponseSDDhollander</span>
+<span class="sd">        - ResponseSDTournier</span>
 <span class="sd">        - SphericalHarmonicExtraction</span>
 <span class="sd">        - TensorMetrics</span>
 <span class="sd">        - Tractography</span>
@@ -3515,6 +3517,259 @@
 
 
 
+<div class="viewcode-block" id="MRGridRegrid">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRGridRegrid">[docs]</a>
+<span class="k">class</span> <span class="nc">MRGridRegrid</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Modify the grid of an image by performing</span>
+<span class="sd">    changes of the voxel grid that require interpolation of the image</span>
+<span class="sd">    (mrgrid regrid command)*</span>
+
+<span class="sd">    Please, see the complete documentation for the `MRGridRegrid brick</span>
+<span class="sd">    in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRGridRegrid.html&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MRGridRegrid.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRGridRegrid.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MRGridRegrid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party software required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input image (a pathlike object&quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Optional inputs description</span>
+        <span class="n">interp_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;interpolation method to use when reslicing &quot;</span>
+            <span class="s2">&quot;(choices: nearest, linear, cubic, sinc; default: cubic).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">voxel_desc</span> <span class="o">=</span> <span class="s2">&quot;define the new voxel size for the output image. &quot;</span>
+        <span class="n">scale_desc</span> <span class="o">=</span> <span class="s2">&quot;scale the image resolution by the supplied factor&quot;</span>
+        <span class="n">oversample_factor_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;amount of over-sampling (in the target space) &quot;</span>
+            <span class="s2">&quot;to perform when regridding.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">template_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;match the input image grid (voxel spacing, image size, &quot;</span>
+            <span class="s2">&quot;header transformation) to that of a reference image&quot;</span>
+        <span class="p">)</span>
+        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;suffix of output image&quot;</span>
+
+        <span class="n">size_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;define the size (number of voxels) in each spatial dimension &quot;</span>
+            <span class="s2">&quot;for the output image&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Output description</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Output image (a pathlike object or string representing &quot;</span>
+            <span class="s2">&quot;an existing file)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Optional inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;suffix&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">String</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">suffix_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;voxel&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">voxel_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">size_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;scale&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">scale_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;interp&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sinc&quot;</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">interp_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;oversample_factor&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">oversample_factor_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">template_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MRGridRegrid.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRGridRegrid.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MRGridRegrid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+                    <span class="n">file_name</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">file_name</span> <span class="o">+=</span> <span class="s2">&quot;_regrid&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MRGridRegrid.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRGridRegrid.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MRGridRegrid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="c1"># No Nipype command for mrgrid</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mrgrid&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="s2">&quot;regrid&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxel</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-voxel&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voxel</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+                    <span class="n">scale</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-scale&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversample_factor</span><span class="p">:</span>
+            <span class="n">oversample</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oversample_factor</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversample_factor</span><span class="p">:</span>
+                    <span class="n">oversample</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+                <span class="n">oversample</span> <span class="o">=</span> <span class="n">oversample</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">oversample</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oversample_factor</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-oversample&quot;</span><span class="p">,</span> <span class="n">oversample</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-size&quot;</span><span class="p">,</span> <span class="n">size</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interp</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-interp&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interp</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-template&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">]</span>
+
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mrtrix</span><span class="o">.</span><span class="n">mrtrix_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="MRMath">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.MRMath">[docs]</a>
 <span class="k">class</span> <span class="nc">MRMath</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
@@ -4467,6 +4722,258 @@
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-fa &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa_thresh</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wm_algo</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-wm_algo &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">wm_algo</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_final_voxels</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-voxels &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxels_image</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResponseSDTournier">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDTournier">[docs]</a>
+<span class="k">class</span> <span class="nc">ResponseSDTournier</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Estimate response function(s) for spherical deconvolution using</span>
+<span class="sd">    the Tournier algorithm (dwi2response command)*</span>
+
+<span class="sd">    Please, see the complete documentation for the `ResponseSDTournier brick</span>
+<span class="sd">    in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ResponseSDTournier.html&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ResponseSDTournier.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDTournier.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResponseSDTournier</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nipype&quot;</span><span class="p">,</span> <span class="s2">&quot;mrtrix&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input DWI image (a pathlike object&quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Optionnal inputs description</span>
+        <span class="n">number_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Number of single-fibre voxels to use when calculating &quot;</span>
+            <span class="s2">&quot;response function&quot;</span>
+        <span class="p">)</span>
+        <span class="n">iter_voxels_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Number of single-fibre voxels to select when preparing for the next iteration&quot;</span>
+        <span class="p">)</span>
+        <span class="n">dilate_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Number of mask dilation steps to apply when &quot;</span>
+            <span class="s2">&quot;deriving voxel mask to test in the next iteration&quot;</span>
+        <span class="p">)</span>
+        <span class="n">max_iters_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum number of iterations (set to 0 to force convergence)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">get_final_voxels_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Get an image showing the final voxel selection(s) (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">in_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Provide initial mask image.(a pathlike object or &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">max_sh_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Maximum harmonic degree of response function (a single &quot;</span>
+            <span class="s2">&quot;value for single-shell response and a list for multi-shell &quot;</span>
+            <span class="s2">&quot;response. (a list of items which are an integer) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">wm_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Output WM response text file (a pathlike object or &quot;</span>
+            <span class="s2">&quot;string representing a file) &quot;</span>
+        <span class="p">)</span>
+        <span class="n">voxels_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Image showing the final voxel selection (a pathlike object or &quot;</span>
+            <span class="s2">&quot;string representing a file) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">number_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;iter_voxels&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">iter_voxels_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dilate&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">dilate_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;max_iters&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">max_iters_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;get_final_voxels&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">get_final_voxels_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">File</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">in_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;max_sh&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">max_sh_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;wm_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">wm_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;voxels_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">voxels_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.mrtrix3.ResponseSD&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ResponseSDTournier.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDTournier.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResponseSDTournier</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT_DWI</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;wm_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s2">&quot;_response_wm.txt&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_final_voxels</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;voxels_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">fileName</span> <span class="o">+</span> <span class="s2">&quot;_response_voxels.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;wm_file&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                    <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_final_voxels</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                    <span class="n">in_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;voxels_image&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ResponseSDTournier.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.mrtrix.html#mia_processes.bricks.preprocess.mrtrix.processes.ResponseSDTournier.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResponseSDTournier</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;tournier&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">wm_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wm_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_mask</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sh</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">max_sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sh</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-number &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_voxels</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-iter_voxels &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_voxels</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dilate</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-dilate &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dilate</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-max_iters &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_final_voxels</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-voxels &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxels_image</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
@@ -5934,7 +6441,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.tools &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
+    <title>mia_processes.utils.tools &#8212; mia_processes 2.6.1-dev+32ff25d8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=598035f7"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../_static/documentation_options.js?v=87f9c06e"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+32ff25d8 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -391,19 +391,33 @@
 <div class="viewcode-block" id="plot_realignment_parameters">
 <a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_realignment_parameters">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_realignment_parameters</span><span class="p">(</span>
-    <span class="n">realignment_parameters</span><span class="p">,</span> <span class="n">vox_size</span><span class="p">,</span> <span class="n">out_file_tra</span><span class="p">,</span> <span class="n">out_file_rot</span>
+    <span class="n">realignment_parameters</span><span class="p">,</span>
+    <span class="n">vox_size</span><span class="p">,</span>
+    <span class="n">out_file_tra</span><span class="p">,</span>
+    <span class="n">out_file_rot</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">5.6</span><span class="p">),</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plot SPM realignment parameters</span>
+<span class="sd">    Plot SPM realignment parameters.</span>
+
 <span class="sd">    :param realignment_parameters: realignment parameters file</span>
-<span class="sd">    (a string representing an existing file)</span>
+<span class="sd">    (a string representing an existing file) or realignment parameters</span>
+<span class="sd">    (a numpy.ndarray object with shape[1] == 6)</span>
 <span class="sd">    :param vox_size: voxel size of the data (a list of 3 float or integer)</span>
 <span class="sd">    :param out_file_tra: out path for the translation figure</span>
 <span class="sd">    (a string representing a path file)</span>
 <span class="sd">    :param out_file_rot: out path for the rotation figure</span>
 <span class="sd">    (a string representing a path file)</span>
+<span class="sd">    :param figsize: width, height in inches (float, float)</span>
+
+<span class="sd">    :returns:</span>
+<span class="sd">        - qc: result of the quality check (a boolean). True: OK</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: it seems that this function is not sufficiently protected against</span>
+    <span class="c1">#       exceptions being thrown</span>
+
+    <span class="n">qc</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">(</span>
         <span class="n">rmsdTra</span><span class="p">,</span>
         <span class="n">maxRmsdTra</span><span class="p">,</span>
@@ -417,10 +431,26 @@
         <span class="n">minRot</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="n">data_rp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">realignment_parameters</span><span class="p">)</span>
-    <span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">pi</span>  <span class="c1"># Rad to deg conversion</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">realignment_parameters</span><span class="p">):</span>
+        <span class="n">data_rp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">realignment_parameters</span><span class="p">)</span>
 
-    <span class="n">xLim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_rp</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">realignment_parameters</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">realignment_parameters</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="n">realignment_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span>
+    <span class="p">):</span>
+        <span class="n">data_rp</span> <span class="o">=</span> <span class="n">realignment_parameters</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># TODO: perhaps we should protect the next steps if</span>
+        <span class="c1">#  realignment_parameters is neither an existing file</span>
+        <span class="c1">#  nor a numpy array?</span>
+        <span class="k">pass</span>
+
+    <span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">pi</span>  <span class="c1"># Rad to deg conversion</span>
+    <span class="n">xLim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_rp</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># Create x-values starting from 1</span>
+    <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_rp</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">data_rp</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]:</span>
@@ -485,13 +515,11 @@
         <span class="c1"># maxRot for quality fixed to 2deg</span>
         <span class="c1"># maxTra(nslation) for quality fixed to</span>
         <span class="c1"># mean x,y,z voxel dim (traLim)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">maxTraCheck</span> <span class="o">&gt;=</span> <span class="n">traLim</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">maxRotCheck</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="n">qc</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">qc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">maxTraCheck</span> <span class="o">&lt;</span> <span class="n">traLim</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">maxRotCheck</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">qc</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># Plot translation</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">5.6</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span>
         <span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -504,7 +532,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Linear head motion parameters&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.03</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Dynamic scans&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Linear motion -X, Y, Z- (mm)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_rp</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">))</span>
+    <span class="c1"># Plot using x_values for the x-axis</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">data_rp</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xLim</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minTra</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">maxTra</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
@@ -512,16 +541,14 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
-
     <span class="c1"># High resolution: 2000px × 1118px.</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file_tra</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-
     <span class="c1"># Plot rotation</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Rotational head motion parameters&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.03</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Dynamic scans&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Rotational motion -Roll, Pitch, Yaw- (°)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Roll&quot;</span><span class="p">,</span> <span class="s2">&quot;Pitch&quot;</span><span class="p">,</span> <span class="s2">&quot;Yaw&quot;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">data_rp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:],</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Roll&quot;</span><span class="p">,</span> <span class="s2">&quot;Pitch&quot;</span><span class="p">,</span> <span class="s2">&quot;Yaw&quot;</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xLim</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">minRot</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">maxRot</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
@@ -1265,7 +1292,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

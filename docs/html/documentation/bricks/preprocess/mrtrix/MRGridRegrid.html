@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MRGridRegrid brick &#8212; mia_processes 2.6.1-dev+1863241e documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../../_static/documentation_options.js?v=cf693d5b"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.6.1-dev+1863241e documentation</span></a></h1>
+        <h2 class="heading"><span>MRGridRegrid brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="mrgridregrid-brick">
+<h1>MRGridRegrid brick<a class="headerlink" href="#mrgridregrid-brick" title="Link to this heading">¶</a></h1>
+<section id="perform-changes-of-the-voxel-grid-that-require-interpolation-of-the-image">
+<h2>Perform changes of the voxel grid that require interpolation of the image<a class="headerlink" href="#perform-changes-of-the-voxel-grid-that-require-interpolation-of-the-image" title="Link to this heading">¶</a></h2>
+<p>Performs changes of the voxel grid such as changing the resolution or location and orientation of the voxel grid.
+If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing
+unless nearest neighbour interpolation is selected or oversample is changed explicitly.</p>
+<p>The resolution can only be changed for spatial dimensions.</p>
+<p>(mrtrix mrgrid regrid command)</p>
+<p><em>Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.</em></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a pathlike object or a string representing an existing file)</dt><dd><p>Input image (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.mif</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>interp</em> (a string among cubic, nearesr, linear, sinc, defaunt value is cubic, optional)</dt><dd><p>Interpolation method to use when reslicing.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;cubic&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>suffix</em> (a string, optional)</dt><dd><p>Suffix of output image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;regrid&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>voxel</em> (a float or an integer or a list of 3 integer, optional)</dt><dd><p>The new voxel size for the output image. his can be specified either as a single value (int or float)
+to be used for all spatial dimensions or as list of three integer for each voxel dimension.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">3.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>size</em> (a list of 3 integer, optional)</dt><dd><p>The new size (number of voxels) in each spatial dimension for the output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>scale</em> (an integer or a float or a list of 3 integer or float, optional)</dt><dd><p>Scale the image resolution by the supplied factor. This can be specified either as a single value
+to be used for all dimensions or as list of three integer or float for each voxel dimension.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>oversample</em> (an integer or a list of 3 integer, optional)</dt><dd><p>Amount of over-sampling (in the target space) to perform when regridding.
+This can consist of a single integer, or list of 3 integers
+if different oversampling factors are desired along the different axes.
+Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>template</em> (an existing file, optional)</dt><dd><p>A reference image, the output image will match the reference image grid (voxel spacing, image size, header transformation).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/downloaded_data_data/template.mif</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><p>The output regrid image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_regrid.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Useful links:</p>
+<p><a class="reference external" href="https://mrtrix.readthedocs.io/en/latest/reference/commands/mrgrid.html">mrtrix mrgrid</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>

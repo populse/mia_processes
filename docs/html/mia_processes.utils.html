@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mia_processes.utils package &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
+    <title>mia_processes.utils package &#8212; mia_processes 2.6.1-dev+1863241e documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=598035f7"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
+    <script src="_static/documentation_options.js?v=cf693d5b"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+1863241e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -378,15 +378,29 @@ and for one modality and put them together in one tsv file.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mia_processes.utils.tools.plot_realignment_parameters">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_realignment_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realignment_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_tra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_rot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_realignment_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_realignment_parameters" title="Link to this definition">¶</a></dt>
-<dd><p>Plot SPM realignment parameters
-:param realignment_parameters: realignment parameters file
-(a string representing an existing file)
+<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_realignment_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realignment_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_tra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file_rot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">5.6)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_realignment_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_realignment_parameters" title="Link to this definition">¶</a></dt>
+<dd><p>Plot SPM realignment parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>realignment_parameters</strong> – realignment parameters file</p>
+</dd>
+</dl>
+<p>(a string representing an existing file) or realignment parameters
+(a numpy.ndarray object with shape[1] == 6)
 :param vox_size: voxel size of the data (a list of 3 float or integer)
 :param out_file_tra: out path for the translation figure
 (a string representing a path file)
 :param out_file_rot: out path for the rotation figure
-(a string representing a path file)</p>
+(a string representing a path file)
+:param figsize: width, height in inches (float, float)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>qc: result of the quality check (a boolean). True: OK</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -470,7 +484,7 @@ are 4, 4 and 1 respectively.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

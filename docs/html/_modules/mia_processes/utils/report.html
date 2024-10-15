@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.6.1-dev+29dabe91 documentation</title>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.6.1-dev+32ff25d8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=598035f7"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../_static/documentation_options.js?v=87f9c06e"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+29dabe91 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+32ff25d8 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -930,8 +930,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># page 4 - fmri-cvr MRI Acq &amp; Post-pro parameters##############</span>
-        <span class="c1">###############################################################</span>
+        <span class="c1"># page 4 - fmri-cvr MRI Acq &amp; Post-pro parameters ##############</span>
+        <span class="c1">################################################################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
                 <span class="s2">&quot;&lt;font size=18 &gt;&lt;b&gt; fMRI under a vasoactive stimulus &quot;</span>
@@ -1278,8 +1278,8 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># page 5 - fmri-cvr MRI quality check: movements &amp; EtCO2 regressor ####</span>
-        <span class="c1">#######################################################################</span>
+        <span class="c1"># page 5 - fmri-cvr MRI quality check: movements &amp; EtCO2 regressor #</span>
+        <span class="c1">####################################################################</span>
         <span class="n">sources_images_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s2">&quot;sources_images&quot;</span>
         <span class="p">)</span>
@@ -1348,14 +1348,14 @@
                 <span class="n">out_file_tra</span><span class="p">,</span>
                 <span class="n">out_file_rot</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="c1"># 912px × 892px</span>
                 <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
                     <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
                     <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># 940px × 893px</span>
                 <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
@@ -2441,8 +2441,8 @@
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># page 5 - Recognition task############</span>
-        <span class="c1">#################################################################</span>
+        <span class="c1"># page 5 - Recognition task #</span>
+        <span class="c1">#############################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
                 <span class="s2">&quot;&lt;font size=18 &gt;&lt;b&gt;Mémoire reconnaissance&lt;/b&gt; &quot;</span>
@@ -3052,14 +3052,14 @@
             <span class="n">out_file_rot</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="c1"># 912px × 892px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
                 <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
                 <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># 940px × 893px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
@@ -3295,14 +3295,14 @@
             <span class="n">out_file_rot</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="c1"># 912px × 892px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
                 <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
                 <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># 940px × 893px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
@@ -3539,14 +3539,14 @@
             <span class="n">out_file_rot</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="c1"># 912px × 892px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
                 <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
                 <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">qc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># 940px × 893px</span>
             <span class="n">im_check</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
@@ -6156,6 +6156,292 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
+        <span class="c1"># page 5 - fmri-perf MRI quality check: movements &amp; EtCO2 regressor #</span>
+        <span class="c1">####################################################################</span>
+        <span class="n">sources_images_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s2">&quot;sources_images&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data_rp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realignment_parameters</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; The &quot;</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">realignment_parameters</span>
+                <span class="o">+</span> <span class="s2">&quot; file cannot be opened! &lt;==</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">data_rp</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; The &quot;</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">realignment_parameters</span>
+                <span class="o">+</span> <span class="s2">&quot; file is not valid! &lt;==</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">data_rp</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">im_qualCheckTra</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">im_qualCheckRot</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">data_rp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out_file_tra</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span>
+                <span class="o">+</span> <span class="s2">&quot;_Perf_QualityControlMeasure_translation.png&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">out_file_rot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span>
+                <span class="o">+</span> <span class="s2">&quot;_Perf_QualityControlMeasure_Rotation.png&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">plot_realignment_parameters</span><span class="p">(</span>
+                    <span class="n">data_rp</span><span class="p">,</span>
+                    <span class="n">raw_func_vox_size_orig</span><span class="p">,</span>
+                    <span class="n">out_file_tra</span><span class="p">,</span>
+                    <span class="n">out_file_rot</span><span class="p">,</span>
+                    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="ow">is</span> <span class="kc">False</span>
+            <span class="p">):</span>
+                <span class="c1"># 912px × 892px</span>
+                <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
+                    <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                    <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># 940px × 893px</span>
+                <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
+                    <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                    <span class="mf">12.4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">im_qualCheckTra</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">out_file_tra</span><span class="p">,</span> <span class="mf">7.2</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="mf">4.4</span> <span class="o">*</span> <span class="n">inch</span><span class="p">)</span>
+            <span class="n">im_qualCheckRot</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">out_file_rot</span><span class="p">,</span> <span class="mf">7.2</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="mf">4.4</span> <span class="o">*</span> <span class="n">inch</span><span class="p">)</span>
+
+        <span class="n">qualCheckMess</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+            <span class="s2">&quot;&lt;font size=14 &gt; &lt;b&gt; fMRI quality &quot;</span>
+            <span class="s2">&quot;check: movements &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">im_qualCheck</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=8 &gt; Automatic evaluation not available &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="n">im_qualCheck</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="p">[[</span><span class="n">qualCheckMess</span><span class="p">,</span> <span class="n">im_qualCheck</span><span class="p">]]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="p">[</span><span class="mi">110</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">mm</span><span class="p">])</span>  <span class="c1"># colWidths, rowHeight</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="n">TableStyle</span><span class="p">([(</span><span class="s2">&quot;VALIGN&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;MIDDLE&quot;</span><span class="p">)]))</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;LEFT&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">im_qualCheckTra</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">im_qualCheckTra</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=14 &gt; Linear head motion parameters not &quot;</span>
+                <span class="s2">&quot;available &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">45</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="n">im_qualCheckTra</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im_qualCheckTra</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">im_qualCheckRot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">im_qualCheckRot</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=14 &gt; Rotational head motion parameters &quot;</span>
+                <span class="s2">&quot;not available &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">55</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="n">im_qualCheckRot</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im_qualCheckRot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 6 - fmri-per MRI quality check: AIF #</span>
+        <span class="c1">############################################</span>
+        <span class="n">qc</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">qc_row</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aif_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">aif_dic</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="n">out_file_aif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span>
+                <span class="o">+</span> <span class="s2">&quot;_Perf_QualityControlMeasure_aif.png&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">aif_data</span> <span class="o">=</span> <span class="n">aif_dic</span><span class="p">[</span><span class="s2">&quot;aif&quot;</span><span class="p">]</span>
+            <span class="n">aif_scores</span> <span class="o">=</span> <span class="n">aif_dic</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aif_scores</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">qc</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">qc_row</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="k">if</span> <span class="n">j</span><span class="p">)</span>
+
+            <span class="c1"># figsize in inches</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">bottom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">hspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+                <span class="s2">&quot;Arterial Input Function diagram&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.03</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Dynamic scans&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Signal intensity (A. U.)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+            <span class="n">xLim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aif_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c1"># Create x-values starting from 1</span>
+            <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">aif_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># Plot using x_values for the x-axis</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">aif_data</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">xLim</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
+            <span class="c1"># High resolution: 2000px × 1118px.</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file_aif</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+            <span class="n">im_qualCheckAIF</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">out_file_aif</span><span class="p">,</span> <span class="mf">7.2</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="mf">4.4</span> <span class="o">*</span> <span class="n">inch</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; The &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">aif_file</span> <span class="o">+</span> <span class="s2">&quot; file cannot be opened! &lt;==</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">qc</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">im_qualCheckAIF</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=14 &gt; Arterial Input Function parameters &quot;</span>
+                <span class="s2">&quot;not available &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="n">im_qualCheckAIF</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;No-check-mark.png&quot;</span><span class="p">),</span>
+                <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                <span class="mf">12.7</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># 940px × 893px</span>
+            <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sources_images_dir</span><span class="p">,</span> <span class="s2">&quot;OK-check-mark.png&quot;</span><span class="p">),</span>
+                <span class="mf">13.0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+                <span class="mf">12.4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">qc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">im_qualCheck</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=8 &gt; Automatic evaluation not available &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="n">qualCheckMess</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
+            <span class="s2">&quot;&lt;font size=14 &gt; &lt;b&gt; fMRI quality &quot;</span> <span class="s2">&quot;check: AIF &lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">im_qualCheck</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="p">[[</span><span class="n">qualCheckMess</span><span class="p">,</span> <span class="n">im_qualCheck</span><span class="p">]]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="p">[</span><span class="mi">110</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">mm</span><span class="p">])</span>  <span class="c1"># colWidths, rowHeight</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="n">TableStyle</span><span class="p">([(</span><span class="s2">&quot;VALIGN&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;MIDDLE&quot;</span><span class="p">)]))</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;LEFT&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im_qualCheckAIF</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">qc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size=11&gt; &lt;b&gt; Calculated &quot;</span>
+                    <span class="s2">&quot;&lt;font size=9&gt;*&lt;/font&gt;&quot;</span>
+                    <span class="s2">&quot;scores, &quot;</span>
+                    <span class="s2">&quot;&lt;font size=9&gt;*&lt;/font&gt;&quot;</span>
+                    <span class="s2">&quot;positions (row, &quot;</span>
+                    <span class="s2">&quot;column, slice) and any &quot;</span>
+                    <span class="s2">&quot;&lt;font size=9&gt;*&lt;/font&gt;&quot;</span>
+                    <span class="s2">&quot;warnings observed &quot;</span>
+                    <span class="s2">&quot;during the assessment of the Arterial Input &quot;</span>
+                    <span class="s2">&quot;Function:&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aif_scores</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&lt;font size=11&gt; </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">- Score: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">;&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; voxel: (</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">qc_row</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qc_row</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;warning:&quot;</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;br/&gt;</span><span class="si">{</span><span class="n">qc_row</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;warnings:&lt;br/&gt;&quot;</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">warning</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">qc_row</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="p">)</span>
+
+                <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Paragraph</span><span class="p">(</span>
+                        <span class="n">line</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="c1"># TODO: we need to optimise the following if loop to handle more</span>
+            <span class="c1">#      complex situations</span>
+            <span class="k">if</span> <span class="n">qc_row</span> <span class="o">==</span> <span class="p">[[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">65</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">25</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+            <span class="c1"># Footnote</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 7&gt;*For more information see &quot;</span>
+                    <span class="s2">&quot;https://populse.github.io/mia_processes/html&quot;</span>
+                    <span class="s2">&quot;/documentation/bricks/tools/Make_AIF.html&lt;/font&gt;&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 </div>
@@ -6173,7 +6459,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>
