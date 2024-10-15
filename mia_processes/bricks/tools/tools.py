@@ -14,6 +14,7 @@ needed to run other higher-level bricks.
         - Files_To_List
         - Filter_Files_List
         - Find_In_List
+        - Get_Conditions_From_BIDS_tsv
         - Get_Conditions_From_csv
         - Get_Eprime_Info_GE2REC
         - Get_Patient_Name
@@ -1616,6 +1617,175 @@ class Find_In_List(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Get_Conditions_From_BIDS_tsv(ProcessMIA):
+    """
+    *Get conditions information (conditions names, onsets and durations)
+    for Level1Design brick using BIDS-compatible tsv files*
+
+    Please, see the complete documentation for
+    the `Get_Conditions_From_BIDS_tsv brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Conditions_From_BIDS_tsv.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Get_Conditions_From_BIDS_tsv, self).__init__()
+
+        # Third party software required for the execution of the brick
+        self.requirement = []  # no need of third party software!
+
+        # Inputs description
+        tsv_files_desc = (
+            ".tsv files contening the onset, one for each session "
+            "(existing .tsv files)"
+        )
+
+        # Outputs description
+        cond_names_desc = "The list of the conditions names"
+        cond_onsets_desc = "The list of the conditions onsets."
+        cond_durations_desc = "The list of the conditions duration."
+
+        # Input traits
+        self.add_trait(
+            "tsv_files",
+            InputMultiPath(
+                traits.File(),
+                output=False,
+                optional=False,
+                desc=tsv_files_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "cond_names",
+            traits.List(
+                traits.List(traits.String()),
+                value=[[]],
+                output=True,
+                optional=True,
+                desc=cond_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cond_onsets",
+            traits.List(
+                traits.List(traits.List(traits.Float())),
+                value=[[[]]],
+                output=True,
+                optional=True,
+                desc=cond_onsets_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cond_durations",
+            traits.List(
+                traits.List(traits.List(traits.Float())),
+                value=[[[]]],
+                output=True,
+                optional=True,
+                desc=cond_durations_desc,
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None, iteration=False):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Get_Conditions_From_BIDS_tsv, self).list_outputs()
+
+        all_cond_names = []
+        all_cond_onsets = []
+        all_cond_durations = []
+
+        for i, tsv_file in enumerate(self.tsv_files):
+            cond_names = []
+            cond_onsets = []
+            cond_durations = []
+            # Check extension
+            valid_bool, in_ext, file_name = checkFileExt(
+                tsv_file, {"tsv": "tsv"}
+            )
+            if not valid_bool:
+                print(
+                    "\nGet_Conditions_From_BIDS_tsv brick: Initialization "
+                    "failed... One of the file is not a .tsv file ...!"
+                )
+                return self.make_initResult()
+
+            # Get infos into tsv
+            df = pd.read_csv(tsv_file, sep="\t")
+
+            # Check columns (onset, duration, trial_type)
+            col_names = list(df.columns)
+            for name in ["onset", "duration", "trial_type"]:
+                if name not in col_names:
+                    print(
+                        "\nGet_Conditions_From_BIDS_tsv brick: Initialization "
+                        "failed... One column among onset, duration or "
+                        "trial_type is missing in the .tsv file ...!"
+                    )
+                    return self.make_initResult()
+
+            cond_names = sorted(list(dict.fromkeys(df["trial_type"].tolist())))
+
+            for cond in cond_names:
+                cond_onsets.append(
+                    df.loc[df["trial_type"] == cond]["onset"].tolist()
+                )
+                cond_durations.append(
+                    df.loc[df["trial_type"] == cond]["duration"].tolist()
+                )
+
+            all_cond_names.append(cond_names)
+            all_cond_onsets.append(cond_onsets)
+            all_cond_durations.append(cond_durations)
+
+        # Outputs definition and tags inheritance (optional)
+        if all_cond_names:
+            self.outputs["cond_names"] = all_cond_names
+            self.outputs["cond_onsets"] = all_cond_onsets
+            self.outputs["cond_durations"] = all_cond_durations
+
+        if self.outputs:
+            self.outputs["notInDb"] = [
+                "cond_names",
+                "cond_onsets",
+                "cond_durations",
+            ]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # super(Get_Conditions_From_BIDS_tsv, self).run_process_mia()
         return
 
 

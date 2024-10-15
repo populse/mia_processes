@@ -24,7 +24,7 @@ For block design, the csv file should contains two columns by conditions: one wi
 The first row of the column with the onset should contains the name of the condition
 and the first row of the column with the duration should contain the name of the condition + " duration":
 
-.. image:: ../../images/getRegressorsFromCSV_example.png
+.. image:: ../../images/getConditionsFromCSV_bloc_example.png
   :width: 300
   :alt: csv example block design
 

@@ -21,6 +21,7 @@ from .tools import (  # noqa: F401
     Files_To_List,
     Filter_Files_List,
     Find_In_List,
+    Get_Conditions_From_BIDS_tsv,
     Get_Conditions_From_csv,
     Get_Eprime_Info_GE2REC,
     Get_Patient_Name,
