@@ -15,7 +15,7 @@ Perform changes of the voxel grid that require interpolation of the image
 
 Performs changes of the voxel grid such as changing the resolution or location and orientation of the voxel grid.
 If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing
-unless nearest neighbour interpolation is selected or oversample is changed explicitly. T
+unless nearest neighbour interpolation is selected or oversample is changed explicitly.
 
 The resolution can only be changed for spatial dimensions.
 

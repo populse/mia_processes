@@ -18,11 +18,13 @@ The events.tsv file should contains a column "onset" (onset (in seconds) of the 
 a column "duration" (duration of the event (measured from onset) in seconds.) and one column "trial_type" (primary categorisation of each trial to identify them as instances of the experimental conditions).
 
 Example for a bloc design:
+
 .. image:: ../../images/getConditionsFromBIDS_bloc_example.png
   :width: 300
   :alt: tsv example bloc design
 
 Example for an event design:
+
 .. image:: ../../images/getConditionsFromBIDS_event_example.png
   :width: 300
   :alt: tsv example event design
@@ -84,3 +86,9 @@ Example for an event design:
                 [0.0, 0.0]
             ]
         ]
+
+-------------
+
+Useful links:
+
+`evetns.tsv BIDS <https://bids-specification.readthedocs.io/en/stable/modality-specific-files/task-events.html#task-events>`_

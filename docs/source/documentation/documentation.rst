@@ -173,7 +173,7 @@ To use certain mia_processes bricks (atomic processes), `third-party software us
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Find_In_List <bricks/tools/Find_In_List.html>`_
-    - `Get_Conditions_From_BIDS_tsv <bricks/tools/Get_Conditions_From_BIDS_tsv>`_
+    - `Get_Conditions_From_BIDS_tsv <bricks/tools/Get_Conditions_From_BIDS_tsv.html>`_
     - `Get_Conditions_From_csv <bricks/tools/Get_Conditions_From_csv.html>`_
     - `Get_Eprime_info_GE2REC <bricks/tools/Get_Eprime_info_GE2REC.html>`_
     - `Get_Patient_Name <bricks/tools/Get_Patient_Name.html>`_

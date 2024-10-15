@@ -45,6 +45,7 @@ In this case, bvec and bval file should be specified.*
 
 
 **Optional inputs:**
+
 - *number* (an integer, optional)
     Number of single-fibre voxels to use when calculating response function
 

@@ -28,6 +28,7 @@ populse_mia.
         - MRTransform
         - MTNormalise
         - ResponseSDDhollander
+        - ResponseSDTournier
         - SphericalHarmonicExtraction
         - TensorMetrics
         - Tractography
@@ -4453,6 +4454,247 @@ class ResponseSDDhollander(ProcessMIA):
             args += "-fa " + str(self.fa_thresh) + " "
         if self.wm_algo:
             args += "-wm_algo " + self.wm_algo + " "
+        if self.get_final_voxels:
+            args += "-voxels " + self.voxels_image + " "
+        if args:
+            self.process.args = args
+
+        return self.process.run(configuration_dict={})
+
+
+class ResponseSDTournier(ProcessMIA):
+    """
+    *Estimate response function(s) for spherical deconvolution using
+    the Tournier algorithm (dwi2response command)*
+
+    Please, see the complete documentation for the `ResponseSDTournier brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ResponseSDTournier.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ResponseSDTournier, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input DWI image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optionnal inputs description
+        number_desc = (
+            "Number of single-fibre voxels to use when calculating "
+            "response function"
+        )
+        iter_voxels_desc = (
+            "Number of single-fibre voxels to select when preparing for "
+            "the next iteration"
+        )
+        dilate_desc = (
+            "Number of mask dilation steps to apply when "
+            "deriving voxel mask to test in the next iteration"
+        )
+        max_iters_desc = (
+            "Maximum number of iterations (set to 0 to force convergence)"
+        )
+        get_final_voxels_desc = (
+            "Get an image showing the final voxel selection(s) (a boolean)"
+        )
+        in_mask_desc = (
+            "Provide initial mask image.(a pathlike object or "
+            "string representing an existing file)"
+        )
+        max_sh_desc = (
+            "Maximum harmonic degree of response function (a single "
+            "value for single-shell response and a list for multi-shell "
+            "response. (a list of items which are an integer) "
+        )
+
+        # Outputs description
+        wm_file_desc = (
+            "Output WM response text file (a pathlike object or "
+            "string representing a file) "
+        )
+        voxels_image_desc = (
+            "Image showing the final voxel selection (a pathlike object or "
+            "string representing a file) "
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "number",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "iter_voxels",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=iter_voxels_desc,
+            ),
+        )
+
+        self.add_trait(
+            "dilate",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=dilate_desc,
+            ),
+        )
+
+        self.add_trait(
+            "max_iters",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=max_iters_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_final_voxels",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=get_final_voxels_desc,
+            ),
+        )
+
+        self.add_trait(
+            "in_mask",
+            Either(
+                Undefined,
+                File(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=in_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "max_sh",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=max_sh_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "wm_file", File(output=True, optional=True, desc=wm_file_desc)
+        )
+        self.add_trait(
+            "voxels_image",
+            File(output=True, optional=True, desc=voxels_image_desc),
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.ResponseSD")
+
+    def list_outputs(self, is_plugged=None, iteration=False):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ResponseSDTournier, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["wm_file"] = os.path.join(
+                    self.output_directory, fileName + "_response_wm.txt"
+                )
+                if self.get_final_voxels:
+                    self.outputs["voxels_image"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_response_voxels." + in_ext,
+                    )
+
+        if self.outputs:
+            for k in ["wm_file"]:
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs[k]
+                )
+            if self.get_final_voxels:
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs["voxels_image"]
+                )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ResponseSDTournier, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.algorithm = "tournier"
+        self.process.wm_file = self.wm_file
+        if self.in_mask:
+            self.process.in_mask = self.in_mask
+        if self.max_sh:
+            self.process.max_sh = self.max_sh
+
+        args = ""
+        if self.number:
+            args += "-number " + str(self.number) + " "
+        if self.iter_voxels:
+            args += "-iter_voxels " + str(self.iter_voxels) + " "
+        if self.dilate:
+            args += "-dilate " + str(self.dilate) + " "
+        if self.max_iters:
+            args += "-max_iters " + str(self.max_iters) + " "
         if self.get_final_voxels:
             args += "-voxels " + self.voxels_image + " "
         if args:
