@@ -23,6 +23,7 @@ populse_mia.
         - MRCat
         - MRConvert
         - MRDeGibbs
+        - MRGridRegrid
         - MRMath
         - MRTransform
         - MTNormalise
@@ -3303,6 +3304,247 @@ class MRDeGibbs(ProcessMIA):
         self.process.nshifts = self.nshifts
 
         return self.process.run(configuration_dict={})
+
+
+class MRGridRegrid(ProcessMIA):
+    """
+    *Modify the grid of an image by performing
+    changes of the voxel grid that require interpolation of the image
+    (mrgrid regrid command)*
+
+    Please, see the complete documentation for the `MRGridRegrid brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRGridRegrid.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MRGridRegrid, self).__init__()
+
+        # Third party software required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs description
+        interp_desc = (
+            "interpolation method to use when reslicing "
+            "(choices: nearest, linear, cubic, sinc; default: cubic)."
+        )
+        voxel_desc = "define the new voxel size for the output image. "
+        scale_desc = "scale the image resolution by the supplied factor"
+        oversample_factor_desc = (
+            "amount of over-sampling (in the target space) "
+            "to perform when regridding."
+        )
+        template_desc = (
+            "match the input image grid (voxel spacing, image size, "
+            "header transformation) to that of a reference image"
+        )
+        suffix_desc = "suffix of output image"
+
+        size_desc = (
+            "define the size (number of voxels) in each spatial dimension "
+            "for the output image"
+        )
+        # Output description
+        out_file_desc = (
+            "Output image (a pathlike object or string representing "
+            "an existing file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "suffix",
+            Either(
+                Undefined,
+                String(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=suffix_desc,
+            ),
+        )
+
+        self.add_trait(
+            "voxel",
+            Either(
+                Undefined,
+                Float(),
+                Int(),
+                List(Int(), minlen=3, maxlen=3),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=voxel_desc,
+            ),
+        )
+
+        self.add_trait(
+            "size",
+            Either(
+                Undefined,
+                List(Int(), minlen=3, maxlen=3),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "scale",
+            Either(
+                Undefined,
+                List(Int(), minlen=3, maxlen=3),
+                List(Float(), minlen=3, maxlen=3),
+                Int(),
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=scale_desc,
+            ),
+        )
+        self.add_trait(
+            "interp",
+            Enum(
+                "cubic",
+                "nearest",
+                "linear",
+                "sinc",
+                default="cubic",
+                output=False,
+                optional=True,
+                desc=interp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "oversample_factor",
+            Either(
+                Undefined,
+                List(Int(), minlen=3, maxlen=3),
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=oversample_factor_desc,
+            ),
+        )
+
+        self.add_trait(
+            "template", File(output=False, optional=True, desc=template_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None, iteration=False):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :param iteration: the state, iterative or not, of the process.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MRGridRegrid, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                if self.suffix:
+                    file_name += "_" + self.suffix
+                else:
+                    file_name += "_regrid"
+
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory,
+                    file_name + "." + in_ext,
+                )
+
+        if self.outputs:
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MRGridRegrid, self).run_process_mia()
+        # No Nipype command for mrgrid
+
+        cmd = ["mrgrid", self.in_file, "regrid"]
+
+        if self.voxel:
+            cmd += ["-voxel", str(self.voxel)]
+
+        if self.scale:
+            scale = ""
+            if isinstance(self.scale, list):
+                for i in self.scale:
+                    scale += str(i) + ","
+                scale = scale[:-1]
+            else:
+                scale = str(self.scale)
+            cmd += ["-scale", scale]
+
+        if self.oversample_factor:
+            oversample = ""
+            if isinstance(self.oversample_factor, list):
+                for i in self.oversample_factor:
+                    oversample += str(i) + ","
+                oversample = oversample[:-1]
+            else:
+                oversample = str(self.oversample_factor)
+            cmd += ["-oversample", oversample]
+
+        if self.size:
+            size = ""
+            for i in self.size:
+                size += str(i) + ","
+            cmd += ["-size", size[:-1]]
+
+        if self.interp:
+            cmd += ["-interp", str(self.interp)]
+
+        if self.template:
+            cmd += ["-template", self.template]
+
+        cmd += [self.out_file]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class MRMath(ProcessMIA):

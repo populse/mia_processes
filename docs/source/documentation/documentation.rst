@@ -81,10 +81,12 @@ To use certain mia_processes bricks (atomic processes), `third-party software us
       - `MRCat <bricks/preprocess/mrtrix/MRCat.html>`_
       - `MRConvert <bricks/preprocess/mrtrix/MRConvert.html>`_
       - `MRDeGibbs <bricks/preprocess/mrtrix/MRDeGibbs.html>`_
+      - `MRGridRegrid <bricks/preprocess/mrtrix/MRGridRegrid.html>`_
       - `MRMath <bricks/preprocess/mrtrix/MRMath.html>`_
       - `MRTransform <bricks/preprocess/mrtrix/MRTransform.html>`_
       - `MTNormalise <bricks/preprocess/mrtrix/MTNormalise.html>`_
       - `ResponseSDDhollander <bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
+      - `ResponseSDTournier <bricks/preprocess/mrtrix/ResponseSDTournier.html>`_
       - `SphericalHarmonicExtraction <bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html>`_
       - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
       - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_
@@ -171,6 +173,7 @@ To use certain mia_processes bricks (atomic processes), `third-party software us
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Find_In_List <bricks/tools/Find_In_List.html>`_
+    - `Get_Conditions_From_BIDS_tsv <bricks/tools/Get_Conditions_From_BIDS_tsv>`_
     - `Get_Conditions_From_csv <bricks/tools/Get_Conditions_From_csv.html>`_
     - `Get_Eprime_info_GE2REC <bricks/tools/Get_Eprime_info_GE2REC.html>`_
     - `Get_Patient_Name <bricks/tools/Get_Patient_Name.html>`_
