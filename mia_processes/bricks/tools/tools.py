@@ -22,6 +22,7 @@ needed to run other higher-level bricks.
         - Import_Data
         - Input_Filter
         - List_Duplicate
+        - List_Of_List_To_List
         - List_To_File
         - Make_AIF
         - Make_A_List
@@ -3092,7 +3093,7 @@ class List_Of_List_To_List(ProcessMIA):
     *Select and generate a list from a list of list*
 
     Please, see the complete documentation for the
-    `List_To_File in the mia_processes website
+    `List_Of_List_To_List in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_Of_List_To_List.html>`_
 
     """
