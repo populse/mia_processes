@@ -579,7 +579,7 @@ class Report:
         )
         self.report.append(PageBreak())
 
-        # page 2 - Anatomical MRI - Acq & Post-pro parameters############
+        # page 2 - Anatomical MRI - Acq & Post-pro parameters ###########
         #################################################################
         self.report.append(
             Paragraph(
@@ -1491,7 +1491,7 @@ class Report:
         self.report.append(im_qualCheckReg)
         self.report.append(PageBreak())
 
-        # page 6 - fmri-cvr MRI quality check: BOLD signal timecourse Vs EtCO2
+        # page 6 - fmri-cvr quality check: BOLD signal time course Vs EtCO2 ##
         ######################################################################
         self.report.append(
             Paragraph(
@@ -5787,8 +5787,8 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # page 4 - fmri-cvr MRI Acq & Post-pro parameters##############
-        ###############################################################
+        # page 4 - fmri-perf Acq & Post-pro parameters #############
+        ############################################################
         self.report.append(
             Paragraph(
                 "<font size=18 ><b>Dynamic Susceptibility Contrast "
@@ -6101,8 +6101,8 @@ class Report:
         )
         self.report.append(PageBreak())
 
-        # page 5 - fmri-perf MRI quality check: movements & EtCO2 regressor #
-        ####################################################################
+        # page 5 - fmri-perf quality check: movements ####
+        ##################################################
         sources_images_dir = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "sources_images"
         )
@@ -6211,7 +6211,7 @@ class Report:
         self.report.append(im_qualCheckRot)
         self.report.append(PageBreak())
 
-        # page 6 - fmri-per MRI quality check: AIF #
+        # page 6 - fmri-perf quality check: AIF ####
         ############################################
         qc = True
         qc_row = [[] for _ in range(5)]
@@ -6326,10 +6326,9 @@ class Report:
                     "<font size=9>*</font>"
                     "scores, "
                     "<font size=9>*</font>"
-                    "positions (row, "
-                    "column, slice) and any "
+                    "positions (row, column, slice) and any "
                     "<font size=9>*</font>"
-                    "warnings observed "
+                    "warnings observed (if applicable) "
                     "during the assessment of the Arterial Input "
                     "Function:</b> </font>",
                     self.styles["Left"],
@@ -6387,5 +6386,219 @@ class Report:
             )
         self.report.append(PageBreak())
 
+        # page 7 - BOLD: MNI normalized axial images, 1st dyn ################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=14 > <b> DSC perfusion: MNI "
+                "normalized axial images (1<sup>st</sup> "
+                "dynamic)</b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_func,
+            fig_rows=self.norm_func_fig_rows,
+            fig_cols=self.norm_func_fig_cols,
+            slice_start=self.norm_func_inf_slice_start,
+            slice_step=self.norm_func_slices_gap,
+            cmap_1=self.norm_func_cmap,
+            vmin_1=self.norm_func_vmin,
+            vmax_1=self.norm_func_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 8 - Parametric maps: Cerebral Blood Volume in A. U. ##########
+        ####################################################################
+
+        self.report.append(
+            Paragraph(
+                "<font size=14><b> Parametric maps: Cerebral Blood Volume "
+                "in A. U. </b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.CBV_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.CBV_cmap,
+            vmin_2=self.CBV_vmin,
+            vmax_2=self.CBV_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 9 - Parametric maps: Cerebral Blood Flow in A. U. ###########
+        ####################################################################
+
+        self.report.append(
+            Paragraph(
+                "<font size=14><b> Parametric maps: Cerebral Blood Flow "
+                "in A. U. </b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.CBF_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.CBF_cmap,
+            vmin_2=self.CBF_vmin,
+            vmax_2=self.CBF_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 10 - Parametric maps: Delay in sec ###########
+        #####################################################
+
+        self.report.append(
+            Paragraph(
+                "<font size=14><b> Parametric maps: Delay in sec </b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.Tmax_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.Tmax_cmap,
+            vmin_2=self.Tmax_vmin,
+            vmax_2=self.Tmax_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 11 - Parametric maps: Mean Transit Time in sec ###########
+        #################################################################
+
+        self.report.append(
+            Paragraph(
+                "<font size=14><b> Parametric maps: Mean Transit Time in sec "
+                "</b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.MTT_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.MTT_cmap,
+            vmin_2=self.MTT_vmin,
+            vmax_2=self.MTT_vmax,
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
