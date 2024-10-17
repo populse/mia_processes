@@ -490,7 +490,7 @@ def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
     """
     Plot boxplot with points data and save the figure in a png image
 
-    :param dataframe:  tabular data. (a pandas dataframe)
+    :param dataframe: tabular data (a pandas dataframe)
     :param title: figure title (a string)
     :param ylabel: y axis label (a string)
     :param out_file: out figure path (a string)
