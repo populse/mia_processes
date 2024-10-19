@@ -6429,10 +6429,21 @@ class Report:
         # page 8 - Parametric maps: Cerebral Blood Volume in A. U. ##########
         ####################################################################
 
+        if isinstance(
+            self.dict4runtime.get("CBV_image", {}).get(
+                "Perf Normalisation Factor"
+            ),
+            (int, float),
+        ):
+            unit = "mL/100g"
+
+        else:
+            unit = "A. U."
+
         self.report.append(
             Paragraph(
                 "<font size=14><b> Parametric maps: Cerebral Blood Volume "
-                "in A. U. </b></font>",
+                f"in {unit}</b></font>",
                 self.styles["Left"],
             )
         )
@@ -6473,10 +6484,13 @@ class Report:
         # page 9 - Parametric maps: Cerebral Blood Flow in A. U. ###########
         ####################################################################
 
+        if unit != "A. U.":
+            unit = "mL/100g/min"
+
         self.report.append(
             Paragraph(
                 "<font size=14><b> Parametric maps: Cerebral Blood Flow "
-                "in A. U. </b></font>",
+                f"in {unit} </b></font>",
                 self.styles["Left"],
             )
         )

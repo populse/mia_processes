@@ -101,7 +101,17 @@ class Perfdsc(Pipeline):
             "reportperfdsc",
             "mia_processes.bricks.reports.reporting.ReportPerfDsc",
         )
-
+        self.nodes["reportperfdsc"].process.norm_anat_slices_gap = 5
+        self.nodes["reportperfdsc"].process.norm_func_inf_slice_start = 13
+        self.nodes["reportperfdsc"].process.norm_func_slices_gap = 2
+        self.nodes["reportperfdsc"].process.CBV_vmin = 0.0
+        self.nodes["reportperfdsc"].process.CBV_vmax = 8.0
+        self.nodes["reportperfdsc"].process.CBF_vmin = 0.0
+        self.nodes["reportperfdsc"].process.CBF_vmax = 120.0
+        self.nodes["reportperfdsc"].process.Tmax_vmin = 0.0
+        self.nodes["reportperfdsc"].process.Tmax_vmax = 6.0
+        self.nodes["reportperfdsc"].process.MTT_vmin = 0.0
+        self.nodes["reportperfdsc"].process.MTT_vmax = 8.0
         # links
         self.export_parameter(
             "spatial_preprocessing", "anat_file", is_optional=False
@@ -172,24 +182,24 @@ class Perfdsc(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "spatial_preprocessing": (-324.676, 18.988),
-            "spatial_mask": (64.459, -197.076),
-            "make_aif": (-33.536, 566.825),
-            "deconv_from_aif": (375.678, 268.475),
-            "reportperfdsc": (731.121, -396.430),
-            "inputs": (-519.529, 133.613),
-            "outputs": (1046.820, 25.995),
+            "spatial_preprocessing": (-247.52, 68.59),
+            "spatial_mask": (220.61, -129.10),
+            "make_aif": (73.01, 379.44),
+            "deconv_from_aif": (552.04, 318.076),
+            "reportperfdsc": (925.85, -308.25),
+            "inputs": (-473.60, 181.38),
+            "outputs": (1245.23, 248.28),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "spatial_preprocessing": (236.515625, 355.0),
-            "spatial_mask": (200.15625, 145.0),
-            "make_aif": (172.171875, 250.0),
-            "deconv_from_aif": (215.328125, 320.0),
-            "reportperfdsc": (212.484375, 1265.0),
-            "inputs": (96.79751223929541, 110.0),
-            "outputs": (59.578125, 75.0),
+            "spatial_preprocessing": (236.5, 355.0),
+            "spatial_mask": (200.2, 145.0),
+            "make_aif": (172.2, 250.0),
+            "deconv_from_aif": (215.3, 320.0),
+            "reportperfdsc": (212.5, 1265.0),
+            "inputs": (96.8, 110.0),
+            "outputs": (59.6, 75.0),
         }
 
         self.do_autoexport_nodes_parameters = False
