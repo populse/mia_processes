@@ -3248,8 +3248,7 @@ class ReportPerfDsc(ProcessMIA):
             "Optional dictionary with information about the patient "
             "(e.g. {"
             "'PatientName': 'sub-1', 'Pathology': 'ACMD', "
-            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
-            "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
+            "'Age': 64, 'Sex': 'M', 'MR': '3T'}"
         )
 
         # Outputs description
@@ -3597,8 +3596,6 @@ class ReportPerfDsc(ProcessMIA):
             Age=Undefined,
             Sex=Undefined,
             MR=Undefined,
-            Gas=Undefined,
-            GasAdmin=Undefined,
         )
 
         # Outputs traits
@@ -3638,8 +3635,6 @@ class ReportPerfDsc(ProcessMIA):
                 Age=Undefined,
                 Sex=Undefined,
                 MR=Undefined,
-                Gas=Undefined,
-                GasAdmin=Undefined,
             )
 
         file_position = (
