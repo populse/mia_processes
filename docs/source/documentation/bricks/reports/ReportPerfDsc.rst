@@ -153,26 +153,21 @@ Generates report for Perfusion study using DSC-MRI
       ex. /home/username/data/derived_data/rp_Func.txt
 
 
-- *beta_image* (a string representing an existing file)
-    The estimated effect size or regression coefficients associated with the
-    1st predictor (e.g., conditions or regressors) included in the GLM model.
-    A spatial map that represent the estimated effect size or intensity of
-    activation/deactivation associated with the 1st predictor/regressor at
-    each voxel in the brain (valid extensions:.nii)
-
+- *CBV_image* (a string representing an existing file)
+    Cerebral Blood Volume map (a file with .nii format).
     ::
 
-      ex. /home/username/data/derived_data/patient_ref_data/beta_0001.nii
+      ex. /home/username/data/derived_data/Func_CBV_deconv.nii
 
-- *beta_cmap* (a string, optional)
-    The name of the colors range that are used for the beta map slice
+- *CBV_cmap* (a string, optional)
+    The name of the colors range that are used for the CBV map slice
     planes plot (default: `rainbow`).
 
     ::
 
       ex. rainbow
 
-- *beta_vmin* (a float, optional)
+- *CBV_vmin* (a float, optional)
     Specifies the minimum value of the data range to be mapped to the
     colormap. Any value lower than vmin will be clipped to vmin before
     mapping to colors.
@@ -181,7 +176,7 @@ Generates report for Perfusion study using DSC-MRI
 
       ex. <undefined>
 
-- *beta_vmax* (a float, optional)
+- *CBV_vmax* (a float, optional)
     Specifies the maximum value of the data range to be mapped to the
     colormap. Any value higher than vmax will be clipped to vmax before
     mapping to colors.
@@ -190,25 +185,21 @@ Generates report for Perfusion study using DSC-MRI
 
       ex. <undefined>
 
-- *spmT_image* (a string representing an existing file)
-    A file containing t-statistic values per voxel, which indicate the
-    strength of the effect of interest at each brain voxel, derived from the
-    general linear model (GLM) analysis performed in SPM (valid
-    extensions:.nii)
-
+- *CBF_image* (a string representing an existing file)
+    Cerebral Blood Flow map (a file with .nii format).
     ::
 
-      ex. /home/username/data/derived_data/patient_ref_data/spmT_0001.nii
+      ex. /home/username/data/derived_data/Func_CBF_deconv.nii
 
-- *spmT_cmap* (a string, optional)
-    The name of the colors range that are used for the spmT map slice
+- *CBF_cmap* (a string, optional)
+    The name of the colors range that are used for the CBF map slice
     planes plot (default: `rainbow`).
 
     ::
 
       ex. rainbow
 
-- *spmT_vmin* (a float, optional)
+- *CBF_vmin* (a float, optional)
     Specifies the minimum value of the data range to be mapped to the
     colormap. Any value lower than vmin will be clipped to vmin before
     mapping to colors.
@@ -217,7 +208,7 @@ Generates report for Perfusion study using DSC-MRI
 
       ex. <undefined>
 
-- *spmT_vmax* (a float, optional)
+- *CBF_vmax* (a float, optional)
     Specifies the maximum value of the data range to be mapped to the
     colormap. Any value higher than vmax will be clipped to vmax before
     mapping to colors.
@@ -225,15 +216,86 @@ Generates report for Perfusion study using DSC-MRI
     ::
 
       ex. <undefined>
+
+- *Tmax_image* (a string representing an existing file)
+    The Time to Maximum map (a file with .nii format).
+    ::
+
+      ex. /home/username/data/derived_data/Func_Tmax_deconv.nii
+
+- *Tmax_cmap* (a string, optional)
+    The name of the colors range that are used for the Tmax map slice
+    planes plot (default: `rainbow`).
+
+    ::
+
+      ex. rainbow
+
+- *Tmax_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *Tmax_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *MTT_image* (a string representing an existing file)
+    Mean Transit Time map (a file with .nii format).
+    ::
+
+      ex. /home/username/data/derived_data/Func_MTT_deconv.nii
+
+- *MTT_cmap* (a string, optional)
+    The name of the colors range that are used for the MTT map slice
+    planes plot (default: `rainbow`).
+
+    ::
+
+      ex. rainbow
+
+- *MTT_vmin* (a float, optional)
+    Specifies the minimum value of the data range to be mapped to the
+    colormap. Any value lower than vmin will be clipped to vmin before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *MTT_vmax* (a float, optional)
+    Specifies the maximum value of the data range to be mapped to the
+    colormap. Any value higher than vmax will be clipped to vmax before
+    mapping to colors.
+
+    ::
+
+      ex. <undefined>
+
+- *aif_file*
+    The AIF (a file in .json format) typically obtained previously with the
+    Make_AIF brick.
+
+    ::
+
+      ex. '/home/username/data/raw_data/swrfunc_aif.json'
 
 - *patient_info*
     Optional dictionary with information about the patient (keys in
-    ['PatientRef', 'Pathology', 'Age', 'Sex', MR', 'Gas', 'GasAdmin'])
+    ['PatientRef', 'Pathology', 'Age', 'Sex', MR'])
 
     ::
 
-      ex. {'PatientRef': 'sub-1', 'Pathology': 'ACMD', 'Age': '56', 'Sex': 'M', 'MR': '3T', 'Gas': 'Bactal', 'GasAdmin': 'Mask'}
-
+      ex. {'PatientRef': 'sub-1', 'Pathology': 'ACMD', 'Age': '56', 'Sex': 'M', 'MR': '3T'}
 
 **Outputs parameters:**
 
