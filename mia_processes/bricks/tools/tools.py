@@ -3262,18 +3262,6 @@ class Make_AIF(ProcessMIA):
         )
         self.func_file = traits.Undefined
 
-        # Number of time points (or dynamics) used to determine the bolus
-        # arrival time (t0) in the MRI signal analysis. Acts as a sliding
-        # window that moves in the time dimension of the MRI data, allowing
-        # the algorithm to analyse the local temporal behaviour at each voxel.
-        # A large window provides smoother estimates of the signal, but can
-        # delay the detection of sudden changes, such as the arrival of the
-        # bolus. It increases stability, but can also ‘blur’ the sharp
-        # transition at bolus arrival. A smaller window size will be more
-        # sensitive to rapid changes, but may also pick up more noise or
-        # fluctuations in the signal. The default value is a moderately
-        # sized window to smooth out short-term fluctuations while detecting
-        # significant changes in the MRI signal value.
         self.add_trait(
             "bat_window_size",
             traits.Int(
@@ -3284,19 +3272,6 @@ class Make_AIF(ProcessMIA):
         )
         self.bat_window_size = 8
 
-        # Threshold multiplier is used to detect significant changes in the
-        # signal intensity of MRI data (controls the sensitivity of the bolus
-        # arrival detection). A high th value (e.g., th = 3.0) would make the
-        # algorithm less sensitive, meaning it will only consider larger,
-        # more pronounced signal drops as valid bolus arrival points. This
-        # reduces false positives but may miss subtle or gradual bolus
-        # arrivals. A low th value (e.g., th = 1.0) would make the algorithm
-        # more sensitive, catching even smaller signal drops. However, this
-        # may lead to false positives, where noise or natural fluctuations in
-        # the signal are incorrectly identified as bolus arrival. The default
-        # value ensures only signal drops larger than 2 standard deviations
-        # below the mean are considered significant, providing a balance
-        # between sensitivity and robustness against noise.
         self.add_trait(
             "bat_th",
             traits.Float(
