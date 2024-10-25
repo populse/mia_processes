@@ -41,13 +41,57 @@ The acquired data are processed to generate various perfusion maps, such as:
 
 **Pipeline insight**
 
-- The Perfdsc pipeline combines the following pipelines and processes:
-    -
+- The `Perfdsc` pipeline combines the following pipelines and processes:
+    - `Bold_spatial_preprocessing1 <../../pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
+    - `Spatial_mask <../../pipelines/preprocess/Spatial_mask.html>`_
+    - `Make_AIF <../../bricks/tools/Make_AIF.html>`_
+    - `Deconv_from_aif <../../bricks/tools/Deconv_from_aif.html>`_
+    - `ReportPerfDsc <../../bricks/reports/ReportPerfDsc.html>`_
 
-..
-    .. image:: ../../images/Perfdsc.png
-      :width: 800
-      :alt: Perfdsc pipeline
+.. image:: ../../images/Perfdsc.png
+  :width: 1100
+  :alt: Perfdsc pipeline
 
-The pipeline is under construction, and documentation will be available
-when the pipeline will be completed ...
+--------------------
+
+**Inputs parameters**
+
+- *anat_file*
+    An anatomical image (ex. 3D T1 sequence such as T1 turbo field echo).
+    An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. /home/username/data/raw_data/Anat.nii
+
+- *func_files*
+    Functional images (ex. 4D T2* sequence such as echo planar imaging).
+    A list of items which are an existing, uncompressed file (valid
+    extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. ['/home/username/data/raw_data/Func.nii']
+
+
+- *patient_info*
+    A dictionary for entering patient data.
+       - PatientRef: the patient's code name
+       - Pathology: the patient's pathology
+       - Age: patient's age
+       - Sex: patient's sex
+       - MR: MR-imager used
+
+    ::
+
+      ex. {'PatientRef': 'bob_01', 'Pathology': 'ACMD', 'Age': 57, 'Sex': 'F', 'MR': '3T'}
+
+**Outputs parameters:**
+
+- *report*
+    The output generated report (.pdf). The summary of analysis, including
+    CBV, CBF, TTP and MTT plots.
+
+    ::
+
+      ex. '/home/username/data/derived_data/bob_01_Perf_DSC_Report_2024_10_23_06_11_12_36.pdf'
