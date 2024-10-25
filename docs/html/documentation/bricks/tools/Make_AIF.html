@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Make_AIF brick &#8212; mia_processes 2.6.1-dev+3f8654d6 documentation</title>
+    <title>Make_AIF brick &#8212; mia_processes 2.6.1-dev+da1f39da documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=e86fb2ef"></script>
+    <script src="../../../_static/documentation_options.js?v=8cec05cd"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+3f8654d6 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+da1f39da documentation</span></a></h1>
         <h2 class="heading"><span>Make_AIF brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -70,6 +70,78 @@ during gadolinium bolus. Ideally, the data will have been pre-processed
 (realignment, segmentation, etc.). An existing, uncompressed file
 (valid extensions: [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/swrfunc.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bat_window_size</em></dt><dd><p>Number of time points (or dynamics) used to determine the bolus arrival
+time (t0) in the MRI signal analysis (an integer). Acts as a sliding
+window that moves in the time dimension of the MRI data, allowing the
+algorithm to analyse the local temporal behaviour at each voxel. A large
+window provides smoother estimates of the signal, but can delay the
+detection of sudden changes, such as the arrival of the bolus. It
+increases stability, but can also <em>blur</em> the sharp transition at bolus
+arrival. A smaller window size will be more sensitive to rapid changes,
+but may also pick up more noise or fluctuations in the signal. The default
+value (8) is a moderately sized window to smooth out short-term
+fluctuations while detecting significant changes in the MRI signal value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bat_th</em></dt><dd><p>Threshold multiplier (a float) is used to detect significant changes in
+the signal intensity of MRI data (controls the sensitivity of the bolus
+arrival detection). A high <em>th</em> value (e.g., th = 3.0) would make the
+algorithm less sensitive, meaning it will only consider larger, more
+pronounced signal drops as valid bolus arrival points. This reduces false
+positives but may miss subtle or gradual bolus arrivals. A low th value
+(e.g., th = 1.0) would make the algorithm more sensitive, catching even
+smaller signal drops. However, this may lead to false positives, where
+noise or natural fluctuations in the signal are incorrectly identified as
+bolus arrival. The default value (2.0) ensures only signal drops larger
+than 2 standard deviations below the mean are considered significant,
+providing a balance between sensitivity and robustness against noise.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>wmaxr</em></dt><dd><p>Scaling factor (a float) used to define the threshold for acceptable peak
+widths of voxel intensity curves. It is a percentage of the total number
+of dynamics, which represents the maximum width allowed for peaks within
+the time series data of each voxel. Increasing <em>wmaxr</em> will relax the
+criterion for peak width, allowing wider peaks to be included in the
+region of interest (ROI). This might allow more voxels with broader peaks
+but could also include noisier or less precise signals. Decreasing <em>wmaxr</em>
+will make the criterion stricter, permitting only narrower peaks and
+potentially excluding more noisy voxels. This could increase precision but
+might also exclude valid data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>nb_vox_cand</em></dt><dd><p>Number of candidate voxels to be evaluated for computing the AIF (an
+integer).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">50</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>nb_vox_best_scor</em></dt><dd><p>Number of best-scoring voxels to be used for computing the AIF after
+evaluating the initial set of candidate voxels (an integer).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5</span>
 </pre></div>
 </div>
 </dd>
