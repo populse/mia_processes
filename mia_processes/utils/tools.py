@@ -223,8 +223,8 @@ def mriqc_get_all_run(modality, project, output_directory):
     Get all raw files name with a mriqc run for one project and
     for one modality.
 
-    :param modality:  modality (a string, 'bold' or 'anat')
-    :param project:  the project (Project Object)
+    :param modality: modality (a string, 'bold' or 'anat')
+    :param project: the project (Project Object)
     :param output_directory: output directory where all json files are stored
                              (a string that representing a path)
     :returns:
@@ -258,7 +258,7 @@ def mriqc_group_iqms_tsv(modality, output_directory):
     Get all IQMs from mriqc json report for one project
     and for one modality and put them together in one tsv file.
 
-    :param modality:  modality (a string, 'bold' or 'anat')
+    :param modality: modality (a string, 'bold' or 'anat')
     :param output_directory: output directory where all json files are stored
                              (a string that representing a path)
     :returns:
@@ -327,14 +327,16 @@ def plot_realignment_parameters(
     Plot SPM realignment parameters.
 
     :param realignment_parameters: realignment parameters file
-    (a string representing an existing file) or realignment parameters
-    (a numpy.ndarray object with shape[1] == 6)
+                                   (a string representing an existing file) or
+                                   realignment parameters (a numpy.ndarray
+                                   object with shape[1] == 6)
     :param vox_size: voxel size of the data (a list of 3 float or integer)
-    :param out_file_tra: out path for the translation figure
-    (a string representing a path file)
-    :param out_file_rot: out path for the rotation figure
-    (a string representing a path file)
-    :param figsize: width, height in inches (float, float)
+    :param out_file_tra: out path for the translation figure (a string
+                         representing a path file)
+    :param out_file_rot: out path for the rotation figure (a string
+                         representing a path file)
+    :param figsize: width, height of parametric maps plot, in inches (float,
+                    float)
 
     :returns:
         - qc: result of the quality check (a boolean). True: OK
