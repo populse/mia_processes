@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ReportPerfDsc brick &#8212; mia_processes 2.6.1-dev+cac41c1b documentation</title>
+    <title>ReportPerfDsc brick &#8212; mia_processes 2.6.1-dev+35339aa1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=62d3bf6e"></script>
+    <script src="../../../_static/documentation_options.js?v=164fa9e6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+cac41c1b documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+35339aa1 documentation</span></a></h1>
         <h2 class="heading"><span>ReportPerfDsc brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -196,19 +196,15 @@ mapping to colors.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>beta_image</em> (a string representing an existing file)</dt><dd><p>The estimated effect size or regression coefficients associated with the
-1st predictor (e.g., conditions or regressors) included in the GLM model.
-A spatial map that represent the estimated effect size or intensity of
-activation/deactivation associated with the 1st predictor/regressor at
-each voxel in the brain (valid extensions:.nii)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">patient_ref_data</span><span class="o">/</span><span class="n">beta_0001</span><span class="o">.</span><span class="n">nii</span>
+<dt><em>CBV_image</em> (a string representing an existing file)</dt><dd><p>Cerebral Blood Volume map (a file with .nii format).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">Func_CBV_deconv</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>beta_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the beta map slice
+<dt><em>CBV_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the CBV map slice
 planes plot (default: <cite>rainbow</cite>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">rainbow</span>
 </pre></div>
@@ -217,7 +213,7 @@ planes plot (default: <cite>rainbow</cite>).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>beta_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
+<dt><em>CBV_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
 colormap. Any value lower than vmin will be clipped to vmin before
 mapping to colors.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
@@ -227,7 +223,7 @@ mapping to colors.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>beta_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
+<dt><em>CBV_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
 colormap. Any value higher than vmax will be clipped to vmax before
 mapping to colors.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
@@ -237,18 +233,15 @@ mapping to colors.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>spmT_image</em> (a string representing an existing file)</dt><dd><p>A file containing t-statistic values per voxel, which indicate the
-strength of the effect of interest at each brain voxel, derived from the
-general linear model (GLM) analysis performed in SPM (valid
-extensions:.nii)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">patient_ref_data</span><span class="o">/</span><span class="n">spmT_0001</span><span class="o">.</span><span class="n">nii</span>
+<dt><em>CBF_image</em> (a string representing an existing file)</dt><dd><p>Cerebral Blood Flow map (a file with .nii format).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">Func_CBF_deconv</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>spmT_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the spmT map slice
+<dt><em>CBF_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the CBF map slice
 planes plot (default: <cite>rainbow</cite>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">rainbow</span>
 </pre></div>
@@ -257,7 +250,7 @@ planes plot (default: <cite>rainbow</cite>).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>spmT_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
+<dt><em>CBF_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
 colormap. Any value lower than vmin will be clipped to vmin before
 mapping to colors.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
@@ -267,10 +260,93 @@ mapping to colors.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>spmT_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
+<dt><em>CBF_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
 colormap. Any value higher than vmax will be clipped to vmax before
 mapping to colors.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>Tmax_image</em> (a string representing an existing file)</dt><dd><p>The Time to Maximum map (a file with .nii format).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">Func_Tmax_deconv</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>Tmax_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the Tmax map slice
+planes plot (default: <cite>rainbow</cite>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">rainbow</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>Tmax_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
+colormap. Any value lower than vmin will be clipped to vmin before
+mapping to colors.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>Tmax_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
+colormap. Any value higher than vmax will be clipped to vmax before
+mapping to colors.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>MTT_image</em> (a string representing an existing file)</dt><dd><p>Mean Transit Time map (a file with .nii format).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">Func_MTT_deconv</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>MTT_cmap</em> (a string, optional)</dt><dd><p>The name of the colors range that are used for the MTT map slice
+planes plot (default: <cite>rainbow</cite>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">rainbow</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>MTT_vmin</em> (a float, optional)</dt><dd><p>Specifies the minimum value of the data range to be mapped to the
+colormap. Any value lower than vmin will be clipped to vmin before
+mapping to colors.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>MTT_vmax</em> (a float, optional)</dt><dd><p>Specifies the maximum value of the data range to be mapped to the
+colormap. Any value higher than vmax will be clipped to vmax before
+mapping to colors.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>aif_file</em></dt><dd><p>The AIF (a file in .json format) typically obtained previously with the
+Make_AIF brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/swrfunc_aif.json&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -278,8 +354,8 @@ mapping to colors.</p>
 </li>
 <li><dl>
 <dt><em>patient_info</em></dt><dd><p>Optional dictionary with information about the patient (keys in
-[‘PatientRef’, ‘Pathology’, ‘Age’, ‘Sex’, MR’, ‘Gas’, ‘GasAdmin’])</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientRef&#39;</span><span class="p">:</span> <span class="s1">&#39;sub-1&#39;</span><span class="p">,</span> <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="s1">&#39;ACMD&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="s1">&#39;3T&#39;</span><span class="p">,</span> <span class="s1">&#39;Gas&#39;</span><span class="p">:</span> <span class="s1">&#39;Bactal&#39;</span><span class="p">,</span> <span class="s1">&#39;GasAdmin&#39;</span><span class="p">:</span> <span class="s1">&#39;Mask&#39;</span><span class="p">}</span>
+[‘PatientRef’, ‘Pathology’, ‘Age’, ‘Sex’, MR’])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientRef&#39;</span><span class="p">:</span> <span class="s1">&#39;sub-1&#39;</span><span class="p">,</span> <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="s1">&#39;ACMD&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="s1">&#39;56&#39;</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="s1">&#39;3T&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </dd>
