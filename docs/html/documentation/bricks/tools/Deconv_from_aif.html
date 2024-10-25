@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Deconv_from_aif brick &#8212; mia_processes 2.6.1-dev+da1f39da documentation</title>
+    <title>Deconv_from_aif brick &#8212; mia_processes 2.6.1-dev+cac41c1b documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=8cec05cd"></script>
+    <script src="../../../_static/documentation_options.js?v=62d3bf6e"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+da1f39da documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+cac41c1b documentation</span></a></h1>
         <h2 class="heading"><span>Deconv_from_aif brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -87,6 +87,92 @@ Make_AIF brick.</p>
 <dt><em>mask_file</em></dt><dd><p>The mask (at the resolution of <cite>func_file</cite>) used for the perfusion
 deconvolution (valid extensions: .nii).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/mask_swc1_anat_003.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>perf_normalisation</em></dt><dd><p>If <em>perf_normalisation</em> is not a number, no CBV normalisation is
+performed. Otherwise, the value of <em>perf_normalisation</em> will be used to
+normalise the CBV (and CBF) maps (any value is accepted).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>zero_pad</em></dt><dd><p>Zero padding factor (deconvolution parameters), a factor by which the
+original data is extended with zeros (an integer). A high zero-padding
+factor increases the signal length, potentially improving the precision of
+the deconvolution but also increasing computational complexity. A low
+factor (like 1, or no zero-padding) may result in less accurate outcomes,
+with lower frequency resolution and greater sensitivity to edge artifacts.
+The default zero_pad_fact is set to 2, meaning the signal length is
+doubled, which strikes a balance between precision and computational
+performance.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>oscil_th</em></dt><dd><p>Oscillation index threshold (deconvolution parameters), a threshold value
+that determines the level of acceptable oscillation during the
+deconvolution process (a float). During the OSVD (Oscillatory Singular
+Value Decomposition) deconvolution, the algorithm calculates the second
+derivative of the deconvolved signal (which highlights oscillations). The
+<em>oscil_th</em> sets a threshold for how much oscillation is acceptable in the
+signal. If the level of oscillation exceeds this threshold, the algorithm
+continues adjusting the truncation of singular values to reduce the
+instability. A low <em>oscil_th</em> will result in stricter filtering, meaning
+that more singular values (associated with oscillations) will be truncated.
+This can reduce noise but may also lose some of the true signal. A high
+<em>oscil_th</em> allows more oscillation, retaining more singular values and
+potentially preserving more of the original signal. However, this
+increases the risk of noise or instability in the output. Don’t change the
+default value (0.1) if you don’t know what you’re doing!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bat_window_size</em></dt><dd><p>Number of time points (or dynamics) used to determine the bolus arrival
+time (t0) in the MRI signal analysis (an integer). Acts as a sliding
+window that moves in the time dimension of the MRI data, allowing the
+algorithm to analyse the local temporal behaviour at each voxel. A large
+window provides smoother estimates of the signal, but can delay the
+detection of sudden changes, such as the arrival of the bolus. It
+increases stability, but can also “blur” the sharp transition at bolus
+arrival. A smaller window size will be more sensitive to rapid changes,
+but may also pick up more noise or fluctuations in the signal. The default
+value (8) is a moderately sized window to smooth out short-term
+fluctuations while detecting significant changes in the MRI signal value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bat_th</em></dt><dd><p>Threshold multiplier (a float) used to detect significant changes in the
+signal intensity of MRI data (controls the sensitivity of the bolus
+arrival detection). A high <em>bat_th</em> value (e.g., <em>bat_th</em> == 3.0) would
+make the algorithm less sensitive, meaning it will only consider larger,
+more pronounced signal drops as valid bolus arrival points. This reduces
+false positives but may miss subtle or gradual bolus arrivals. A low
+<em>bat_th</em> value (e.g., <em>bat_th</em> == 1.0) would make the algorithm more
+sensitive, catching even smaller signal drops. However, this may lead to
+false positives, where noise or natural fluctuations in the signal are
+incorrectly identified as bolus arrival. The default (2.0) value ensures
+only signal drops larger than 2 standard deviations below the mean are
+considered significant, providing a balance between sensitivity and
+robustness against noise.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
 </pre></div>
 </div>
 </dd>

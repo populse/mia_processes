@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+da1f39da documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.6.1-dev+cac41c1b documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=8cec05cd"></script>
+    <script src="../../../../_static/documentation_options.js?v=62d3bf6e"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+da1f39da documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+cac41c1b documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -477,16 +477,6 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perf_normalisation</span> <span class="o">=</span> <span class="mi">5</span>
 
-        <span class="c1"># Zero Padding Factor (deconvolution parameters), a factor by which</span>
-        <span class="c1"># the original data is extended with zeros (an integer). A high</span>
-        <span class="c1"># zero-padding factor increases the signal length, potentially</span>
-        <span class="c1"># improving the precision of the deconvolution but also increasing</span>
-        <span class="c1"># computational complexity. A low factor (like 1, or no zero-padding)</span>
-        <span class="c1"># may result in less accurate outcomes, with lower frequency</span>
-        <span class="c1"># resolution and greater sensitivity to edge artifacts. The default</span>
-        <span class="c1"># zero_pad_fact is set to 2, meaning the signal length is doubled,</span>
-        <span class="c1"># which strikes a balance between precision and computational</span>
-        <span class="c1"># performance.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;zero_pad_fact&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
@@ -497,22 +487,6 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zero_pad_fact</span> <span class="o">=</span> <span class="mi">2</span>
 
-        <span class="c1"># Oscillation index threshold (deconvolution parameters), a threshold</span>
-        <span class="c1"># value that determines the level of acceptable oscillation during the</span>
-        <span class="c1"># deconvolution process. During the OSVD (Oscillatory Singular Value</span>
-        <span class="c1"># Decomposition) deconvolution, the algorithm calculates the second</span>
-        <span class="c1"># derivative of the deconvolved signal (which highlights oscillations).</span>
-        <span class="c1"># The oscil_th sets a threshold for how much oscillation is acceptable</span>
-        <span class="c1"># in the signal. If the level of oscillation exceeds this threshold,</span>
-        <span class="c1"># the algorithm continues adjusting the truncation of singular values</span>
-        <span class="c1"># to reduce the instability. A low oscil_th will result in stricter</span>
-        <span class="c1"># filtering, meaning that more singular values (associated with</span>
-        <span class="c1"># oscillations) will be truncated. This can reduce noise but may also</span>
-        <span class="c1"># lose some of the true signal. A high oscil_th allows more</span>
-        <span class="c1"># oscillation, retaining more singular values and potentially</span>
-        <span class="c1"># preserving more of the original signal. However, this increases the</span>
-        <span class="c1"># risk of noise or instability in the output. Don&#39;t change the default</span>
-        <span class="c1"># value if you don&#39;t know what you&#39;re doing.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;oscil_th&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(</span>
@@ -523,18 +497,6 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">oscil_th</span> <span class="o">=</span> <span class="mf">0.1</span>
 
-        <span class="c1"># Number of time points (or dynamics) used to determine the bolus</span>
-        <span class="c1"># arrival time (t0) in the MRI signal analysis. Acts as a sliding</span>
-        <span class="c1"># window that moves in the time dimension of the MRI data, allowing</span>
-        <span class="c1"># the algorithm to analyse the local temporal behaviour at each voxel.</span>
-        <span class="c1"># A large window provides smoother estimates of the signal, but can</span>
-        <span class="c1"># delay the detection of sudden changes, such as the arrival of the</span>
-        <span class="c1"># bolus. It increases stability, but can also ‘blur’ the sharp</span>
-        <span class="c1"># transition at bolus arrival. A smaller window size will be more</span>
-        <span class="c1"># sensitive to rapid changes, but may also pick up more noise or</span>
-        <span class="c1"># fluctuations in the signal. The default value is a moderately</span>
-        <span class="c1"># sized window to smooth out short-term fluctuations while detecting</span>
-        <span class="c1"># significant changes in the MRI signal value.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;bat_window_size&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span>
@@ -545,19 +507,6 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bat_window_size</span> <span class="o">=</span> <span class="mi">8</span>
 
-        <span class="c1"># Threshold multiplier is used to detect significant changes in the</span>
-        <span class="c1"># signal intensity of MRI data (controls the sensitivity of the bolus</span>
-        <span class="c1"># arrival detection). A high th value (e.g., th = 3.0) would make the</span>
-        <span class="c1"># algorithm less sensitive, meaning it will only consider larger,</span>
-        <span class="c1"># more pronounced signal drops as valid bolus arrival points. This</span>
-        <span class="c1"># reduces false positives but may miss subtle or gradual bolus</span>
-        <span class="c1"># arrivals. A low th value (e.g., th = 1.0) would make the algorithm</span>
-        <span class="c1"># more sensitive, catching even smaller signal drops. However, this</span>
-        <span class="c1"># may lead to false positives, where noise or natural fluctuations in</span>
-        <span class="c1"># the signal are incorrectly identified as bolus arrival. The default</span>
-        <span class="c1"># value ensures only signal drops larger than 2 standard deviations</span>
-        <span class="c1"># below the mean are considered significant, providing a balance</span>
-        <span class="c1"># between sensitivity and robustness against noise.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;bat_th&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(</span>
