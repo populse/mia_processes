@@ -1677,8 +1677,8 @@ class ComputeDVARS(ProcessMIA):
             np.savetxt(
                 file_out,
                 np.vstack((dvars_stdz, dvars_nstd)).T,
-                fmt=b"%0.8f",
-                delimiter=b"\t",
+                fmt="%0.8f",
+                delimiter="\t",
                 header="std DVARS\tnon-std DVARS",
                 comments="",
             )
@@ -1686,8 +1686,8 @@ class ComputeDVARS(ProcessMIA):
             np.savetxt(
                 file_out,
                 np.vstack((dvars_stdz, dvars_nstd, dvars_vx_stdz)).T,
-                fmt=b"%0.8f",
-                delimiter=b"\t",
+                fmt="%0.8f",
+                delimiter="\t",
                 header="std DVARS\tnon-std DVARS\tvx-wise std DVARS",
                 comments="",
             )
