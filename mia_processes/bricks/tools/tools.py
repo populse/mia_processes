@@ -73,7 +73,7 @@ from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy import io, signal
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
 from scipy.linalg import svd, toeplitz
 
@@ -974,7 +974,7 @@ class Deconv_from_aif(ProcessMIA):
         #                        of brain tissue, typically expressed in
         #                        milliliters per 100 grams of brain tissue
         #                        (mL/100g).
-        cbv = 100 * trapz(c_func, axis=3) / trapz(c_aif)
+        cbv = 100 * trapezoid(c_func, axis=3) / trapezoid(c_aif)
         residu_f_max = np.max(residu_f, axis=3)
         residu_f_max_ind = np.argmax(residu_f, axis=3)
         residu_f_max_ind = np.where(
@@ -997,7 +997,7 @@ class Deconv_from_aif(ProcessMIA):
             #                    usually expressed in seconds.
             mtt = (
                 self.dict4runtime["rep_time"]
-                * trapz(residu_f, axis=3)
+                * trapezoid(residu_f, axis=3)
                 / residu_f_max
             )
 
