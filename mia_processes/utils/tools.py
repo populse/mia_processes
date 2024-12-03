@@ -359,15 +359,27 @@ def plot_realignment_parameters(
         minRot,
     ) = np.zeros(10)
 
-    if os.path.exists(realignment_parameters):
+    # Ensure realignment_parameters is a valid path or a NumPy array with
+    # the expected shape
+    if isinstance(
+        realignment_parameters, (str, os.PathLike)
+    ) and os.path.exists(realignment_parameters):
+        # If it's a valid file path, load the data
         data_rp = np.loadtxt(realignment_parameters)
 
-    elif (
-        isinstance(realignment_parameters, np.ndarray)
-        and realignment_parameters.size > 0
-        and realignment_parameters.shape[1] == 6
-    ):
-        data_rp = realignment_parameters
+    elif isinstance(realignment_parameters, np.ndarray):
+
+        # If it's a NumPy array, check if it has the expected shape
+        if (
+            realignment_parameters.size > 0
+            and realignment_parameters.shape[1] == 6
+        ):
+            data_rp = realignment_parameters
+
+        else:
+            raise ValueError(
+                "The NumPy array must have 6 columns and " "non-zero size."
+            )
 
     else:
         # TODO: perhaps we should protect the next steps if
