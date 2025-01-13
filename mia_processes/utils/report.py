@@ -141,8 +141,10 @@ class Report:
             infos = [
                 self.dict4runtime["norm_anat"][i]
                 for i in (
-                    "Site",
-                    "Spectro",
+                    "Institution",
+                    "Manufacturer",
+                    "Manufacturer's Model",
+                    "SoftwareVersions",
                     "StudyName",
                     "AcquisitionDate",
                     "PatientRef",
@@ -151,15 +153,17 @@ class Report:
                     "Pathology",
                 )
             ]
-            infos.insert(4, today_date)
+            infos.insert(6, today_date)
             # infos.insert(5, ref_exp)
             # Hard-coded, we know the ref data used for IL in the
             # CVR CO2 pipeline:
-            infos.insert(10, "CVR_temoins_IL")
+            infos.insert(11, "CVR_temoins_IL")
 
             headers = [
                 "SITE",
-                "MRI SCANNER",
+                "MRI MANUFACTURER",
+                "MRI SCANNER MODEL",
+                "MRI SOFTWARE VERSION",
                 "STUDY NAME",
                 "EXAMINATION DATE",
                 "CALCULATION DATE",
@@ -194,8 +198,10 @@ class Report:
             infos = [
                 self.dict4runtime["norm_anat"][i]
                 for i in (
-                    "Site",
-                    "Spectro",
+                    "Institution",
+                    "Manufacturer",
+                    "Manufacturer's Model",
+                    "SoftwareVersions",
                     "StudyName",
                     "AcquisitionDate",
                     "Sex",
@@ -208,7 +214,9 @@ class Report:
 
             headers = [
                 "SITE",
-                "MRI SCANNER",
+                "MRI MANUFACTURER",
+                "MRI SCANNER MODEL",
+                "MRI SOFTWARE VERSION",
                 "STUDY NAME",
                 "EXAMINATION DATE",
                 "PATIENT SEX",
@@ -249,8 +257,10 @@ class Report:
             infos = [
                 self.dict4runtime[i]
                 for i in (
-                    "Site",
-                    "Spectro",
+                    "Institution",
+                    "Manufacturer",
+                    "Manufacturer's Model",
+                    "SoftwareVersions",
                     "StudyName",
                     "AcquisitionDate",
                     "PatientName",
@@ -258,12 +268,14 @@ class Report:
                     "Age",
                 )
             ]
-            infos.insert(4, today_date)
-            infos.insert(5, ref_exp)
+            infos.insert(6, today_date)
+            infos.insert(7, ref_exp)
 
             headers = [
                 "SITE",
-                "MRI SCANNER",
+                "MRI MANUFACTURER",
+                "MRI SCANNER MODEL",
+                "MRI SOFTWARE VERSION",
                 "STUDY NAME",
                 "EXAMINATION DATE",
                 "MRIQC CALCULATION DATE",
@@ -318,8 +330,10 @@ class Report:
             infos = [
                 self.dict4runtime["norm_anat"][i]
                 for i in (
-                    "Site",
-                    "Spectro",
+                    "Institution",
+                    "Manufacturer",
+                    "Manufacturer's Model",
+                    "SoftwareVersions",
                     "StudyName",
                     "AcquisitionDate",
                     "PatientRef",
@@ -328,11 +342,13 @@ class Report:
                     "Pathology",
                 )
             ]
-            infos.insert(4, today_date)
+            infos.insert(6, today_date)
 
             headers = [
                 "SITE",
-                "MRI SCANNER",
+                "MRI MANUFACTURER",
+                "MRI SCANNER MODEL",
+                "MRI SOFTWARE VERSION",
                 "STUDY NAME",
                 "EXAMINATION DATE",
                 "CALCULATION DATE",
@@ -569,7 +585,7 @@ class Report:
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 18 * mm))
+        self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(Paragraph(self.title, self.styles["Center"]))
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(self.cover_data)
@@ -776,7 +792,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        scan_dur = self.dict4runtime["norm_anat"]["ScanDuration"]
+        scan_dur = self.dict4runtime["norm_anat"]["AcquisitionDuration"]
 
         if isinstance(scan_dur, list):
             scan_dur = scan_dur[0]
@@ -1098,7 +1114,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        scan_dur = self.dict4runtime["norm_func"]["ScanDuration"]
+        scan_dur = self.dict4runtime["norm_func"]["AcquisitionDuration"]
 
         if isinstance(scan_dur, list):
             scan_dur = scan_dur[0]
@@ -3615,15 +3631,15 @@ class Report:
 
         self.report.append(self.image_cov)
         # width, height
-        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(Paragraph(self.header_title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         self.report.append(Paragraph(self.title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         self.report.append(self.cover_data)
         self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(
@@ -4423,15 +4439,15 @@ class Report:
 
         self.report.append(self.image_cov)
         # width, height
-        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(Paragraph(self.header_title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         self.report.append(Paragraph(self.title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Spacer(0 * mm, 8 * mm))
         self.report.append(self.cover_data)
         self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(
@@ -5463,7 +5479,7 @@ class Report:
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 18 * mm))
+        self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(Paragraph(self.title, self.styles["Center"]))
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(self.cover_data)
@@ -5670,7 +5686,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        scan_dur = self.dict4runtime["norm_anat"]["ScanDuration"]
+        scan_dur = self.dict4runtime["norm_anat"]["AcquisitionDuration"]
 
         if isinstance(scan_dur, list):
             scan_dur = scan_dur[0]
@@ -5992,7 +6008,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        scan_dur = self.dict4runtime["norm_func"]["ScanDuration"]
+        scan_dur = self.dict4runtime["norm_func"]["AcquisitionDuration"]
 
         if isinstance(scan_dur, list):
             scan_dur = scan_dur[0]

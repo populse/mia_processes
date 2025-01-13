@@ -335,21 +335,26 @@ class ReportAnatMriqc(ProcessMIA):
             "StudyName",
             "AcquisitionDate",
             "Sex",
-            "Site",
-            "Spectro",
+            "Institution",
+            "Manufacturer",
+            "Manufacturer's Model",
+            "SoftwareVersions",
             "Age",
         )
 
-        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
-        #        should be found to retrieve them automatically or to put them
-        #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["Site"] in ("", "Undefined"):
-            self.dict4runtime["Site"] = "Grenoble University Hospital - CLUNI"
+        if self.dict4runtime["Institution"] in ("", "Undefined"):
+            self.dict4runtime["Institution"] = (
+                "Grenoble University Hospital - CLUNI (default value)"
+            )
 
         # MriScanner
-        if self.dict4runtime["Spectro"] in ("", "Undefined"):
-            self.dict4runtime["Spectro"] = "Philips Achieva 3.0T TX"
+        if self.dict4runtime["Manufacturer"] in ("", "Undefined"):
+            self.dict4runtime["Manufacturer"] = "Philips (default value)"
+        if self.dict4runtime["Manufacturer's Model"] in ("", "Undefined"):
+            self.dict4runtime["Manufacturer's Model"] = (
+                "Achieva dStream (default value)"
+            )
 
         # Generate an output name
         if self.anat and self.anat not in ["<undefined>", traits.Undefined]:
@@ -1330,6 +1335,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime["norm_anat"],
             self.project.session,
             db_file_norm_anat,
+            "AcquisitionDuration",
             "AcquisitionDate",
             "AcquisitionNumber",
             "Affine regularization type",
@@ -1339,6 +1345,9 @@ class ReportCO2inhalCvr(ProcessMIA):
             "FlipAngle",
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
+            "Institution",
+            "Manufacturer",
+            "Manufacturer's Model",
             "MaxNumOfSlices",
             "Pathology",
             "PatientName",
@@ -1347,12 +1356,10 @@ class ReportCO2inhalCvr(ProcessMIA):
             "RepetitionTime",
             "SequenceName",
             "Sex",
-            "ScanDuration",
             "ScanResolution",
-            "Site",
+            "SoftwareVersions",
             "SliceGap",
             "SliceThickness",
-            "Spectro",
             "Start/end slice",
             "StudyName",
             "Voxel sizes",
@@ -1362,6 +1369,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime["norm_func"],
             self.project.session,
             db_file_norm_func,
+            "AcquisitionDuration",
             "AcquisitionNumber",
             "Affine regularization type",
             "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -1375,7 +1383,6 @@ class ReportCO2inhalCvr(ProcessMIA):
             "ProtocolName",
             "RepetitionTime",
             "SequenceName",
-            "ScanDuration",
             "ScanResolution",
             "SliceGap",
             "SliceThickness",
@@ -1474,14 +1481,14 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.patient_info.get("MR") is None
             or self.patient_info["MR"] == Undefined
         ):
-            if self.dict4runtime["norm_anat"]["Spectro"] != "Undefined":
+            if self.dict4runtime["norm_anat"]["Manufacturer"] != "Undefined":
                 self.patient_info["MR"] = self.dict4runtime["norm_anat"][
-                    "Spectro"
+                    "Manufacturer"
                 ]
 
         else:
-            self.dict4runtime["norm_anat"]["Spectro"] = self.patient_info.get(
-                "MR"
+            self.dict4runtime["norm_anat"]["Manufacturer"] = (
+                self.patient_info.get("MR")
             )
 
         if (
@@ -1512,20 +1519,24 @@ class ReportCO2inhalCvr(ProcessMIA):
                 "GasAdmin"
             )
 
-        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
-        #        should be found to retrieve them automatically or to put them
-        #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["norm_anat"]["Site"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Institution"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Site"
-            ] = "Grenoble University Hospital - CLUNI"
+                "Institution"
+            ] = "Grenoble University Hospital - CLUNI (default value)"
 
         # MriScanner
-        if self.dict4runtime["norm_anat"]["Spectro"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Manufacturer"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Spectro"
-            ] = "Philips Achieva 3.0T TX"
+                "Manufacturer"
+            ] = "Philips (default value)"
+        if self.dict4runtime["norm_anat"]["Manufacturer's Model"] in (
+            "",
+            "Undefined",
+        ):
+            self.dict4runtime["norm_anat"][
+                "Manufacturer's Model"
+            ] = "Achieva dStream (default value)"
 
         # Reference population file for result stat anal
         config = Config()
@@ -1875,21 +1886,26 @@ class ReportFuncMriqc(ProcessMIA):
             "StudyName",
             "AcquisitionDate",
             "Sex",
-            "Site",
-            "Spectro",
+            "Institution",
+            "Manufacturer",
+            "Manufacturer's Model",
+            "SoftwareVersions",
             "Age",
         )
 
-        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
-        #        should be found to retrieve them automatically or to put them
-        #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["Site"] in ("", "Undefined", None):
-            self.dict4runtime["Site"] = "Grenoble University Hospital - CLUNI"
+        if self.dict4runtime["Institution"] in ("", "Undefined"):
+            self.dict4runtime["Institution"] = (
+                "Grenoble University Hospital - CLUNI (default value)"
+            )
 
         # MriScanner
-        if self.dict4runtime["Spectro"] in ("", "Undefined", None):
-            self.dict4runtime["Spectro"] = "Philips Achieva 3.0T TX"
+        if self.dict4runtime["Manufacturer"] in ("", "Undefined"):
+            self.dict4runtime["Manufacturer"] = "Philips (default value)"
+        if self.dict4runtime["Manufacturer's Model"] in ("", "Undefined"):
+            self.dict4runtime["Manufacturer's Model"] = (
+                "Achieva dStream (default value)"
+            )
 
         # Generate an output name
         if self.func and self.func not in ["<undefined>", traits.Undefined]:
@@ -2529,15 +2545,16 @@ class ReportGE2REC(ProcessMIA):
             "FlipAngle",
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
+            "Institution",
+            "Manufacturer",
+            "Manufacturer's Model",
             "Pathology",
             "PatientName",
             "ProtocolName",
             "RepetitionTime",
             "SequenceName",
             "Sex",
-            "Site",
             "SliceThickness",
-            "Spectro",
             "Start/end slice",
             "StudyName",
             "Voxel sizes",
@@ -2714,20 +2731,24 @@ class ReportGE2REC(ProcessMIA):
             "Voxel sizes",
         )
 
-        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
-        #        should be found to retrieve them automatically or to put them
-        #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["norm_anat"]["Site"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Institution"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Site"
-            ] = "Grenoble University Hospital - CLUNI"
+                "Institution"
+            ] = "Grenoble University Hospital - CLUNI (default value)"
 
         # MriScanner
-        if self.dict4runtime["norm_anat"]["Spectro"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Manufacturer"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Spectro"
-            ] = "Philips Achieva 3.0T TX"
+                "Manufacturer"
+            ] = "Philips (default value)"
+        if self.dict4runtime["norm_anat"]["Manufacturer's Model"] in (
+            "",
+            "Undefined",
+        ):
+            self.dict4runtime["norm_anat"][
+                "Manufacturer's Model"
+            ] = "Achieva dStream (default value)"
 
         # Generate an output name
         if self.norm_anat and self.norm_anat not in [
@@ -2880,22 +2901,36 @@ class ReportGroupMriqc(ProcessMIA):
                 "StudyName",
                 "AcquisitionDate",
                 "Sex",
-                "Site",
-                "Spectro",
+                "Institution",
+                "Manufacturer",
+                "Manufacturer's Model",
+                "SoftwareVersions",
                 "Age",
             )
-            # FIXME: Currently, Site and Spectro data are hard-coded.
-            #        A solution should be found to retrieve them automatically
-            #        or to put them in the input parameters of the brick:
             # Site
-            if dict4runtime_file["Site"] in ("", "Undefined"):
-                dict4runtime_file["Site"] = (
-                    "Grenoble University Hospital - CLUNI"
-                )
+            if self.dict4runtime["norm_anat"]["Institution"] in (
+                "",
+                "Undefined",
+            ):
+                self.dict4runtime["norm_anat"][
+                    "Institution"
+                ] = "Grenoble University Hospital - CLUNI (default value)"
 
             # MriScanner
-            if dict4runtime_file["Spectro"] in ("", "Undefined"):
-                dict4runtime_file["Spectro"] = "Philips Achieva 3.0T TX"
+            if self.dict4runtime["norm_anat"]["Manufacturer"] in (
+                "",
+                "Undefined",
+            ):
+                self.dict4runtime["norm_anat"][
+                    "Manufacturer"
+                ] = "Philips (default value)"
+            if self.dict4runtime["norm_anat"]["Manufacturer's Model"] in (
+                "",
+                "Undefined",
+            ):
+                self.dict4runtime["norm_anat"][
+                    "Manufacturer's Model"
+                ] = "Achieva dStream (default value)"
 
             self.dict4runtime[str(i)] = dict4runtime_file
             i += 1
@@ -3658,6 +3693,7 @@ class ReportPerfDsc(ProcessMIA):
             self.dict4runtime["norm_anat"],
             self.project.session,
             db_file_norm_anat,
+            "AcquisitionDuration",
             "AcquisitionDate",
             "AcquisitionNumber",
             "Affine regularization type",
@@ -3667,6 +3703,10 @@ class ReportPerfDsc(ProcessMIA):
             "FlipAngle",
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
+            "Institution",
+            "Manufacturer",
+            "Manufacturer's Model",
+            "SoftwareVersions",
             "MaxNumOfSlices",
             "Pathology",
             "PatientName",
@@ -3675,12 +3715,9 @@ class ReportPerfDsc(ProcessMIA):
             "RepetitionTime",
             "SequenceName",
             "Sex",
-            "ScanDuration",
             "ScanResolution",
-            "Site",
             "SliceGap",
             "SliceThickness",
-            "Spectro",
             "Start/end slice",
             "StudyName",
             "Voxel sizes",
@@ -3690,6 +3727,7 @@ class ReportPerfDsc(ProcessMIA):
             self.dict4runtime["norm_func"],
             self.project.session,
             db_file_norm_func,
+            "AcquisitionDuration",
             "AcquisitionNumber",
             "Affine regularization type",
             "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -3701,7 +3739,6 @@ class ReportPerfDsc(ProcessMIA):
             "ProtocolName",
             "RepetitionTime",
             "SequenceName",
-            "ScanDuration",
             "ScanResolution",
             "SliceGap",
             "SliceThickness",
@@ -3800,31 +3837,34 @@ class ReportPerfDsc(ProcessMIA):
             self.patient_info.get("MR") is None
             or self.patient_info["MR"] == Undefined
         ):
-            if self.dict4runtime["norm_anat"]["Spectro"] != "Undefined":
+            if self.dict4runtime["norm_anat"]["Manufacturer"] != "Undefined":
                 self.patient_info["MR"] = self.dict4runtime["norm_anat"][
-                    "Spectro"
+                    "Manufacturer"
                 ]
 
         else:
-            self.dict4runtime["norm_anat"]["Spectro"] = self.patient_info.get(
-                "MR"
+            self.dict4runtime["norm_anat"]["Manufacturer"] = (
+                self.patient_info.get("MR")
             )
 
-        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
-        #        should be found to retrieve them automatically or to put them
-        #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["norm_anat"]["Site"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Institution"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Site"
-            ] = "Grenoble University Hospital - CLUNI"
+                "Institution"
+            ] = "Grenoble University Hospital - CLUNI (default value)"
 
         # MriScanner
-        if self.dict4runtime["norm_anat"]["Spectro"] in ("", "Undefined"):
+        if self.dict4runtime["norm_anat"]["Manufacturer"] in ("", "Undefined"):
             self.dict4runtime["norm_anat"][
-                "Spectro"
-            ] = "Philips Achieva 3.0T TX"
-
+                "Manufacturer"
+            ] = "Philips (default value)"
+        if self.dict4runtime["norm_anat"]["Manufacturer's Model"] in (
+            "",
+            "Undefined",
+        ):
+            self.dict4runtime["norm_anat"][
+                "Manufacturer's Model"
+            ] = "Achieva dStream (default value)"
         # Generate an output name
         if (
             (
