@@ -6,8 +6,17 @@
 |`Home <../index.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------+----------------------------------------------------+
 
-Mia_processes's documentation
-=============================
+How to test bricks and pipeline ?
+=================================
+
+Data are available to use and test Mia: `mia_data_users <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users>`_.
+
+The `participants.tsv <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users/-/blob/main/data_user_bids/participants.tsv?ref_type=heads>`_ 
+file specifies which pipelines or bricks can be tested with each data.
+
+
+Bricks and pipelines documentation
+==================================
 
 To use certain mia_processes bricks (atomic processes), `third-party software used in these bricks must be installed <https://populse.github.io/populse_mia/html/installation/3rd-party_installations.html>`_.
 

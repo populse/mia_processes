@@ -69,6 +69,8 @@ variables (e.g. motion parameters) are also included as regressors.
 A report is generated at the end of the analysis with the main statistical
 results obtained.
 
+**Test this pipeline :** use the sub-001 from `mia_data_users <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users>`_.
+
 --------------------
 
 **Pipeline insight**

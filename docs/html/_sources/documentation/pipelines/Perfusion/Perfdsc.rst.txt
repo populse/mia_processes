@@ -36,6 +36,8 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     - Time to Peak (TTP): The time it takes for the contrast agent concentration
       to reach its maximum in the tissue.
+  
+**Test this pipeline :** use the sub-001 from `mia_data_users <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users>`_.
 
 --------------------------------------
 
