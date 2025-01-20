@@ -51,6 +51,8 @@ The pipeline is based on `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_ and `A
 Note that this pipeline used the FLIRT registration (FSL) to co-register diffusion and anatomical data as suggested in the `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_.
 However it seems to not work perfectly for some data.
 
+**Test this pipeline :** use the sub-002 from `mia_data_users <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users>`_.
+
 --------------------------------------
 
 **Pipeline insight**

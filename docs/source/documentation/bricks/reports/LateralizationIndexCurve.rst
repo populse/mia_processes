@@ -25,7 +25,7 @@ an integrated software package allowing for the investigation of laterality effe
 If you are using this brick please cite: `Wilke M & Lidzba K <https://doi.org/10.1016/j.jneumeth.2007.01.026>`_: LI-tool: A new toolbox to assess
 lateralization in functional MR-data, J Neurosci Meth, 2007, 163: 128-136.
 
-*Please note that, for this brick, the* `miaresources <https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/miaresources>`_
+*Please note that, for this brick, the* `mia_resources <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_resources>`_
 *package should be added to* `Mia Preferences <https://populse.github.io/populse_mia/html/documentation/preferences.html>`_.
 
 ------------------------------------------------------------
