@@ -47,7 +47,14 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
-from populse_mia.data_manager.project import COLLECTION_CURRENT
+# from populse_mia.data_manager.project import COLLECTION_CURRENT
+from populse_mia.data_manager import (
+    COLLECTION_CURRENT,
+    FIELD_TYPE_LIST_FLOAT,
+    FIELD_TYPE_STRING,
+    TAG_ORIGIN_USER,
+    TAG_UNIT_MM,
+)
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
@@ -682,8 +689,10 @@ class GM_WM_Normalize(ProcessMIA):
         files = []
 
         if self.runFlag is False:
+
             for file_name in self.apply_to_files:
-                if type(file_name) in [list, TraitListObject]:
+
+                if isinstance(file_name, (list, TraitListObject)):
                     file_name = file_name[0]
 
                 if self.in_filter == "GM" and os.path.basename(
@@ -1883,15 +1892,15 @@ class Normalize12(ProcessMIA):
                             # in database
                             tag_to_add = dict()
                             tag_to_add["name"] = "Voxel sizes"
-                            tag_to_add["field_type"] = "list_float"
+                            tag_to_add["field_type"] = FIELD_TYPE_LIST_FLOAT
                             tag_to_add["description"] = (
                                 "The voxel sizes (x, y & "
                                 "z, in mm) of the written "
                                 "normalised images"
                             )
                             tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = "mm"
+                            tag_to_add["origin"] = TAG_ORIGIN_USER
+                            tag_to_add["unit"] = TAG_UNIT_MM
                             tag_to_add["default_value"] = None
                             tag_to_add["value"] = self.write_voxel_sizes
                             all_tags_to_add.append(tag_to_add)
@@ -1899,12 +1908,12 @@ class Normalize12(ProcessMIA):
                             # normalization, in database
                             tag_to_add = dict()
                             tag_to_add["name"] = "Affine regularization type"
-                            tag_to_add["field_type"] = "string"
+                            tag_to_add["field_type"] = FIELD_TYPE_STRING
                             tag_to_add["description"] = (
-                                "Standard space for affine " "registration"
+                                "Standard space for affine registration"
                             )
                             tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
+                            tag_to_add["origin"] = TAG_ORIGIN_USER
                             tag_to_add["unit"] = None
                             tag_to_add["default_value"] = None
                             tag_to_add["value"] = (
@@ -3205,14 +3214,14 @@ class Smooth(ProcessMIA):
                             # Add the fwhm parameter for smooth, in database
                             tag_to_add = dict()
                             tag_to_add["name"] = "FWHM (X, Y, Z) for Smooth"
-                            tag_to_add["field_type"] = "list_float"
+                            tag_to_add["field_type"] = FIELD_TYPE_LIST_FLOAT
                             tag_to_add["description"] = (
                                 "Full width at half maximum (FWHM) of the "
                                 "Gaussian smoothing kernel in mm"
                             )
                             tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = "mm"
+                            tag_to_add["origin"] = TAG_ORIGIN_USER
+                            tag_to_add["unit"] = TAG_UNIT_MM
                             tag_to_add["default_value"] = None
                             tag_to_add["value"] = self.fwhm
                             all_tags_to_add.append(tag_to_add)
