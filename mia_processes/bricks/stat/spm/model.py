@@ -41,8 +41,7 @@ from nipype.interfaces.base import (
     traits,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
-from populse_db.database import FIELD_TYPE_INTEGER
-from populse_mia.data_manager.database_mia import TAG_ORIGIN_USER
+from populse_mia.data_manager import FIELD_TYPE_INTEGER, TAG_ORIGIN_USER
 
 # populse_db and populse_mia import
 from populse_mia.data_manager.project import COLLECTION_CURRENT
