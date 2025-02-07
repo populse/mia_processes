@@ -14,6 +14,14 @@ Data are available to use and test Mia: `mia_data_users <https://gricad-gitlab.u
 The `participants.tsv <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users/-/blob/main/data_user_bids/participants.tsv?ref_type=heads>`_
 file specifies which pipelines or bricks can be tested with each data.
 
+This data are organized in `BIDS <https://bids.neuroimaging.io/>`_ format.
+To import the data into MIA using
+`MRI File Manager <https://populse.github.io/populse_mia/html/documentation/mri_file_manager.html>`_, click on the "BIDS" button.
+Note that, the name of the data will be modified between BIDS format and MIA database (name and time of the sequence added), for example:
+
+- BIDS format: "sub-001_ses-01_T1w.nii.gz"
+
+- MIA database: "sub-001_ses-01--2-CS_3DT1DEG-T1TFE-153355_910000.nii.gz"
 
 Bricks and pipelines documentation
 ==================================

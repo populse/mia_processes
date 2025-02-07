@@ -99,7 +99,7 @@ results obtained.
 
     ::
 
-      ex. /home/username/data/raw_data/Anat.nii
+      ex. '/home/username/data/raw_data/sub-001-ses-01--2-CS_T13DEG-T1TFE-153355_910000.nii'
 
 - *func_files*
     Functional images (ex. 4D T2* sequence such as echo planar imaging).
@@ -108,7 +108,7 @@ results obtained.
 
     ::
 
-      ex. ['/home/username/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/sub-001-ses-01--1-FE_EPI_32chSHC-FEEPI-153814_370000.nii']
 
 - *trigger_data*
     The trigger data, to ensure that ETCO2 data (physiological data) are
@@ -117,7 +117,7 @@ results obtained.
 
     ::
 
-      ex. '/home/username/data/downloaded_data/trigger_time.log'
+      ex. '/home/username/data/downloaded_data/sub-001_ses-01_task-cvr_trigger.log'
 
 
 - *physio_data*
@@ -126,7 +126,7 @@ results obtained.
 
     ::
 
-      ex. '/home/username/data/downloaded_data/physio_data.csv'
+      ex. '/home/username/data/downloaded_data/sub-001_ses-01_task-cvr_coolterm.txt'
 
 - *patient_info*
     A dictionary for entering patient data.
@@ -140,7 +140,7 @@ results obtained.
 
     ::
 
-      ex. {'PatientRef': 'bob_01', 'Pathology': 'ACMD', 'Age': 57,
+      ex. {'PatientRef': 'sub-001', 'Pathology': 'ACMD', 'Age': 57,
            'Sex': 'F', 'MR': '3T', 'Gas': 'Bactal', 'GasAdmin': 'Mask'}
 
 **Outputs parameters:**
@@ -168,4 +168,4 @@ results obtained.
 
     ::
 
-      ex. '/home/username/data/derived_data/PatientRef_CO2_inhal_CVR_Report_2024_03_19_11_01_15_04.pdf'
+      ex. '/home/username/data/derived_data/sub-001_CO2_inhal_CVR_Report_2024_03_19_11_01_15_04.pdf'

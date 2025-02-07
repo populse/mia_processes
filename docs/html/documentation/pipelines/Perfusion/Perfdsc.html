@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Perfdsc pipeline &#8212; mia_processes 2.6.1-dev+2e50262f documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=659b1fac" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=d31ea6cb" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=5071eacb"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <title>Perfdsc pipeline &#8212; mia_processes 2.6.1-dev+1d5054f3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=dfa0e015" />
+    <script src="../../../_static/documentation_options.js?v=6cb05c6b"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.6.1-dev+2e50262f documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+1d5054f3 documentation</span></a></h1>
         <h2 class="heading"><span>Perfdsc pipeline</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -39,9 +39,9 @@
 </tbody>
 </table>
 <section id="perfdsc-pipeline">
-<h1>Perfdsc pipeline<a class="headerlink" href="#perfdsc-pipeline" title="Permalink to this heading">¶</a></h1>
+<h1>Perfdsc pipeline<a class="headerlink" href="#perfdsc-pipeline" title="Link to this heading">¶</a></h1>
 <section id="perfusion-dynamic-susceptibility-contrast-mri">
-<h2>Perfusion Dynamic Susceptibility Contrast MRI<a class="headerlink" href="#perfusion-dynamic-susceptibility-contrast-mri" title="Permalink to this heading">¶</a></h2>
+<h2>Perfusion Dynamic Susceptibility Contrast MRI<a class="headerlink" href="#perfusion-dynamic-susceptibility-contrast-mri" title="Link to this heading">¶</a></h2>
 <p>Perfusion DSC (Dynamic Susceptibility Contrast) MRI is a widely used imaging technique
 in clinical and research settings to measure cerebral perfusion, which refers to the
 flow of blood through the brain’s vasculature.</p>
@@ -79,14 +79,15 @@ to reach its maximum in the tissue.</p></li>
 </dl>
 </li>
 </ul>
-<a class="reference internal image-reference" href="../../../_images/Perfdsc.png"><img alt="Perfdsc pipeline" src="../../../_images/Perfdsc.png" style="width: 1100px;" /></a>
+<a class="reference internal image-reference" href="../../../_images/Perfdsc.png"><img alt="Perfdsc pipeline" src="../../../_images/Perfdsc.png" style="width: 1100px;" />
+</a>
 <hr class="docutils" />
 <p><strong>Inputs parameters</strong></p>
 <ul>
 <li><dl>
 <dt><em>anat_file</em></dt><dd><p>An anatomical image (ex. 3D T1 sequence such as T1 turbo field echo).
 An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/sub-001-ses-01--2-CS_T13DEG-T1TFE-153355_910000.nii.nii&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -96,7 +97,7 @@ An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
 <dt><em>func_files</em></dt><dd><p>Functional images (ex. 4D T2* sequence such as echo planar imaging).
 A list of items which are an existing, uncompressed file (valid
 extensions: [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/sub-001-ses-01--0-PERFUSION-FEEPI-155640_450000.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -113,7 +114,7 @@ extensions: [.img, .nii, .hdr]).</p>
 </ul>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientRef&#39;</span><span class="p">:</span> <span class="s1">&#39;bob_01&#39;</span><span class="p">,</span> <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="s1">&#39;ACMD&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="mi">57</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="s1">&#39;3T&#39;</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientRef&#39;</span><span class="p">:</span> <span class="s1">&#39;sub-001&#39;</span><span class="p">,</span> <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="s1">&#39;ACMD&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="mi">57</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="s1">&#39;3T&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </dd>
@@ -125,7 +126,7 @@ extensions: [.img, .nii, .hdr]).</p>
 <li><dl>
 <dt><em>report</em></dt><dd><p>The output generated report (.pdf). The summary of analysis, including
 CBV, CBF, TTP and MTT plots.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/bob_01_Perf_DSC_Report_2024_10_23_06_11_12_36.pdf&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/sub-001_Perf_DSC_Report_2024_10_23_06_11_12_36.pdf&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -147,7 +148,7 @@ CBV, CBF, TTP and MTT plots.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>
