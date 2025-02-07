@@ -79,7 +79,7 @@ However it seems to not work perfectly for some data.
 
     ::
 
-      ex. '/home/username/data/raw_data/DWI.nii'
+      ex. '/home/username/data/raw_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000.nii'
 
 - *in_dwi_pe_dir* (ap, pa, lr, rl, default value is ap, optional)
     | Phase encoding direction of the in_diw image:
@@ -90,14 +90,14 @@ However it seems to not work perfectly for some data.
 
     ::
 
-      ex. ap
+      ex. pa
 
 - *in_dwi_ro_time* (a float, optional)
     Total readout time of in_dwi image (in seconds).
 
     ::
 
-      ex. 2.0
+      ex. 0.0298634
 
 - *in_b0_reverse* (a string representing an existing file)
     b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
@@ -105,14 +105,14 @@ However it seems to not work perfectly for some data.
 
     ::
 
-      ex. '/home/username/data/raw_data/b0_reverse.nii'
+      ex. '/home/username/data/raw_data/sub-002-ses-01--1-DWI-APA_0_Axi2_50_EnhG-DwiSE-151925_410000.nii'
 
 - *in_T1w* (a string representing an existing file)
     Anatomical image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
-      ex. '/home/username/data/raw_data/T1w.nii'
+      ex. '/home/username/data/raw_data/sub-002-ses-01--2-T1_3D-T1TFE-150551_470000.nii'
 
 **Outputs parameters:**
 
@@ -122,49 +122,49 @@ However it seems to not work perfectly for some data.
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_peaks.mif'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_peaks.mif'
 
 - *tracks_10mio* (a string representing a file)
     The tractography with 10 million streamlines
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto.tck'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto.tck'
 
 - *tracks_200k* (a string representing a file)
     The reduce tractography with 200k streamlines
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_200k.tck'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_200k.tck'
 
 - *tracks_10k* (a string representing a file)
     The reduce tractography with 10k streamlines
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck'
 
 - *tracks_sift* (a string representing a file)
     The tractography filtered such that the streamline densities match the FOD lobe integrals
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_sift.tck'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_sift.tck'
 
 - *tracks_sift_10k* (a string representing a file)
     The reduce sift tractography with 10k streamlines
 
     ::
 
-      ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--0-DWI-APP_8x0-32x1000-64x2500_Axi2_50_EnhG-DwiSE-151142_650000_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck'
 
 - *T1w_coreg* (a string representing a file)
     Anatomical image coregistered in DWI space.
 
     ::
 
-      ex. '/home/username/data/derived_data/T1w_transformed.mif'
+      ex. '/home/username/data/derived_data/sub-002-ses-01--2-T1_3D-T1TFE-150551_470000_transformed.mif'
 
 -------------
 
