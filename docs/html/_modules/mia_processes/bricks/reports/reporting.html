@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+32ff25d8 documentation</title>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.6.1-dev+1d5054f3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=dfa0e015" />
-    <script src="../../../../_static/documentation_options.js?v=87f9c06e"></script>
+    <script src="../../../../_static/documentation_options.js?v=6cb05c6b"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.6.1-dev+32ff25d8 documentation</span></a></h1>
+          <span>mia_processes 2.6.1-dev+1d5054f3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -372,21 +372,26 @@
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SoftwareVersions&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
-        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
-        <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
@@ -1379,6 +1384,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_anat</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
@@ -1388,6 +1394,9 @@
             <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
             <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
             <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -1396,12 +1405,10 @@
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SoftwareVersions&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
@@ -1411,6 +1418,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -1424,7 +1432,6 @@
             <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
@@ -1523,14 +1530,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;Spectro&quot;</span>
+                    <span class="s2">&quot;Manufacturer&quot;</span>
                 <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="s2">&quot;MR&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
@@ -1561,20 +1568,24 @@
                 <span class="s2">&quot;GasAdmin&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
-        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
-        <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Site&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+                <span class="s2">&quot;Institution&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Spectro&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+                <span class="s2">&quot;Manufacturer&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
 
         <span class="c1"># Reference population file for result stat anal</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
@@ -1936,21 +1947,26 @@
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SoftwareVersions&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
-        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
-        <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
@@ -2602,15 +2618,16 @@
             <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
             <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
@@ -2787,20 +2804,24 @@
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
-        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
-        <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Site&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+                <span class="s2">&quot;Institution&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Spectro&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+                <span class="s2">&quot;Manufacturer&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
 
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
@@ -2965,22 +2986,36 @@
                 <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SoftwareVersions&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded.</span>
-            <span class="c1">#        A solution should be found to retrieve them automatically</span>
-            <span class="c1">#        or to put them in the input parameters of the brick:</span>
             <span class="c1"># Site</span>
-            <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-                <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
-                <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Institution&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
 
             <span class="c1"># MriScanner</span>
-            <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-                <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Manufacturer&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">dict4runtime_file</span>
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -3342,8 +3377,7 @@
             <span class="s2">&quot;Optional dictionary with information about the patient &quot;</span>
             <span class="s2">&quot;(e.g. {&quot;</span>
             <span class="s2">&quot;&#39;PatientName&#39;: &#39;sub-1&#39;, &#39;Pathology&#39;: &#39;ACMD&#39;, &quot;</span>
-            <span class="s2">&quot;&#39;Age&#39;: 64, &#39;Sex&#39;: &#39;M&#39;, &#39;MR&#39;: &#39;3T&#39;, &quot;</span>
-            <span class="s2">&quot;&#39;Gas&#39;: &#39;BACTAL&#39;, &#39;GasAdmin&#39;: &#39;MASK&#39;}&quot;</span>
+            <span class="s2">&quot;&#39;Age&#39;: 64, &#39;Sex&#39;: &#39;M&#39;, &#39;MR&#39;: &#39;3T&#39;}&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs description</span>
@@ -3691,8 +3725,6 @@
             <span class="n">Age</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
             <span class="n">Sex</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
             <span class="n">MR</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-            <span class="n">Gas</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-            <span class="n">GasAdmin</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
@@ -3735,8 +3767,6 @@
                 <span class="n">Age</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
                 <span class="n">Sex</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
                 <span class="n">MR</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                <span class="n">Gas</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                <span class="n">GasAdmin</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
@@ -3760,6 +3790,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_anat</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
@@ -3769,6 +3800,10 @@
             <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
             <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Institution&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SoftwareVersions&quot;</span><span class="p">,</span>
             <span class="s2">&quot;MaxNumOfSlices&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -3777,12 +3812,9 @@
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
@@ -3792,6 +3824,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
             <span class="n">db_file_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;AcquisitionDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionNumber&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -3803,7 +3836,6 @@
             <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ScanDuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;ScanResolution&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceGap&quot;</span><span class="p">,</span>
             <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
@@ -3902,31 +3934,34 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;Spectro&quot;</span>
+                    <span class="s2">&quot;Manufacturer&quot;</span>
                 <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="s2">&quot;MR&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
-        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
-        <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Institution&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Site&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+                <span class="s2">&quot;Institution&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI (default value)&quot;</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;Spectro&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
-
+                <span class="s2">&quot;Manufacturer&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips (default value)&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span><span class="s2">&quot;Manufacturer&#39;s Model&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Manufacturer&#39;s Model&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Achieva dStream (default value)&quot;</span>
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="p">(</span>

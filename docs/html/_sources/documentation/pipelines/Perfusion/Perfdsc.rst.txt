@@ -36,7 +36,7 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     - Time to Peak (TTP): The time it takes for the contrast agent concentration
       to reach its maximum in the tissue.
-  
+
 **Test this pipeline :** use the sub-001 from `mia_data_users <https://gricad-gitlab.univ-grenoble-alpes.fr/mia/mia_data_users>`_.
 
 --------------------------------------
@@ -64,7 +64,7 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     ::
 
-      ex. /home/username/data/raw_data/Anat.nii
+      ex. '/home/username/data/raw_data/sub-001-ses-01--2-CS_T13DEG-T1TFE-153355_910000.nii.nii'
 
 - *func_files*
     Functional images (ex. 4D T2* sequence such as echo planar imaging).
@@ -73,7 +73,7 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     ::
 
-      ex. ['/home/username/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/sub-001-ses-01--0-PERFUSION-FEEPI-155640_450000.nii']
 
 
 - *patient_info*
@@ -86,7 +86,7 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     ::
 
-      ex. {'PatientRef': 'bob_01', 'Pathology': 'ACMD', 'Age': 57, 'Sex': 'F', 'MR': '3T'}
+      ex. {'PatientRef': 'sub-001', 'Pathology': 'ACMD', 'Age': 57, 'Sex': 'F', 'MR': '3T'}
 
 **Outputs parameters:**
 
@@ -96,4 +96,4 @@ The acquired data are processed to generate various perfusion maps, such as:
 
     ::
 
-      ex. '/home/username/data/derived_data/bob_01_Perf_DSC_Report_2024_10_23_06_11_12_36.pdf'
+      ex. '/home/username/data/derived_data/sub-001_Perf_DSC_Report_2024_10_23_06_11_12_36.pdf'
