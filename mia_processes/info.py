@@ -19,7 +19,7 @@ import subprocess
 
 # Current version
 version_major = 2
-version_minor = 6
+version_minor = 7
 version_micro = 1
 version_extra = "dev"  # leave empty for release
 # version_extra = ""
