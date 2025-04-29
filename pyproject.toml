@@ -6,7 +6,7 @@ authors = [
 ]
 description = "mia_processes"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "CeCILL-B"}
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -16,7 +16,6 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -36,8 +35,8 @@ dependencies = [
     "numpy",
     "openpyxl",
     "paramiko",
-    "populse-db >= 2.5.0, < 3.0.0",
-    "populse_mia >= 2.5.0, < 3.0.0",
+    "populse-db >= 3.0.0, < 4.0.0",
+    "populse_mia >= 3.0.0, < 4.0.0",
     "pyxnat",
     "reportlab",
     "scipy",
