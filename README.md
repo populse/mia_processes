@@ -7,7 +7,7 @@
 <!-- [![](https://codecov.io/github/populse/mia_processes/coverage.svg?branch=master)](https://codecov.io/github/populse/mia_processes) -->
 [![](https://img.shields.io/badge/license-CeCILL-blue.svg)](https://github.com/populse/mia_processes/blob/master/LICENSE)
 [![](https://img.shields.io/pypi/v/mia_processes.svg)](https://pypi.org/project/mia_processes/)
-[![](https://img.shields.io/badge/python-3.9%2C%203.10%2C%203.11-yellow.svg)](#)
+[![](https://img.shields.io/badge/python-3.10%2C%203.11-yellow.svg)](#)
 [![](https://img.shields.io/badge/platform-Linux%2C%20OSX%2C%20Windows-orange.svg)](#)
 
 # Documentation
