@@ -8,9 +8,6 @@ Module that contains multiple functions used across mia_processes
         - ReportLine
     :Functions:
         - checkFileExt
-        - del_dbFieldValue
-        - dict4runtime_update
-        - get_dbFieldValue
         - mriqc_get_all_run
         - mriqc_group_iqms_tsv
         - plot_boxplot_points
@@ -18,7 +15,6 @@ Module that contains multiple functions used across mia_processes
         - plot_segmentation
         - plot_slice_planes
         - plot_realignment_parameters
-        - set_dbFieldValue
 """
 
 ##########################################################################
@@ -46,10 +42,6 @@ from nilearn.image import resample_to_img
 from nilearn.plotting import plot_anat
 from nitransforms.io.afni import _dicom_real_to_card
 from populse_mia.data_manager.data_history_inspect import data_history_pipeline
-from populse_mia.data_manager.project import (
-    COLLECTION_CURRENT,
-    COLLECTION_INITIAL,
-)
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable
@@ -135,87 +127,6 @@ def checkFileExt(in_file, ext_dic):
         valid_bool = True
 
     return valid_bool, in_ext, file_name
-
-
-def del_dbFieldValue(project, document, tags2del):
-    """Delete for a document, the value for a field in the db.
-
-    :param project: the project.
-    :param document: the absolute path of the document.
-    :param tag_to_del: a list of fields where values will be deleted
-    """
-
-    file_position = (
-        document.find(project.getName()) + len(project.getName()) + 1
-    )
-    database_filename = document[file_position:]
-
-    for tag_to_del in tags2del:
-        try:
-            project.session.remove_value(
-                COLLECTION_CURRENT, database_filename, tag_to_del
-            )
-        except ValueError:
-            # The collection does not exist
-            # or the field does not exist
-            # or the document does not exist
-            pass
-        try:
-            project.session.remove_value(
-                COLLECTION_INITIAL, database_filename, tag_to_del
-            )
-        except ValueError:
-            # The collection does not exist
-            # or the field does not exist
-            # or the document does not exist
-            pass
-
-
-def dict4runtime_update(dict4runtime, database, db_filename, *args):
-    """Update the dict4runtime dictionary object with tags values
-
-    :param dict4runtime: the dict used in mia_processes bricks to pass data
-                         from the list_outputs method to the run_process_mia
-                         method
-    :param database: the database object (for example: self.project.session)
-    :param db_filename: the name of the database file from which the tag value
-                        will be retrieved
-    :param args: the tags to be recovered
-
-    """
-
-    for tag in args:
-        if tag in database.get_fields_names(COLLECTION_CURRENT):
-            dict4runtime[tag] = database.get_value(
-                COLLECTION_CURRENT, db_filename, tag
-            )
-
-        else:
-            dict4runtime[tag] = "Undefined"
-
-        if isinstance(dict4runtime[tag], datetime.date):
-            dict4runtime[tag] = str(dict4runtime[tag])
-
-        if dict4runtime[tag] is None:
-            dict4runtime[tag] = "Undefined"
-
-
-def get_dbFieldValue(project, document, field):
-    """Return, for a document, the field value from the database.
-
-    :param project: the project.
-    :param document: the absolute path of the document.
-    :param field: the field name.
-    :returns: the value of the field for the document in the database.
-    """
-    file_position = (
-        document.find(project.getName()) + len(project.getName()) + 1
-    )
-    database_filename = document[file_position:]
-
-    return project.session.get_value(
-        COLLECTION_CURRENT, database_filename, field
-    )
 
 
 def mriqc_get_all_run(modality, project, output_directory):
@@ -650,67 +561,6 @@ def plot_segmentation(anat_file, segmentation, name, out_dir=None, **kwargs):
     disp = None
 
     return out_file
-
-
-def set_dbFieldValue(project, document, tag_to_add):
-    """Creates for a document, the field and the corresponding value in the db.
-
-    :param project: the project.
-    :param document: the absolute path of the document.
-    :param tag_to_add: a dictionary with 'default_value', 'description',
-                      'field_type', 'name', 'origin', 'unit', 'value',
-                      'visibility' keys.
-    """
-    file_position = (
-        document.find(project.getName()) + len(project.getName()) + 1
-    )
-    database_filename = document[file_position:]
-
-    if tag_to_add["name"] not in project.session.get_fields_names(
-        COLLECTION_CURRENT
-    ):
-        project.session.add_field(
-            COLLECTION_CURRENT,
-            tag_to_add["name"],
-            tag_to_add["field_type"],
-            tag_to_add["description"],
-            tag_to_add["visibility"],
-            tag_to_add["origin"],
-            tag_to_add["unit"],
-            tag_to_add["default_value"],
-        )
-
-    if tag_to_add["name"] not in project.session.get_fields_names(
-        COLLECTION_INITIAL
-    ):
-        project.session.add_field(
-            COLLECTION_INITIAL,
-            tag_to_add["name"],
-            tag_to_add["field_type"],
-            tag_to_add["description"],
-            tag_to_add["visibility"],
-            tag_to_add["origin"],
-            tag_to_add["unit"],
-            tag_to_add["default_value"],
-        )
-
-    if project.session.get_document(COLLECTION_CURRENT, database_filename):
-        print("Path {0} already in database.".format(database_filename))
-
-    else:
-        project.session.add_document(COLLECTION_CURRENT, database_filename)
-        project.session.add_document(COLLECTION_INITIAL, database_filename)
-
-    project.session.set_values(
-        COLLECTION_CURRENT,
-        database_filename,
-        {tag_to_add["name"]: tag_to_add["value"]},
-    )
-    project.session.set_values(
-        COLLECTION_INITIAL,
-        database_filename,
-        {tag_to_add["name"]: tag_to_add["value"]},
-    )
 
 
 def plot_slice_planes(

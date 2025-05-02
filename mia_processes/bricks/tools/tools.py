@@ -72,6 +72,7 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import get_db_field_value
 from scipy import io, signal
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
@@ -84,7 +85,7 @@ from scipy.special import gammaln
 from traits.api import Either, Undefined
 
 # mia_processes imports
-from mia_processes.utils import checkFileExt, get_dbFieldValue
+from mia_processes.utils import checkFileExt
 
 
 class Concat_to_list(ProcessMIA):
@@ -770,10 +771,10 @@ class Deconv_from_aif(ProcessMIA):
             ]
         ):
 
-            rep_time = get_dbFieldValue(
+            rep_time = get_db_field_value(
                 self.project, self.func_file, "RepetitionTime"
             )
-            echo_time = get_dbFieldValue(
+            echo_time = get_db_field_value(
                 self.project, self.func_file, "EchoTime"
             )
 
@@ -2318,7 +2319,7 @@ class Get_Patient_Name(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            sub_name = get_dbFieldValue(
+            sub_name = get_db_field_value(
                 self.project, self.in_file, "PatientName"
             )
             if sub_name is None:
@@ -2582,7 +2583,7 @@ class Import_Data(ProcessMIA):
             self.rois_list not in (traits.Undefined, [], [[]])
             and self.file_in_db != traits.Undefined
         ):
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.file_in_db, "PatientName"
             )
 
@@ -3821,7 +3822,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         #     self.outputs = {}
 
         if self.func_file not in ["<undefined>", traits.Undefined]:
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.func_file[0], "PatientName"
             )
 
@@ -3879,7 +3880,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             # delay between respiration and EtCO2 variation (s)
             delay_for_etco2 = 4.8
             tr = (
-                get_dbFieldValue(
+                get_db_field_value(
                     self.project, self.func_file[0], "RepetitionTime"
                 )[0]
                 / 1000
@@ -3890,7 +3891,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             # hrf = glover_hrf(tr)
             hrf = self.spm_hrf(tr, [6, 16, 2, 1, np.inf, 0, 32])
             nb_dyn = (
-                get_dbFieldValue(
+                get_db_field_value(
                     self.project,
                     self.func_file[0],
                     "Dataset dimensions (Count, X,Y,Z,T...)",

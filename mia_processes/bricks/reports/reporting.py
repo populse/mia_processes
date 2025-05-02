@@ -35,12 +35,11 @@ from nipype.interfaces.spm.base import ImageFileSPM
 # populse_mia import
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import dict4runtime_update, get_db_field_value
 
 # mia_processes import:
 from mia_processes.utils import (
     Report,
-    dict4runtime_update,
-    get_dbFieldValue,
     mriqc_get_all_run,
     mriqc_group_iqms_tsv,
     plot_boxplot_points,
@@ -329,7 +328,7 @@ class ReportAnatMriqc(ProcessMIA):
         # via dict4runtime parameter:
         dict4runtime_update(
             self.dict4runtime,
-            self.project.session,
+            self.project,
             database_filename,
             "PatientName",
             "StudyName",
@@ -1333,7 +1332,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         self.dict4runtime["norm_anat"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_anat"],
-            self.project.session,
+            self.project,
             db_file_norm_anat,
             "AcquisitionDuration",
             "AcquisitionDate",
@@ -1367,7 +1366,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         self.dict4runtime["norm_func"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_func"],
-            self.project.session,
+            self.project,
             db_file_norm_func,
             "AcquisitionDuration",
             "AcquisitionNumber",
@@ -1392,14 +1391,14 @@ class ReportCO2inhalCvr(ProcessMIA):
         self.dict4runtime["smooth_norm_func"] = {}
         dict4runtime_update(
             self.dict4runtime["smooth_norm_func"],
-            self.project.session,
+            self.project,
             db_file_smooth_norm_func,
             "FWHM (X, Y, Z) for Smooth",
         )
         self.dict4runtime["regressor_physio"] = {}
         dict4runtime_update(
             self.dict4runtime["regressor_physio"],
-            self.project.session,
+            self.project,
             db_file_regressor_physio,
             "Regressor state",
         )
@@ -1880,7 +1879,7 @@ class ReportFuncMriqc(ProcessMIA):
         # via dict4runtime parameter:
         dict4runtime_update(
             self.dict4runtime,
-            self.project.session,
+            self.project,
             database_filename,
             "PatientName",
             "StudyName",
@@ -2534,7 +2533,7 @@ class ReportGE2REC(ProcessMIA):
         self.dict4runtime["norm_anat"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_anat"],
-            self.project.session,
+            self.project,
             db_file_norm_anat,
             "AcquisitionDate",
             "Acquisition nbr",
@@ -2670,7 +2669,7 @@ class ReportGE2REC(ProcessMIA):
         self.dict4runtime["norm_func_gene"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_func_gene"],
-            self.project.session,
+            self.project,
             db_file_norm_func_gene,
             "Acquisition nbr",
             "Affine regularization type",
@@ -2691,7 +2690,7 @@ class ReportGE2REC(ProcessMIA):
         self.dict4runtime["norm_func_reco"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_func_reco"],
-            self.project.session,
+            self.project,
             db_file_norm_func_reco,
             "Acquisition nbr",
             "Affine regularization type",
@@ -2712,7 +2711,7 @@ class ReportGE2REC(ProcessMIA):
         self.dict4runtime["norm_func_recall"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_func_recall"],
-            self.project.session,
+            self.project,
             db_file_norm_func_recall,
             "Acquisition nbr",
             "Affine regularization type",
@@ -2756,7 +2755,7 @@ class ReportGE2REC(ProcessMIA):
             traits.Undefined,
         ]:
             date = datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22]
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.norm_anat, "PatientName"
             )
             self.outputs["report"] = os.path.join(
@@ -2895,7 +2894,7 @@ class ReportGroupMriqc(ProcessMIA):
             database_filename = file_name[file_position:]
             dict4runtime_update(
                 dict4runtime_file,
-                self.project.session,
+                self.project,
                 database_filename,
                 "PatientName",
                 "StudyName",
@@ -3691,7 +3690,7 @@ class ReportPerfDsc(ProcessMIA):
         self.dict4runtime["norm_anat"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_anat"],
-            self.project.session,
+            self.project,
             db_file_norm_anat,
             "AcquisitionDuration",
             "AcquisitionDate",
@@ -3725,7 +3724,7 @@ class ReportPerfDsc(ProcessMIA):
         self.dict4runtime["norm_func"] = {}
         dict4runtime_update(
             self.dict4runtime["norm_func"],
-            self.project.session,
+            self.project,
             db_file_norm_func,
             "AcquisitionDuration",
             "AcquisitionNumber",
@@ -3748,14 +3747,14 @@ class ReportPerfDsc(ProcessMIA):
         self.dict4runtime["smooth_norm_func"] = {}
         dict4runtime_update(
             self.dict4runtime["smooth_norm_func"],
-            self.project.session,
+            self.project,
             db_file_smooth_norm_func,
             "FWHM (X, Y, Z) for Smooth",
         )
         self.dict4runtime["CBV_image"] = {}
         dict4runtime_update(
             self.dict4runtime["CBV_image"],
-            self.project.session,
+            self.project,
             db_file_CBV_image,
             "Perf Normalisation Factor",
         )

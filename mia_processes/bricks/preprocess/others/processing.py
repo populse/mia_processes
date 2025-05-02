@@ -64,8 +64,8 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
-# from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import get_db_field_value, set_db_field_value
 from scipy import ndimage as sim
 from skimage.morphology import ball
 
@@ -77,14 +77,7 @@ from statsmodels.robust.scale import mad
 from templateflow.api import get as get_template
 
 # mia_processes import
-from mia_processes.utils import (
-    checkFileExt,
-    get_dbFieldValue,
-    set_dbFieldValue,
-)
-
-# Other import
-# from distutils.dir_util import copy_tree
+from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
@@ -923,7 +916,7 @@ class ConformImage(ProcessMIA):
             )
             if file:
                 self.outputs["out_file"] = file
-                # FIXME: In the latest version of mia, indexing of the
+                # FIXME: In the latest version of Mia, indexing of the
                 #        database with particular tags defined in the
                 #        processes is done only at the end of the
                 #        initialisation of the whole pipeline. So we
@@ -931,10 +924,10 @@ class ConformImage(ProcessMIA):
                 #        processes of the pipeline at the time of
                 #        initialisation (see populse_mia #290). Unti
                 #        better we use a quick and dirty hack with the
-                #        set_dbFieldValue() function !
+                #        set_db_field_value() function !
 
                 # Get patient name
-                patient_name = get_dbFieldValue(
+                patient_name = get_db_field_value(
                     self.project, self.in_file, "PatientName"
                 )
                 if patient_name is not None:
@@ -947,7 +940,7 @@ class ConformImage(ProcessMIA):
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
                     tag_to_add["value"] = patient_name
-                    set_dbFieldValue(
+                    set_db_field_value(
                         self.project, self.outputs["out_file"], tag_to_add
                     )
                 else:
@@ -1121,7 +1114,7 @@ class ConvROI(ProcessMIA):
             self.images_to_convolve != Undefined
             and self.convolve_with != Undefined
         ):
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.convolve_with, "PatientName"
             )
 
@@ -3372,7 +3365,7 @@ class Resample1(ProcessMIA):
 
                         if fileOval_no_ext == fileIval_no_ext:
 
-                            if get_dbFieldValue(
+                            if get_db_field_value(
                                 self.project, in_val, "PatientName"
                             ) is None:
                                 print(
@@ -3565,7 +3558,7 @@ class Resample2(ProcessMIA):
             self.files_to_resample != Undefined
             and self.reference_image != Undefined
         ):
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.reference_image, "PatientName"
             )
 
@@ -4072,7 +4065,7 @@ class Sanitize(ProcessMIA):
                 #        processes of the pipeline at the time of
                 #        initialisation (see populse_mia #290). Until
                 #        better we use a quick and dirty hack with the
-                #        set_dbFieldValue() function !
+                #        set_db_field_value() function !
 
                 tag_to_add = dict()
                 tag_to_add["name"] = "RepetitionTime"
@@ -4090,12 +4083,12 @@ class Sanitize(ProcessMIA):
                 tag_to_add["origin"] = "user"
                 tag_to_add["unit"] = "ms"
                 tag_to_add["default_value"] = None
-                tag_to_add["value"] = get_dbFieldValue(
+                tag_to_add["value"] = get_db_field_value(
                     self.project, self.in_file, "RepetitionTime"
                 )
 
                 if tag_to_add["value"] is not None:
-                    set_dbFieldValue(self.project, file, tag_to_add)
+                    set_db_field_value(self.project, file, tag_to_add)
 
                 else:
                     print(
@@ -5011,7 +5004,7 @@ class Threshold(ProcessMIA):
 
                         if fileOval_no_ext == fileIval_no_ext:
                             if (
-                                get_dbFieldValue(
+                                get_db_field_value(
                                     self.project, in_val, "PatientName"
                                 )
                                 is None

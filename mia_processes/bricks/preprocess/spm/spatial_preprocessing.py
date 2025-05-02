@@ -47,7 +47,6 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
-# from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.data_manager import (
     COLLECTION_CURRENT,
     FIELD_TYPE_LIST_FLOAT,
@@ -57,6 +56,7 @@ from populse_mia.data_manager import (
 )
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import get_db_field_value
 
 # soma-base import
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -72,9 +72,6 @@ from traits.api import (
     Tuple,
     Undefined,
 )
-
-# mia_processes import
-from mia_processes.utils import get_dbFieldValue
 
 
 class Coregister(ProcessMIA):
@@ -411,7 +408,7 @@ class Coregister(ProcessMIA):
 
                         if fileOvalNoPref == fileIval:
                             if (
-                                get_dbFieldValue(
+                                get_db_field_value(
                                     self.project, in_val, "PatientName"
                                 )
                                 is None
@@ -464,7 +461,7 @@ class Coregister(ProcessMIA):
 
                         if fileOvalNoPref == fileIval:
                             if (
-                                get_dbFieldValue(
+                                get_db_field_value(
                                     self.project, in_val, "PatientName"
                                 )
                                 is None
@@ -854,7 +851,7 @@ class GM_WM_Normalize(ProcessMIA):
                 if key == "normalized_files":
                     if self.in_filter == "GM + WM":
                         if (
-                            get_dbFieldValue(
+                            get_db_field_value(
                                 self.project,
                                 self.apply_to_files[0],
                                 "PatientName",
@@ -887,7 +884,7 @@ class GM_WM_Normalize(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 if (
-                                    get_dbFieldValue(
+                                    get_db_field_value(
                                         self.project, in_val, "PatientName"
                                     )
                                     is None
@@ -1341,7 +1338,7 @@ class NewSegment(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 if (
-                                    get_dbFieldValue(
+                                    get_db_field_value(
                                         self.project, in_val, "PatientName"
                                     )
                                     is None
@@ -1371,7 +1368,7 @@ class NewSegment(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 if (
-                                    get_dbFieldValue(
+                                    get_db_field_value(
                                         self.project, in_val, "PatientName"
                                     )
                                     is None
@@ -1836,7 +1833,7 @@ class Normalize12(ProcessMIA):
 
                     for in_val, out_val in zip(self.apply_to_files, val):
                         if (
-                            get_dbFieldValue(
+                            get_db_field_value(
                                 self.project, in_val, "RepetitionTime"
                             )
                             is None
@@ -1850,7 +1847,7 @@ class Normalize12(ProcessMIA):
                             )
 
                         if (
-                            get_dbFieldValue(
+                            get_db_field_value(
                                 self.project,
                                 in_val,
                                 "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -1867,7 +1864,7 @@ class Normalize12(ProcessMIA):
                             )
 
                         if (
-                            get_dbFieldValue(
+                            get_db_field_value(
                                 self.project, in_val, "PatientName"
                             )
                             is None
@@ -2377,7 +2374,7 @@ class Realign(ProcessMIA):
                     self.outputs["realigned_files"].append(out_val)
 
                     if (
-                        get_dbFieldValue(
+                        get_db_field_value(
                             self.project, in_val, "RepetitionTime"
                         )
                         is None
@@ -2391,7 +2388,7 @@ class Realign(ProcessMIA):
                         )
 
                     if (
-                        get_dbFieldValue(
+                        get_db_field_value(
                             self.project,
                             in_val,
                             "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -2408,7 +2405,7 @@ class Realign(ProcessMIA):
                         )
 
                     if (
-                        get_dbFieldValue(self.project, in_val, "PatientName")
+                        get_db_field_value(self.project, in_val, "PatientName")
                         is None
                     ):
                         print(

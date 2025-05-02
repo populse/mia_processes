@@ -126,10 +126,11 @@ from numpy.polynomial import Legendre
 # populse_mia import
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import get_db_field_value
 from scipy.stats import kurtosis  # pylint: disable=E0611
 
 # mia_processes import
-from mia_processes.utils import checkFileExt, get_dbFieldValue
+from mia_processes.utils import checkFileExt
 
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
@@ -1192,7 +1193,9 @@ class BoldIQMsPlot(ProcessMIA):
 
         if self.tr is Undefined:
             # Get TR in the database
-            tr = get_dbFieldValue(self.project, self.in_func, "RepetitionTime")
+            tr = get_db_field_value(
+                self.project, self.in_func, "RepetitionTime"
+            )
             if tr is None:
                 print("Please add TR in database for functional file")
                 return self.make_initResult()
@@ -2143,7 +2146,7 @@ class Mean_stdDev_calc(ProcessMIA):
             # FIXME: We retrieve the name of the patient from the first element
             #        of parametric_maps. This is only fine if all the elements
             #        of parametric_maps correspond to the same patient.
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.parametric_maps[0], "PatientName"
             )
 
@@ -2813,7 +2816,7 @@ class Result_collector(ProcessMIA):
             #          patient.
             # FIXME 2: The data should be anonymized and we should use
             #          PatientRef instead of PatientName !
-            patient_name = get_dbFieldValue(
+            patient_name = get_db_field_value(
                 self.project, self.parameter_files[0], "PatientName"
             )
             if patient_name is None:
@@ -2925,7 +2928,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("PatientRef") is None
                 or self.patient_info["PatientRef"] == Undefined
             ):
-                patient_ref = get_dbFieldValue(
+                patient_ref = get_db_field_value(
                     self.project, self.parameter_files[0], "PatientRef"
                 )
 
@@ -2939,7 +2942,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("Pathology") is None
                 or self.patient_info["Pathology"] == Undefined
             ):
-                pathology = get_dbFieldValue(
+                pathology = get_db_field_value(
                     self.project, self.parameter_files[0], "Pathology"
                 )
 
@@ -2953,7 +2956,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("Age") is None
                 or self.patient_info["Age"] == Undefined
             ):
-                age = get_dbFieldValue(
+                age = get_db_field_value(
                     self.project, self.parameter_files[0], "Age"
                 )
 
@@ -2967,7 +2970,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("Sex") is None
                 or self.patient_info["Sex"] == Undefined
             ):
-                sex = get_dbFieldValue(
+                sex = get_db_field_value(
                     self.project, self.parameter_files[0], "Sex"
                 )
 
@@ -2981,7 +2984,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("MR") is None
                 or self.patient_info["MR"] == Undefined
             ):
-                mr = get_dbFieldValue(
+                mr = get_db_field_value(
                     self.project, self.parameter_files[0], "MR"
                 )
 
@@ -2995,7 +2998,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("Gas") is None
                 or self.patient_info["Gas"] == Undefined
             ):
-                gas = get_dbFieldValue(
+                gas = get_db_field_value(
                     self.project, self.parameter_files[0], "Gas"
                 )
 
@@ -3009,7 +3012,7 @@ class Result_collector(ProcessMIA):
                 self.patient_info.get("GasAdmin") is None
                 or self.patient_info["GasAdmin"] == Undefined
             ):
-                gas_admin = get_dbFieldValue(
+                gas_admin = get_db_field_value(
                     self.project, self.parameter_files[0], "GasAdmin"
                 )
 

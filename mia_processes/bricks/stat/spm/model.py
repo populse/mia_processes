@@ -43,18 +43,14 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 from populse_mia.data_manager import FIELD_TYPE_INTEGER, TAG_ORIGIN_USER
 
-# populse_db and populse_mia import
+# populse_mia import
 from populse_mia.data_manager.project import COLLECTION_CURRENT
-
-# populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.utils import get_db_field_value
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 from traits.api import Undefined
-
-# mia_processes import
-from mia_processes.utils import get_dbFieldValue
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
@@ -390,7 +386,7 @@ class EstimateContrast(ProcessMIA):
                 else:
                     # if spm_mat file not in a subfolder (for e.g spm_mat
                     # file in download data)
-                    sub_name = get_dbFieldValue(
+                    sub_name = get_db_field_value(
                         self.project, self.spm_mat_file, "PatientName"
                     )
 
@@ -445,7 +441,7 @@ class EstimateContrast(ProcessMIA):
 
             nb_contrasts = 0
             # Get number of contrasts already created
-            nb_contrasts_old = get_dbFieldValue(
+            nb_contrasts_old = get_db_field_value(
                 self.project, self.spm_mat_file, "Contrasts num"
             )
 
@@ -516,7 +512,7 @@ class EstimateContrast(ProcessMIA):
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file":
                     if (
-                        get_dbFieldValue(
+                        get_db_field_value(
                             self.project,
                             self.spm_mat_file,
                             "PatientName",
@@ -542,14 +538,14 @@ class EstimateContrast(ProcessMIA):
                     "spmF_images",
                 ]:
                     all_tag_to_del = ["Contrasts num"]
-                    regress_num = get_dbFieldValue(
+                    regress_num = get_db_field_value(
                         self.project, self.spm_mat_file, "Regress num"
                     )
                     if regress_num:
                         all_tag_to_del.append("Regress num")
                     for fullname in value:
                         if (
-                            get_dbFieldValue(
+                            get_db_field_value(
                                 self.project,
                                 self.spm_mat_file,
                                 "PatientName",
@@ -992,7 +988,7 @@ class EstimateModel(ProcessMIA):
                 else:
                     # if spm_mat file not in a subfolder (for e.g spm_mat
                     # file in download data)
-                    sub_name = get_dbFieldValue(
+                    sub_name = get_db_field_value(
                         self.project, self.spm_mat_file, "PatientName"
                     )
                     if sub_name is None:
@@ -1035,7 +1031,7 @@ class EstimateModel(ProcessMIA):
             betas = []
 
             if self.tot_reg_num in ["<undefined>", Undefined]:
-                tot_reg_numb = get_dbFieldValue(
+                tot_reg_numb = get_db_field_value(
                     self.project, self.spm_mat_file, "Regress num"
                 )
 
@@ -1079,7 +1075,7 @@ class EstimateModel(ProcessMIA):
                 )
 
                 if self.write_residuals:
-                    nb_dyn = get_dbFieldValue(
+                    nb_dyn = get_db_field_value(
                         self.project, self.spm_mat_file, "Dynamic Number"
                     )
 
@@ -1205,7 +1201,7 @@ class EstimateModel(ProcessMIA):
 
         if self.outputs:
             all_tag_to_del = ["Contrasts num"]
-            regress_num = get_dbFieldValue(
+            regress_num = get_db_field_value(
                 self.project, self.spm_mat_file, "Regress num"
             )
             if regress_num:
@@ -1244,7 +1240,7 @@ class EstimateModel(ProcessMIA):
                     "spmF_images",
                     "residual_images",
                 ]:
-                    patient_name = get_dbFieldValue(
+                    patient_name = get_db_field_value(
                         self.project, self.spm_mat_file, "PatientName"
                     )
 
@@ -2044,7 +2040,7 @@ class Level1Design(ProcessMIA):
             subjects_names = []
             # files_names = ""
             for idx_session, scan in enumerate(self.sess_scans):
-                sub_name = get_dbFieldValue(
+                sub_name = get_db_field_value(
                     self.project, self.sess_scans[idx_session], "PatientName"
                 )
                 if sub_name is None:
@@ -2192,7 +2188,7 @@ class Level1Design(ProcessMIA):
             all_tags_to_add.append(tag_to_add)
 
             if (
-                get_dbFieldValue(
+                get_db_field_value(
                     self.project,
                     self.sess_scans[0],
                     "PatientName",
@@ -2210,7 +2206,7 @@ class Level1Design(ProcessMIA):
             dyn_num = 0
 
             for scan in self.sess_scans:
-                dimensions = get_dbFieldValue(
+                dimensions = get_db_field_value(
                     self.project,
                     scan,
                     "Dataset dimensions (Count, X,Y,Z,T...)",
@@ -2250,7 +2246,7 @@ class Level1Design(ProcessMIA):
                 "RepetitionTime"
                 in self.project.session.get_fields_names(COLLECTION_CURRENT)
             ):
-                rep_time = get_dbFieldValue(
+                rep_time = get_db_field_value(
                     self.project, self.sess_scans[0], "RepetitionTime"
                 )
                 if rep_time is not None:

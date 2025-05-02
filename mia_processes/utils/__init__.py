@@ -22,9 +22,6 @@ from .tools import (  # noqa: F401
     PageNumCanvas,
     ReportLine,
     checkFileExt,
-    del_dbFieldValue,
-    dict4runtime_update,
-    get_dbFieldValue,
     mriqc_get_all_run,
     mriqc_group_iqms_tsv,
     plot_boxplot_points,
@@ -32,7 +29,6 @@ from .tools import (  # noqa: F401
     plot_realignment_parameters,
     plot_segmentation,
     plot_slice_planes,
-    set_dbFieldValue,
 )
 
 # Prevent circular import (PageNumCanvas)
