@@ -56,7 +56,7 @@ from populse_mia.data_manager import (
 )
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from populse_mia.utils import get_db_field_value
+from populse_mia.utils import get_db_field_value, get_field_names, get_value
 
 # soma-base import
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -2697,11 +2697,11 @@ class SliceTiming(ProcessMIA):
         database_filename = complete_path[file_position:]
         temp = None
 
-        if (
-            "Dataset dimensions (Count, X,Y,Z,T...)"
-            in self.project.session.get_fields_names(COLLECTION_CURRENT)
+        if "Dataset dimensions (Count, X,Y,Z,T...)" in get_field_names(
+            self.project, COLLECTION_CURRENT
         ):
-            temp = self.project.session.get_value(
+            temp = get_value(
+                self.project,
                 COLLECTION_CURRENT,
                 database_filename,
                 ("Dataset dimensions (Count, X,Y,Z,T...)"),
@@ -2743,12 +2743,15 @@ class SliceTiming(ProcessMIA):
 
         temp = None
 
-        if "RepetitionTime" in self.project.session.get_fields_names(
-            COLLECTION_CURRENT
+        if "RepetitionTime" in get_field_names(
+            self.project, COLLECTION_CURRENT
         ):
             temp = (
-                self.project.session.get_value(
-                    COLLECTION_CURRENT, database_filename, "RepetitionTime"
+                get_value(
+                    self.project,
+                    COLLECTION_CURRENT,
+                    database_filename,
+                    "RepetitionTime",
                 )[0]
                 / 1000
             )

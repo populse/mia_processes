@@ -72,7 +72,13 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from populse_mia.utils import get_db_field_value
+from populse_mia.utils import (
+    get_db_field_value,
+    get_document_names,
+    get_shown_tags,
+    get_value,
+    remove_document,
+)
 from scipy import io, signal
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
@@ -1207,9 +1213,9 @@ class Delete_data(ProcessMIA):
                         outputs_filename.remove(file)
 
         self.files_removed = outputs_filename
+        # Remove document from database
+        remove_document(self.project, COLLECTION_CURRENT, outputs_filename)
         for doc in outputs_filename:
-            # Remove document from database
-            self.project.session.remove_document(COLLECTION_CURRENT, doc)
             full_doc_path = os.path.join(self.project.folder, doc)
             # Remove from project
             if os.path.isfile(full_doc_path):
@@ -2777,18 +2783,16 @@ class Input_Filter(ProcessMIA):
         # of a previous brick or from the database (using Export to
         # database_scans, or not) and of course to perform a filtering from it.
         # But also, if no data is sent in, we get all the data from the
-        # database (self.project.session.get_documents_names(
-        # COLLECTION_CURRENT), below). It can maybe lead to side effects
-        # (however it also allows for example not to connect the input to
-        # something and to have the whole database by default...
+        # database (get_documents_names(COLLECTION_CURRENT), below).
+        # It can maybe lead to side effects (however it also allows for
+        # example not to connect the input to something and to have the whole
+        # database by default...
         # Is it really desirable????
         if self.input:
             self.scans_list = self.input
 
         else:
-            self.scans_list = self.project.session.get_documents_names(
-                COLLECTION_CURRENT
-            )
+            self.scans_list = get_document_names(COLLECTION_CURRENT)
 
         # The data to filter are always a relative path
         if (self.scans_list) and (os.path.isabs(self.scans_list[0])):
@@ -2801,7 +2805,7 @@ class Input_Filter(ProcessMIA):
         self.outputs["output"] = self.filter.generate_filter(
             self.project,
             self.scans_list,
-            self.project.session.get_shown_tags(),
+            get_shown_tags(),
         )
         self.outputs["notInDb"] = ["output"]
 
@@ -2824,8 +2828,8 @@ class Input_Filter(ProcessMIA):
                 tag_to_file = {}
 
                 for file in self.outputs["output"]:
-                    tag_value = self.project.session.get_value(
-                        COLLECTION_CURRENT, file, iterated_tag
+                    tag_value = get_value(
+                        self.project, COLLECTION_CURRENT, file, iterated_tag
                     )
 
                     if tag_value in tag_values_list:

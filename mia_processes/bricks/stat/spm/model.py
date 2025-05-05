@@ -46,7 +46,7 @@ from populse_mia.data_manager import FIELD_TYPE_INTEGER, TAG_ORIGIN_USER
 # populse_mia import
 from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from populse_mia.utils import get_db_field_value
+from populse_mia.utils import get_db_field_value, get_field_names
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -2244,7 +2244,7 @@ class Level1Design(ProcessMIA):
 
             if (self.interscan_interval is Undefined) and (
                 "RepetitionTime"
-                in self.project.session.get_fields_names(COLLECTION_CURRENT)
+                in get_field_names(self.project, COLLECTION_CURRENT)
             ):
                 rep_time = get_db_field_value(
                     self.project, self.sess_scans[0], "RepetitionTime"
