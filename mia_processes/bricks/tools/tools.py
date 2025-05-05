@@ -64,12 +64,17 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
+from populse_mia.data_manager import (
+    BRICK_OUTPUTS,
+    COLLECTION_CURRENT,
+    FIELD_TYPE_FLOAT,
+    FIELD_TYPE_STRING,
+)
 from populse_mia.data_manager.data_history_inspect import (
     get_data_history_processes,
     get_filenames_in_value,
 )
 from populse_mia.data_manager.filter import Filter
-from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from populse_mia.utils import (
@@ -852,10 +857,10 @@ class Deconv_from_aif(ProcessMIA):
                 tag_to_add["name"] = "Perf Normalisation Factor"
 
                 if isinstance(self.perf_normalisation, (int, float)):
-                    norm_type = "float"
+                    norm_type = FIELD_TYPE_FLOAT
 
                 else:
-                    norm_type = "string"
+                    norm_type = FIELD_TYPE_STRING
                     self.perf_normalisation = "no_normalisation"
 
                 tag_to_add["field_type"] = norm_type
@@ -3865,7 +3870,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         # Add the reg state (individual or standard), in database
         tag_to_add = dict()
         tag_to_add["name"] = "Regressor state"
-        tag_to_add["field_type"] = "string"
+        tag_to_add["field_type"] = FIELD_TYPE_STRING
         tag_to_add["description"] = (
             "Indicates the state of the physiological regressor for CVR "
             "(Individual or Standard)"
