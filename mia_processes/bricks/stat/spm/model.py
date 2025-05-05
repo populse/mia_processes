@@ -2118,8 +2118,8 @@ class Level1Design(ProcessMIA):
                     check = False
                     self.outputs = {}
                     print(
-                        "\nLevel1Design brick: There seems to be a problem in"
-                        "the definition of session parameters. The"
+                        "\nLevel1Design brick: There seems to be a problem in "
+                        "the definition of session parameters. The "
                         "initialisation failed, please check your settings ..."
                     )
 
