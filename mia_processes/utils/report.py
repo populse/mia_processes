@@ -40,10 +40,11 @@ from nilearn.plotting import plot_carpet
 
 # nipype import
 from nipype import info as nipype_info
-
-# populse_mia import
 from populse_mia import info as mia_info
 from populse_mia import sources_images
+
+# populse_mia import
+from populse_mia.data_manager import TAG_FILENAME
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4, portrait
@@ -5096,7 +5097,7 @@ class Report:
         data = [["Input data", "Site", "MRI scanner"]]
         for key in list(self.dict4runtime.keys()):
             data_file = []
-            for i in ("FileName", "Site", "Spectro"):
+            for i in (TAG_FILENAME, "Site", "Spectro"):
                 tag = self.dict4runtime[key][i]
                 if len(tag) > 30:
                     tag = f"{tag[:30]}\n{tag[30:]}"

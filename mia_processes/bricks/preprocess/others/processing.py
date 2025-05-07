@@ -64,6 +64,12 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
+from populse_mia.data_manager import (
+    FIELD_TYPE_FLOAT,
+    FIELD_TYPE_STRING,
+    TAG_ORIGIN_USER,
+    TAG_UNIT_MS,
+)
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from populse_mia.utils import get_db_field_value, set_db_field_value
 from scipy import ndimage as sim
@@ -933,10 +939,10 @@ class ConformImage(ProcessMIA):
                 if patient_name is not None:
                     tag_to_add = dict()
                     tag_to_add["name"] = "PatientName"
-                    tag_to_add["field_type"] = "string"
+                    tag_to_add["field_type"] = FIELD_TYPE_STRING
                     tag_to_add["description"] = ""
                     tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
+                    tag_to_add["origin"] = TAG_ORIGIN_USER
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
                     tag_to_add["value"] = patient_name
@@ -4069,7 +4075,7 @@ class Sanitize(ProcessMIA):
 
                 tag_to_add = dict()
                 tag_to_add["name"] = "RepetitionTime"
-                tag_to_add["field_type"] = "float"
+                tag_to_add["field_type"] = FIELD_TYPE_FLOAT
                 tag_to_add["description"] = (
                     "The period of time "
                     "in msec between the "
@@ -4080,8 +4086,8 @@ class Sanitize(ProcessMIA):
                     "sequence"
                 )
                 tag_to_add["visibility"] = True
-                tag_to_add["origin"] = "user"
-                tag_to_add["unit"] = "ms"
+                tag_to_add["origin"] = TAG_ORIGIN_USER
+                tag_to_add["unit"] = TAG_UNIT_MS
                 tag_to_add["default_value"] = None
                 tag_to_add["value"] = get_db_field_value(
                     self.project, self.in_file, "RepetitionTime"

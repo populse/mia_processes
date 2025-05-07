@@ -33,6 +33,7 @@ from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
+from populse_mia.data_manager import TAG_FILENAME
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from populse_mia.utils import dict4runtime_update, get_db_field_value
@@ -2885,7 +2886,7 @@ class ReportGroupMriqc(ProcessMIA):
         i = 0
         self.dict4runtime = {}
         for file_name in files_name:
-            dict4runtime_file = {"FileName": os.path.basename(file_name)}
+            dict4runtime_file = {TAG_FILENAME: os.path.basename(file_name)}
             file_position = (
                 file_name.find(self.project.getName())
                 + len(self.project.getName())

@@ -69,6 +69,8 @@ from populse_mia.data_manager import (
     COLLECTION_CURRENT,
     FIELD_TYPE_FLOAT,
     FIELD_TYPE_STRING,
+    TAG_FILENAME,
+    TAG_ORIGIN_USER,
 )
 from populse_mia.data_manager.data_history_inspect import (
     get_data_history_processes,
@@ -868,7 +870,7 @@ class Deconv_from_aif(ProcessMIA):
                     "The normalization factor used for CBF and CBV"
                 )
                 tag_to_add["visibility"] = True
-                tag_to_add["origin"] = "user"
+                tag_to_add["origin"] = TAG_ORIGIN_USER
                 tag_to_add["unit"] = ""
                 tag_to_add["default_value"] = None
                 tag_to_add["value"] = self.perf_normalisation
@@ -2755,7 +2757,7 @@ class Input_Filter(ProcessMIA):
 
         # Instantiation of the filter object
         self.filter = Filter(
-            None, [""], [""], [["FileName"]], [], ["CONTAINS"], ""
+            None, [""], [""], [[TAG_FILENAME]], [], ["CONTAINS"], ""
         )
 
         self.init_default_traits()
@@ -3876,7 +3878,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             "(Individual or Standard)"
         )
         tag_to_add["visibility"] = True
-        tag_to_add["origin"] = "user"
+        tag_to_add["origin"] = TAG_ORIGIN_USER
         tag_to_add["unit"] = None
         tag_to_add["default_value"] = None
 
