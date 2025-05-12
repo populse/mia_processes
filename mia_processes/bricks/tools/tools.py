@@ -2812,7 +2812,7 @@ class Input_Filter(ProcessMIA):
         self.outputs["output"] = self.filter.generate_filter(
             self.project,
             self.scans_list,
-            get_shown_tags(),
+            get_shown_tags(self.project),
         )
         self.outputs["notInDb"] = ["output"]
 
