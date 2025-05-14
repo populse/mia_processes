@@ -2732,7 +2732,7 @@ class Result_collector(ProcessMIA):
             "information about the patient "
             "(e.g. {"
             "'PatientRef': 'sub_1','Pathology': 'ACMD', "
-            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+            "'Age': 64, 'Sex': 'M', 'MagneticFieldStrength': '3T', "
             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
         )
 
@@ -2772,7 +2772,7 @@ class Result_collector(ProcessMIA):
             Pathology=Undefined,
             Age=Undefined,
             Sex=Undefined,
-            MR=Undefined,
+            MagneticFieldStrength=Undefined,
             Gas=Undefined,
             GasAdmin=Undefined,
         )
@@ -2982,18 +2982,20 @@ class Result_collector(ProcessMIA):
                     self.patient_info["Sex"] = sex
 
             if (
-                self.patient_info.get("MR") is None
-                or self.patient_info["MR"] == Undefined
+                self.patient_info.get("MagneticFieldStrength") is None
+                or self.patient_info["MagneticFieldStrength"] == Undefined
             ):
                 mr = get_db_field_value(
-                    self.project, self.parameter_files[0], "MR"
+                    self.project,
+                    self.parameter_files[0],
+                    "MagneticFieldStrength",
                 )
 
                 if mr is None:
-                    self.patient_info["MR"] = "Undefined"
+                    self.patient_info["MagneticFieldStrength"] = "Undefined"
 
                 else:
-                    self.patient_info["MR"] = mr
+                    self.patient_info["MagneticFieldStrength"] = mr
 
             if (
                 self.patient_info.get("Gas") is None
@@ -3133,7 +3135,7 @@ class Result_collector(ProcessMIA):
                         f.write("{0}\t".format("patho"))
                         f.write("{0}\t".format("age"))
                         f.write("{0}\t".format("sex"))
-                        f.write("{0}\t".format("MR"))
+                        f.write("{0}\t".format("MagneticFieldStrength"))
                         f.write("{0}\t".format("Gaz"))
                         f.write("{0}\t".format("Admin"))
 
@@ -3156,7 +3158,11 @@ class Result_collector(ProcessMIA):
                         f.write("{0}\t".format(self.patient_info["Pathology"]))
                         f.write("{0}\t".format(self.patient_info["Age"]))
                         f.write("{0}\t".format(self.patient_info["Sex"]))
-                        f.write("{0}\t".format(self.patient_info["MR"]))
+                        f.write(
+                            "{0}\t".format(
+                                self.patient_info["MagneticFieldStrength"]
+                            )
+                        )
                         f.write("{0}\t".format(self.patient_info["Gas"]))
                         f.write("{0}\t".format(self.patient_info["GasAdmin"]))
 

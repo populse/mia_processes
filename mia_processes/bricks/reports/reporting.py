@@ -995,7 +995,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Optional dictionary with information about the patient "
             "(e.g. {"
             "'PatientName': 'sub-1', 'Pathology': 'ACMD', "
-            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+            "'Age': 64, 'Sex': 'M', 'MagneticFieldStrength': '3T', "
             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
         )
 
@@ -1268,7 +1268,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             Pathology=Undefined,
             Age=Undefined,
             Sex=Undefined,
-            MR=Undefined,
+            MagneticFieldStrength=Undefined,
             Gas=Undefined,
             GasAdmin=Undefined,
         )
@@ -1309,7 +1309,7 @@ class ReportCO2inhalCvr(ProcessMIA):
                 Pathology=Undefined,
                 Age=Undefined,
                 Sex=Undefined,
-                MR=Undefined,
+                MagneticFieldStrength=Undefined,
                 Gas=Undefined,
                 GasAdmin=Undefined,
             )
@@ -1346,6 +1346,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
             "Institution",
+            "MagneticFieldStrength",
             "Manufacturer",
             "Manufacturer's Model",
             "MaxNumOfSlices",
@@ -1478,17 +1479,21 @@ class ReportCO2inhalCvr(ProcessMIA):
             )
 
         if (
-            self.patient_info.get("MR") is None
-            or self.patient_info["MR"] == Undefined
+            self.patient_info.get("MagneticFieldStrength") is None
+            or self.patient_info["MagneticFieldStrength"] == Undefined
         ):
-            if self.dict4runtime["norm_anat"]["Manufacturer"] != "Undefined":
-                self.patient_info["MR"] = self.dict4runtime["norm_anat"][
-                    "Manufacturer"
-                ]
+
+            if (
+                self.dict4runtime["norm_anat"]["MagneticFieldStrength"]
+                != "Undefined"
+            ):
+                self.patient_info["MagneticFieldStrength"] = self.dict4runtime[
+                    "norm_anat"
+                ]["MagneticFieldStrength"]
 
         else:
-            self.dict4runtime["norm_anat"]["Manufacturer"] = (
-                self.patient_info.get("MR")
+            self.dict4runtime["norm_anat"]["MagneticFieldStrength"] = (
+                self.patient_info.get("MagneticFieldStrength")
             )
 
         if (
@@ -3283,7 +3288,7 @@ class ReportPerfDsc(ProcessMIA):
             "Optional dictionary with information about the patient "
             "(e.g. {"
             "'PatientName': 'sub-1', 'Pathology': 'ACMD', "
-            "'Age': 64, 'Sex': 'M', 'MR': '3T'}"
+            "'Age': 64, 'Sex': 'M', MagneticFieldStrength': '3T'}"
         )
 
         # Outputs description
@@ -3630,7 +3635,7 @@ class ReportPerfDsc(ProcessMIA):
             Pathology=Undefined,
             Age=Undefined,
             Sex=Undefined,
-            MR=Undefined,
+            MagneticFieldStrength=Undefined,
         )
 
         # Outputs traits
@@ -3669,7 +3674,7 @@ class ReportPerfDsc(ProcessMIA):
                 Pathology=Undefined,
                 Age=Undefined,
                 Sex=Undefined,
-                MR=Undefined,
+                MagneticFieldStrength=Undefined,
             )
 
         file_position = (
@@ -3704,6 +3709,7 @@ class ReportPerfDsc(ProcessMIA):
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
             "Institution",
+            "MagneticFieldStrength",
             "Manufacturer",
             "Manufacturer's Model",
             "SoftwareVersions",
@@ -3834,17 +3840,21 @@ class ReportPerfDsc(ProcessMIA):
             )
 
         if (
-            self.patient_info.get("MR") is None
-            or self.patient_info["MR"] == Undefined
+            self.patient_info.get("MagneticFieldStrength") is None
+            or self.patient_info["MagneticFieldStrength"] == Undefined
         ):
-            if self.dict4runtime["norm_anat"]["Manufacturer"] != "Undefined":
-                self.patient_info["MR"] = self.dict4runtime["norm_anat"][
-                    "Manufacturer"
-                ]
+
+            if (
+                self.dict4runtime["norm_anat"]["MagneticFieldStrength"]
+                != "Undefined"
+            ):
+                self.patient_info["MagneticFieldStrength"] = self.dict4runtime[
+                    "norm_anat"
+                ]["MagneticFieldStrength"]
 
         else:
-            self.dict4runtime["norm_anat"]["Manufacturer"] = (
-                self.patient_info.get("MR")
+            self.dict4runtime["norm_anat"]["MagneticFieldStrength"] = (
+                self.patient_info.get("MagneticFieldStrength")
             )
 
         # Site
