@@ -119,6 +119,9 @@ from nipype.interfaces.base import (
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 from nitime.algorithms import AR_est_YW
+
+# Importing niworflow causes problems in unit tests (when the verify_processes
+# function is used in the Test1AMIAOthers.test_verify_processes method).
 from niworkflows.utils.timeseries import _nifti_timeseries
 from niworkflows.viz.plots import fMRIPlot
 from numpy.polynomial import Legendre
