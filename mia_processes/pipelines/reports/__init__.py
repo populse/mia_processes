@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Pipelines used in the reports generation.
 """

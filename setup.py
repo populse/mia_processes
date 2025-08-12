@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The module dedicated to install the mia_processes library."""
 
 ##########################################################################

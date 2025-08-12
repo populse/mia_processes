@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Each package corresponds to a software encapsulated in mia_processes.
 

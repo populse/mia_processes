@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 The MRIQC pipeline for functional MRI data.
 

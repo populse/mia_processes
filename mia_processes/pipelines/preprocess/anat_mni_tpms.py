@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The Anat_mni_tpms pipeline.
 

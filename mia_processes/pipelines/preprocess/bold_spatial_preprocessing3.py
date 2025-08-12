@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The pipelines library of the mia_processes package.
 
 The objective of this module is to propose pipelines built from atomic bricks

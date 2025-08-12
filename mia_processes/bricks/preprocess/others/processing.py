@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The other preprocess library of the mia_processes package.
 
 The purpose of this module is to provide bricks generally necessary for the
@@ -106,7 +105,7 @@ class ApplyBiasCorrection(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ApplyBiasCorrection, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -146,7 +145,7 @@ class ApplyBiasCorrection(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ApplyBiasCorrection, self).list_outputs()
+        super().list_outputs()
 
         if self.in_file:
             if self.output_directory:
@@ -181,7 +180,7 @@ class ApplyBiasCorrection(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
 
-        super(ApplyBiasCorrection, self).run_process_mia()
+        super().run_process_mia()
 
         in_file = self.in_file
         out_file = self.out_file
@@ -222,7 +221,7 @@ class ArtifactMask(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ArtifactMask, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -308,7 +307,7 @@ class ArtifactMask(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ArtifactMask, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -364,7 +363,7 @@ class ArtifactMask(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ArtifactMask, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
         head_mask_name = self.head_mask
@@ -502,7 +501,7 @@ class Binarize(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Binarize, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -573,7 +572,7 @@ class Binarize(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Binarize, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_files:
@@ -614,7 +613,7 @@ class Binarize(ProcessMIA):
                     msg.setText(
                         "Suffix and prefix input parameters are not "
                         "defined or consist only of one or more white "
-                        "spaces.\nThe {0} input parameter will be "
+                        "spaces.\nThe {} input parameter will be "
                         "overwritten ...\n Yes or "
                         "Abort?".format(file_name1)
                     )
@@ -630,7 +629,7 @@ class Binarize(ProcessMIA):
                             "\nBinarize brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwritten ...".format(file_name1)
+                            "\n{} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -727,7 +726,7 @@ class Binarize(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Binarize, self).run_process_mia()
+        super().run_process_mia()
 
         files_name = self.in_files
 
@@ -801,7 +800,7 @@ class ConformImage(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ConformImage, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -850,7 +849,7 @@ class ConformImage(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ConformImage, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -892,7 +891,7 @@ class ConformImage(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(file_name)
                 )
@@ -904,7 +903,7 @@ class ConformImage(ProcessMIA):
                         "\nConformImage brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(file_name)
+                        "\n{} will be overwritten ...".format(file_name)
                     )
                 else:
                     print("\nAborted. Please check your input parameters ...")
@@ -975,7 +974,7 @@ class ConformImage(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ConformImage, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
 
@@ -1048,7 +1047,7 @@ class ConvROI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ConvROI, self).__init__()
+        super().__init__()
 
         # Inputs description
         images_to_convolve_desc = (
@@ -1113,7 +1112,7 @@ class ConvROI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ConvROI, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -1215,7 +1214,7 @@ class ConvROI(ProcessMIA):
                 conv_dir, self.prefix + os.path.basename(roi_file)
             )
             nib.save(result_img, out_file)
-            print("{0} saved".format(out_file))
+            print(f"{out_file} saved")
 
 
 class Enhance(ProcessMIA):
@@ -1239,7 +1238,7 @@ class Enhance(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Enhance, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1303,7 +1302,7 @@ class Enhance(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Enhance, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_files:
@@ -1351,7 +1350,7 @@ class Enhance(ProcessMIA):
                     msg.setText(
                         "Suffix and prefix input parameters are not "
                         "defined or consist only of one or more white "
-                        "spaces.\nThe {0} input parameter will be "
+                        "spaces.\nThe {} input parameter will be "
                         "overwritten ...\n Yes or "
                         "Abort?".format(file_name1)
                     )
@@ -1367,7 +1366,7 @@ class Enhance(ProcessMIA):
                             "\nEnhance brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwritten ...".format(file_name1)
+                            "\n{} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -1461,7 +1460,7 @@ class Enhance(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Enhance, self).run_process_mia()
+        super().run_process_mia()
 
         files_name = self.in_files
 
@@ -1540,7 +1539,7 @@ class EstimateSNR(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(EstimateSNR, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1585,7 +1584,7 @@ class EstimateSNR(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(EstimateSNR, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -1608,7 +1607,7 @@ class EstimateSNR(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(EstimateSNR, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
         seg_file_name = self.seg_file
@@ -1650,7 +1649,7 @@ class ExtractROIbyLabel(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ExtractROIbyLabel, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1739,7 +1738,7 @@ class ExtractROIbyLabel(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ExtractROIbyLabel, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -1802,7 +1801,7 @@ class ExtractROIbyLabel(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ExtractROIbyLabel, self).run_process_mia()
+        super().run_process_mia()
 
         seg_volume = np.asarray(nib.load(self.in_file).dataobj)
         concate_roi = None
@@ -1862,7 +1861,7 @@ class ExtractSignalROI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ExtractSignalROI, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1933,7 +1932,7 @@ class ExtractSignalROI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ExtractSignalROI, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -1973,7 +1972,7 @@ class ExtractSignalROI(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ExtractSignalROI, self).run_process_mia()
+        super().run_process_mia()
 
         masker = NiftiLabelsMasker(
             labels_img=self.in_seg, labels=self.labels, standardize=False
@@ -2008,7 +2007,7 @@ class GradientThreshold(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(GradientThreshold, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2063,7 +2062,7 @@ class GradientThreshold(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(GradientThreshold, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2105,7 +2104,7 @@ class GradientThreshold(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -2117,7 +2116,7 @@ class GradientThreshold(ProcessMIA):
                         "\nGradientThreshold brick warning: the out_file"
                         "output parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -2160,7 +2159,7 @@ class GradientThreshold(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(GradientThreshold, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
         seg_file_name = self.seg_file
@@ -2269,7 +2268,7 @@ class Harmonize(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Harmonize, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2331,7 +2330,7 @@ class Harmonize(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Harmonize, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2371,7 +2370,7 @@ class Harmonize(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -2383,7 +2382,7 @@ class Harmonize(ProcessMIA):
                         "\nHarmonize brick warning: the out_file output "
                         "parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -2426,7 +2425,7 @@ class Harmonize(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Harmonize, self).run_process_mia()
+        super().run_process_mia()
 
         try:
             img = nib.load(self.in_file)
@@ -2504,7 +2503,7 @@ class IntensityClip(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(IntensityClip, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2596,7 +2595,7 @@ class IntensityClip(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(IntensityClip, self).list_outputs()
+        super().list_outputs()
 
         if self.in_file:
             if self.output_directory:
@@ -2625,7 +2624,7 @@ class IntensityClip(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
 
-        super(IntensityClip, self).run_process_mia()
+        super().run_process_mia()
 
         in_file = self.in_file
         out_file = self.out_file
@@ -2688,7 +2687,7 @@ class Mask(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Mask, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2745,7 +2744,7 @@ class Mask(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Mask, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2785,7 +2784,7 @@ class Mask(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -2797,7 +2796,7 @@ class Mask(ProcessMIA):
                         "\nMask brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten...".format(fileName)
+                        "\n{} will be overwritten...".format(fileName)
                     )
 
                 else:
@@ -2839,7 +2838,7 @@ class Mask(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Mask, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
         mask_name = self.mask_file
@@ -2910,7 +2909,7 @@ class NonSteadyStateDetector(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(NonSteadyStateDetector, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2947,7 +2946,7 @@ class NonSteadyStateDetector(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(NonSteadyStateDetector, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2958,7 +2957,7 @@ class NonSteadyStateDetector(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(NonSteadyStateDetector, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
 
@@ -3007,7 +3006,7 @@ class Resample1(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Resample1, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -3111,7 +3110,7 @@ class Resample1(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample1, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if (
@@ -3187,8 +3186,8 @@ class Resample1(ProcessMIA):
                             "Currently, the Resample1 brick only "
                             "allows to resample 3D images from 3D or "
                             "4D reference images.\n\n However the "
-                            "'{0}' reference image is a {1}D and the "
-                            "'{2}' image is a {3}D ...\n\nPlease, "
+                            "'{}' reference image is a {}D and the "
+                            "'{}' image is a {}D ...\n\nPlease, "
                             "modify your input and initialise again "
                             "this brick.".format(
                                 self.reference_image,
@@ -3214,8 +3213,8 @@ class Resample1(ProcessMIA):
                         "mia_processes - Resample1 brick Warning!"
                     )
                     msg.setText(
-                        "files_to_resample '{0}' or/and "
-                        "reference_image '{1}' is (are) empty ... Do "
+                        "files_to_resample '{}' or/and "
+                        "reference_image '{}' is (are) empty ... Do "
                         "you want to continue? \n\n"
                         "- To correct the input parameters "
                         "click 'Abort'.\n\n"
@@ -3297,7 +3296,7 @@ class Resample1(ProcessMIA):
                     print(
                         "\nResample1 brick warning: suffix and prefix input "
                         "parameters are not defined, the following files "
-                        "could be overwrite!:\n{0} ...\n".format(set(files))
+                        "could be overwrite!:\n{} ...\n".format(set(files))
                     )
 
                 else:
@@ -3392,7 +3391,7 @@ class Resample1(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Resample1, self).run_process_mia()
+        super().run_process_mia()
         files_name = self.files_to_resample
         refName = nib.load(self.reference_image)
         print(
@@ -3488,7 +3487,7 @@ class Resample2(ProcessMIA):
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
         """
-        super(Resample2, self).__init__()
+        super().__init__()
 
         # Inputs description
         files_to_resample_desc = (
@@ -3557,7 +3556,7 @@ class Resample2(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample2, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -3647,11 +3646,7 @@ class Resample2(ProcessMIA):
             out_file = out_file_no_ext + self.suffix + file_extension
             out_file = os.path.join(conv_dir2, out_file)
             nib.save(resized_roi_img, out_file)
-            print(
-                "\nResample2 brick:{0} saved".format(
-                    os.path.basename(out_file)
-                )
-            )
+            print(f"\nResample2 brick:{os.path.basename(out_file)} saved")
 
 
 class RotationMask(ProcessMIA):
@@ -3675,7 +3670,7 @@ class RotationMask(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(RotationMask, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -3726,7 +3721,7 @@ class RotationMask(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(RotationMask, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -3768,7 +3763,7 @@ class RotationMask(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -3780,7 +3775,7 @@ class RotationMask(ProcessMIA):
                         "\nRotationMask brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -3823,7 +3818,7 @@ class RotationMask(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(RotationMask, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
 
@@ -3920,7 +3915,7 @@ class Sanitize(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Sanitize, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -3988,7 +3983,7 @@ class Sanitize(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Sanitize, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -4028,7 +4023,7 @@ class Sanitize(ProcessMIA):
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -4040,7 +4035,7 @@ class Sanitize(ProcessMIA):
                         "\nSanitize brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -4123,7 +4118,7 @@ class Sanitize(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Sanitize, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
 
@@ -4281,7 +4276,7 @@ class TSNR(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(TSNR, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -4362,7 +4357,7 @@ class TSNR(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(TSNR, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -4404,7 +4399,7 @@ class TSNR(ProcessMIA):
                 msg.setText(
                     "suffix_tsnr and prefix_tsnr input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -4416,7 +4411,7 @@ class TSNR(ProcessMIA):
                         "\nTSNR brick warning: the out_tsnr_file output "
                         "parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
 
                 else:
@@ -4465,7 +4460,7 @@ class TSNR(ProcessMIA):
                 msg.setText(
                     "suffix_stddev and prefix_stddev input parameters are not "
                     "defined or consist only of one or more white "
-                    "spaces.\nThe {0} input parameter will be "
+                    "spaces.\nThe {} input parameter will be "
                     "overwritten ...\n Yes or "
                     "Abort?".format(fileName)
                 )
@@ -4477,7 +4472,7 @@ class TSNR(ProcessMIA):
                         "\nTSNR brick warning: the out_stddev_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwritten ...".format(fileName)
+                        "\n{} will be overwritten ...".format(fileName)
                     )
                 else:
                     print(
@@ -4519,7 +4514,7 @@ class TSNR(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(TSNR, self).run_process_mia()
+        super().run_process_mia()
 
         file_name = self.in_file
 
@@ -4609,7 +4604,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(TemplateFromTemplateFlow, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -4682,7 +4677,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(TemplateFromTemplateFlow, self).list_outputs()
+        super().list_outputs()
 
         if not self.suffix:
             suffix = None
@@ -4716,7 +4711,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
         if not tpl_target_path:
             print(
                 "\nTemplateFromTemplateFlow brick: Could not find template "
-                "'{0}' with specs={1}. Please revise your template "
+                "'{}' with specs={}. Please revise your template "
                 "argument.".format(self.in_template, template_spec)
             )
             return
@@ -4724,8 +4719,8 @@ class TemplateFromTemplateFlow(ProcessMIA):
         if isinstance(tpl_target_path, list):
             print(
                 "\nTemplateFromTemplateFlow brick: The available template "
-                "modifiers ({0}) did not select a unique template (got "
-                "'{1}'). Please revise your template "
+                "modifiers ({}) did not select a unique template (got "
+                "'{}'). Please revise your template "
                 "argument.".format(self.in_template, template_spec)
             )
             return
@@ -4737,7 +4732,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(TemplateFromTemplateFlow, self).run_process_mia()
+        super().run_process_mia()
 
 
 class Threshold(ProcessMIA):
@@ -4758,7 +4753,7 @@ class Threshold(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Threshold, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -4873,7 +4868,7 @@ class Threshold(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Threshold, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_files != Undefined and (
@@ -4928,7 +4923,7 @@ class Threshold(ProcessMIA):
                     msg.setText(
                         "Suffix and prefix input parameters are not "
                         "defined or consist only of one or more white "
-                        "spaces.\nThe {0} input parameter will be "
+                        "spaces.\nThe {} input parameter will be "
                         "overwritten ...\n Yes or "
                         "Abort?".format(file_name1)
                     )
@@ -4944,7 +4939,7 @@ class Threshold(ProcessMIA):
                             "\nThreshold brick warning: the out_files output "
                             "parameter is the same as the in_files input "
                             "parameter (suffix and prefix are not defined):"
-                            "\n{0} will be overwritten ...".format(file_name1)
+                            "\n{} will be overwritten ...".format(file_name1)
                         )
 
                         if retval == QMessageBox.YesToAll:
@@ -5033,7 +5028,7 @@ class Threshold(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Threshold, self).run_process_mia()
+        super().run_process_mia()
 
         if self.GM_filtering is True:
             files_name = self._namesFilter()

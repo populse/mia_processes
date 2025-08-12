@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The library for the SPM fMRI statistical analysis of the mia_processes
 package.
 
@@ -73,7 +71,7 @@ class EstimateContrast(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(EstimateContrast, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -337,7 +335,7 @@ class EstimateContrast(ProcessMIA):
         :param iteration: the state, iterative or not, of the process.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
-        super(EstimateContrast, self).list_outputs()
+        super().list_outputs()
 
         # We cannot directly called Nipype's method to get all the output
         # because we want to avoid to read in the SPM.mat file
@@ -458,14 +456,10 @@ class EstimateContrast(ProcessMIA):
                 if nb_contrasts_old is not None:
                     i += nb_contrasts_old
                 spmT_files.append(
-                    os.path.join(
-                        self.output_directory, "spmT_{:04d}.nii".format(i)
-                    )
+                    os.path.join(self.output_directory, f"spmT_{i:04d}.nii")
                 )
                 con_files.append(
-                    os.path.join(
-                        self.output_directory, "con_{:04d}.nii".format(i)
-                    )
+                    os.path.join(self.output_directory, f"con_{i:04d}.nii")
                 )
 
             spmF_files = []
@@ -480,13 +474,11 @@ class EstimateContrast(ProcessMIA):
                         i += nb_contrasts_old
                     spmF_files.append(
                         os.path.join(
-                            self.output_directory, "spmF_{:04d}.nii".format(i)
+                            self.output_directory, f"spmF_{i:04d}.nii"
                         )
                     )
                     ess_files.append(
-                        os.path.join(
-                            self.output_directory, "ess_{:04d}.nii".format(i)
-                        )
+                        os.path.join(self.output_directory, f"ess_{i:04d}.nii")
                     )
 
             if spmT_files:
@@ -572,7 +564,7 @@ class EstimateContrast(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
 
-        super(EstimateContrast, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.spm_mat_file = self.spm_mat_file
         self.process.contrasts = self._get_contrasts()
@@ -605,7 +597,7 @@ class EstimateModel(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(EstimateModel, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -946,7 +938,7 @@ class EstimateModel(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(EstimateModel, self).list_outputs()
+        super().list_outputs()
 
         # We cannot directly call Nipype's method to get all the output
         # because we want to avoid to read in the SPM.mat file
@@ -1065,13 +1057,13 @@ class EstimateModel(ProcessMIA):
 
             if "Classical" in self.estimation_method.keys():
                 self.outputs["residual_image"] = os.path.join(
-                    self.output_directory, "ResMS.{}".format(im_form)
+                    self.output_directory, f"ResMS.{im_form}"
                 )
                 self.outputs["RPVimage"] = os.path.join(
-                    self.output_directory, "RPV.{}".format(im_form)
+                    self.output_directory, f"RPV.{im_form}"
                 )
                 self.outputs["mask_image"] = os.path.join(
-                    self.output_directory, "mask.{}".format(im_form)
+                    self.output_directory, f"mask.{im_form}"
                 )
 
                 if self.write_residuals:
@@ -1085,7 +1077,7 @@ class EstimateModel(ProcessMIA):
 
                         for i in range(nb_dyn):
                             i += 1
-                            ress.append("Res_{:04d}.{}".format(i, im_form))
+                            ress.append(f"Res_{i:04d}.{im_form}")
 
                         if ress:
                             self.outputs["residual_images"] = [
@@ -1112,7 +1104,7 @@ class EstimateModel(ProcessMIA):
                     )
                 ):
                     i += 1
-                    betas.append("beta_{:04d}.{}".format(i, im_form))
+                    betas.append(f"beta_{i:04d}.{im_form}")
 
                 if betas:
                     self.outputs["beta_images"] = [
@@ -1169,8 +1161,8 @@ class EstimateModel(ProcessMIA):
                 spmFs = []
                 for i in range(number_f_contrast):
                     i += 1
-                    esss.append("ess_{:04d}.{}".format(i, im_form))
-                    spmFs.append("spmF_{:04d}.{}".format(i, im_form))
+                    esss.append(f"ess_{i:04d}.{im_form}")
+                    spmFs.append(f"spmF_{i:04d}.{im_form}")
 
                     if esss:
                         self.outputs["ess_images"] = [
@@ -1185,8 +1177,8 @@ class EstimateModel(ProcessMIA):
                 for i in range(number_t_contrast):
                     i += 1
                     i += number_f_contrast
-                    cons.append("con_{:04d}.{}".format(i, im_form))
-                    spmTs.append("spmT_{:04d}.{}".format(i, im_form))
+                    cons.append(f"con_{i:04d}.{im_form}")
+                    spmTs.append(f"spmT_{i:04d}.{im_form}")
 
                     if cons:
                         self.outputs["con_images"] = [
@@ -1264,7 +1256,7 @@ class EstimateModel(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(EstimateModel, self).run_process_mia()
+        super().run_process_mia()
         self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
         self.process.estimation_method = self.estimation_method
         self.process.write_residuals = self.write_residuals
@@ -1290,7 +1282,7 @@ class Level1Design(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Level1Design, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -1819,8 +1811,8 @@ class Level1Design(ProcessMIA):
                 "Warning: The number of values in the "
                 "sess_cond_durations parameter does not correspond to "
                 "the number of values in the sess_cond_onsets "
-                "parameter, for the session '{0}' and the "
-                "condition '{1}'! Please, check your "
+                "parameter, for the session '{}' and the "
+                "condition '{}'! Please, check your "
                 "settings ...".format(idx_session, cond["name"])
             )
             msg.setStandardButtons(QMessageBox.Close)
@@ -2020,7 +2012,7 @@ class Level1Design(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Level1Design, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -2281,7 +2273,7 @@ class Level1Design(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Level1Design, self).run_process_mia()
+        super().run_process_mia()
         # Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)
         if self.output_directory:
             out_file = os.path.join(
@@ -2342,7 +2334,7 @@ class MultipleRegressionDesign(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(MultipleRegressionDesign, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -2629,7 +2621,7 @@ class MultipleRegressionDesign(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(MultipleRegressionDesign, self).list_outputs()
+        super().list_outputs()
 
         # global_calc_values only if global_calc set to "User"
         if (self.global_calc) == "User" and (
@@ -2734,7 +2726,7 @@ class MultipleRegressionDesign(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(MultipleRegressionDesign, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.spm_mat_dir = self.dict4runtime["out_directory"]
         self.process.in_files = self.in_files
@@ -2792,7 +2784,7 @@ class OneSampleTTestDesign(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(OneSampleTTestDesign, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -3028,7 +3020,7 @@ class OneSampleTTestDesign(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(OneSampleTTestDesign, self).list_outputs()
+        super().list_outputs()
 
         # global_calc_values only if global_calc set to "User"
         if (self.global_calc) == "User" and (
@@ -3114,7 +3106,7 @@ class OneSampleTTestDesign(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(OneSampleTTestDesign, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.spm_mat_dir = self.dict4runtime["out_directory"]
         self.process.in_files = self.in_files
@@ -3164,7 +3156,7 @@ class PairedTTestDesign(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(PairedTTestDesign, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -3405,7 +3397,7 @@ class PairedTTestDesign(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(PairedTTestDesign, self).list_outputs()
+        super().list_outputs()
 
         # global_calc_values only if global_calc set to "User"
         if (self.global_calc) == "User" and (
@@ -3490,7 +3482,7 @@ class PairedTTestDesign(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(PairedTTestDesign, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.spm_mat_dir = self.dict4runtime["out_directory"]
         self.process.paired_files = self.paired_files
@@ -3540,7 +3532,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(TwoSampleTTestDesign, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -3815,7 +3807,7 @@ class TwoSampleTTestDesign(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(TwoSampleTTestDesign, self).list_outputs()
+        super().list_outputs()
 
         # global_calc_values only if global_calc set to "User"
         if (self.global_calc) == "User" and (
@@ -3904,7 +3896,7 @@ class TwoSampleTTestDesign(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(TwoSampleTTestDesign, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.spm_mat_dir = self.dict4runtime["out_directory"]
         self.process.group1_files = self.group1_files

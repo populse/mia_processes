@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The pipelines library of the mia_processes package.
 
 The objective of this module is to propose pipelines built from atomic bricks
@@ -10,6 +8,7 @@ or other pipelines provided in the mia_processes library.
         - Dwi_preprocessing
 
 """
+
 from capsul.api import Pipeline
 
 

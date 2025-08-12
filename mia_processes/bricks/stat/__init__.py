@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The package dedicated to statistical calculations.
 

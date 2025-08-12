@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 The pipeline dedicated to the IQMs extraction for functional IRM data.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The Anat_spatial_norm pipeline.
 

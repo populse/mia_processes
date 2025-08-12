@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The various pipelines used for the pre-treatment stage.
 

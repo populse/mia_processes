@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The pipelines used for the CerebroVascular Reactivity evaluation.
 

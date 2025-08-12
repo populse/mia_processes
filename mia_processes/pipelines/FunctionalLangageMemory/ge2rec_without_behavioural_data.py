@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The pipelines library of the mia_processes package.
 
 The GE2REC_without_behavioural_data pipeline

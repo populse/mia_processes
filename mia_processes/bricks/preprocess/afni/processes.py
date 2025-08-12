@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The afni preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main afni preprocessing bricks
@@ -79,7 +77,7 @@ class Automask(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Automask, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -209,7 +207,7 @@ class Automask(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Automask, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -265,7 +263,7 @@ class Automask(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Automask, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
         self.process.out_file = self.out_file
@@ -297,7 +295,7 @@ class Calc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Calc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -451,7 +449,7 @@ class Calc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Calc, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (self.start_idx != Undefined and self.stop_idx == Undefined) or (
@@ -500,7 +498,7 @@ class Calc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Calc, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file_a = self.in_file_a
         self.process.in_file_b = self.in_file_b
         self.process.in_file_c = self.in_file_c
@@ -535,7 +533,7 @@ class CalcDropTRs(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(CalcDropTRs, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -618,7 +616,7 @@ class CalcDropTRs(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(CalcDropTRs, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -674,7 +672,7 @@ class CalcDropTRs(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(CalcDropTRs, self).run_process_mia()
+        super().run_process_mia()
 
         if self.in_file == self.out_file:
             return
@@ -725,7 +723,7 @@ class Despike(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Despike, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -800,7 +798,7 @@ class Despike(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Despike, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -845,7 +843,7 @@ class Despike(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Despike, self).run_process_mia()
+        super().run_process_mia()
         if not self.despike:
             return
 
@@ -874,7 +872,7 @@ separately*
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(FWHMx, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -960,7 +958,7 @@ separately*
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(FWHMx, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -996,7 +994,7 @@ separately*
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(FWHMx, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         if self.mask_file:
@@ -1029,7 +1027,7 @@ voxel, over any given mask*
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(GCOR, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -1099,14 +1097,14 @@ voxel, over any given mask*
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(GCOR, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             if self.output_directory:
                 out_directory = os.path.join(
                     self.output_directory,
-                    "_dataGCOR{}".format(uuid.uuid4().hex[:6].upper()),
+                    f"_dataGCOR{uuid.uuid4().hex[:6].upper()}",
                 )
 
                 try:
@@ -1138,7 +1136,7 @@ voxel, over any given mask*
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(GCOR, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         self.process.mask = self.mask_file
@@ -1168,7 +1166,7 @@ separately*
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(OutlierCount, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -1305,7 +1303,7 @@ separately*
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(OutlierCount, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1351,7 +1349,7 @@ separately*
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(OutlierCount, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         if self.automask:
@@ -1390,7 +1388,7 @@ class QualityIndex(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(QualityIndex, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -1501,7 +1499,7 @@ class QualityIndex(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(QualityIndex, self).list_outputs()
+        super().list_outputs()
 
         if (self.automask and self.mask_file) or (
             self.autoclip and self.mask_file
@@ -1546,7 +1544,7 @@ class QualityIndex(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(QualityIndex, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         if self.autoclip:
@@ -1583,7 +1581,7 @@ class RefitDeoblique(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(RefitDeoblique, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -1632,7 +1630,7 @@ class RefitDeoblique(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(RefitDeoblique, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1648,7 +1646,7 @@ class RefitDeoblique(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(RefitDeoblique, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         self.process.deoblique = self.deoblique
@@ -1674,7 +1672,7 @@ class SkullStrip(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SkullStrip, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -1743,7 +1741,7 @@ class SkullStrip(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SkullStrip, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1782,7 +1780,7 @@ class SkullStrip(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SkullStrip, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
         self.process.out_file = self.out_file
@@ -1811,7 +1809,7 @@ class TShift(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(TShift, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -2046,7 +2044,7 @@ class TShift(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(TShift, self).list_outputs()
+        super().list_outputs()
 
         if self.slice_timing and self.tpattern != Undefined:
             print(
@@ -2107,7 +2105,7 @@ class TShift(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(TShift, self).run_process_mia()
+        super().run_process_mia()
         if not self.slice_timing and self.tpattern == Undefined:
             return
 
@@ -2154,7 +2152,7 @@ class TStatMean(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(TStatMean, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -2223,7 +2221,7 @@ class TStatMean(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(TStatMean, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -2262,7 +2260,7 @@ class TStatMean(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(TStatMean, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.in_file = self.in_file
         self.process.args = "-mean"
@@ -2293,7 +2291,7 @@ class Volreg(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Volreg, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["afni", "nipype"]
@@ -2475,7 +2473,7 @@ class Volreg(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Volreg, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -2543,7 +2541,7 @@ class Volreg(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Volreg, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
         self.process.interp = self.interpolation

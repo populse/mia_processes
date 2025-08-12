@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The fsl preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main fsl preprocessing bricks
@@ -58,7 +56,7 @@ class Bet(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Bet, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -476,7 +474,7 @@ class Bet(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Bet, self).list_outputs()
+        super().list_outputs()
 
         t2_guided = False
         if self.t2_guided:
@@ -582,7 +580,7 @@ class Bet(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Bet, self).run_process_mia()
+        super().run_process_mia()
         self.process.output_type = self.output_type
         self.process.in_file = self.in_file
         if self.center:
@@ -632,7 +630,7 @@ class BetSurfacesExtraction(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(BetSurfacesExtraction, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -788,7 +786,7 @@ class BetSurfacesExtraction(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(BetSurfacesExtraction, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -857,7 +855,7 @@ class BetSurfacesExtraction(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(BetSurfacesExtraction, self).run_process_mia()
+        super().run_process_mia()
         self.process.output_type = self.output_type
         self.process.in_file = self.in_file
 
@@ -883,7 +881,7 @@ class ConvertXFM(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ConvertXFM, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -986,7 +984,7 @@ class ConvertXFM(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ConvertXFM, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance
         if self.in_transfo:
@@ -1050,7 +1048,7 @@ class ConvertXFM(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ConvertXFM, self).run_process_mia()
+        super().run_process_mia()
         self.process.output_type = self.output_type
         self.process.in_file = self.in_transfo
         self.process.out_file = self.out_file
@@ -1082,7 +1080,7 @@ class EpiReg(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(EpiReg, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -1336,7 +1334,7 @@ class EpiReg(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(EpiReg, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance
         if self.in_epi:
@@ -1455,7 +1453,7 @@ class EpiReg(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(EpiReg, self).run_process_mia()
+        super().run_process_mia()
         self.process.output_type = self.output_type
         self.process.epi = self.in_epi
         self.process.t1_head = self.in_t1
@@ -1495,7 +1493,7 @@ class ExtractROI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ExtractROI, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -1668,7 +1666,7 @@ class ExtractROI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ExtractROI, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1699,7 +1697,7 @@ class ExtractROI(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ExtractROI, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.output_type = self.output_type
         self.process.roi_file = self.roi_file
@@ -1741,7 +1739,7 @@ class FastSegment(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(FastSegment, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -1864,7 +1862,7 @@ class FastSegment(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(FastSegment, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1945,7 +1943,7 @@ class FastSegment(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(FastSegment, self).run_process_mia()
+        super().run_process_mia()
         self.process.img_type = self.img_type
         self.process.in_files = self.in_file
         _, fileIval = os.path.split(self.in_file)
@@ -1977,7 +1975,7 @@ class Flirt(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Flirt, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -2603,7 +2601,7 @@ class Flirt(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Flirt, self).list_outputs()
+        super().list_outputs()
 
         if self.apply_isoxfm and self.apply_xfm:
             print(
@@ -2691,7 +2689,7 @@ class Flirt(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Flirt, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.reference = self.in_reference_file
         if self.out_file:
@@ -2782,7 +2780,7 @@ class Smooth(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Smooth, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["fsl", "nipype"]
@@ -2893,7 +2891,7 @@ class Smooth(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Smooth, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.sigma == Undefined and self.fwhm == Undefined:
@@ -2945,7 +2943,7 @@ class Smooth(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Smooth, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
 
         if self.fwhm == Undefined:

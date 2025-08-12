@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The bricks and functions to calculate the values needed in the reports
 and to create the report itself.

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The toolbox library of the mia_processes package.
 
 Basically, this module is dedicated to the low-level processes
@@ -122,7 +120,7 @@ class Concat_to_list(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Concat_to_list, self).__init__()
+        super().__init__()
 
         # Inputs description
         list1_desc = "A list"
@@ -169,7 +167,7 @@ class Concat_to_list(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Concat_to_list, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.list1 not in [[], traits.Undefined] and self.list2 not in [
@@ -212,7 +210,7 @@ class Concat_to_list_of_list(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Concat_to_list_of_list, self).__init__()
+        super().__init__()
 
         LIST1 = [
             "ACA",
@@ -272,7 +270,7 @@ class Concat_to_list_of_list(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Concat_to_list_of_list, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.list1 not in [[], traits.Undefined] and self.list2 not in [
@@ -313,7 +311,7 @@ class Deconv_from_aif(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Deconv_from_aif, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -757,7 +755,7 @@ class Deconv_from_aif(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Deconv_from_aif, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.outputs:
@@ -921,10 +919,10 @@ class Deconv_from_aif(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Deconv_from_aif, self).run_process_mia()
+        super().run_process_mia()
 
         # load aif
-        with open(self.aif_file, "r") as f:
+        with open(self.aif_file) as f:
             aif = np.array(json.load(f)["aif"])
 
         # load functional
@@ -1110,7 +1108,7 @@ class Delete_data(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Delete_data, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -1177,7 +1175,7 @@ class Delete_data(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
 
-        super(Delete_data, self).list_outputs()
+        super().list_outputs()
 
         if self.to_keep_filters and self.to_remove_filters:
             print(
@@ -1254,7 +1252,7 @@ class Files_To_List(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Files_To_List, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -1308,7 +1306,7 @@ class Files_To_List(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Files_To_List, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.file1 not in ["<undefined>", traits.Undefined]:
@@ -1366,7 +1364,7 @@ class Filter_Files_List(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Filter_Files_List, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -1421,7 +1419,7 @@ class Filter_Files_List(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Filter_Files_List, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_list and self.in_list not in [
@@ -1505,7 +1503,7 @@ class Find_In_List(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Find_In_List, self).__init__()
+        super().__init__()
 
         # Inputs description
         in_list_desc = (
@@ -1561,7 +1559,7 @@ class Find_In_List(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Find_In_List, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_list and self.in_list not in [
@@ -1604,7 +1602,7 @@ class Get_Conditions_From_BIDS_tsv(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Conditions_From_BIDS_tsv, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -1682,7 +1680,7 @@ class Get_Conditions_From_BIDS_tsv(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Conditions_From_BIDS_tsv, self).list_outputs()
+        super().list_outputs()
 
         all_cond_names = []
         all_cond_onsets = []
@@ -1773,7 +1771,7 @@ class Get_Conditions_From_csv(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Conditions_From_csv, self).__init__()
+        super().__init__()
 
         # Inputs description
         csv_files_desc = (
@@ -1862,7 +1860,7 @@ class Get_Conditions_From_csv(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Conditions_From_csv, self).list_outputs()
+        super().list_outputs()
 
         if len(self.csv_files) != len(self.design_type):
             print(
@@ -1967,7 +1965,7 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Eprime_Info_GE2REC, self).__init__()
+        super().__init__()
 
         # Inputs description
         eprime_file_desc = "Eprime file"
@@ -2051,7 +2049,7 @@ class Get_Eprime_Info_GE2REC(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Eprime_Info_GE2REC, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.eprime_file:
@@ -2287,7 +2285,7 @@ class Get_Patient_Name(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Patient_Name, self).__init__()
+        super().__init__()
 
         # Inputs description
         in_file_desc = "In file"
@@ -2328,7 +2326,7 @@ class Get_Patient_Name(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Patient_Name, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -2374,7 +2372,7 @@ class Get_Regressors_From_csv(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Get_Regressors_From_csv, self).__init__()
+        super().__init__()
 
         # Inputs description
         csv_files_desc = (
@@ -2430,7 +2428,7 @@ class Get_Regressors_From_csv(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Get_Regressors_From_csv, self).list_outputs()
+        super().list_outputs()
         sess_regress_level1design = []
         for csv_file in self.csv_files:
             # Check extension
@@ -2497,7 +2495,7 @@ class Import_Data(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Import_Data, self).__init__()
+        super().__init__()
 
         # Inputs description
         rois_list_desc = (
@@ -2589,7 +2587,7 @@ class Import_Data(ProcessMIA):
         """
 
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Import_Data, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -2729,7 +2727,7 @@ class Input_Filter(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Input_Filter, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -2777,7 +2775,7 @@ class Input_Filter(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Input_Filter, self).list_outputs()
+        super().list_outputs()
 
         # TODO: MAYBE WE DON'T NEED THAT, IT SHOULD BE DONE IN
         #       open_filter of PipelineEditor?
@@ -2882,7 +2880,7 @@ class List_Duplicate(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(List_Duplicate, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -2928,7 +2926,7 @@ class List_Duplicate(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(List_Duplicate, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.file_name:
@@ -2962,7 +2960,7 @@ class List_To_File(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(List_To_File, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -3015,7 +3013,7 @@ class List_To_File(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(List_To_File, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.file_list and self.file_list not in [
@@ -3067,7 +3065,7 @@ class List_Of_List_To_List(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(List_Of_List_To_List, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -3120,7 +3118,7 @@ class List_Of_List_To_List(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(List_Of_List_To_List, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.list_of_list and self.list_of_list not in [
@@ -3174,7 +3172,7 @@ class Make_AIF(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Make_AIF, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -3343,7 +3341,7 @@ class Make_AIF(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Make_AIF, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.outputs:
@@ -3375,7 +3373,7 @@ class Make_AIF(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Make_AIF, self).run_process_mia()
+        super().run_process_mia()
         header, data = self.load_nii(self.func_file, False, True)
         # TODO: Perhaps we should do here a test to find out whether it's a
         #       4D or a 3D? using a try statement ?
@@ -3446,7 +3444,7 @@ class Make_AIF(ProcessMIA):
             # Calculate t1 and t2
             threshold = min_val[idx] + 4 * std_val
             t1 = np.argmax(data[idx] <= threshold)
-            t2 = len(data[idx]) - 1 - np.argmax((data[idx][::-1] <= threshold))
+            t2 = len(data[idx]) - 1 - np.argmax(data[idx][::-1] <= threshold)
 
             # Calculate saturated_voxel
             if t1 < t2:
@@ -3585,7 +3583,7 @@ class Make_A_List(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Make_A_List, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -3627,7 +3625,7 @@ class Make_A_List(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Make_A_List, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.outputs:
@@ -3686,7 +3684,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(Make_CVR_reg_physio, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []  # no need of third party software!
@@ -3826,7 +3824,7 @@ class Make_CVR_reg_physio(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Make_CVR_reg_physio, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         # if self.outputs:
@@ -3924,7 +3922,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             if file_extension == "txt":
                 # TODO: Not yet tested
 
-                with open(self.trigger_data, "r") as fil:
+                with open(self.trigger_data) as fil:
                     lines = fil.readlines()
 
                     for line in lines:
@@ -3964,7 +3962,7 @@ class Make_CVR_reg_physio(ProcessMIA):
 
             elif file_extension == "log":
                 # tested: OK
-                with open(self.trigger_data, "r") as fil:
+                with open(self.trigger_data) as fil:
                     lines = fil.readlines()[5:]  # Skip header lines
                     trig_times = []
 
@@ -4028,7 +4026,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 )[0]
                 starttime = int(short_fname.split("_")[1])
 
-                with open(self.trigger_data, "r") as fil:
+                with open(self.trigger_data) as fil:
                     lines = fil.readlines()[2:]  # Skip header lines
                     trig_times = []
 
@@ -4062,7 +4060,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 data_s = []
                 paramnames = None
 
-                with open(self.physio_data, "r") as fid:
+                with open(self.physio_data) as fid:
 
                     for line in fid:
                         times.append(line[:9])
@@ -4502,7 +4500,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 # tested: OK
                 print("Data from CoolTerm application detected ...")
 
-                with open(self.physio_data, "r") as fid:
+                with open(self.physio_data) as fid:
                     lines = fid.readlines()
 
                 # Replacing multiple delimiters with single delimiter
@@ -4724,7 +4722,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 "individual regressor has failed!\nTraceback:"
             )
             print("".join(traceback.format_tb(e.__traceback__)), end="")
-            print("{0}: {1}\n".format(e.__class__.__name__, e))
+            print(f"{e.__class__.__name__}: {e}\n")
             print("\n...Using the standard regressor...\n")
             tag_to_add["value"] = "Standard"
             config = Config()

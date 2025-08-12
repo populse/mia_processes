@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The Bold_mni_align pipeline.
 

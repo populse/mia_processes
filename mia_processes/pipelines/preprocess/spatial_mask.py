@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The module for the Spatial_mask pipeline.
 
 :Contains:

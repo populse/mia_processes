@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The spm preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main spm preprocessing bricks
@@ -92,7 +90,7 @@ class Coregister(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Coregister, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -338,7 +336,7 @@ class Coregister(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Coregister, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -500,7 +498,7 @@ class Coregister(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Coregister, self).run_process_mia()
+        super().run_process_mia()
         self.process.target = self.target
         self.process.source = self.source
         self.process.jobtype = self.jobtype
@@ -539,7 +537,7 @@ class GM_WM_Normalize(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(GM_WM_Normalize, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -772,7 +770,7 @@ class GM_WM_Normalize(ProcessMIA):
 
                     if (img1.affine != img2.affine).all():
                         print(
-                            "\nWarning! The affine arrays for {0} and {1} "
+                            "\nWarning! The affine arrays for {} and {} "
                             "are not the same. This can produce an erroneous "
                             "result!".format(i, j)
                         )
@@ -782,7 +780,7 @@ class GM_WM_Normalize(ProcessMIA):
 
                     if img1_data.shape != img2_data.shape:
                         print(
-                            "\nWarning! The shapes for {0} and {1} are not "
+                            "\nWarning! The shapes for {} and {} are not "
                             "the same. This can produce an erroneous "
                             "result!".format(i, j)
                         )
@@ -821,7 +819,7 @@ class GM_WM_Normalize(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(GM_WM_Normalize, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         self.runFlag = False
@@ -921,7 +919,7 @@ class GM_WM_Normalize(ProcessMIA):
         # capsul/process/nipype_process module raises an exception in nipype
         # if the mandatory parameters are not yet defined, the next line
         # can't be write before!
-        super(GM_WM_Normalize, self).run_process_mia()
+        super().run_process_mia()
         return self.process.run(configuration_dict={})
 
 
@@ -943,7 +941,7 @@ class NewSegment(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # initialisation of the objects needed for the launch of the brick
-        super(NewSegment, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -1276,7 +1274,7 @@ class NewSegment(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(NewSegment, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -1392,7 +1390,7 @@ class NewSegment(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(NewSegment, self).run_process_mia()
+        super().run_process_mia()
         self.process.channel_files = self.channel_files
         self.process.channel_info = self.channel_info
         self.process.tissues = self.tissues
@@ -1421,7 +1419,7 @@ class Normalize12(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Normalize12, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -1743,7 +1741,7 @@ class Normalize12(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Normalize12, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         _flag = False
@@ -1950,7 +1948,7 @@ class Normalize12(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Normalize12, self).run_process_mia()
+        super().run_process_mia()
         self.process.trait("image_to_align").optional = True
         self.process.image_to_align = self.image_to_align
         self.process.jobtype = self.jobtype
@@ -2001,7 +1999,7 @@ class Realign(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Realign, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -2309,7 +2307,7 @@ class Realign(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Realign, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_files and self.in_files != [Undefined]:
@@ -2479,7 +2477,7 @@ class Realign(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Realign, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_files = self.in_files
 
         if self.out_prefix:
@@ -2518,7 +2516,7 @@ class SliceTiming(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SliceTiming, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -2960,7 +2958,7 @@ class SliceTiming(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SliceTiming, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_files and self.in_files != [Undefined]:
@@ -3028,7 +3026,7 @@ class SliceTiming(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SliceTiming, self).run_process_mia()
+        super().run_process_mia()
 
         # in_files parameter are normally already in absolute path format.
         # So, the 3 next lines can be see as "in case of"...
@@ -3067,7 +3065,7 @@ class Smooth(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Smooth, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["spm", "nipype"]
@@ -3165,7 +3163,7 @@ class Smooth(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Smooth, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_files and self.in_files != [Undefined]:
@@ -3233,7 +3231,7 @@ class Smooth(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Smooth, self).run_process_mia()
+        super().run_process_mia()
 
         # in_files parameter are normally already in absolute path format.
         # So, the 3 next lines can be see as "in case of"...

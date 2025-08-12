@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The module dedicated to the main information on mia_processes.
 
 The info.py module is mainly used by the setup.py module.
@@ -26,12 +24,12 @@ version_extra = "dev"  # leave empty for release
 
 # Expected by setup.py: string of form "X.Y.Z"
 if version_extra:
-    __version__ = "{0}.{1}.{2}-{3}".format(
+    __version__ = "{}.{}.{}-{}".format(
         version_major, version_minor, version_micro, version_extra
     )
 
 else:
-    __version__ = "{0}.{1}.{2}".format(
+    __version__ = "{}.{}.{}".format(
         version_major, version_minor, version_micro
     )
 
@@ -81,7 +79,7 @@ if __version__.endswith("-dev"):
     gitversion = get_gitversion()
 
     if gitversion:
-        __version__ = "{0}+{1}".format(__version__, gitversion)
+        __version__ = f"{__version__}+{gitversion}"
 
 # Expected by setup.py: the status of the project
 CLASSIFIERS = [

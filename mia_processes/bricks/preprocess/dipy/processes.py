@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The dipy preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main dipy preprocessing bricks
@@ -61,7 +59,7 @@ class Denoise(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Denoise, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["nipype"]
@@ -187,7 +185,7 @@ class Denoise(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Denoise, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -223,7 +221,7 @@ class Denoise(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Denoise, self).run_process_mia()
+        super().run_process_mia()
         self.process.in_file = self.in_file
         self.process.block_radius = self.block_radius
         self.process.noise_model = self.noise_model
@@ -259,7 +257,7 @@ class ComputeDKI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ComputeDKI, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         # self.requirement = ["nipype"]
@@ -366,7 +364,7 @@ class ComputeDKI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ComputeDKI, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_dwi:
@@ -447,7 +445,7 @@ class ComputeDKI(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ComputeDKI, self).run_process_mia()
+        super().run_process_mia()
 
         data, affine = load_nifti(self.in_dwi)
         bvals, bvecs = read_bvals_bvecs(self.dwi_bval, self.dwi_bvec)

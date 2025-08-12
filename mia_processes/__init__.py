@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Mia_processes is the official bricks library for populse_mia.
 A brick can be an atomic operation or a pipeline (a succession of atomic

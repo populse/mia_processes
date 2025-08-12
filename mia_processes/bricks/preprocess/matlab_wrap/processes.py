@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The matlab script preprocess library of the mia_processes package.
 
 The purpose of this module is to add bricks that wrap MATLAB
@@ -43,7 +42,7 @@ class ComputeBrainVolume(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ComputeBrainVolume, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["nipype", "matlab"]
@@ -81,7 +80,7 @@ class ComputeBrainVolume(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ComputeBrainVolume, self).list_outputs()
+        super().list_outputs()
         config = Config()
         use_matlab = config.get_use_matlab()
 
@@ -110,7 +109,7 @@ class ComputeBrainVolume(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ComputeBrainVolume, self).run_process_mia()
+        super().run_process_mia()
 
         # Matlab path configuration
         config = Config()

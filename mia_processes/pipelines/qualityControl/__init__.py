@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The pipelines dedicated to the quality control measurement.
 

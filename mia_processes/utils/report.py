@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module dedicated to report generation
 
@@ -121,12 +120,9 @@ class Report:
             #     "norm_anat": self.norm_anat,
             #     "norm_func": self.norm_func,
             # }
-            self.title = (
-                "<font size=18><b>{0} report: </b>{1}"
-                "</font>".format(
-                    self.dict4runtime["norm_anat"]["PatientRef"],
-                    today_date.split(" ")[0],
-                )
+            self.title = "<font size=18><b>{} report: </b>{}" "</font>".format(
+                self.dict4runtime["norm_anat"]["PatientRef"],
+                today_date.split(" ")[0],
             )
 
             self.header_title = (
@@ -185,12 +181,9 @@ class Report:
                 "norm_func_reco": self.norm_func_reco,
                 "norm_func_recall": self.norm_func_recall,
             }
-            self.title = (
-                "<font size=18><b>{0} report: </b>{1}"
-                "</font>".format(
-                    self.dict4runtime["norm_anat"]["PatientName"],
-                    today_date.split(" ")[0],
-                )
+            self.title = "<font size=18><b>{} report: </b>{}" "</font>".format(
+                self.dict4runtime["norm_anat"]["PatientName"],
+                today_date.split(" ")[0],
             )
 
             self.header_title = (
@@ -306,12 +299,9 @@ class Report:
 
         elif "Perf_DSC" in kwargs:
             self.make_report = self.perf_dsc_make_report
-            self.title = (
-                "<font size=18><b>{0} report: </b>{1}"
-                "</font>".format(
-                    self.dict4runtime["norm_anat"]["PatientRef"],
-                    today_date.split(" ")[0],
-                )
+            self.title = "<font size=18><b>{} report: </b>{}" "</font>".format(
+                self.dict4runtime["norm_anat"]["PatientRef"],
+                today_date.split(" ")[0],
             )
 
             self.header_title = (
@@ -368,7 +358,7 @@ class Report:
                 "Capsul " + capsul_info.__version__,
                 "Nipype " + nipype_info.__version__,
                 "Mia_processes " + mia_processes_info.__version__,
-                "Operating System {0} {1}".format(
+                "Operating System {} {}".format(
                     (
                         "Mac OS X"
                         if platform.system() == "Darwin"
@@ -1266,7 +1256,7 @@ class Report:
         try:
             data_rp = np.loadtxt(self.realignment_parameters)
 
-        except IOError:
+        except OSError:
             print(
                 "\n==> The "
                 + self.realignment_parameters
@@ -1277,7 +1267,7 @@ class Report:
         try:
             matDataReg = loadmat(self.regressor_physio)
 
-        except IOError:
+        except OSError:
             print(
                 "\n==> The " + self.regressor_physio + " was not found ! <==\n"
             )
@@ -1760,7 +1750,7 @@ class Report:
             time.sleep(1)
             i += 1
 
-        with open(res_anal_data, "r") as data:
+        with open(res_anal_data) as data:
             r_data = [elt.replace("beta_", "") for elt in data.readlines()]
 
         # IL in ROIs, uses \t for split() to deal with space
@@ -3578,7 +3568,7 @@ class Report:
         else:
             if self.dict4runtime["extra_info"][param][2] is None:
                 return Paragraph(
-                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
+                    "<font size = 11> <b>{}</b> </font>: {}".format(
                         self.dict4runtime["extra_info"][param][0],
                         (
                             str(
@@ -3600,8 +3590,8 @@ class Report:
 
             else:
                 return Paragraph(
-                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
-                    "{1}</b></font>: {2}".format(
+                    "<font size = 9><sup>{}</sup></font><font size = 11><b>"
+                    "{}</b></font>: {}".format(
                         self.dict4runtime["extra_info"][param][2],
                         self.dict4runtime["extra_info"][param][0],
                         (
@@ -6127,7 +6117,7 @@ class Report:
         try:
             data_rp = np.loadtxt(self.realignment_parameters)
 
-        except (IOError, OSError):
+        except OSError:
             print(
                 "\n==> The "
                 + self.realignment_parameters
@@ -6235,7 +6225,7 @@ class Report:
 
         try:
 
-            with open(self.aif_file, "r") as file:
+            with open(self.aif_file) as file:
                 aif_dic = json.load(file)
 
             out_file_aif = os.path.join(

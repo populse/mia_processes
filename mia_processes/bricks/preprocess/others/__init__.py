@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Atomic calculations that do not come from ants, fsl, spm, etc.
 

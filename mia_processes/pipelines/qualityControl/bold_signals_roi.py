@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 A pipeline to get average signals in severals ROI for functional MRI data.
 It used Assemblynet segmentation

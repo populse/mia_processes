@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The .Anat_skullstrip_synthstrip pipeline.
 

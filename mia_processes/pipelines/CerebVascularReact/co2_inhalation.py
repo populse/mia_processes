@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The pipelines library of the mia_processes package.
 
 The CO2_inhalation pipeline is designed for CVR measurement

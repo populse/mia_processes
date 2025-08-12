@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module that contains multiple functions used across mia_processes
 
@@ -74,7 +73,7 @@ class PageNumCanvas(canvas.Canvas):
 
     def draw_page_number(self, page_count):
         """Add the page number."""
-        page = "Page %s of %s" % (self._pageNumber, page_count)
+        page = f"Page {self._pageNumber} of {page_count}"
         self.setFont("Helvetica", 7)
         self.drawRightString(195 * mm, 10 * mm, page)
 
@@ -928,7 +927,7 @@ def plot_slice_planes(
         ax.text(
             0.98,
             0.01,
-            "{}".format(ind_slice),
+            f"{ind_slice}",
             color=fgcolor,
             transform=ax.transAxes,
             horizontalalignment="right",

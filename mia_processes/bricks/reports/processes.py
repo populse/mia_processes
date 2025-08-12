@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The report preprocess library of the mia_processes package.
 
@@ -163,7 +162,7 @@ class AnatIQMs(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(AnatIQMs, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -278,7 +277,7 @@ class AnatIQMs(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(AnatIQMs, self).list_outputs()
+        super().list_outputs()
 
         if self.in_ras:
             valid_ext, in_ext, fileName = checkFileExt(self.in_ras, EXT)
@@ -312,7 +311,7 @@ class AnatIQMs(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(AnatIQMs, self).run_process_mia()
+        super().run_process_mia()
 
         results_dict = {}
 
@@ -670,7 +669,7 @@ class BoldIQMs(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(BoldIQMs, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -789,7 +788,7 @@ class BoldIQMs(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(BoldIQMs, self).list_outputs()
+        super().list_outputs()
 
         if self.in_epi:
             valid_ext, in_ext, fileName = checkFileExt(self.in_epi, EXT)
@@ -824,7 +823,7 @@ class BoldIQMs(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(BoldIQMs, self).run_process_mia()
+        super().run_process_mia()
 
         # Get the mean EPI data and get it ready
         epinii = nib.load(self.in_epi)
@@ -931,7 +930,7 @@ class BoldIQMs(ProcessMIA):
         # aqi
         if self.in_QI_file:
             try:
-                with open(self.in_QI_file, "r") as fin:
+                with open(self.in_QI_file) as fin:
                     lines = fin.readlines()
             except (FileNotFoundError, TypeError) as e:
                 print("\nError with aqi file: ", e)
@@ -1096,7 +1095,7 @@ class BoldIQMsPlot(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(BoldIQMsPlot, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1193,7 +1192,7 @@ class BoldIQMsPlot(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(BoldIQMsPlot, self).list_outputs()
+        super().list_outputs()
 
         if self.tr is Undefined:
             # Get TR in the database
@@ -1233,7 +1232,7 @@ class BoldIQMsPlot(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(BoldIQMsPlot, self).run_process_mia()
+        super().run_process_mia()
 
         dataframe = pd.DataFrame(
             {
@@ -1298,7 +1297,7 @@ class CarpetParcellation(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(CarpetParcellation, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1363,7 +1362,7 @@ class CarpetParcellation(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(CarpetParcellation, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.segmentation and self.brainmask:
@@ -1402,7 +1401,7 @@ class CarpetParcellation(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(CarpetParcellation, self).run_process_mia()
+        super().run_process_mia()
 
         # Binary dilation
         brainmask_img = nib.load(self.brainmask)
@@ -1463,7 +1462,7 @@ class ComputeDVARS(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ComputeDVARS, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1574,7 +1573,7 @@ class ComputeDVARS(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ComputeDVARS, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file and self.in_mask:
@@ -1610,7 +1609,7 @@ class ComputeDVARS(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ComputeDVARS, self).run_process_mia()
+        super().run_process_mia()
 
         # Out file name
         _, file_name = os.path.split(self.in_file)
@@ -1727,7 +1726,7 @@ class FramewiseDisplacement(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(FramewiseDisplacement, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1813,7 +1812,7 @@ class FramewiseDisplacement(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(FramewiseDisplacement, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1851,7 +1850,7 @@ class FramewiseDisplacement(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(FramewiseDisplacement, self).run_process_mia()
+        super().run_process_mia()
 
         mpars = np.loadtxt(self.in_file)  # mpars is N_t x 6
         mpars = np.apply_along_axis(
@@ -1910,7 +1909,7 @@ class LateralizationIndexCurve(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(LateralizationIndexCurve, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1965,7 +1964,7 @@ class LateralizationIndexCurve(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(LateralizationIndexCurve, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2005,7 +2004,7 @@ class LateralizationIndexCurve(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(LateralizationIndexCurve, self).run_process_mia()
+        super().run_process_mia()
 
         config = Config()
         roi_path = os.path.join(
@@ -2050,7 +2049,7 @@ class Mean_stdDev_calc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Mean_stdDev_calc, self).__init__()
+        super().__init__()
 
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
@@ -2143,7 +2142,7 @@ class Mean_stdDev_calc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Mean_stdDev_calc, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.parametric_maps != Undefined and self.rois_files != Undefined:
@@ -2330,7 +2329,7 @@ class Mean_stdDev_calc(ProcessMIA):
                 if np.size(result[result.nonzero()]) == 0:
                     print(
                         "\nMean_stdDev_cal brick:\nWarning: No result found "
-                        "after convolution of the {0} ROI and the {1} "
+                        "after convolution of the {} ROI and the {} "
                         "data".format(roi_file, parametric_map)
                     )
                     mean_result = 0
@@ -2379,7 +2378,7 @@ class PlotSignalROI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(PlotSignalROI, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2477,7 +2476,7 @@ class PlotSignalROI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(PlotSignalROI, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition
         if self.in_file:
@@ -2522,7 +2521,7 @@ class PlotSignalROI(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(PlotSignalROI, self).run_process_mia()
+        super().run_process_mia()
         color = [
             "r",
             "g",
@@ -2720,7 +2719,7 @@ class Result_collector(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Result_collector, self).__init__()
+        super().__init__()
 
         # Inputs description
         parameter_files_desc = (
@@ -2810,7 +2809,7 @@ class Result_collector(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Result_collector, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.parameter_files != Undefined:
@@ -2869,7 +2868,7 @@ class Result_collector(ProcessMIA):
                 out_files.add(
                     os.path.join(
                         aggreg_results_dir,
-                        "{0}_{1}_{2}.xls".format(contrast, calcul, param),
+                        f"{contrast}_{calcul}_{param}.xls",
                     )
                 )
 
@@ -2900,7 +2899,7 @@ class Result_collector(ProcessMIA):
                 if hemi in res[contrast][param][calcul][roi]:
                     print(
                         "\nResult_collector brick:\nThe data for "
-                        "{0}-{1}-{2}-{3}-{4} in {5} already exists "
+                        "{}-{}-{}-{}-{} in {} already exists "
                         "in the final result. Overwriting with the new "
                         "data ...\n".format(
                             contrast, param, calcul, roi, hemi, data
@@ -2917,7 +2916,7 @@ class Result_collector(ProcessMIA):
                     out_files.add(
                         os.path.join(
                             aggreg_results_dir,
-                            "{0}_{1}_{2}.xls".format(
+                            "{}_{}_{}.xls".format(
                                 contrast, "IL_" + calcul, param
                             ),
                         )
@@ -3093,7 +3092,7 @@ class Result_collector(ProcessMIA):
                 res[contrast][param]["IL_" + calcul][roi] = {}
 
             try:
-                with open(data, "r") as f_read:
+                with open(data) as f_read:
                     data_val = float(f_read.read())
 
             except Exception:
@@ -3105,8 +3104,8 @@ class Result_collector(ProcessMIA):
 
             if hemi in res[contrast][param][calcul][roi]:
                 print(
-                    "\nResult_collector brick:\nThe data for {0}-{1}-{2}-{3}"
-                    "-{4} in {5} already exists in the final result. "
+                    "\nResult_collector brick:\nThe data for {}-{}-{}-{}"
+                    "-{} in {} already exists in the final result. "
                     "Overwriting with the new data ...\n".format(
                         contrast, param, calcul, roi, hemi, data
                     )
@@ -3130,50 +3129,46 @@ class Result_collector(ProcessMIA):
                 for calcul in res[contrast][param]:
                     out_file = os.path.join(
                         aggreg_results_dir,
-                        "{0}_{1}_{2}.xls".format(contrast, calcul, param),
+                        f"{contrast}_{calcul}_{param}.xls",
                     )
 
                     with open(out_file, "w") as f:
-                        f.write("{0}\t".format("subjects"))
-                        f.write("{0}\t".format("patho"))
-                        f.write("{0}\t".format("age"))
-                        f.write("{0}\t".format("sex"))
-                        f.write("{0}\t".format("MagneticFieldStrength"))
-                        f.write("{0}\t".format("Gaz"))
-                        f.write("{0}\t".format("Admin"))
+                        f.write("{}\t".format("subjects"))
+                        f.write("{}\t".format("patho"))
+                        f.write("{}\t".format("age"))
+                        f.write("{}\t".format("sex"))
+                        f.write("{}\t".format("MagneticFieldStrength"))
+                        f.write("{}\t".format("Gaz"))
+                        f.write("{}\t".format("Admin"))
 
                         if not calcul.startswith("IL_"):
                             for roi in res[contrast][param][calcul]:
                                 for hemi in res[contrast][param][calcul][roi]:
-                                    f.write(
-                                        "{0}_{1}_{2}\t".format(
-                                            param, roi, hemi
-                                        )
-                                    )
+                                    f.write(f"{param}_{roi}_{hemi}\t")
 
                         else:
                             for roi in res[contrast][param][calcul]:
-                                f.write("{0}_{1}\t".format(param, roi))
+                                f.write(f"{param}_{roi}\t")
 
                         f.write(
-                            "\n{0}\t".format(self.patient_info["PatientRef"])
+                            "\n{}\t".format(self.patient_info["PatientRef"])
                         )
-                        f.write("{0}\t".format(self.patient_info["Pathology"]))
-                        f.write("{0}\t".format(self.patient_info["Age"]))
-                        f.write("{0}\t".format(self.patient_info["Sex"]))
+                        f.write("{}\t".format(self.patient_info["Pathology"]))
+                        f.write("{}\t".format(self.patient_info["Age"]))
+                        f.write("{}\t".format(self.patient_info["Sex"]))
                         f.write(
-                            "{0}\t".format(
+                            "{}\t".format(
                                 self.patient_info["MagneticFieldStrength"]
                             )
                         )
-                        f.write("{0}\t".format(self.patient_info["Gas"]))
-                        f.write("{0}\t".format(self.patient_info["GasAdmin"]))
+                        f.write("{}\t".format(self.patient_info["Gas"]))
+                        f.write("{}\t".format(self.patient_info["GasAdmin"]))
 
                         if not calcul.startswith("IL_"):
                             for roi in res[contrast][param][calcul]:
                                 for hemi in res[contrast][param][calcul][roi]:
                                     f.write(
-                                        "{0}\t".format(
+                                        "{}\t".format(
                                             res[contrast][param][calcul][roi][
                                                 hemi
                                             ]
@@ -3183,7 +3178,7 @@ class Result_collector(ProcessMIA):
                         else:
                             for roi in res[contrast][param][calcul]:
                                 f.write(
-                                    "{0}\t".format(
+                                    "{}\t".format(
                                         res[contrast][param][calcul][roi]
                                     )
                                 )
@@ -3214,7 +3209,7 @@ class Spikes(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Spikes, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -3296,7 +3291,7 @@ class Spikes(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Spikes, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -3332,7 +3327,7 @@ class Spikes(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Spikes, self).run_process_mia()
+        super().run_process_mia()
 
         func_nii = nib.load(self.in_file)
         func_data = func_nii.get_fdata()
@@ -3694,7 +3689,7 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
                 if ext == ".gz":
                     fname, ext2 = os.path.splitext(fname)
                     ext = ext2 + ext
-                ofile = "{0}_{1}{2}".format(fname, newdir, ext)
+                ofile = f"{fname}_{newdir}{ext}"
             result += [
                 gsr(epi_data, mask, newdir, ref_file=ref_file, out_file=ofile)
             ]
@@ -4068,7 +4063,7 @@ def summary_stats(img, pvms, airmask=None, erode=True):
         stats_pvms = [np.ones_like(pvms) - pvms, pvms]
     else:
         raise RuntimeError(
-            "Incorrect image dimensions ({0:d})".format(np.array(pvms).ndim)
+            f"Incorrect image dimensions ({np.array(pvms).ndim:d})"
         )
 
     if airmask is not None:

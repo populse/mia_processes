@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The ants preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main ants preprocessing bricks
@@ -69,7 +67,7 @@ class AffineInitializer(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(AffineInitializer, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
@@ -189,7 +187,7 @@ class AffineInitializer(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(AffineInitializer, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.moving_image:
@@ -228,7 +226,7 @@ class AffineInitializer(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(AffineInitializer, self).run_process_mia()
+        super().run_process_mia()
 
         # TODO: We see in soma_workflow: nipype.interface INFO:
         #       bad det -1 v 1 u -1
@@ -266,7 +264,7 @@ class ApplyTransforms(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ApplyTransforms, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
@@ -468,7 +466,7 @@ class ApplyTransforms(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ApplyTransforms, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.input_image:
@@ -506,7 +504,7 @@ class ApplyTransforms(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ApplyTransforms, self).run_process_mia()
+        super().run_process_mia()
 
         self.process.input_image = self.input_image
         self.process.reference_image = self.reference_image
@@ -551,7 +549,7 @@ class N4BiasFieldCorrection(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(N4BiasFieldCorrection, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
@@ -793,7 +791,7 @@ class N4BiasFieldCorrection(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(N4BiasFieldCorrection, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -850,7 +848,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(N4BiasFieldCorrection, self).run_process_mia()
+        super().run_process_mia()
 
         # If negative values, scale image
         input_nii = nib.load(self.in_file)
@@ -926,7 +924,7 @@ class Registration(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Registration, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["ants", "nipype"]
@@ -1614,7 +1612,7 @@ class Registration(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Registration, self).list_outputs()
+        super().list_outputs()
 
         if (
             self.sampling_percentage == Undefined
@@ -1735,7 +1733,7 @@ class Registration(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Registration, self).run_process_mia()
+        super().run_process_mia()
 
         # TODO: We see in soma_workflow: nipype.interface INFO: file NULL does
         #       not exist, with MRIQC anat

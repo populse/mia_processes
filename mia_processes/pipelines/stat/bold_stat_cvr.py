@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The module for the Bold_stat pipeline.
 
 :Contains:

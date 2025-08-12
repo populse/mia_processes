@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The reporting library of the mia_processes package.
 
 The purpose of this module is to provide the reporting bricks necessary to
@@ -65,7 +64,7 @@ class ReportAnatMriqc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportAnatMriqc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -315,7 +314,7 @@ class ReportAnatMriqc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportAnatMriqc, self).list_outputs()
+        super().list_outputs()
 
         file_position = (
             self.anat.find(self.project.getName())
@@ -360,7 +359,7 @@ class ReportAnatMriqc(ProcessMIA):
         if self.anat and self.anat not in ["<undefined>", traits.Undefined]:
             self.outputs["report"] = os.path.join(
                 self.output_directory,
-                "{0}_anatomical_mriqcReport_{1}.pdf".format(
+                "{}_anatomical_mriqcReport_{}.pdf".format(
                     (
                         self.dict4runtime["PatientName"]
                         if self.dict4runtime["PatientName"] != "Undefined"
@@ -811,7 +810,7 @@ class ReportAnatMriqc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportAnatMriqc, self).run_process_mia()
+        super().run_process_mia()
 
         report = Report(
             self.report,
@@ -855,7 +854,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportCO2inhalCvr, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1301,7 +1300,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportCO2inhalCvr, self).list_outputs()
+        super().list_outputs()
 
         if iteration is True:
             self.patient_info = dict(
@@ -1561,7 +1560,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         ):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
-                "{0}_CO2_inhal_CVR_Report_{1}.pdf".format(
+                "{}_CO2_inhal_CVR_Report_{}.pdf".format(
                     self.dict4runtime["norm_anat"]["PatientRef"],
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
@@ -1578,7 +1577,7 @@ class ReportCO2inhalCvr(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportCO2inhalCvr, self).run_process_mia()
+        super().run_process_mia()
 
         report = Report(
             self.report,
@@ -1635,7 +1634,7 @@ class ReportFuncMriqc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportFuncMriqc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -1871,7 +1870,7 @@ class ReportFuncMriqc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportFuncMriqc, self).list_outputs()
+        super().list_outputs()
 
         file_position = (
             self.func.find(self.project.getName())
@@ -1916,7 +1915,7 @@ class ReportFuncMriqc(ProcessMIA):
         if self.func and self.func not in ["<undefined>", traits.Undefined]:
             self.outputs["report"] = os.path.join(
                 self.output_directory,
-                "{0}_functional_mriqcReport_{1}.pdf".format(
+                "{}_functional_mriqcReport_{}.pdf".format(
                     (
                         self.dict4runtime["PatientName"]
                         if self.dict4runtime["PatientName"] != "Undefined"
@@ -2214,7 +2213,7 @@ class ReportFuncMriqc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportFuncMriqc, self).run_process_mia()
+        super().run_process_mia()
 
         report = Report(
             self.report,
@@ -2257,7 +2256,7 @@ class ReportGE2REC(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportGE2REC, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2521,7 +2520,7 @@ class ReportGE2REC(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportGE2REC, self).list_outputs()
+        super().list_outputs()
 
         file_position = (
             self.norm_anat.find(self.project.getName())
@@ -2779,7 +2778,7 @@ class ReportGE2REC(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportGE2REC, self).run_process_mia()
+        super().run_process_mia()
 
         report = Report(
             self.report,
@@ -2825,7 +2824,7 @@ class ReportGroupMriqc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportGroupMriqc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -2870,7 +2869,7 @@ class ReportGroupMriqc(ProcessMIA):
         """
 
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportGroupMriqc, self).list_outputs()
+        super().list_outputs()
 
         # Update dict4runtime
         # As we do not have access to the database at the runtime (see #272),
@@ -2962,7 +2961,7 @@ class ReportGroupMriqc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportGroupMriqc, self).run_process_mia()
+        super().run_process_mia()
         # Get all info in a tsv file and in a panda dataframe
         df, out_tsv = mriqc_group_iqms_tsv(
             self.modality, self.output_directory
@@ -3117,7 +3116,7 @@ class ReportPerfDsc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(ReportPerfDsc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -3666,7 +3665,7 @@ class ReportPerfDsc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(ReportPerfDsc, self).list_outputs()
+        super().list_outputs()
 
         if iteration is True:
             self.patient_info = dict(
@@ -3904,7 +3903,7 @@ class ReportPerfDsc(ProcessMIA):
         ):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
-                "{0}_Perf_DSC_Report_{1}.pdf".format(
+                "{}_Perf_DSC_Report_{}.pdf".format(
                     self.dict4runtime["norm_anat"]["PatientRef"],
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
@@ -3921,7 +3920,7 @@ class ReportPerfDsc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(ReportPerfDsc, self).run_process_mia()
+        super().run_process_mia()
 
         report = Report(
             self.report,

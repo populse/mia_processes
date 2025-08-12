@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 The atomic calculations from afni.
 

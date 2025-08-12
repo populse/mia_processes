@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """blabla.
 
 The purpose of this module is to blabla.

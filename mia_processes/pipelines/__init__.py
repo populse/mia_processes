@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The package containing the various pipelines available in mia_processes.
 

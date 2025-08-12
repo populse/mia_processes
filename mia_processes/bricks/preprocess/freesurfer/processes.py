@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The freesurfer preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main freesurfer
@@ -67,7 +65,7 @@ class Binarize(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Binarize, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["freesurfer", "nipype"]
@@ -345,7 +343,7 @@ class Binarize(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Binarize, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -399,7 +397,7 @@ class Binarize(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Binarize, self).run_process_mia()
+        super().run_process_mia()
 
         # mandatory inputs / outputs
         self.process.in_file = self.in_file
@@ -447,7 +445,7 @@ class SynthStrip(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SynthStrip, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["freesurfer", "nipype"]
@@ -517,7 +515,7 @@ class SynthStrip(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SynthStrip, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -560,7 +558,7 @@ class SynthStrip(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SynthStrip, self).run_process_mia()
+        super().run_process_mia()
 
         # default input
         fconf = capsul.engine.configurations.get(
@@ -797,7 +795,7 @@ class SynthStripMriqc(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SynthStripMriqc, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = ["freesurfer"]
@@ -934,7 +932,7 @@ class SynthStripMriqc(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SynthStripMriqc, self).list_outputs()
+        super().list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -978,7 +976,7 @@ class SynthStripMriqc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SynthStripMriqc, self).run_process_mia()
+        super().run_process_mia()
 
         # necessary for speed gains (I think)
         torch.backends.cudnn.benchmark = True

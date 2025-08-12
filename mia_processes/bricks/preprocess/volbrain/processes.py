@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """The volBrain (https://github.com/volBrain/AssemblyNet)
 preprocess library of the mia_processes package.
 
@@ -51,7 +49,7 @@ class AssemblyNetDocker(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(AssemblyNetDocker, self).__init__()
+        super().__init__()
 
         # Third party software required for the execution of the brick
         # TODO: add requirement (docker needed)
@@ -205,7 +203,7 @@ class AssemblyNetDocker(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(AssemblyNetDocker, self).list_outputs()
+        super().list_outputs()
 
         # Check docker availability
         # This is a patch pending modification of the requirements check
@@ -317,7 +315,7 @@ class AssemblyNetDocker(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(AssemblyNetDocker, self).run_process_mia()
+        super().run_process_mia()
 
         in_directory = os.path.dirname(os.path.realpath(self.in_file))
         file_name = os.path.basename(self.in_file)
@@ -417,7 +415,7 @@ class GetLabels(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(GetLabels, self).__init__()
+        super().__init__()
         # Optional inputs description
         tissues_desc = "Get labels for tissues (a boolean)"
         structures_desc = "Get labels for structures (a boolean)"
@@ -466,7 +464,7 @@ class GetLabels(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(GetLabels, self).list_outputs()
+        super().list_outputs()
 
         if (
             not self.tissues
@@ -492,7 +490,7 @@ class GetLabels(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(GetLabels, self).run_process_mia()
+        super().run_process_mia()
         dir_name = os.path.realpath(os.path.dirname(__file__))
         if self.tissues:
             csv_file = os.path.join(dir_name, "assemblynet_labels_tissues.csv")
@@ -528,7 +526,7 @@ class LabelsCorrespondence(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(LabelsCorrespondence, self).__init__()
+        super().__init__()
 
         # Mandatory inputs description
         labels_names_desc = (
@@ -598,7 +596,7 @@ class LabelsCorrespondence(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(LabelsCorrespondence, self).list_outputs()
+        super().list_outputs()
 
         if (
             not self.tissues
@@ -624,7 +622,7 @@ class LabelsCorrespondence(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(LabelsCorrespondence, self).run_process_mia()
+        super().run_process_mia()
         dir_name = os.path.realpath(os.path.dirname(__file__))
         if self.tissues:
             csv_file = os.path.join(dir_name, "assemblynet_labels_tissues.csv")
