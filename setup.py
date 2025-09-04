@@ -23,6 +23,7 @@ scripts = []
 pkgdata = {
     # format is:
     # <python module>: <file extensions list>
+    "mia_processes.utils": ["DejaVuSans.ttf"],
 }
 
 # Read the info.py file in mia_processes module

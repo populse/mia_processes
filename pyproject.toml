@@ -103,3 +103,9 @@ verbose = 2
 quiet = false
 color = true
 omit-covered-files = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+"*" = ["*.ttf"]
