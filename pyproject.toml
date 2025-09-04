@@ -108,4 +108,5 @@ omit-covered-files = false
 where = ["."]
 
 [tool.setuptools.package-data]
-"*" = ["*.ttf"]
+"mia_processes.sources_images" = ["*.jpg", "*.png"]
+"mia_processes.utils" = ["*.ttf"]

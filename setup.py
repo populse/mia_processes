@@ -24,6 +24,7 @@ pkgdata = {
     # format is:
     # <python module>: <file extensions list>
     "mia_processes.utils": ["DejaVuSans.ttf"],
+    "mia_processes.sources_images": ["*.jpg", "*.png"],
 }
 
 # Read the info.py file in mia_processes module

@@ -1,1 +1,3 @@
 include mia_processes/utils/DejaVuSans.ttf
+include mia_processes/sources_images/*.jpg
+include mia_processes/sources_images/*.png
