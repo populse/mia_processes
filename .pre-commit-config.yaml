@@ -18,7 +18,7 @@ repos:
     -   id: trailing-whitespace
 
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.0
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
@@ -31,7 +31,7 @@ repos:
         args: ["--line-length=79"]
 
 -   repo: https://github.com/pycqa/isort
-    rev: 6.1.0
+    rev: 7.0.0
     hooks: # imports sorting
     -   id: isort
         name: isort (python)
