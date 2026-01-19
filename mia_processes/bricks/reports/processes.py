@@ -634,7 +634,7 @@ class AnatIQMs(ProcessMIA):
         _, file_name = os.path.split(self.in_ras)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
         if file_extension == ".gz":
-            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+            file_name_no_ext_2, file_extension_2 = os.path.splitext(
                 file_name_no_ext
             )
             if file_extension_2 == ".nii":
@@ -1066,7 +1066,7 @@ class BoldIQMs(ProcessMIA):
         _, file_name = os.path.split(self.in_epi)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
         if file_extension == ".gz":
-            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+            file_name_no_ext_2, file_extension_2 = os.path.splitext(
                 file_name_no_ext
             )
             if file_extension_2 == ".nii":
@@ -1615,7 +1615,7 @@ class ComputeDVARS(ProcessMIA):
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
         if file_extension == ".gz":
-            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+            file_name_no_ext_2, file_extension_2 = os.path.splitext(
                 file_name_no_ext
             )
             if file_extension_2 == ".nii":
@@ -1867,7 +1867,7 @@ class FramewiseDisplacement(ProcessMIA):
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
         if file_extension == ".gz":
-            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+            file_name_no_ext_2, file_extension_2 = os.path.splitext(
                 file_name_no_ext
             )
             if file_extension_2 == ".nii":
@@ -3376,7 +3376,7 @@ class Spikes(ProcessMIA):
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
         if file_extension == ".gz":
-            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+            file_name_no_ext_2, file_extension_2 = os.path.splitext(
                 file_name_no_ext
             )
             if file_extension_2 == ".nii":

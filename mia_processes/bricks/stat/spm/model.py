@@ -2293,7 +2293,7 @@ class Level1Design(ProcessMIA):
         self.process.factor_info = self.factor_info
         self.process.bases = self.bases
         self.process.volterra_expansion_order = self.volterra_expansion_order
-        (self.process.global_intensity_normalization) = (
+        self.process.global_intensity_normalization = (
             self.global_intensity_normalization
         )
         self.process.mask_threshold = self.mask_threshold
