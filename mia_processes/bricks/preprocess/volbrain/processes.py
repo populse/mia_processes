@@ -217,7 +217,7 @@ class AssemblyNetDocker(ProcessMIA):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            (sdtoutl, stderrl) = p.communicate()
+            sdtoutl, stderrl = p.communicate()
             if str(sdtoutl) != "":
                 print("sdtoutl: ", sdtoutl.decode())
             if str(stderrl) != "":
@@ -356,7 +356,7 @@ class AssemblyNetDocker(ProcessMIA):
 
         print("--------->PID:", p.pid)
 
-        (sdtoutl, stderrl) = p.communicate()
+        sdtoutl, stderrl = p.communicate()
         if str(sdtoutl) != "":
             print("sdtoutl: ", sdtoutl.decode())
         if str(stderrl) != "":
@@ -392,7 +392,7 @@ class AssemblyNetDocker(ProcessMIA):
 
             print("--------->PID:", p.pid)
 
-            (sdtoutl, stderrl) = p.communicate()
+            sdtoutl, stderrl = p.communicate()
             if str(sdtoutl) != "":
                 print("sdtoutl: ", sdtoutl.decode())
             if str(stderrl) != "":

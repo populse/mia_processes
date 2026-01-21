@@ -1285,7 +1285,7 @@ class NewSegment(ProcessMIA):
         ):
             self.process.channel_files = self.channel_files
             self.process.channel_info = self.channel_info
-            (self.process.write_deformation_fields) = (
+            self.process.write_deformation_fields = (
                 self.write_deformation_fields
             )
             self.process.tissues = self.tissues
@@ -1967,7 +1967,7 @@ class Normalize12(ProcessMIA):
         if self.jobtype.startswith("est"):
             self.process.tpm = self.tpm
 
-        (self.process.affine_regularization_type) = (
+        self.process.affine_regularization_type = (
             self.affine_regularization_type
         )
         self.process.warping_regularization = self.warping_regularization

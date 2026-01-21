@@ -432,7 +432,7 @@ class ArtifactMask(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -760,7 +760,7 @@ class Binarize(ProcessMIA):
                 _, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
                 if file_extension == ".gz":
-                    (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                    file_name_no_ext_2, file_extension_2 = os.path.splitext(
                         file_name_no_ext
                     )
                     if file_extension_2 == ".nii":
@@ -1002,7 +1002,7 @@ class ConformImage(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -1499,7 +1499,7 @@ class Enhance(ProcessMIA):
                 _, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
                 if file_extension == ".gz":
-                    (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                    file_name_no_ext_2, file_extension_2 = os.path.splitext(
                         file_name_no_ext
                     )
                     if file_extension_2 == ".nii":
@@ -2228,7 +2228,7 @@ class GradientThreshold(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -2466,7 +2466,7 @@ class Harmonize(ProcessMIA):
             _, file_name = os.path.split(self.in_file)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -2869,7 +2869,7 @@ class Mask(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -3875,7 +3875,7 @@ class RotationMask(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
@@ -4236,7 +4236,7 @@ class Sanitize(ProcessMIA):
                 _, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
                 if file_extension == ".gz":
-                    (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                    file_name_no_ext_2, file_extension_2 = os.path.splitext(
                         file_name_no_ext
                     )
                     if file_extension_2 == ".nii":
@@ -4554,7 +4554,7 @@ class TSNR(ProcessMIA):
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
             if file_extension == ".gz":
-                (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext_2, file_extension_2 = os.path.splitext(
                     file_name_no_ext
                 )
                 if file_extension_2 == ".nii":
