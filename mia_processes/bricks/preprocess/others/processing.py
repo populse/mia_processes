@@ -927,7 +927,7 @@ class ConformImage(ProcessMIA):
                 #        initialisation of the whole pipeline. So we
                 #        cannot use the value of these tags in other
                 #        processes of the pipeline at the time of
-                #        initialisation (see populse_mia #290). Unti
+                #        initialisation (see populse_mia #290). Until
                 #        better we use a quick and dirty hack with the
                 #        set_db_field_value() function !
 
