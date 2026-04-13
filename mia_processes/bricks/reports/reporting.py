@@ -998,6 +998,11 @@ class ReportCO2inhalCvr(ProcessMIA):
             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
         )
 
+        display_convention_desc = (
+            "Display convention "
+            "(a string among 'neurological' or radiological')"
+        )
+
         # Outputs description
         report_desc = "The generated report (pdf)"
 
@@ -1270,6 +1275,18 @@ class ReportCO2inhalCvr(ProcessMIA):
             MagneticFieldStrength=Undefined,
             Gas=Undefined,
             GasAdmin=Undefined,
+        )
+
+        self.add_trait(
+            "display_convention",
+            traits.Enum(
+                "radiological",
+                "neurological",
+                value="radiological",
+                output=False,
+                optional=True,
+                desc=display_convention_desc,
+            ),
         )
 
         # Outputs traits
@@ -1611,6 +1628,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             spmT_vmax=self.spmT_vmax,
             mask_003=self.mask_003,
             output_directory=self.output_directory,
+            display_convention=self.display_convention,
         )
 
         report.make_report()
@@ -3290,6 +3308,10 @@ class ReportPerfDsc(ProcessMIA):
             "'Age': 64, 'Sex': 'M', MagneticFieldStrength': '3T'}"
         )
 
+        display_convention_desc = (
+            "Display convention "
+            "(a string among 'neurological' or radiological')"
+        )
         # Outputs description
         report_desc = "The generated report (pdf)"
 
@@ -3637,6 +3659,18 @@ class ReportPerfDsc(ProcessMIA):
             MagneticFieldStrength=Undefined,
         )
 
+        self.add_trait(
+            "display_convention",
+            traits.Enum(
+                "radiological",
+                "neurological",
+                value="radiological",
+                output=False,
+                optional=True,
+                desc=display_convention_desc,
+            ),
+        )
+
         # Outputs traits
         self.add_trait(
             "report",
@@ -3961,6 +3995,7 @@ class ReportPerfDsc(ProcessMIA):
             MTT_vmax=self.MTT_vmax,
             aif_file=self.aif_file,
             output_directory=self.output_directory,
+            display_convention=self.display_convention,
         )
 
         report.make_report()

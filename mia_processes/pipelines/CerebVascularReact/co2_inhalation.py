@@ -120,7 +120,8 @@ class CO2_inhalation(Pipeline):
         self.nodes["reportco2inhalcvr"].process.norm_anat_slices_gap = 5
         self.nodes["reportco2inhalcvr"].process.norm_func_inf_slice_start = 11
         self.nodes["reportco2inhalcvr"].process.norm_func_slices_gap = 2
-        self.nodes["reportco2inhalcvr"].process.beta_vmin = 0.01
+        # self.nodes["reportco2inhalcvr"].process.beta_vmin = 0.01
+        self.nodes["reportco2inhalcvr"].process.beta_vmin = -0.25
         self.nodes["reportco2inhalcvr"].process.beta_vmax = 0.25
         self.nodes["reportco2inhalcvr"].process.spmT_vmin = 3.0
         self.nodes["reportco2inhalcvr"].process.spmT_vmax = 12
@@ -140,6 +141,9 @@ class CO2_inhalation(Pipeline):
             "1_spatial_preprocessing", "func_files", is_optional=False
         )
         self.add_link("func_files->make_cvr_reg_physio_1.func_file")
+        self.export_parameter(
+            "reportco2inhalcvr", "display_convention", is_optional=True
+        )
         self.export_parameter(
             "reportco2inhalcvr", "patient_info", is_optional=True
         )
@@ -241,6 +245,7 @@ class CO2_inhalation(Pipeline):
                 "conv_roi_masks",
                 "patient_info",
                 "xls_files",
+                "display_convention",
                 "report",
             )
         )

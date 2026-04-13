@@ -580,6 +580,7 @@ def plot_slice_planes(
     out_dir=None,
     only_noise=False,
     out_name=None,
+    convention="neurological",
 ):
     """Create a PNG file with a mosaic display of volume slices.
 
@@ -611,10 +612,18 @@ def plot_slice_planes(
     :param out_dir: the output directory where the mosaic images will be saved.
     :param only_noise: if True, shows the noise (boolean).
     :param out_name: the suffix added to form the output name (string).
+    :param convention: display convention (neurological or radiological).
 
     Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,
           rainbow_r, jet_r, seismic_r, bwr_r
     """
+
+    if convention not in ["neurological", "radiological"]:
+        print(
+            "Parameter convention should be either "
+            "radiological or neurological"
+        )
+        return
 
     if plane not in ["ax", "cor", "sag"]:
         print("Parameter plane should be either ax, sag or cor")
@@ -681,8 +690,8 @@ def plot_slice_planes(
             else:
                 vmin = vmin_2
 
-            if vmin < 0:
-                vmin = 0.1
+            # if vmin < 0:
+            #     vmin = 0.1
 
             if vmax_2 in (None, Undefined):
                 vmax = np.max(data[~nan_indexes])
@@ -838,8 +847,11 @@ def plot_slice_planes(
 
         if plane == "ax":
             phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
+            data = np.swapaxes(displ_1[:, :, ind_slice], 0, 1)
+            if convention == "radiological":
+                data = np.fliplr(data)
             ax.imshow(
-                np.swapaxes(displ_1[:, :, ind_slice], 0, 1),
+                data,
                 vmin=vmin_1,
                 vmax=vmax_1,
                 cmap=cmap_1,
@@ -849,8 +861,11 @@ def plot_slice_planes(
             )
         elif plane == "sag":
             phys_sp = np.array(zooms[:2]) * brain_data_1[ind_slice, :, :].shape
+            data = np.swapaxes(displ_1[ind_slice, :, :], 0, 1)
+            if convention == "radiological":
+                data = np.fliplr(data)
             ax.imshow(
-                np.swapaxes(displ_1[ind_slice, :, :], 0, 1),
+                data,
                 vmin=vmin_1,
                 vmax=vmax_1,
                 cmap=cmap_1,
@@ -860,8 +875,11 @@ def plot_slice_planes(
             )
         elif plane == "cor":
             phys_sp = np.array(zooms[:2]) * brain_data_1[:, ind_slice, :].shape
+            data = np.swapaxes(displ_1[:, ind_slice, :], 0, 1)
+            if convention == "radiological":
+                data = np.fliplr(data)
             ax.imshow(
-                np.swapaxes(displ_1[:, ind_slice, :], 0, 1),
+                data,
                 vmin=vmin_1,
                 vmax=vmax_1,
                 cmap=cmap_1,
@@ -875,6 +893,8 @@ def plot_slice_planes(
             for i, displ in enumerate(displ_2):
                 if plane == "ax":
                     data = np.swapaxes(displ[:, :, ind_slice], 0, 1)
+                    if convention == "radiological":
+                        data = np.fliplr(data)
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],
@@ -888,6 +908,8 @@ def plot_slice_planes(
                     )
                 elif plane == "sag":
                     data = np.swapaxes(displ[ind_slice, :, :], 0, 1)
+                    if convention == "radiological":
+                        data = np.fliplr(data)
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],
@@ -901,6 +923,8 @@ def plot_slice_planes(
                     )
                 elif plane == "cor":
                     data = np.swapaxes(displ[:, ind_slice, :], 0, 1)
+                    if convention == "radiological":
+                        data = np.fliplr(data)
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],
