@@ -120,7 +120,8 @@ class CO2_inhalation(Pipeline):
         self.nodes["reportco2inhalcvr"].process.norm_anat_slices_gap = 5
         self.nodes["reportco2inhalcvr"].process.norm_func_inf_slice_start = 11
         self.nodes["reportco2inhalcvr"].process.norm_func_slices_gap = 2
-        self.nodes["reportco2inhalcvr"].process.beta_vmin = 0.01
+        # self.nodes["reportco2inhalcvr"].process.beta_vmin = 0.01
+        self.nodes["reportco2inhalcvr"].process.beta_vmin = -0.25
         self.nodes["reportco2inhalcvr"].process.beta_vmax = 0.25
         self.nodes["reportco2inhalcvr"].process.spmT_vmin = 3.0
         self.nodes["reportco2inhalcvr"].process.spmT_vmax = 12

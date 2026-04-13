@@ -690,8 +690,8 @@ def plot_slice_planes(
             else:
                 vmin = vmin_2
 
-            if vmin < 0:
-                vmin = 0.1
+            # if vmin < 0:
+            #     vmin = 0.1
 
             if vmax_2 in (None, Undefined):
                 vmax = np.max(data[~nan_indexes])
