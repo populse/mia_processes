@@ -164,6 +164,9 @@ class Perfdsc(Pipeline):
         )
         self.nodes["deconv_from_aif"].process.trait("T0_image").userlevel = 1
         self.export_parameter("deconv_from_aif", "T0_image", is_optional=False)
+        self.export_parameter(
+            "reportperfdsc", "display_convention", is_optional=True
+        )
         self.export_parameter("reportperfdsc", "report", is_optional=True)
         self.export_parameter(
             "reportperfdsc", "patient_info", is_optional=True
@@ -178,6 +181,7 @@ class Perfdsc(Pipeline):
                 "TTP_image",
                 "T0_image",
                 "patient_info",
+                "display_convention",
                 "report",
             )
         )

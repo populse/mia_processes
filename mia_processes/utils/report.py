@@ -565,6 +565,23 @@ class Report:
     def co2_inhal_cvr_make_report(self):
         """Make CVR under CO2 challenge report"""
 
+        if self.display_convention == "neurological":
+            convention_paragraph = Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        elif self.display_convention == "radiological":
+            convention_paragraph = Paragraph(
+                '<font size=9 > <i> "Radiological" '
+                "convention, the left side of the "
+                "image corresponds to the right side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+
         # page 1 - cover ##################################################
         ###################################################################
 
@@ -869,15 +886,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
         slices_image = plot_slice_planes(
@@ -890,6 +899,7 @@ class Report:
             vmin_1=self.norm_anat_vmin,
             vmax_1=self.norm_anat_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -1539,15 +1549,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_func,
@@ -1559,6 +1561,7 @@ class Report:
             vmin_1=self.norm_func_vmin,
             vmax_1=self.norm_func_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -1582,15 +1585,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -1606,6 +1601,7 @@ class Report:
             vmin_2=self.beta_vmin,
             vmax_2=self.beta_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
 
         # remainder: A4 == 210mmx297mm
@@ -1626,15 +1622,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -1650,6 +1638,7 @@ class Report:
             vmin_2=self.spmT_vmin,
             vmax_2=self.spmT_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
 
         # remainder: A4 == 210mmx297mm
@@ -1955,15 +1944,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 15 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         conv_roi_dir = os.path.join(
             self.output_directory,
@@ -2026,6 +2007,7 @@ class Report:
             vmax_2=None,
             out_dir=tmpdir.name,
             out_name="arterialTerritories_axial",
+            convention=self.display_convention,
         )
 
         # remainder: A4 == 210mmx297mm
@@ -2075,15 +2057,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 15 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         brain_lobes = [
             "convROI-CING",
@@ -2136,6 +2110,7 @@ class Report:
             vmax_2=None,
             out_dir=tmpdir.name,
             out_name="roisTerritories_axial",
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -5459,6 +5434,23 @@ class Report:
     def perf_dsc_make_report(self):
         """Make DSC MR perfusion report"""
 
+        if self.display_convention == "neurological":
+            convention_paragraph = Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        elif self.display_convention == "radiological":
+            convention_paragraph = Paragraph(
+                '<font size=9 > <i> "Radiological" '
+                "convention, the left side of the "
+                "image corresponds to the right side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+
         # page 1 - cover ##################################################
         ###################################################################
 
@@ -5763,15 +5755,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
         slices_image = plot_slice_planes(
@@ -5784,6 +5768,7 @@ class Report:
             vmin_1=self.norm_anat_vmin,
             vmax_1=self.norm_anat_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -6404,15 +6389,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_func,
@@ -6424,6 +6401,7 @@ class Report:
             vmin_1=self.norm_func_vmin,
             vmax_1=self.norm_func_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -6455,15 +6433,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -6479,6 +6449,7 @@ class Report:
             vmin_2=self.CBV_vmin,
             vmax_2=self.CBV_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -6502,15 +6473,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -6526,6 +6489,7 @@ class Report:
             vmin_2=self.CBF_vmin,
             vmax_2=self.CBF_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -6545,15 +6509,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -6569,6 +6525,7 @@ class Report:
             vmin_2=self.Tmax_vmin,
             vmax_2=self.Tmax_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
@@ -6589,15 +6546,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 20 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size=9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
+        self.report.append(convention_paragraph)
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
@@ -6613,6 +6562,7 @@ class Report:
             vmin_2=self.MTT_vmin,
             vmax_2=self.MTT_vmax,
             out_dir=tmpdir.name,
+            convention=self.display_convention,
         )
         # remainder: A4 == 210mmx297mm
         slices_image = Image(

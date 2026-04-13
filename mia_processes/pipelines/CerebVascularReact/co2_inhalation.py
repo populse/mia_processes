@@ -141,6 +141,9 @@ class CO2_inhalation(Pipeline):
         )
         self.add_link("func_files->make_cvr_reg_physio_1.func_file")
         self.export_parameter(
+            "reportco2inhalcvr", "display_convention", is_optional=True
+        )
+        self.export_parameter(
             "reportco2inhalcvr", "patient_info", is_optional=True
         )
         self.add_link("patient_info->4_extract_roi_param.patient_info")
@@ -241,6 +244,7 @@ class CO2_inhalation(Pipeline):
                 "conv_roi_masks",
                 "patient_info",
                 "xls_files",
+                "display_convention",
                 "report",
             )
         )
