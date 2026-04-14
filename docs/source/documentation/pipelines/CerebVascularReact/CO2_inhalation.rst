@@ -143,6 +143,14 @@ results obtained.
       ex. {'PatientRef': 'sub-001', 'Pathology': 'ACMD', 'Age': 57,
            'Sex': 'F', 'MR': '3T', 'Gas': 'Bactal', 'GasAdmin': 'Mask'}
 
+- *display_convention* (a string, optional, default value is 'radiological')
+    The display convention used for the anatomical and functional images in the
+    report. It can be either 'neurological' or 'radiological'.
+
+    ::
+
+      ex. neurological
+
 **Outputs parameters:**
 
 - *xls_files*

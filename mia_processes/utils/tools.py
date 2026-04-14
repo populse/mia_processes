@@ -848,8 +848,10 @@ def plot_slice_planes(
         if plane == "ax":
             phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
             data = np.swapaxes(displ_1[:, :, ind_slice], 0, 1)
+
             if convention == "radiological":
                 data = np.fliplr(data)
+
             ax.imshow(
                 data,
                 vmin=vmin_1,
@@ -859,11 +861,14 @@ def plot_slice_planes(
                 origin="lower",
                 extent=[0, phys_sp[0], 0, phys_sp[1]],
             )
+
         elif plane == "sag":
             phys_sp = np.array(zooms[:2]) * brain_data_1[ind_slice, :, :].shape
             data = np.swapaxes(displ_1[ind_slice, :, :], 0, 1)
+
             if convention == "radiological":
                 data = np.fliplr(data)
+
             ax.imshow(
                 data,
                 vmin=vmin_1,
@@ -873,11 +878,14 @@ def plot_slice_planes(
                 origin="lower",
                 extent=[0, phys_sp[0], 0, phys_sp[1]],
             )
+
         elif plane == "cor":
             phys_sp = np.array(zooms[:2]) * brain_data_1[:, ind_slice, :].shape
             data = np.swapaxes(displ_1[:, ind_slice, :], 0, 1)
+
             if convention == "radiological":
                 data = np.fliplr(data)
+
             ax.imshow(
                 data,
                 vmin=vmin_1,
@@ -891,10 +899,13 @@ def plot_slice_planes(
         if displ_2 is not None:
 
             for i, displ in enumerate(displ_2):
+
                 if plane == "ax":
                     data = np.swapaxes(displ[:, :, ind_slice], 0, 1)
+
                     if convention == "radiological":
                         data = np.fliplr(data)
+
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],
@@ -906,10 +917,13 @@ def plot_slice_planes(
                         origin="lower",
                         extent=[0, phys_sp[0], 0, phys_sp[1]],
                     )
+
                 elif plane == "sag":
                     data = np.swapaxes(displ[ind_slice, :, :], 0, 1)
+
                     if convention == "radiological":
                         data = np.fliplr(data)
+
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],
@@ -921,10 +935,13 @@ def plot_slice_planes(
                         origin="lower",
                         extent=[0, phys_sp[0], 0, phys_sp[1]],
                     )
+
                 elif plane == "cor":
                     data = np.swapaxes(displ[:, ind_slice, :], 0, 1)
+
                     if convention == "radiological":
                         data = np.fliplr(data)
+
                     im2 = ax.imshow(
                         data,
                         vmin=vmin_2[i],

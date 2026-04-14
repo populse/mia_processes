@@ -242,6 +242,13 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
       ex. {'PatientRef': 'sub-1', 'Pathology': 'ACMD', 'Age': '56', 'Sex': 'M', 'MR': '3T', 'Gas': 'Bactal', 'GasAdmin': 'Mask'}
 
+- *display_convention* (a string, optional, default value is 'radiological')
+    The display convention used for the anatomical and functional images in the
+    report. It can be either 'neurological' or 'radiological'.
+
+    ::
+
+      ex. neurological
 
 **Outputs parameters:**
 
