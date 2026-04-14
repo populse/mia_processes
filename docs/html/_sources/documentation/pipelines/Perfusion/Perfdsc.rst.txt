@@ -75,7 +75,6 @@ The acquired data are processed to generate various perfusion maps, such as:
 
       ex. ['/home/username/data/raw_data/sub-001-ses-01--0-PERFUSION-FEEPI-155640_450000.nii']
 
-
 - *patient_info*
     A dictionary for entering patient data.
        - PatientRef: the patient's code name
@@ -87,6 +86,14 @@ The acquired data are processed to generate various perfusion maps, such as:
     ::
 
       ex. {'PatientRef': 'sub-001', 'Pathology': 'ACMD', 'Age': 57, 'Sex': 'F', 'MR': '3T'}
+
+- *display_convention* (a string, optional, default value is 'radiological')
+    The display convention used for the anatomical and functional images in the
+    report. It can be either 'neurological' or 'radiological'.
+
+    ::
+
+      ex. neurological
 
 **Outputs parameters:**
 

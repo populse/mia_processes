@@ -4,20 +4,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=dfa0e015" />
-    <script src="../../../../../_static/documentation_options.js?v=dfec817d"></script>
-    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.7.1-dev+7299fed3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=fce32b03" />
+    <script src="../../../../../_static/documentation_options.js?v=cbf0544e"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.7.0 documentation</span></a></h1>
+          <span>mia_processes 2.7.1-dev+7299fed3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm.model</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -28,9 +28,7 @@
         
         
   <h1>Source code for mia_processes.bricks.stat.spm.model</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;The library for the SPM fMRI statistical analysis of the mia_processes</span>
+<span></span><span class="sd">&quot;&quot;&quot;The library for the SPM fMRI statistical analysis of the mia_processes</span>
 <span class="sd">package.</span>
 
 <span class="sd">The purpose of this module is to customise the main spm statistical analysis</span>
@@ -58,41 +56,36 @@
 <span class="c1">##########################################################################</span>
 
 <span class="c1"># Other import</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
 
 <span class="c1"># nipype import</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nipype.interfaces.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">File</span><span class="p">,</span>
     <span class="n">InputMultiPath</span><span class="p">,</span>
     <span class="n">OutputMultiPath</span><span class="p">,</span>
     <span class="n">traits</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
-<span class="kn">from</span> <span class="nn">populse_db.database</span> <span class="kn">import</span> <span class="n">FIELD_TYPE_INTEGER</span>
-<span class="kn">from</span> <span class="nn">populse_mia.data_manager.database_mia</span> <span class="kn">import</span> <span class="n">TAG_ORIGIN_USER</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nipype.interfaces.spm.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageFileSPM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.data_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">FIELD_TYPE_INTEGER</span><span class="p">,</span> <span class="n">TAG_ORIGIN_USER</span>
 
-<span class="c1"># populse_db and populse_mia import</span>
-<span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="n">COLLECTION_CURRENT</span>
-
-<span class="c1"># populse_mia imports</span>
-<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="c1"># populse_mia import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.data_manager.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">COLLECTION_CURRENT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db_field_value</span><span class="p">,</span> <span class="n">get_field_names</span>
 
 <span class="c1"># soma-base imports</span>
-<span class="kn">from</span> <span class="nn">soma.qt_gui.qt_backend.Qt</span> <span class="kn">import</span> <span class="n">QMessageBox</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Undefined</span>
-
-<span class="c1"># mia_processes import</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">soma.qt_gui.qt_backend.Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QMessageBox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">traits.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Undefined</span>
 
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="EstimateContrast">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast">[docs]</a>
-<span class="k">class</span> <span class="nc">EstimateContrast</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EstimateContrast</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimate contrasts of interest*</span>
 
@@ -104,7 +97,7 @@
 
 <div class="viewcode-block" id="EstimateContrast.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -112,7 +105,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -294,7 +287,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.EstimateContrast&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_contrasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_contrasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get list of contrasts with each contrast being a list of the form:</span>
 <span class="sd">        - for T contrasts</span>
@@ -365,7 +358,7 @@
 
 <div class="viewcode-block" id="EstimateContrast.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -379,7 +372,7 @@
 <span class="sd">        :param iteration: the state, iterative or not, of the process.</span>
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># We cannot directly called Nipype&#39;s method to get all the output</span>
         <span class="c1"># because we want to avoid to read in the SPM.mat file</span>
@@ -428,7 +421,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># if spm_mat file not in a subfolder (for e.g spm_mat</span>
                     <span class="c1"># file in download data)</span>
-                    <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                     <span class="p">)</span>
 
@@ -483,7 +476,7 @@
 
             <span class="n">nb_contrasts</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="c1"># Get number of contrasts already created</span>
-            <span class="n">nb_contrasts_old</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+            <span class="n">nb_contrasts_old</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;Contrasts num&quot;</span>
             <span class="p">)</span>
 
@@ -500,14 +493,10 @@
                 <span class="k">if</span> <span class="n">nb_contrasts_old</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="n">nb_contrasts_old</span>
                 <span class="n">spmT_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;spmT_</span><span class="si">{:04d}</span><span class="s2">.nii&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                    <span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;spmT_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.nii&quot;</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">con_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;con_</span><span class="si">{:04d}</span><span class="s2">.nii&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                    <span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;con_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.nii&quot;</span><span class="p">)</span>
                 <span class="p">)</span>
 
             <span class="n">spmF_files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -522,13 +511,11 @@
                         <span class="n">i</span> <span class="o">+=</span> <span class="n">nb_contrasts_old</span>
                     <span class="n">spmF_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;spmF_</span><span class="si">{:04d}</span><span class="s2">.nii&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;spmF_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.nii&quot;</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                     <span class="n">ess_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;ess_</span><span class="si">{:04d}</span><span class="s2">.nii&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                        <span class="p">)</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;ess_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.nii&quot;</span><span class="p">)</span>
                     <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">spmT_files</span><span class="p">:</span>
@@ -554,7 +541,7 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                        <span class="n">get_db_field_value</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span>
                             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -580,14 +567,14 @@
                     <span class="s2">&quot;spmF_images&quot;</span><span class="p">,</span>
                 <span class="p">]:</span>
                     <span class="n">all_tag_to_del</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Contrasts num&quot;</span><span class="p">]</span>
-                    <span class="n">regress_num</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="n">regress_num</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;Regress num&quot;</span>
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">regress_num</span><span class="p">:</span>
                         <span class="n">all_tag_to_del</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Regress num&quot;</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
                         <span class="k">if</span> <span class="p">(</span>
-                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="n">get_db_field_value</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span>
                                 <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -614,10 +601,10 @@
 
 <div class="viewcode-block" id="EstimateContrast.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">contrasts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_contrasts</span><span class="p">()</span>
@@ -635,7 +622,7 @@
 
 <div class="viewcode-block" id="EstimateModel">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel">[docs]</a>
-<span class="k">class</span> <span class="nc">EstimateModel</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EstimateModel</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimation of model parameters using classical method (ReML - Restricted</span>
 <span class="sd">    Maximum Likelihood)*</span>
@@ -648,7 +635,7 @@
 
 <div class="viewcode-block" id="EstimateModel.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -656,7 +643,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -985,7 +972,7 @@
 
 <div class="viewcode-block" id="EstimateModel.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1000,7 +987,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># We cannot directly call Nipype&#39;s method to get all the output</span>
         <span class="c1"># because we want to avoid to read in the SPM.mat file</span>
@@ -1042,7 +1029,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># if spm_mat file not in a subfolder (for e.g spm_mat</span>
                     <span class="c1"># file in download data)</span>
-                    <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">sub_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1085,7 +1072,7 @@
             <span class="n">betas</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tot_reg_num</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]:</span>
-                <span class="n">tot_reg_numb</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="n">tot_reg_numb</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;Regress num&quot;</span>
                 <span class="p">)</span>
 
@@ -1119,17 +1106,17 @@
 
             <span class="k">if</span> <span class="s2">&quot;Classical&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation_method</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;residual_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;ResMS.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_form</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;ResMS.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;RPVimage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;RPV.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_form</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;RPV.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mask_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;mask.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_form</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;mask.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_residuals</span><span class="p">:</span>
-                    <span class="n">nb_dyn</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="n">nb_dyn</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;Dynamic Number&quot;</span>
                     <span class="p">)</span>
 
@@ -1139,7 +1126,7 @@
 
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_dyn</span><span class="p">):</span>
                             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="n">ress</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Res_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
+                            <span class="n">ress</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Res_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">ress</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;residual_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1166,7 +1153,7 @@
                     <span class="p">)</span>
                 <span class="p">):</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">betas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;beta_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
+                    <span class="n">betas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;beta_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">betas</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;beta_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1223,8 +1210,8 @@
                 <span class="n">spmFs</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_f_contrast</span><span class="p">):</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">esss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ess_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
-                    <span class="n">spmFs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;spmF_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
+                    <span class="n">esss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ess_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">spmFs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;spmF_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">esss</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;ess_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1239,8 +1226,8 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_t_contrast</span><span class="p">):</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="n">number_f_contrast</span>
-                    <span class="n">cons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;con_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
-                    <span class="n">spmTs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;spmT_</span><span class="si">{:04d}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">im_form</span><span class="p">))</span>
+                    <span class="n">cons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;con_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">spmTs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;spmT_</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">im_form</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">cons</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;con_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1255,7 +1242,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="n">all_tag_to_del</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Contrasts num&quot;</span><span class="p">]</span>
-            <span class="n">regress_num</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+            <span class="n">regress_num</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;Regress num&quot;</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">regress_num</span><span class="p">:</span>
@@ -1294,7 +1281,7 @@
                     <span class="s2">&quot;spmF_images&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;residual_images&quot;</span><span class="p">,</span>
                 <span class="p">]:</span>
-                    <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                     <span class="p">)</span>
 
@@ -1319,9 +1306,9 @@
 
 <div class="viewcode-block" id="EstimateModel.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">EstimateModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">estimation_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_residuals</span>
@@ -1333,7 +1320,7 @@
 
 <div class="viewcode-block" id="Level1Design">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design">[docs]</a>
-<span class="k">class</span> <span class="nc">Level1Design</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Level1Design</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Specification of the GLM design matrix, fMRI data files and filtering*</span>
 
@@ -1345,7 +1332,7 @@
 
 <div class="viewcode-block" id="Level1Design.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1353,7 +1340,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Level1Design</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1836,7 +1823,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Level1Design&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">,</span> <span class="n">idx_cond</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">,</span> <span class="n">idx_cond</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the condition dictionary.</span>
 
 <span class="sd">        One condition dictionary is generated for each condition.</span>
@@ -1883,8 +1870,8 @@
                 <span class="s2">&quot;Warning: The number of values in the &quot;</span>
                 <span class="s2">&quot;sess_cond_durations parameter does not correspond to &quot;</span>
                 <span class="s2">&quot;the number of values in the sess_cond_onsets &quot;</span>
-                <span class="s2">&quot;parameter, for the session &#39;</span><span class="si">{0}</span><span class="s2">&#39; and the &quot;</span>
-                <span class="s2">&quot;condition &#39;</span><span class="si">{1}</span><span class="s2">&#39;! Please, check your &quot;</span>
+                <span class="s2">&quot;parameter, for the session &#39;</span><span class="si">{}</span><span class="s2">&#39; and the &quot;</span>
+                <span class="s2">&quot;condition &#39;</span><span class="si">{}</span><span class="s2">&#39;! Please, check your &quot;</span>
                 <span class="s2">&quot;settings ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx_session</span><span class="p">,</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
             <span class="p">)</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Close</span><span class="p">)</span>
@@ -1958,7 +1945,7 @@
 
         <span class="k">return</span> <span class="n">cond</span>
 
-    <span class="k">def</span> <span class="nf">_get_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the session_info parameter for each session.</span>
 
 <span class="sd">        The &#39;session_info&#39; dictionary is equivalent to the &#39;sess&#39;</span>
@@ -2071,7 +2058,7 @@
 
 <div class="viewcode-block" id="Level1Design.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2086,7 +2073,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Level1Design</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -2106,7 +2093,7 @@
             <span class="n">subjects_names</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># files_names = &quot;&quot;</span>
             <span class="k">for</span> <span class="n">idx_session</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess_scans</span><span class="p">):</span>
-                <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="n">sub_name</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess_scans</span><span class="p">[</span><span class="n">idx_session</span><span class="p">],</span> <span class="s2">&quot;PatientName&quot;</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">sub_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2184,8 +2171,8 @@
                     <span class="n">check</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Level1Design brick: There seems to be a problem in&quot;</span>
-                        <span class="s2">&quot;the definition of session parameters. The&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Level1Design brick: There seems to be a problem in &quot;</span>
+                        <span class="s2">&quot;the definition of session parameters. The &quot;</span>
                         <span class="s2">&quot;initialisation failed, please check your settings ...&quot;</span>
                     <span class="p">)</span>
 
@@ -2254,7 +2241,7 @@
             <span class="n">all_tags_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag_to_add</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
-                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="n">get_db_field_value</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">sess_scans</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                     <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -2272,7 +2259,7 @@
             <span class="n">dyn_num</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess_scans</span><span class="p">:</span>
-                <span class="n">dimensions</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="n">dimensions</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                     <span class="n">scan</span><span class="p">,</span>
                     <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -2310,9 +2297,9 @@
 
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interscan_interval</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                 <span class="s2">&quot;RepetitionTime&quot;</span>
-                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">)</span>
+                <span class="ow">in</span> <span class="n">get_field_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">COLLECTION_CURRENT</span><span class="p">)</span>
             <span class="p">):</span>
-                <span class="n">rep_time</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                <span class="n">rep_time</span> <span class="o">=</span> <span class="n">get_db_field_value</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess_scans</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;RepetitionTime&quot;</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">rep_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2348,9 +2335,9 @@
 
 <div class="viewcode-block" id="Level1Design.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Level1Design</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
             <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -2370,7 +2357,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">factor_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bases</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">volterra_expansion_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volterra_expansion_order</span>
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_intensity_normalization</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_intensity_normalization</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">global_intensity_normalization</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span>
@@ -2397,7 +2384,7 @@
 
 <div class="viewcode-block" id="MultipleRegressionDesign">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign">[docs]</a>
-<span class="k">class</span> <span class="nc">MultipleRegressionDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultipleRegressionDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for multiple regression*</span>
 
@@ -2409,7 +2396,7 @@
 
 <div class="viewcode-block" id="MultipleRegressionDesign.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2417,7 +2404,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2692,7 +2679,7 @@
 
 <div class="viewcode-block" id="MultipleRegressionDesign.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2707,7 +2694,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
@@ -2813,9 +2800,9 @@
 
 <div class="viewcode-block" id="MultipleRegressionDesign.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
@@ -2859,7 +2846,7 @@
 
 <div class="viewcode-block" id="OneSampleTTestDesign">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign">[docs]</a>
-<span class="k">class</span> <span class="nc">OneSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OneSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for one sample t-test*</span>
 
@@ -2871,7 +2858,7 @@
 
 <div class="viewcode-block" id="OneSampleTTestDesign.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2879,7 +2866,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -3103,7 +3090,7 @@
 
 <div class="viewcode-block" id="OneSampleTTestDesign.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3118,7 +3105,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
@@ -3205,9 +3192,9 @@
 
 <div class="viewcode-block" id="OneSampleTTestDesign.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
@@ -3243,7 +3230,7 @@
 
 <div class="viewcode-block" id="PairedTTestDesign">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign">[docs]</a>
-<span class="k">class</span> <span class="nc">PairedTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PairedTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for one sample t-test*</span>
 
@@ -3255,7 +3242,7 @@
 
 <div class="viewcode-block" id="PairedTTestDesign.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -3263,7 +3250,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -3492,7 +3479,7 @@
 
 <div class="viewcode-block" id="PairedTTestDesign.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3507,7 +3494,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
@@ -3593,9 +3580,9 @@
 
 <div class="viewcode-block" id="PairedTTestDesign.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">paired_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paired_files</span>
@@ -3631,7 +3618,7 @@
 
 <div class="viewcode-block" id="TwoSampleTTestDesign">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign">[docs]</a>
-<span class="k">class</span> <span class="nc">TwoSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TwoSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for two sample t-test*</span>
 
@@ -3643,7 +3630,7 @@
 
 <div class="viewcode-block" id="TwoSampleTTestDesign.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -3651,7 +3638,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -3914,7 +3901,7 @@
 
 <div class="viewcode-block" id="TwoSampleTTestDesign.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3929,7 +3916,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
@@ -4019,9 +4006,9 @@
 
 <div class="viewcode-block" id="TwoSampleTTestDesign.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">group1_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group1_files</span>
@@ -4061,7 +4048,7 @@
 
 <div class="viewcode-block" id="get_covariates">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.get_covariates">[docs]</a>
-<span class="k">def</span> <span class="nf">get_covariates</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_covariates</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate the covariates list containing dictionaries</span>
 <span class="sd">    with the following key :</span>
 <span class="sd">    name, vector, interaction, centering</span>
@@ -4085,7 +4072,7 @@
 </pre></div>
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -4095,7 +4082,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

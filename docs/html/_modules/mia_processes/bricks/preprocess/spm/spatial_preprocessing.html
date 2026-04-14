@@ -4,20 +4,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=dfa0e015" />
-    <script src="../../../../../_static/documentation_options.js?v=dfec817d"></script>
-    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.7.1-dev+7299fed3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=fce32b03" />
+    <script src="../../../../../_static/documentation_options.js?v=cbf0544e"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.7.0 documentation</span></a></h1>
+          <span>mia_processes 2.7.1-dev+7299fed3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -28,9 +28,7 @@
         
         
   <h1>Source code for mia_processes.bricks.preprocess.spm.spatial_preprocessing</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;The spm preprocess library of the mia_processes package.</span>
+<span></span><span class="sd">&quot;&quot;&quot;The spm preprocess library of the mia_processes package.</span>
 
 <span class="sd">The purpose of this module is to customise the main spm preprocessing bricks</span>
 <span class="sd">provided by nipype and to correct some things that do not work directly in</span>
@@ -57,33 +55,40 @@
 <span class="c1">##########################################################################</span>
 
 <span class="c1"># Other imports</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">nibabel</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># nipype imports</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nipype.interfaces.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">File</span><span class="p">,</span>
     <span class="n">InputMultiPath</span><span class="p">,</span>
     <span class="n">OutputMultiPath</span><span class="p">,</span>
     <span class="n">TraitListObject</span><span class="p">,</span>
     <span class="n">traits</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nipype.interfaces.spm.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageFileSPM</span>
 
 <span class="c1"># populse_mia imports</span>
-<span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="n">COLLECTION_CURRENT</span>
-<span class="kn">from</span> <span class="nn">populse_mia.software_properties</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.data_manager</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
+    <span class="n">FIELD_TYPE_LIST_FLOAT</span><span class="p">,</span>
+    <span class="n">FIELD_TYPE_STRING</span><span class="p">,</span>
+    <span class="n">TAG_ORIGIN_USER</span><span class="p">,</span>
+    <span class="n">TAG_UNIT_MM</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.software_properties</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db_field_value</span><span class="p">,</span> <span class="n">get_field_names</span><span class="p">,</span> <span class="n">get_value</span>
 
 <span class="c1"># soma-base import</span>
-<span class="kn">from</span> <span class="nn">soma.qt_gui.qt_backend.Qt</span> <span class="kn">import</span> <span class="n">QMessageBox</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">soma.qt_gui.qt_backend.Qt</span><span class="w"> </span><span class="kn">import</span> <span class="n">QMessageBox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">traits.api</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Bool</span><span class="p">,</span>
     <span class="n">Either</span><span class="p">,</span>
     <span class="n">Enum</span><span class="p">,</span>
@@ -96,13 +101,10 @@
     <span class="n">Undefined</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># mia_processes import</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
-
 
 <div class="viewcode-block" id="Coregister">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a>
-<span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Coregister</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Align together scans of different modalities*</span>
 
@@ -114,7 +116,7 @@
 
 <div class="viewcode-block" id="Coregister.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -122,7 +124,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -356,7 +358,7 @@
 
 <div class="viewcode-block" id="Coregister.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -371,7 +373,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -441,7 +443,7 @@
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                             <span class="k">if</span> <span class="p">(</span>
-                                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="n">get_db_field_value</span><span class="p">(</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                 <span class="p">)</span>
                                 <span class="ow">is</span> <span class="kc">None</span>
@@ -494,7 +496,7 @@
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                             <span class="k">if</span> <span class="p">(</span>
-                                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="n">get_db_field_value</span><span class="p">(</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                 <span class="p">)</span>
                                 <span class="ow">is</span> <span class="kc">None</span>
@@ -534,9 +536,9 @@
 
 <div class="viewcode-block" id="Coregister.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -561,7 +563,7 @@
 
 <div class="viewcode-block" id="GM_WM_Normalize">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize">[docs]</a>
-<span class="k">class</span> <span class="nc">GM_WM_Normalize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GM_WM_Normalize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Normalisation of the grey and/or white matter map(s)*</span>
 
@@ -573,7 +575,7 @@
 
 <div class="viewcode-block" id="GM_WM_Normalize.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -581,7 +583,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GM_WM_Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -720,7 +722,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Normalize12&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
 
 <span class="sd">        :returns: from the apply_to_files input parameter, returns the selected</span>
@@ -729,8 +731,10 @@
         <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+
             <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">TraitListObject</span><span class="p">]:</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">TraitListObject</span><span class="p">)):</span>
                     <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s2">&quot;GM&quot;</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span>
@@ -813,7 +817,7 @@
 
                     <span class="k">if</span> <span class="p">(</span><span class="n">img1</span><span class="o">.</span><span class="n">affine</span> <span class="o">!=</span> <span class="n">img2</span><span class="o">.</span><span class="n">affine</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Warning! The affine arrays for </span><span class="si">{0}</span><span class="s2"> and </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Warning! The affine arrays for </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2"> &quot;</span>
                             <span class="s2">&quot;are not the same. This can produce an erroneous &quot;</span>
                             <span class="s2">&quot;result!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
                         <span class="p">)</span>
@@ -823,7 +827,7 @@
 
                     <span class="k">if</span> <span class="n">img1_data</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Warning! The shapes for </span><span class="si">{0}</span><span class="s2"> and </span><span class="si">{1}</span><span class="s2"> are not &quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Warning! The shapes for </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2"> are not &quot;</span>
                             <span class="s2">&quot;the same. This can produce an erroneous &quot;</span>
                             <span class="s2">&quot;result!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
                         <span class="p">)</span>
@@ -849,7 +853,7 @@
 
 <div class="viewcode-block" id="GM_WM_Normalize.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -864,7 +868,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GM_WM_Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="o">=</span> <span class="kc">False</span>
@@ -894,7 +898,7 @@
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_files&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s2">&quot;GM + WM&quot;</span><span class="p">:</span>
                         <span class="k">if</span> <span class="p">(</span>
-                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="n">get_db_field_value</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                 <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
@@ -927,7 +931,7 @@
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                                 <span class="k">if</span> <span class="p">(</span>
-                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                    <span class="n">get_db_field_value</span><span class="p">(</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                     <span class="p">)</span>
                                     <span class="ow">is</span> <span class="kc">None</span>
@@ -952,7 +956,7 @@
 
 <div class="viewcode-block" id="GM_WM_Normalize.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="s2">&quot;write&quot;</span>
@@ -967,7 +971,7 @@
         <span class="c1"># capsul/process/nipype_process module raises an exception in nipype</span>
         <span class="c1"># if the mandatory parameters are not yet defined, the next line</span>
         <span class="c1"># can&#39;t be write before!</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GM_WM_Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
 </div>
 
@@ -975,7 +979,7 @@
 
 <div class="viewcode-block" id="NewSegment">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a>
-<span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NewSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Segmentation: Segments, bias corrects and spatially normalises*</span>
 
@@ -987,7 +991,7 @@
 
 <div class="viewcode-block" id="NewSegment.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -995,7 +999,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1316,7 +1320,7 @@
 
 <div class="viewcode-block" id="NewSegment.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1331,7 +1335,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -1342,7 +1346,7 @@
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
@@ -1393,7 +1397,7 @@
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                                 <span class="k">if</span> <span class="p">(</span>
-                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                    <span class="n">get_db_field_value</span><span class="p">(</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                     <span class="p">)</span>
                                     <span class="ow">is</span> <span class="kc">None</span>
@@ -1423,7 +1427,7 @@
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                                 <span class="k">if</span> <span class="p">(</span>
-                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                    <span class="n">get_db_field_value</span><span class="p">(</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                     <span class="p">)</span>
                                     <span class="ow">is</span> <span class="kc">None</span>
@@ -1448,9 +1452,9 @@
 
 <div class="viewcode-block" id="NewSegment.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
@@ -1465,7 +1469,7 @@
 
 <div class="viewcode-block" id="Normalize12">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12">[docs]</a>
-<span class="k">class</span> <span class="nc">Normalize12</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Normalize12</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the warp that best aligns the template (atlas) to the image*</span>
 
@@ -1477,7 +1481,7 @@
 
 <div class="viewcode-block" id="Normalize12.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1485,7 +1489,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1795,7 +1799,7 @@
 
 <div class="viewcode-block" id="Normalize12.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1810,7 +1814,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition</span>
         <span class="n">_flag</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1900,7 +1904,7 @@
 
                     <span class="k">for</span> <span class="n">in_val</span><span class="p">,</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
                         <span class="k">if</span> <span class="p">(</span>
-                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="n">get_db_field_value</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
                             <span class="p">)</span>
                             <span class="ow">is</span> <span class="kc">None</span>
@@ -1914,7 +1918,7 @@
                             <span class="p">)</span>
 
                         <span class="k">if</span> <span class="p">(</span>
-                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="n">get_db_field_value</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                                 <span class="n">in_val</span><span class="p">,</span>
                                 <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -1931,7 +1935,7 @@
                             <span class="p">)</span>
 
                         <span class="k">if</span> <span class="p">(</span>
-                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="n">get_db_field_value</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                             <span class="p">)</span>
                             <span class="ow">is</span> <span class="kc">None</span>
@@ -1956,15 +1960,15 @@
                             <span class="c1"># in database</span>
                             <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Voxel sizes&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;list_float&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIELD_TYPE_LIST_FLOAT</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="s2">&quot;The voxel sizes (x, y &amp; &quot;</span>
                                 <span class="s2">&quot;z, in mm) of the written &quot;</span>
                                 <span class="s2">&quot;normalised images&quot;</span>
                             <span class="p">)</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;mm&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_ORIGIN_USER</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_UNIT_MM</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
                             <span class="n">all_tags_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag_to_add</span><span class="p">)</span>
@@ -1972,12 +1976,12 @@
                             <span class="c1"># normalization, in database</span>
                             <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Affine regularization type&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIELD_TYPE_STRING</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                                <span class="s2">&quot;Standard space for affine &quot;</span> <span class="s2">&quot;registration&quot;</span>
+                                <span class="s2">&quot;Standard space for affine registration&quot;</span>
                             <span class="p">)</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_ORIGIN_USER</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
@@ -2018,9 +2022,9 @@
 
 <div class="viewcode-block" id="Normalize12.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;image_to_align&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -2039,7 +2043,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;est&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
 
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">affine_regularization_type</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">affine_regularization_type</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
@@ -2057,7 +2061,7 @@
 
 <div class="viewcode-block" id="Realign">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign">[docs]</a>
-<span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Realign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Realigns a time-series of images acquired from the same subject*</span>
 
@@ -2069,7 +2073,7 @@
 
 <div class="viewcode-block" id="Realign.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2077,7 +2081,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2373,7 +2377,7 @@
 
 <div class="viewcode-block" id="Realign.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2388,7 +2392,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
@@ -2453,7 +2457,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;realigned_files&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                        <span class="n">get_db_field_value</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
                         <span class="p">)</span>
                         <span class="ow">is</span> <span class="kc">None</span>
@@ -2467,7 +2471,7 @@
                         <span class="p">)</span>
 
                     <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                        <span class="n">get_db_field_value</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                             <span class="n">in_val</span><span class="p">,</span>
                             <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
@@ -2484,7 +2488,7 @@
                         <span class="p">)</span>
 
                     <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span><span class="p">)</span>
+                        <span class="n">get_db_field_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span><span class="p">)</span>
                         <span class="ow">is</span> <span class="kc">None</span>
                     <span class="p">):</span>
                         <span class="nb">print</span><span class="p">(</span>
@@ -2559,9 +2563,9 @@
 
 <div class="viewcode-block" id="Realign.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
@@ -2586,7 +2590,7 @@
 
 <div class="viewcode-block" id="SliceTiming">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming">[docs]</a>
-<span class="k">class</span> <span class="nc">SliceTiming</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SliceTiming</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Temporal correction to get back every slice at the same acquisition time*</span>
 
@@ -2598,7 +2602,7 @@
 
 <div class="viewcode-block" id="SliceTiming.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2606,7 +2610,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SliceTiming</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2755,7 +2759,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.SliceTiming&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_database_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_database_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;sets default values for certain parameters.</span>
 
 <span class="sd">        If the following parameters are undefined, this method attempts to give</span>
@@ -2786,11 +2790,11 @@
         <span class="n">database_filename</span> <span class="o">=</span> <span class="n">complete_path</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span>
-            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span> <span class="ow">in</span> <span class="n">get_field_names</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">COLLECTION_CURRENT</span>
         <span class="p">):</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                 <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
                 <span class="n">database_filename</span><span class="p">,</span>
                 <span class="p">(</span><span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
@@ -2832,12 +2836,15 @@
 
         <span class="n">temp</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s2">&quot;RepetitionTime&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span>
-            <span class="n">COLLECTION_CURRENT</span>
+        <span class="k">if</span> <span class="s2">&quot;RepetitionTime&quot;</span> <span class="ow">in</span> <span class="n">get_field_names</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">COLLECTION_CURRENT</span>
         <span class="p">):</span>
             <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
-                    <span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
+                <span class="n">get_value</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                    <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
+                    <span class="n">database_filename</span><span class="p">,</span>
+                    <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
                 <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="o">/</span> <span class="mi">1000</span>
             <span class="p">)</span>
@@ -3033,7 +3040,7 @@
 
 <div class="viewcode-block" id="SliceTiming.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3048,7 +3055,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SliceTiming</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
@@ -3117,9 +3124,9 @@
 
 <div class="viewcode-block" id="SliceTiming.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SliceTiming</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
         <span class="c1"># So, the 3 next lines can be see as &quot;in case of&quot;...</span>
@@ -3144,7 +3151,7 @@
 
 <div class="viewcode-block" id="Smooth">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a>
-<span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *3D Gaussian smoothing of image volumes*</span>
 
@@ -3156,7 +3163,7 @@
 
 <div class="viewcode-block" id="Smooth.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -3164,7 +3171,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -3250,7 +3257,7 @@
 
 <div class="viewcode-block" id="Smooth.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -3265,7 +3272,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
@@ -3314,14 +3321,14 @@
                             <span class="c1"># Add the fwhm parameter for smooth, in database</span>
                             <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;FWHM (X, Y, Z) for Smooth&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;list_float&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIELD_TYPE_LIST_FLOAT</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="s2">&quot;Full width at half maximum (FWHM) of the &quot;</span>
                                 <span class="s2">&quot;Gaussian smoothing kernel in mm&quot;</span>
                             <span class="p">)</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;mm&quot;</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_ORIGIN_USER</span>
+                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_UNIT_MM</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span>
                             <span class="n">all_tags_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag_to_add</span><span class="p">)</span>
@@ -3334,9 +3341,9 @@
 
 <div class="viewcode-block" id="Smooth.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
         <span class="c1"># So, the 3 next lines can be see as &quot;in case of&quot;...</span>
@@ -3358,7 +3365,7 @@
 </pre></div>
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -3368,7 +3375,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

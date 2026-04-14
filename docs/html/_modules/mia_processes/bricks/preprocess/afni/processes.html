@@ -4,20 +4,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.afni.processes &#8212; mia_processes 2.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=dfa0e015" />
-    <script src="../../../../../_static/documentation_options.js?v=dfec817d"></script>
-    <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+    <title>mia_processes.bricks.preprocess.afni.processes &#8212; mia_processes 2.7.1-dev+7299fed3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=fce32b03" />
+    <script src="../../../../../_static/documentation_options.js?v=cbf0544e"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.7.0 documentation</span></a></h1>
+          <span>mia_processes 2.7.1-dev+7299fed3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.afni.processes</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -28,9 +28,7 @@
         
         
   <h1>Source code for mia_processes.bricks.preprocess.afni.processes</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;The afni preprocess library of the mia_processes package.</span>
+<span></span><span class="sd">&quot;&quot;&quot;The afni preprocess library of the mia_processes package.</span>
 
 <span class="sd">The purpose of this module is to customise the main afni preprocessing bricks</span>
 <span class="sd">provided by nipype and to correct some things that do not work directly in</span>
@@ -63,18 +61,18 @@
 <span class="c1">##########################################################################</span>
 
 <span class="c1"># Other import</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
 
-<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">nibabel</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nib</span>
 
 <span class="c1"># nipype imports</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nipype.interfaces.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
 
 <span class="c1"># populse_mia import</span>
-<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">traits.api</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Bool</span><span class="p">,</span>
     <span class="n">Either</span><span class="p">,</span>
     <span class="n">Enum</span><span class="p">,</span>
@@ -86,14 +84,14 @@
     <span class="n">Undefined</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mia_processes.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkFileExt</span>
 
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="Automask">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Automask">[docs]</a>
-<span class="k">class</span> <span class="nc">Automask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Automask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create a brain-only mask of the image using AFNI 3dAutomask command*</span>
 
@@ -105,7 +103,7 @@
 
 <div class="viewcode-block" id="Automask.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Automask.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -113,7 +111,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Automask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -231,7 +229,7 @@
 
 <div class="viewcode-block" id="Automask.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Automask.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -246,7 +244,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Automask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -303,9 +301,9 @@
 
 <div class="viewcode-block" id="Automask.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Automask.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Automask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">outputtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
@@ -323,7 +321,7 @@
 
 <div class="viewcode-block" id="Calc">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Calc">[docs]</a>
-<span class="k">class</span> <span class="nc">Calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Voxel-by-voxel arithmetic on 3D datasets*</span>
 
@@ -335,7 +333,7 @@
 
 <div class="viewcode-block" id="Calc.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Calc.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -343,7 +341,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Calc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -485,7 +483,7 @@
 
 <div class="viewcode-block" id="Calc.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Calc.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -500,7 +498,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Calc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_idx</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_idx</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
@@ -550,9 +548,9 @@
 
 <div class="viewcode-block" id="Calc.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Calc.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Calc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file_a</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file_b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file_c</span>
@@ -573,7 +571,7 @@
 
 <div class="viewcode-block" id="CalcDropTRs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs">[docs]</a>
-<span class="k">class</span> <span class="nc">CalcDropTRs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CalcDropTRs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *DropTRs of bold datasets (using AFNI 3dCalc command)*</span>
 
@@ -585,7 +583,7 @@
 
 <div class="viewcode-block" id="CalcDropTRs.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -593,7 +591,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CalcDropTRs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -664,7 +662,7 @@
 
 <div class="viewcode-block" id="CalcDropTRs.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -679,7 +677,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CalcDropTRs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -736,9 +734,9 @@
 
 <div class="viewcode-block" id="CalcDropTRs.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.CalcDropTRs.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CalcDropTRs</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">:</span>
             <span class="k">return</span>
@@ -775,7 +773,7 @@
 
 <div class="viewcode-block" id="Despike">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Despike">[docs]</a>
-<span class="k">class</span> <span class="nc">Despike</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Despike</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Removes ‘spikes’ from the 3D+time input dataset*</span>
 
@@ -787,7 +785,7 @@
 
 <div class="viewcode-block" id="Despike.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Despike.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -795,7 +793,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Despike</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -858,7 +856,7 @@
 
 <div class="viewcode-block" id="Despike.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Despike.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -873,7 +871,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Despike</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -919,9 +917,9 @@
 
 <div class="viewcode-block" id="Despike.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Despike.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Despike</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">despike</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -936,7 +934,7 @@
 
 <div class="viewcode-block" id="FWHMx">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.FWHMx">[docs]</a>
-<span class="k">class</span> <span class="nc">FWHMx</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FWHMx</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes FWHMs for all sub-bricks in the input dataset, each one \</span>
 <span class="sd">separately*</span>
@@ -948,7 +946,7 @@
 
 <div class="viewcode-block" id="FWHMx.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.FWHMx.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -956,7 +954,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FWHMx</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1030,7 +1028,7 @@
 
 <div class="viewcode-block" id="FWHMx.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.FWHMx.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1045,7 +1043,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FWHMx</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -1082,9 +1080,9 @@
 
 <div class="viewcode-block" id="FWHMx.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.FWHMx.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FWHMx</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_file</span><span class="p">:</span>
@@ -1102,7 +1100,7 @@
 
 <div class="viewcode-block" id="GCOR">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.GCOR">[docs]</a>
-<span class="k">class</span> <span class="nc">GCOR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GCOR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the average correlation between every voxel and every other \</span>
 <span class="sd">voxel, over any given mask*</span>
@@ -1115,7 +1113,7 @@
 
 <div class="viewcode-block" id="GCOR.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.GCOR.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1123,7 +1121,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GCOR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1181,7 +1179,7 @@
 
 <div class="viewcode-block" id="GCOR.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.GCOR.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1196,14 +1194,14 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GCOR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
                 <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="s2">&quot;_dataGCOR</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()),</span>
+                    <span class="sa">f</span><span class="s2">&quot;_dataGCOR</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="k">try</span><span class="p">:</span>
@@ -1236,9 +1234,9 @@
 
 <div class="viewcode-block" id="GCOR.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.GCOR.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GCOR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_file</span>
@@ -1253,7 +1251,7 @@
 
 <div class="viewcode-block" id="OutlierCount">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.OutlierCount">[docs]</a>
-<span class="k">class</span> <span class="nc">OutlierCount</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OutlierCount</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes outliers for all sub-bricks in the input dataset, each one \</span>
 <span class="sd">separately*</span>
@@ -1266,7 +1264,7 @@
 
 <div class="viewcode-block" id="OutlierCount.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.OutlierCount.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1274,7 +1272,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OutlierCount</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1399,7 +1397,7 @@
 
 <div class="viewcode-block" id="OutlierCount.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.OutlierCount.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1414,7 +1412,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OutlierCount</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -1461,9 +1459,9 @@
 
 <div class="viewcode-block" id="OutlierCount.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.OutlierCount.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">OutlierCount</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">automask</span><span class="p">:</span>
@@ -1488,7 +1486,7 @@
 
 <div class="viewcode-block" id="QualityIndex">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.QualityIndex">[docs]</a>
-<span class="k">class</span> <span class="nc">QualityIndex</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QualityIndex</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes a quality index for each sub-brick in a 3D+time dataset*</span>
 
@@ -1500,7 +1498,7 @@
 
 <div class="viewcode-block" id="QualityIndex.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.QualityIndex.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1508,7 +1506,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">QualityIndex</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1607,7 +1605,7 @@
 
 <div class="viewcode-block" id="QualityIndex.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.QualityIndex.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1622,7 +1620,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">QualityIndex</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">automask</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_file</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">autoclip</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_file</span>
@@ -1668,9 +1666,9 @@
 
 <div class="viewcode-block" id="QualityIndex.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.QualityIndex.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">QualityIndex</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoclip</span><span class="p">:</span>
@@ -1693,7 +1691,7 @@
 
 <div class="viewcode-block" id="RefitDeoblique">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique">[docs]</a>
-<span class="k">class</span> <span class="nc">RefitDeoblique</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefitDeoblique</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Deoblique dataset*</span>
 
@@ -1705,7 +1703,7 @@
 
 <div class="viewcode-block" id="RefitDeoblique.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1713,7 +1711,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RefitDeoblique</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1750,7 +1748,7 @@
 
 <div class="viewcode-block" id="RefitDeoblique.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1765,7 +1763,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RefitDeoblique</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -1782,9 +1780,9 @@
 
 <div class="viewcode-block" id="RefitDeoblique.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.RefitDeoblique.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RefitDeoblique</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">deoblique</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deoblique</span>
@@ -1796,7 +1794,7 @@
 
 <div class="viewcode-block" id="SkullStrip">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.SkullStrip">[docs]</a>
-<span class="k">class</span> <span class="nc">SkullStrip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SkullStrip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From MRI T1-weighted images, extract the brain from surrounding tissue*</span>
 
@@ -1808,7 +1806,7 @@
 
 <div class="viewcode-block" id="SkullStrip.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.SkullStrip.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1816,7 +1814,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SkullStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -1873,7 +1871,7 @@
 
 <div class="viewcode-block" id="SkullStrip.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.SkullStrip.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -1888,7 +1886,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SkullStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -1928,9 +1926,9 @@
 
 <div class="viewcode-block" id="SkullStrip.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.SkullStrip.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SkullStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">outputtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
@@ -1945,7 +1943,7 @@
 
 <div class="viewcode-block" id="TShift">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TShift">[docs]</a>
-<span class="k">class</span> <span class="nc">TShift</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TShift</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Slice-time correction of bold images*</span>
 
@@ -1957,7 +1955,7 @@
 
 <div class="viewcode-block" id="TShift.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TShift.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -1965,7 +1963,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TShift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2188,7 +2186,7 @@
 
 <div class="viewcode-block" id="TShift.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TShift.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2203,7 +2201,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TShift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_timing</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpattern</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
@@ -2265,9 +2263,9 @@
 
 <div class="viewcode-block" id="TShift.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TShift.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TShift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_timing</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpattern</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -2300,7 +2298,7 @@
 
 <div class="viewcode-block" id="TStatMean">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TStatMean">[docs]</a>
-<span class="k">class</span> <span class="nc">TStatMean</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TStatMean</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Mean of bold images (using AFNI 3dTstat)*</span>
 
@@ -2312,7 +2310,7 @@
 
 <div class="viewcode-block" id="TStatMean.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TStatMean.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2320,7 +2318,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TStatMean</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2377,7 +2375,7 @@
 
 <div class="viewcode-block" id="TStatMean.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TStatMean.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2392,7 +2390,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TStatMean</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -2432,9 +2430,9 @@
 
 <div class="viewcode-block" id="TStatMean.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.TStatMean.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TStatMean</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;-mean&quot;</span>
@@ -2451,7 +2449,7 @@
 
 <div class="viewcode-block" id="Volreg">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Volreg">[docs]</a>
-<span class="k">class</span> <span class="nc">Volreg</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Volreg</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Register an input volume to a base volume using AFNI 3dvolreg*</span>
 
@@ -2463,7 +2461,7 @@
 
 <div class="viewcode-block" id="Volreg.__init__">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Volreg.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -2471,7 +2469,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Volreg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party software required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;afni&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
@@ -2641,7 +2639,7 @@
 
 <div class="viewcode-block" id="Volreg.list_outputs">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Volreg.list_outputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -2656,7 +2654,7 @@
 <span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Volreg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
@@ -2725,9 +2723,9 @@
 
 <div class="viewcode-block" id="Volreg.run_process_mia">
 <a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.afni.html#mia_processes.bricks.preprocess.afni.processes.Volreg.run_process_mia">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Volreg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">outputtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span>
@@ -2754,7 +2752,7 @@
 </pre></div>
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
@@ -2764,7 +2762,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

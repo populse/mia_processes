@@ -5,20 +5,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mia_processes.utils package &#8212; mia_processes 2.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=dfa0e015" />
-    <script src="_static/documentation_options.js?v=dfec817d"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <title>mia_processes.utils package &#8212; mia_processes 2.7.1-dev+7299fed3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=fce32b03" />
+    <script src="_static/documentation_options.js?v=cbf0544e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.7.0 documentation</span></a></h1>
+          <span>mia_processes 2.7.1-dev+7299fed3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils package</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="index.html">Contents</a>
@@ -149,9 +149,6 @@
 <dt class="field-even">Functions<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p>checkFileExt</p></li>
-<li><p>del_dbFieldValue</p></li>
-<li><p>dict4runtime_update</p></li>
-<li><p>get_dbFieldValue</p></li>
 <li><p>mriqc_get_all_run</p></li>
 <li><p>mriqc_group_iqms_tsv</p></li>
 <li><p>plot_boxplot_points</p></li>
@@ -159,7 +156,6 @@
 <li><p>plot_segmentation</p></li>
 <li><p>plot_slice_planes</p></li>
 <li><p>plot_realignment_parameters</p></li>
-<li><p>set_dbFieldValue</p></li>
 </ul>
 </dd>
 </dl>
@@ -246,58 +242,6 @@ EXT = {‘NIFTI_GZ’: ‘nii.gz’, ‘NIFTI’: ‘nii’})</p></li>
 verbose: whether to create a verbose returned message.</p>
 <dl class="simple">
 <dt>returns:    status: status (True means OK)</dt><dd><p>message: string describing status (empty if OK)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.utils.tools.del_dbFieldValue">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">del_dbFieldValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags2del</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#del_dbFieldValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.del_dbFieldValue" title="Link to this definition">¶</a></dt>
-<dd><p>Delete for a document, the value for a field in the db.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>project</strong> – the project.</p></li>
-<li><p><strong>document</strong> – the absolute path of the document.</p></li>
-<li><p><strong>tag_to_del</strong> – a list of fields where values will be deleted</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.utils.tools.dict4runtime_update">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">dict4runtime_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict4runtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#dict4runtime_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.dict4runtime_update" title="Link to this definition">¶</a></dt>
-<dd><p>Update the dict4runtime dictionary object with tags values</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dict4runtime</strong> – the dict used in mia_processes bricks to pass data
-from the list_outputs method to the run_process_mia
-method</p></li>
-<li><p><strong>database</strong> – the database object (for example: self.project.session)</p></li>
-<li><p><strong>db_filename</strong> – the name of the database file from which the tag value
-will be retrieved</p></li>
-<li><p><strong>args</strong> – the tags to be recovered</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.utils.tools.get_dbFieldValue">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">get_dbFieldValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#get_dbFieldValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.get_dbFieldValue" title="Link to this definition">¶</a></dt>
-<dd><p>Return, for a document, the field value from the database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>project</strong> – the project.</p></li>
-<li><p><strong>document</strong> – the absolute path of the document.</p></li>
-<li><p><strong>field</strong> – the field name.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the value of the field for the document in the database.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -414,7 +358,7 @@ float)</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mia_processes.utils.tools.plot_slice_planes">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_slice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ax'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greys_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rainbow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_slice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_slice_planes" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_slice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ax'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greys_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rainbow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurological'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_slice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_slice_planes" title="Link to this definition">¶</a></dt>
 <dd><p>Create a PNG file with a mosaic display of volume slices.</p>
 <p>Several images can be overlaid. data_1, the only mandatory argument,
 is the background image (or the only image displayed). data_2 is the
@@ -445,6 +389,7 @@ are 4, 4 and 1 respectively.</p>
 <li><p><strong>out_dir</strong> – the output directory where the mosaic images will be saved.</p></li>
 <li><p><strong>only_noise</strong> – if True, shows the noise (boolean).</p></li>
 <li><p><strong>out_name</strong> – the suffix added to form the output name (string).</p></li>
+<li><p><strong>convention</strong> – display convention (neurological or radiological).</p></li>
 </ul>
 </dd>
 </dl>
@@ -454,29 +399,12 @@ are 4, 4 and 1 respectively.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.utils.tools.set_dbFieldValue">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">set_dbFieldValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_add</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#set_dbFieldValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.set_dbFieldValue" title="Link to this definition">¶</a></dt>
-<dd><p>Creates for a document, the field and the corresponding value in the db.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>project</strong> – the project.</p></li>
-<li><p><strong>document</strong> – the absolute path of the document.</p></li>
-<li><p><strong>tag_to_add</strong> – a dictionary with ‘default_value’, ‘description’,
-‘field_type’, ‘name’, ‘origin’, ‘unit’, ‘value’,
-‘visibility’ keys.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 </section>
 
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="index.html">Contents</a>
@@ -486,7 +414,7 @@ are 4, 4 and 1 respectively.</p>
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

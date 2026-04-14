@@ -297,6 +297,14 @@ Generates report for Perfusion study using DSC-MRI
 
       ex. {'PatientRef': 'sub-1', 'Pathology': 'ACMD', 'Age': '56', 'Sex': 'M', 'MR': '3T'}
 
+- *display_convention* (a string, optional, default value is 'radiological')
+    The display convention used for the anatomical and functional images in the
+    report. It can be either 'neurological' or 'radiological'.
+
+    ::
+
+      ex. neurological
+
 **Outputs parameters:**
 
 - *report* (a strings representing a file)

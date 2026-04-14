@@ -4,20 +4,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=dfa0e015" />
-    <script src="../../../../_static/documentation_options.js?v=dfec817d"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.7.1-dev+7299fed3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=fce32b03" />
+    <script src="../../../../_static/documentation_options.js?v=cbf0544e"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.7.0 documentation</span></a></h1>
+          <span>mia_processes 2.7.1-dev+7299fed3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_spatial_norm</span></h2>
       </div>
-      <div class="topnav" role="navigation" aria-label="top navigation">
+      <div class="topnav" role="navigation" aria-label="Top">
       
         <p>
         <a class="uplink" href="../../../../index.html">Contents</a>
@@ -28,8 +28,7 @@
         
         
   <h1>Source code for mia_processes.pipelines.preprocess.anat_spatial_norm</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The Anat_spatial_norm pipeline.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -42,14 +41,14 @@
 <span class="c1"># for details.</span>
 <span class="c1">##########################################################################</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">capsul.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
 
 
 <div class="viewcode-block" id="Anat_spatial_norm">
 <a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">[docs]</a>
-<span class="k">class</span> <span class="nc">Anat_spatial_norm</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Anat_spatial_norm</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Spatial normalization to MNI (using &#39;MNI152NLin2009cAsym&#39; template)*</span>
 
@@ -64,7 +63,7 @@
 
 <div class="viewcode-block" id="Anat_spatial_norm.pipeline_definition">
 <a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition">[docs]</a>
-    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
         <span class="c1"># nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
@@ -212,7 +211,7 @@
 </pre></div>
 
       </div>
-      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
       
         <p>
         <a class="uplink" href="../../../../index.html">Contents</a>
@@ -222,7 +221,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
