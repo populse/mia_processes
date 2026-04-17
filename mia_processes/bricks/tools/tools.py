@@ -465,12 +465,6 @@ class Deconv_from_aif(ProcessMIA):
         self.bat_th = 2.0
 
         # Outputs traits
-        # self.add_trait(
-        #     "CBV_image",
-        #     OutputMultiPath(
-        #         File(), output=True, optional=True, desc=CBV_image_desc
-        #     ),
-        # )
         self.add_trait("CBV_image", File(output=True, desc=CBV_image_desc))
         self.CBV_image = traits.Undefined
 
@@ -524,12 +518,9 @@ class Deconv_from_aif(ProcessMIA):
         # Calculate moving average and standard deviation over the window
         # fmt: off
         for t in range(nb_dyn - self.bat_window_size):
-            mean[:, :, :, t] = np.mean(
-                vol_4d[:, :, :, t:t + self.bat_window_size + 1], axis=3
-            )
-            stdev[:, :, :, t] = np.std(
-                vol_4d[:, :, :, t:t + self.bat_window_size + 1], axis=3, ddof=1
-            )
+            window = vol_4d[..., t:t + self.bat_window_size + 1]
+            mean[:, :, :, t] = np.mean(window, axis=3)
+            stdev[:, :, :, t] = np.std(window, axis=3, ddof=1)
         # fmt: on
 
         # Logical condition to determine the first significant drop in signal
@@ -539,7 +530,7 @@ class Deconv_from_aif(ProcessMIA):
         )
         # fmt: on
         # Find the index of the first occurrence of the condition being true
-        t0 = np.argmax(ind_decrease, axis=3) + self.bat_window_size - 1
+        t0 = np.argmax(ind_decrease, axis=3) + self.bat_window_size
         # Mask out invalid T0 values (outside the mask or too early)
         t0[~mask | (t0 == self.bat_window_size)] = 0
         # Calculate Time To Peak (TTP)
@@ -550,12 +541,12 @@ class Deconv_from_aif(ProcessMIA):
 
             if ttp[row, col, sli] > t0[row, col, sli] > self.bat_window_size:
                 # fmt: off
-                t0_mask[row, col, sli, 1:t0[row, col, sli] - 1] = True
+                t0_mask[row, col, sli, 1:t0[row, col, sli]] = True
                 # fmt: on
 
             else:
                 # fmt: off
-                t0_mask[row, col, sli, 1:self.bat_window_size - 1] = True
+                t0_mask[row, col, sli, 1:self.bat_window_size] = True
                 # fmt: on
 
         return t0, t0_mask
@@ -790,16 +781,9 @@ class Deconv_from_aif(ProcessMIA):
                 return self.make_initResult()
 
             else:
-                # Amigo sets TR == 1.677 for pgad80 ... I don't know why this
-                # difference exists (drift since the first experiment
-                # where TR was equal to 1677s?). In any case, during
-                # reproducibility tests between Mia and Amigo we also impose
-                # this value ...
-                # TODO: To be changed at the end of the tests!
-                self.dict4runtime["rep_time"] = 1.677
                 # The repetition time is supposed to have the unit [ms].
                 # We convert it into seconds.
-                # self.dict4runtime["rep_time"] = rep_time[0] * 1e-3
+                self.dict4runtime["rep_time"] = rep_time[0] * 1e-3
 
             if echo_time is None:
                 print(
@@ -965,6 +949,7 @@ class Deconv_from_aif(ProcessMIA):
             nb_dyn,
             data_mask,
         )
+        residu_f = np.roll(residu_f, 1, axis=3)
         # end_time = time.time()
         # elapsed_time = end_time - start_time
         # print(f"deconv_osvd function: elapsed time: {elapsed_time} seconds")
@@ -980,7 +965,6 @@ class Deconv_from_aif(ProcessMIA):
         #                        milliliters per 100 grams of brain tissue
         #                        (mL/100g).
         cbv = 100 * trapezoid(c_func, axis=3) / trapezoid(c_aif)
-        residu_f_max = np.max(residu_f, axis=3)
         residu_f_max_ind = np.argmax(residu_f, axis=3)
         residu_f_max_ind = np.where(
             ~np.isnan(residu_f_max_ind), residu_f_max_ind + 1, residu_f_max_ind
@@ -992,18 +976,20 @@ class Deconv_from_aif(ProcessMIA):
         #       contrast agent in the arterial input function (AIF) and its
         #       peak concentration in the tissue of interest (s)
         t_max = residu_f_max_ind.astype(float)
-        t_max[data_mask] = (t_max[data_mask] - 0.5) * self.dict4runtime[
-            "rep_time"
-        ]
+        t_max[data_mask] = t_max[data_mask] * self.dict4runtime["rep_time"]
+        r_peak = np.maximum(np.max(residu_f, axis=3), 1e-8)
 
         with np.errstate(divide="ignore", invalid="ignore"):
             # Mean Transit Time: The average time it takes for blood to pass
             #                    through a given volume of brain tissue,
             #                    usually expressed in seconds.
             mtt = (
-                self.dict4runtime["rep_time"]
-                * trapezoid(residu_f, axis=3)
-                / residu_f_max
+                trapezoid(
+                    np.clip(residu_f, 0, None),
+                    dx=self.dict4runtime["rep_time"],
+                    axis=3,
+                )
+                / r_peak
             )
 
         mtt[np.isinf(mtt) | np.isnan(mtt)] = 0
@@ -3271,29 +3257,75 @@ class Make_AIF(ProcessMIA):
         self.init_default_traits()
 
     def bol_ar_time(self, data):
-        """Compute bolus arrival time
-
-        :param data: Value of voxels selected during dynamics
-        :returns: the bolus arrival time
         """
-        dim = len(data)
-        mean = np.zeros(dim - self.bat_window_size)
-        std = np.zeros(dim - self.bat_window_size)
+        Compute the bolus arrival time (T0) for a given voxel's time series.
 
-        for t in range(dim - self.bat_window_size):
+        This method detects the first significant drop in signal intensity,
+        which corresponds to the arrival of the bolus in DSC-MRI. It uses a
+        sliding window approach to compute the mean and standard deviation of
+        the signal, then identifies the first time point where the signal drops
+        below a threshold (mean - bat_th * std). If no drop is found,
+        it tries with a lower threshold. Edge cases (T0 too early or too late)
+        are handled to ensure physiological plausibility.
+
+        :param data (ndarray): 1D array representing the time series of a
+                               voxel's signal intensity. Shape: (ndynamics,),
+                               where ndynamics is the number of time points.
+
+        :returns (int): The bolus arrival time (T0), expressed as the index of
+                        the time point where the bolus arrives. Returns 0 if
+                        no valid T0 is detected.
+        """
+
+        # Check if the data is too short for the sliding window
+        if len(data) < self.bat_window_size + 1:
+            return 0
+
+        # Initialize arrays for sliding window mean and std
+        n_windows = len(data) - self.bat_window_size
+        window_mean = np.zeros(n_windows)
+        window_std = np.zeros(n_windows)
+
+        # Compute mean and std for each sliding window
+        for t in range(n_windows):
             # fmt: off
-            mean[t] = np.mean(data[t:t + self.bat_window_size + 1])
-            std[t] = np.std(data[t:t + self.bat_window_size + 1], ddof=1)
+            window = data[t:t + self.bat_window_size + 1]
             # fmt: on
-        # fmt: off
-        tlog = data[self.bat_window_size:] < (mean - self.bat_th * std)
-        # fmt: on
-        t0 = np.argmax(tlog)
-        t0 += self.bat_window_size - 1
-        ttp = np.argmin(data)
+            window_mean[t] = np.mean(window)
+            window_std[t] = np.std(window, ddof=1)
 
-        if t0 == self.bat_window_size or t0 > ttp:
-            t0 = 40
+        threshold = window_mean - self.bat_th * window_std
+        # fmt: off
+        signal_drop = data[self.bat_window_size:] < threshold
+        # fmt: on
+
+        # If no drop is detected with the initial threshold, try with a lower
+        # threshold
+        if not np.any(signal_drop):
+            threshold = window_mean - (self.bat_th - 0.5) * window_std
+            # fmt: off
+            signal_drop = data[self.bat_window_size:] < threshold
+            # fmt: on
+
+            if not np.any(signal_drop):
+                return 0  # No significant drop detected
+
+        # Compute T0 as the first time point where the drop occurs
+        t0 = np.argmax(signal_drop) + self.bat_window_size
+        # Compute the time to peak (TTP) within the first 60 time points
+        ttp = np.argmin(data[:60])
+
+        # Handle edge cases where T0 is too early or too late
+        if t0 <= self.bat_window_size:
+            # If T0 is too early, find the minimum in the first 50 time points
+            t0 = np.argmin(data[:50])
+
+            if t0 == 0:
+                return 0  # No valid T0 found
+
+        elif t0 > ttp:
+            # If T0 is after TTP, adjust it to be just before TTP
+            t0 = max(1, ttp - 2)
 
         return t0
 
@@ -3365,57 +3397,51 @@ class Make_AIF(ProcessMIA):
         return self.make_initResult()
 
     def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
+        """
+        Dedicated to the process launch step of the brick.
+
+        This method performs the following steps:
+        1. Loads and preprocesses the DSC-MRI data.
+        2. Applies a mask to exclude invalid voxels (NaN, Inf, or zero values).
+        3. Filters out noisy voxels based on their mean intensity.
+        4. Applies temporal smoothing to reduce noise in the signal.
+        5. Computes the baseline and peak characteristics for each voxel.
+        6. Filters out saturated voxels and voxels with excessive peak width.
+        7. Applies an early drop filter to exclude non-arterial voxels.
+        8. Computes a score for each candidate voxel based on its signal
+           characteristics.
+        9. Selects the best voxels to compute the final AIF.
+        10. Saves the AIF and associated scores to a JSON file.
+        """
         super().run_process_mia()
-        header, data = self.load_nii(self.func_file, False, True)
+        # Load the NIfTI data and extract dimensions
+        _, data = self.load_nii(self.func_file, False, True)
         # TODO: Perhaps we should do here a test to find out whether it's a
         #       4D or a 3D? using a try statement ?
         nrow, ncol, nslices, ndynamics = data.shape
-        # TODO: Do we really need thres? For now, let's comment
-        # thres is currently being commented on
-        # thres = np.array(
-        #     [threshold_otsu(data[:, :, aux, 0]) for aux in range(nslices)]
-        # )
+        # Initialize the ROI mask: exclude voxels with Inf, NaN, or zero values
         head_mask = np.all(data, axis=3)
-        # score of each selected voxel, the number of warnings, and the reasons
-        scores = [[None] * 9 for _ in range(self.nb_vox_best_scor)]
-        wmax = round(self.wmaxr * ndynamics)
-        # rename head_mask to roi, remove voxels with inf, NaN and null
-        # values (not necessarily required)
-        roi = (
-            head_mask
-            & ~np.any(np.isinf(data), axis=3)
-            & ~np.any(np.isnan(data), axis=3)
-            & np.all(data, axis=3)
-        )
-        # remove noisy voxels
+        roi = head_mask & np.all(np.isfinite(data), axis=3)
+        # Exclude voxels with low mean intensity (likely non-arterial)
         data_mean = np.mean(data[roi])
         roi &= np.mean(data, axis=3) >= data_mean
-        # calculation of peak heights - delta_base_min:
-        # Replicate the roi array, ndynamics times along the 4th dimension
+        # Compute baseline and minimum intensity for each voxel
         roi_replicated = np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)
-        # Apply the mask to data
         masked_data = data[roi_replicated].reshape(-1, ndynamics)
-        # Calculate the mean along the second axis
-        # (ignoring the first frame, so use frames 2-6)
+        # Baseline: mean of the first 5 dynamics (excluding the first dynamic)
         mean_values = masked_data[:, 1:6].mean(axis=1)
-        # Assign the mean values to base_line at the positions of roi:
-        # Average intensity for the first 5 dynamics, i.e. over the whole of
-        # the beginning before the passage (excluding the first dynamic).
-        # Outside the mask, the value is 0:
         base_line = np.zeros((nrow, ncol, nslices))
         base_line[roi] = mean_values
-        # Assign the minimum values to base_line at the positions of roi:
-        # Minimum value for all dynamics. Outside the mask, the value is 0:
+        # Minimum intensity over all dynamics
         min_val = np.zeros((nrow, ncol, nslices))
         min_val[roi] = masked_data.min(axis=1)
-        # Delta between the intensity at the start and the minimum of the
-        # first pass curve
+        # Delta between baseline and minimum intensity
         delta_base_min = base_line - min_val
-        # calculation of peak widths - half_width_peak:
+        # Compute the half-width of the peak at half-maximum
         half_width_peak = ndynamics * np.ones((nrow, ncol, nslices))
 
-        # Loop through non-zero elements of roi
+        # computes the temporal width of the signal drop at half depth for
+        # each voxel in the ROI
         for idx in zip(*np.where(roi)):
             condition = data[idx] <= (min_val[idx] + delta_base_min[idx] / 2)
 
@@ -3424,77 +3450,103 @@ class Make_AIF(ProcessMIA):
                 last_idx = len(condition) - np.argmax(condition[::-1]) - 1
                 half_width_peak[idx] = last_idx - first_idx
 
-        # Assign ndynamics to entries in half_width_peak that are still zero.
-        # So, half_width_peak is a brain whose peak width is at half-height.
-        # If the intensity is zero during dynamics, the value of the
-        # corresponding voxel is set ndynamics value.
+        # Set default value for voxels with zero half-width
         half_width_peak[half_width_peak == 0] = ndynamics
-        # keep only non-saturated voxels
+        # Exclude saturated voxels (non-physiological signal changes)
         saturated_voxel = np.zeros((nrow, ncol, nslices), dtype=bool)
 
         for idx in zip(*np.where(roi)):
-            std_val = np.std(data[idx][1:6], ddof=1)
-            # Calculate t1 and t2
+            curve = data[idx]
+            std_val = np.std(curve[1:6], ddof=1)
             threshold = min_val[idx] + 4 * std_val
-            t1 = np.argmax(data[idx] <= threshold)
-            t2 = len(data[idx]) - 1 - np.argmax(data[idx][::-1] <= threshold)
+            low_signal = curve <= threshold
+            t1 = np.argmax(low_signal)
+            t2 = len(curve) - 1 - np.argmax(low_signal[::-1])
 
             # Calculate saturated_voxel
             if t1 < t2:
                 # fmt: off
-                saturated_voxel[idx] = np.any(
-                    np.diff(data[idx][t1:t2 + 1], n=2) < 0
-                )
+                curvature = np.diff(curve[t1:t2+1], n=2)  # noqa: E226
                 # fmt: on
+                saturated_voxel[idx] = np.any(curvature < 0)
 
         roi &= ~saturated_voxel
-        # keep only voxels with a width less than a specified value. The width
-        # of the peak must be less than self.wmaxr * ndynamics range
-        # and greater than 0
+        # Keep only voxels with a peak width within the specified range
+        wmax = round(self.wmaxr * ndynamics)
         roi &= (half_width_peak < wmax) & (half_width_peak > 0)
+        # Apply early drop filter to exclude voxels with insufficient signal
+        # drop
+        print(f"Voxels before early_drop: {np.sum(roi)}")
+        early_drop = np.zeros((nrow, ncol, nslices), dtype=bool)
+
+        for idx in zip(*np.where(roi)):
+            baseline = np.mean(data[idx][:5])
+            min_val = np.min(data[idx][:50])
+
+            if (baseline - min_val) < 0.2 * baseline:
+                early_drop[idx] = True
+
+        roi &= ~early_drop
+        print(f"Voxels after early_drop: {np.sum(roi)}")
+        # Prepare data for scoring
         tmp_data = data.copy()
         tmp_data[~np.repeat(roi[:, :, :, np.newaxis], ndynamics, axis=3)] = 0
         # tmp_data corresponds to data with the roi mask applied and
         # remodelled in the form of a matrix of n rows x ndynamics columns
         # (each column therefore has a dynamic, i.e. a brain).
         tmp_data = tmp_data.reshape((-1, ndynamics), order="F")
-        # sorting of voxels, the height is recalculated beforehand to remove
-        # voxels with excessive width
         delta_base_min[~roi] = 0
         tmp_delta_base_min = delta_base_min.reshape(-1, order="F")
+        # Sorts voxels indices from largest drop → smallest drop
         sorting = np.argsort(tmp_delta_base_min)[::-1]
-        # score calculation
+        flat_delta = delta_base_min.flatten(order="F")
+        flat_half = half_width_peak.flatten(order="F")
+        flat_argmin = np.argmin(data, axis=3).flatten(order="F")
+        # Compute score for each candidate voxel
         score = np.zeros(self.nb_vox_cand)
 
         for i in range(self.nb_vox_cand):
-            # calculation of arrival time
-            t0 = self.bol_ar_time(tmp_data[sorting[i], :])
-            initslop = delta_base_min.flatten(order="F")[sorting[i]] / (
-                np.argmin(data, axis=3).flatten(order="F")[sorting[i]] - t0
-            )
-            # TODO: Do we need * (t0 + 1) because python is 0-based indexing ?
-            score[i] = (
-                delta_base_min.flatten(order="F")[sorting[i]] * initslop
-            ) / (half_width_peak.flatten(order="F")[sorting[i]] * t0)
+            voxel_data = tmp_data[sorting[i], :]
+            # Compute arrival time (T0)
+            t0 = self.bol_ar_time(voxel_data)
+            idx = sorting[i]
+            delta_val = flat_delta[idx]
+            half = flat_half[idx]
+            argmin_val = flat_argmin[idx]
+            dt = argmin_val - t0
 
+            if dt <= 0:
+                continue
+
+            initslop = delta_val / dt
+            # Compute the final score
+            # score = (deep drop x steep slope) / (wide peak * late arrival**2)
+            # So good AIF voxels have:
+            # - large drop
+            # - steep descent
+            # - narrow width
+            # - early arrival
+            score[i] = (delta_val * initslop) / (half * (t0 + 1) ** 2)
+
+        # Sort voxels by score (descending order)
         sorted_score = np.argsort(score)[::-1]
-        # first-pass curve averaged over the 5 best voxels determined using
-        # the score.
+        # Compute the final AIF as the mean of the best voxels
         # fmt: off
         aif = np.mean(
             tmp_data[sorting[sorted_score[:self.nb_vox_best_scor]], :], axis=0
         )
-        # fmt: on
         # i, j, k correspond to the indexes in the brain (3D) for
         # the best results
-        # fmt: off
         i, j, k = np.unravel_index(
             sorting[sorted_score[:self.nb_vox_best_scor]],
             (nrow, ncol, nslices),
             order="F",
         )
         # fmt: on
+        # Initialize scores array
+        scores = [[None] * 9 for _ in range(self.nb_vox_best_scor)]
 
+        # Compute warnings for each selected voxel
         for v in range(self.nb_vox_best_scor):
             warn = 0
             # In scores, the first 4 columns are:
@@ -3503,8 +3555,8 @@ class Make_AIF(ProcessMIA):
             # Then, from the sixth to the ninth column, the results of 4
             # tests are displayed.
 
-            # 1/ Pre-bolus baseline test: indicates whether the baseline is
-            # too noisy
+            # 1/ Pre-bolus baseline noise test: indicates whether the baseline
+            # is too noisy
             std_basepre = np.std(
                 tmp_data[sorting[sorted_score[v]], 1:6], ddof=1
             )
@@ -3546,6 +3598,7 @@ class Make_AIF(ProcessMIA):
             # Finally, the fifth column shows the number of warnings
             scores[v][4] = warn
 
+        # Save the AIF and scores to a JSON file
         with open(self.aif_file, "w") as f:
             json.dump(
                 {
