@@ -135,7 +135,6 @@ REQUIRES = [
     "numpy",
     "openpyxl",
     "paramiko",
-    "populse_mia >= 3.0.0, < 4.0.0",
     "pyxnat",
     "reportlab",
     "scipy",

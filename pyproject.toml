@@ -35,7 +35,6 @@ dependencies = [
     "numpy",
     "openpyxl",
     "paramiko",
-    "populse_mia >= 3.0.0, < 4.0.0",
     "pyxnat",
     "reportlab",
     "scipy",
@@ -105,6 +104,7 @@ omit-covered-files = false
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["mia_processes*"]
 
 [tool.setuptools.package-data]
 "mia_processes.sources_images" = ["*.jpg", "*.png"]
