@@ -111,7 +111,6 @@ In order to get all the bricks and pipelines proposed by mia_processes some thir
 * numpy
 * openpyxl
 * paramiko
-* populse-db >= 2.5.0, < 3.0.0
 * populse_mia >= 2.5.0, < 3.0.0
 * pyxnat
 * reportlab
