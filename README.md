@@ -16,7 +16,7 @@
 
 # Installation
 
-* A compatible version of [Python](https://www.python.org/) (>= 3.5) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
+* A compatible version of [Python](https://www.python.org/) (>= 3.10) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 
 * Depending on the Python setup and OS, the `python3` command may be used as the default Python command.
 
